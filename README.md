@@ -65,8 +65,7 @@ gantt
 
 | 주차 | 날짜 | 활동 | 결과물 유형 | 비고 |
 | --- | --- | --- | --- | --- |
-| 1 | 9/9 | Introduction | Notion / Github
-모든 팀원 초대 | 온라인 |
+| 1 | 9/9 | Introduction |  | 온라인 |
 | 2 | 9/16 | 논문 리뷰 (배정 1권, 개별 1권) | 논문 리뷰 문서 | 온라인 |
 |  | 9/23 | Magical Week |  | 오프라인 |
 | 3 | 9/30 | 논문 리뷰 (배정 1권, 개별 1권) | 논문 리뷰 문서 | 온라인 |
@@ -75,8 +74,7 @@ gantt
 |  | 10/28 | Magical Week |  | 오프라인 |
 | 6 | 11/4 | Data refinement / Augmentation |  | 온라인 |
 | 7 | 11/11 | Data refinement / Augmentation | 최종 데이터셋 | 온라인 |
-| 8 | 11/18 | Paper Remind 
-/ Evaluation Idea Discussion |  | 오프라인 |
+| 8 | 11/18 | Paper Remind / Evaluation Idea Discussion |  | 오프라인 |
 | 9 | 11/25 | Pipleine setting |  | 온라인 |
 | 10 | 12/2 | Evaluation (Basic) | 아이디어 구현, 결과물 | 온라인 |
 | 11 | 12/9 | Evaluation (Advanced) | 아이디어 구현, 결과물 | 온라인 |
@@ -104,7 +102,7 @@ gantt
 
 이 프로젝트는 가짜연구소 Open Academy로 진행됩니다.
 여러분의 참여와 기여가 ‘우연한 혁명(Serendipity Revolution)’을 가능하게 합니다. 모두에게 깊은 감사를 전합니다.
-OOO is developed as part of Pseudo-Lab's Open Research Initiative. Special thanks to our contributors and the open source community for their valuable insights and contributions.
+TableMagnifier is developed as part of Pseudo-Lab's Open Research Initiative. Special thanks to our contributors and the open source community for their valuable insights and contributions.
 
 ## About Pseudo Lab 👋🏼</h2>
 
