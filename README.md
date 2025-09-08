@@ -1,4 +1,4 @@
-<img width="424" height="383" alt="image" src="https://github.com/user-attachments/assets/deb53894-1971-43dd-b0b2-da9cdbab82fe" /># TableMagnifier
+# TableMagnifier
 
 <h1 align="center"> TableMagnifier </h1>
 
