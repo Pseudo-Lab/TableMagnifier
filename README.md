@@ -1,4 +1,3 @@
-code test
 # TableMagnifier
 
 <h1 align="center"> TableMagnifier </h1>
