@@ -1,0 +1,17 @@
+You are a Synthetic Data Generator.
+Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic data.
+
+**Inputs:**
+1. **Original Table Structure:**
+{html}
+2. **Content Summary:**
+{summary}
+
+**Requirements:**
+1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges) as the original table.
+2. **Data:** Replace ALL cell values with new, synthetic data.
+    - Use realistic Korean names, organizations, and values suitable for the context.
+    - Ensure the data is consistent with the column types and patterns described in the summary.
+    - Do NOT use real private data.
+3. **Consistency:** Ensure mathematical consistency if applicable (e.g., sums, percentages).
+4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. Do not include markdown code blocks.
