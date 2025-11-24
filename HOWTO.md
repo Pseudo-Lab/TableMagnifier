@@ -7,10 +7,31 @@ LangGraph 기반의 Agentic 플로우를 이용해 한국어 표 이미지를 �
 플로우는 다음 5단계로 구성되어 있습니다.
 
 1. **Image2HTML** – 표 이미지를 HTML `<table>` 구조로 복원합니다.
-2. **Parse Contents** – 표의 열/행 정보를 요약하고 패턴을 추출합니다.
-3. **Generate Synthetic Dataset** – 동일한 구조를 유지하면서 합성 데이터를 채운 HTML 표를 생성합니다.
+2. **Validate PyMuPDF** – PyMuPDF로 파싱된 결과가 유효한지 검증합니다.
+3. **Generate Synthetic Dataset** – 동일한 구조를 유지하면서 합성 데이터를 채운 HTML 표를 생성합니다. (PyMuPDF 실패 시 Image2HTML 수행 후 진행)
 4. **Self-Reflection** – 생성된 표가 라이선스/개인정보 이슈가 없는지 점검하고, 필요시 재생성을 요청합니다.
 5. **Parse Synthetic Table** – 최종 생성된 합성 HTML 표를 구조화된 JSON 포맷으로 변환합니다.
+
+## Flow Diagram
+
+```mermaid
+graph TD
+    START[Start] --> pymupdf_parse[PyMuPDF Parse]
+    
+    pymupdf_parse --> validate_parsed_table[Validate PyMuPDF]
+    
+    validate_parsed_table -->|Valid| generate_synthetic_table[Generate Synthetic Table]
+    validate_parsed_table -->|Invalid| image_to_html[Image to HTML]
+    
+    image_to_html --> generate_synthetic_table
+    generate_synthetic_table --> self_reflection[Self Reflection]
+    
+    self_reflection -->|Passed| parse_synthetic_table[Parse Synthetic Table]
+    self_reflection -->|Failed| revise_synthetic_table[Revise Synthetic Table]
+    
+    revise_synthetic_table --> self_reflection
+    parse_synthetic_table --> END[End]
+```
 
 ## 주요 코드 설명 (Code Review Guide)
 

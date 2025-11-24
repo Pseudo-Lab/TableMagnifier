@@ -12,6 +12,7 @@ from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from dotenv import load_dotenv
+import fitz  # PyMuPDF
 
 
 MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
@@ -27,6 +28,7 @@ class TableState(TypedDict, total=False):
     revision_instructions: str      # 재생성 지시
     attempts: int                   # 재생성 횟수
     passed: bool                    # 평가 통과 여부
+    valid_pymupdf: bool             # PyMuPDF 파싱 결과 유효성
     errors: List[str]
     synthetic_json: dict            # 파싱된 합성 데이터 JSON
 
@@ -104,31 +106,84 @@ def image_to_html_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     return _node
 
 
-def parse_contents_node(llm: ChatOpenAI) -> Callable[["TableState"], "TableState"]:
-    """Create a node that summarizes the table contents."""
-
-    prompt_template = _load_prompt("parse_contents")
-
-    def _node(state: "TableState") -> "TableState":
-        logger.info("Entering node: parse_contents")
-        if state.get("errors"):
+def pymupdf_parse_node(state: TableState) -> TableState:
+    """Try to parse the table using PyMuPDF (fitz)."""
+    logger.info("Entering node: pymupdf_parse")
+    
+    image_path = Path(state["image_path"])
+    
+    try:
+        doc = fitz.open(image_path)
+        if len(doc) == 0:
             return state
+            
+        # Try to find tables on the first page
+        page = doc[0]
+        tabs = page.find_tables()
+        
+        if tabs.tables:
+            logger.info(f"PyMuPDF found {len(tabs.tables)} tables.")
+            # Use the first table
+            tab = tabs[0]
+            data = tab.extract()
+            
+            if not data:
+                return state
+
+            # Simple HTML construction
+            html_parts = ["<table>"]
+            for row in data:
+                html_parts.append("<tr>")
+                for cell in row:
+                    cell_text = str(cell) if cell is not None else ""
+                    html_parts.append(f"<td>{cell_text}</td>")
+                html_parts.append("</tr>")
+            html_parts.append("</table>")
+            
+            html_table = "".join(html_parts)
+            
+            # Basic validation: ensure it's not empty
+            if len(html_table) > 20: # arbitrary small length check
+                 return {**state, "html_table": html_table}
+                 
+    except Exception as e:
+        logger.warning(f"PyMuPDF parsing failed: {e}")
+        
+    return state
+
+
+def route_after_validation(state: TableState) -> str:
+    if state.get("valid_pymupdf"):
+        return "generate_synthetic_table"
+    return "image_to_html"
+
+
+def validate_parsed_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
+    """Validate the table parsed by PyMuPDF."""
+    prompt_template = _load_prompt("validate_parsed_table")
+
+    def _node(state: TableState) -> TableState:
+        logger.info("Entering node: validate_parsed_table")
+        
         html = state.get("html_table")
         if not html:
-            errors = state.get("errors", [])
-            errors.append("Missing HTML table representation.")
-            return {**state, "errors": errors}
+             return {**state, "valid_pymupdf": False}
 
-        # format 중 KeyError 방지 (템플릿에 {html} 없는 경우 등)
         try:
             prompt = prompt_template.format(html=html)
         except KeyError as e:
-            errors = state.get("errors", [])
-            errors.append(f"Prompt template missing placeholder: {e}")
-            return {**state, "errors": errors}
+            logger.error(f"Validation prompt missing placeholder: {e}")
+            return {**state, "valid_pymupdf": False}
 
-        summary = _call_llm(llm, prompt)
-        return {**state, "table_summary": summary}
+        response_text = _call_llm(llm, prompt)
+        response_json = _safe_parse_json(response_text)
+        
+        valid = False
+        if response_json:
+            valid = bool(response_json.get("valid", False))
+            
+        logger.info(f"PyMuPDF validation result: {valid}")
+        return {**state, "valid_pymupdf": valid}
 
     return _node
 
@@ -143,15 +198,14 @@ def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "
         if state.get("errors"):
             return state
         html = state.get("html_table")
-        summary = state.get("table_summary")
 
-        if not html or not summary:
+        if not html:
             errors = state.get("errors", [])
             errors.append("Insufficient information to generate synthetic table.")
             return {**state, "errors": errors}
 
         try:
-            prompt = prompt_template.format(html=html, summary=summary)
+            prompt = prompt_template.format(html=html)
         except KeyError as e:
             errors = state.get("errors", [])
             errors.append(f"Prompt template missing placeholder: {e}")
@@ -314,7 +368,8 @@ def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
     graph = StateGraph(TableState)
 
     graph.add_node("image_to_html", image_to_html_node(llm))
-    graph.add_node("parse_contents", parse_contents_node(llm))
+    graph.add_node("pymupdf_parse", pymupdf_parse_node)
+    graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
     graph.add_node("generate_synthetic_table", generate_synthetic_table_node(llm))
 
     graph.add_node("self_reflection", self_reflection_node(llm))
@@ -322,9 +377,19 @@ def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
     graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
 
 
-    graph.add_edge(START, "image_to_html")
-    graph.add_edge("image_to_html", "parse_contents")
-    graph.add_edge("parse_contents", "generate_synthetic_table")
+    graph.add_edge(START, "pymupdf_parse")
+    graph.add_edge("pymupdf_parse", "validate_parsed_table")
+    
+    graph.add_conditional_edges(
+        "validate_parsed_table",
+        route_after_validation,
+        {
+            "generate_synthetic_table": "generate_synthetic_table",
+            "image_to_html": "image_to_html",
+        }
+    )
+
+    graph.add_edge("image_to_html", "generate_synthetic_table")
     graph.add_edge("generate_synthetic_table", "self_reflection")
 
     graph.add_conditional_edges(
