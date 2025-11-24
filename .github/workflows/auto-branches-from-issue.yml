@@ -1,0 +1,131 @@
+name: Create branches from issue
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  create_branches:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: dev # 베이스 브랜치
+
+      - name: Install Git LFS (for stable git ls-remote)
+        run: |
+          sudo apt-get install git-lfs -y
+
+      - name: Create feature branch with sequential index if title conflicts
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          BASE_BRANCH: dev
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          
+          echo "Issue title: $ISSUE_TITLE"
+          
+          # 1. 태그 제거 및 슬러그 생성
+          CLEAN_TITLE=$(echo "$ISSUE_TITLE" | sed 's/^\[[^]]*\][[:space:]]*//')
+          CLEAN_TITLE=$(echo "$CLEAN_TITLE" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          SLUG=$(echo "$CLEAN_TITLE" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed 's/[[:punct:]]//g' \
+            | tr ' ' '-' \
+          )
+          SLUG=$(echo "$SLUG" \
+            | sed 's/-\+/-/g' \
+            | sed 's/^-//' \
+            | sed 's/-$//' \
+          )
+          
+          if [ -z "$SLUG" ]; then
+            echo "Slug is empty. Aborting."
+            exit 1
+          fi
+          
+          echo "Generated Slug: $SLUG"
+
+          # 2. 다음 순번(Index) 결정 (동일 SLUG에 대해서만 순번 증가)
+          
+          REPO="${{ github.repository }}"
+          TARGET_PREFIX="feature/${SLUG}"
+          
+          # 원격 저장소에서 동일 슬러그로 시작하는 모든 브랜치 목록을 가져옵니다.
+          EXISTING_MATCHES=$(git ls-remote --heads origin "refs/heads/${TARGET_PREFIX}*" | awk '{print $2}' | sed 's/refs\/heads\///')
+          
+          MAX_INDEX=-1
+          
+          for BRANCH in $EXISTING_MATCHES; do
+              # 브랜치 이름의 접두사 패턴 설정
+              PREFIX_PATTERN="$TARGET_PREFIX"
+              
+              CURRENT_INDEX=""
+              
+              # 패턴 1: feature/SLUG-XX-issue (순번이 붙은 경우)
+              if echo "$BRANCH" | grep -E -q "^${PREFIX_PATTERN}-[0-9]{2}-issue$"; then
+                  # sed 구분자를 #으로 변경하여 충돌 방지. XX만 추출합니다.
+                  CURRENT_INDEX=$(echo "$BRANCH" | sed "s#^${PREFIX_PATTERN}-\([0-9]\{2\}\)-issue$#\1#")
+              
+              # 패턴 2: feature/SLUG-issue (순번이 없는 첫 번째 브랜치)
+              elif echo "$BRANCH" | grep -E -q "^${PREFIX_PATTERN}-issue$"; then
+                  CURRENT_INDEX="00"
+              fi
+
+              # CURRENT_INDEX가 추출되었을 경우에만 MAX_INDEX와 비교
+              if [ -n "$CURRENT_INDEX" ]; then
+                # 인덱스를 정수로 변환하여 비교합니다.
+                NUM_INDEX=$(printf "%d" "$CURRENT_INDEX")
+                
+                if [ "$NUM_INDEX" -gt "$MAX_INDEX" ]; then
+                    MAX_INDEX="$NUM_INDEX"
+                fi
+              fi
+          done
+
+          # 3. 브랜치 이름 포맷 결정
+          
+          DEFAULT_BRANCH_NAME="${TARGET_PREFIX}-issue"
+          
+          # 저장소에 이미 해당 브랜치명이 존재하는지 확인 (순번이 없는 기본 이름)
+          if git ls-remote --heads origin "$DEFAULT_BRANCH_NAME" | grep "$DEFAULT_BRANCH_NAME" > /dev/null; then
+              # 브랜치가 이미 존재하면, MAX_INDEX를 기준으로 다음 순번을 사용합니다.
+              # MAX_INDEX가 -1이면 00, 00이면 01, 01이면 02...
+              NEXT_INDEX=$((MAX_INDEX + 1))
+              
+              if [ "$NEXT_INDEX" -gt 20 ]; then
+                 echo "Maximum index (20) reached for $SLUG. No branch created."
+                 exit 1
+              fi
+
+              FORMATTED_INDEX=$(printf "%02d" $NEXT_INDEX)
+              BRANCH_NAME="${TARGET_PREFIX}-${FORMATTED_INDEX}-issue"
+              echo "Conflict detected. Next Index: $FORMATTED_INDEX"
+          else
+              # 브랜치가 존재하지 않으면 순번이 없는 기본 이름을 사용합니다.
+              BRANCH_NAME="$DEFAULT_BRANCH_NAME"
+              echo "No conflict detected. Using default branch name."
+          fi
+          
+          echo "Final Branch Name: $BRANCH_NAME"
+
+          # 4. 브랜치 생성 및 이슈 연결 (GH CLI 사용)
+          
+          gh issue develop "$ISSUE_NUMBER" \
+            --repo "$REPO" \
+            --branch-repo "$REPO" \
+            --base "$BASE_BRANCH" \
+            --name "$BRANCH_NAME"
+          
+          echo "Branch created and linked successfully."
+          echo "Linked branches now:"
+          gh issue develop --list --repo "$REPO" "$ISSUE_NUMBER"
