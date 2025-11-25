@@ -31,6 +31,7 @@ app.mount("/static", StaticFiles(directory=str(BASE_DIR)), name="static")
 
 class UpdateRequest(BaseModel):
     synthetic_json: Dict[str, Any]
+    qa_results: list[Dict[str, Any]] | None = None
 
 
 @app.get("/api/data")
@@ -67,6 +68,7 @@ async def get_data():
             "html_table": html_content,
             "synthetic_table": synthetic_html_content,
             "synthetic_json": data.get("synthetic_json"),
+            "qa_results": data.get("qa_results", []),
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -83,6 +85,8 @@ async def save_data(request: UpdateRequest):
             data = json.load(f)
         
         data["synthetic_json"] = request.synthetic_json
+        if request.qa_results is not None:
+            data["qa_results"] = request.qa_results
         
         with open(OUTPUT_JSON_PATH, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)

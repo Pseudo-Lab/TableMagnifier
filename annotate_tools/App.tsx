@@ -8,6 +8,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [jsonInput, setJsonInput] = useState<string>('');
+  const [qaInput, setQaInput] = useState<string>('');
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -21,6 +22,7 @@ const App: React.FC = () => {
       const result: TableGenerationResult = await response.json();
       setData(result);
       setJsonInput(JSON.stringify(result.synthetic_json, null, 2));
+      setQaInput(JSON.stringify(result.qa_results, null, 2));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     } finally {
@@ -36,12 +38,16 @@ const App: React.FC = () => {
     setSaveStatus('Saving...');
     try {
       const parsedJson = JSON.parse(jsonInput);
+      const parsedQa = JSON.parse(qaInput);
       const response = await fetch(`${API_BASE_URL}/save`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ synthetic_json: parsedJson }),
+        body: JSON.stringify({
+          synthetic_json: parsedJson,
+          qa_results: parsedQa
+        }),
       });
 
       if (!response.ok) {
@@ -107,9 +113,9 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Visuals */}
-          <div className="space-y-8">
+          <div className="space-y-8 lg:col-span-1">
 
             {/* Original Image */}
             <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
@@ -142,12 +148,22 @@ const App: React.FC = () => {
 
           </div>
 
-          {/* Right Column: JSON Editor */}
-          <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col h-full">
+          {/* Middle Column: JSON Editor */}
+          <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col h-full lg:col-span-1">
             <h2 className="text-xl font-bold text-teal-300 mb-4">Synthetic JSON (Editable)</h2>
             <textarea
               value={jsonInput}
               onChange={(e) => setJsonInput(e.target.value)}
+              className="flex-grow w-full bg-gray-900 border border-gray-600 text-gray-200 font-mono text-sm p-4 rounded-lg focus:ring-blue-500 focus:border-blue-500 min-h-[600px]"
+            />
+          </div>
+
+          {/* Right Column: QA Editor */}
+          <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col h-full lg:col-span-1">
+            <h2 className="text-xl font-bold text-teal-300 mb-4">QA Pairs (Editable)</h2>
+            <textarea
+              value={qaInput}
+              onChange={(e) => setQaInput(e.target.value)}
               className="flex-grow w-full bg-gray-900 border border-gray-600 text-gray-200 font-mono text-sm p-4 rounded-lg focus:ring-blue-500 focus:border-blue-500 min-h-[600px]"
             />
           </div>

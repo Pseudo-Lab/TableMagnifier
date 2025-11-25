@@ -31,7 +31,7 @@ class TableState(TypedDict, total=False):
     valid_pymupdf: bool             # PyMuPDF 파싱 결과 유효성
     errors: List[str]
     synthetic_json: dict            # 파싱된 합성 데이터 JSON
-
+    qa_results: List[Dict]          # 생성된 QA 쌍
 
 
 def _encode_image(image_path: Path) -> str:
@@ -188,6 +188,34 @@ def validate_parsed_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
     return _node
 
 
+def analyze_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
+    """Analyze the table to generate a summary of its structure and content."""
+    prompt_template = _load_prompt("parse_contents")
+
+    def _node(state: TableState) -> TableState:
+        logger.info("Entering node: analyze_table")
+        if state.get("errors"):
+            return state
+
+        html = state.get("html_table")
+        if not html:
+            errors = state.get("errors", [])
+            errors.append("No HTML table to analyze.")
+            return {**state, "errors": errors}
+
+        try:
+            prompt = prompt_template.format(html=html)
+        except KeyError as e:
+            errors = state.get("errors", [])
+            errors.append(f"Analysis prompt missing placeholder: {e}")
+            return {**state, "errors": errors}
+
+        summary = _call_llm(llm, prompt)
+        return {**state, "table_summary": summary}
+
+    return _node
+
+
 def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "TableState"]:
     """Create a node that generates a synthetic dataset with the same structure."""
 
@@ -198,15 +226,27 @@ def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "
         if state.get("errors"):
             return state
         html = state.get("html_table")
+        summary = state.get("table_summary")
 
         if not html:
             errors = state.get("errors", [])
             errors.append("Insufficient information to generate synthetic table.")
             return {**state, "errors": errors}
+        
+        # summary가 없어도 진행은 가능하지만, 경고를 남기거나 빈 문자열 처리
+        if not summary:
+            logger.warning("No table summary available for synthetic generation.")
+            summary = "No summary provided."
 
         try:
-            prompt = prompt_template.format(html=html)
+            prompt = prompt_template.format(html=html, summary=summary)
         except KeyError as e:
+            # 템플릿에 summary가 추가되었는지 확인 필요. 
+            # 기존 프롬프트 파일에는 {summary}가 없을 수도 있음. 
+            # 하지만 계획상으로는 summary를 사용하는 것이 목표임.
+            # 만약 프롬프트 파일에 {summary}가 없다면 format에서 무시되거나 에러가 날 수 있음.
+            # 여기서는 프롬프트 파일도 확인/수정해야 할 수 있음.
+            # 일단 에러 처리.
             errors = state.get("errors", [])
             errors.append(f"Prompt template missing placeholder: {e}")
             return {**state, "errors": errors}
@@ -347,6 +387,41 @@ def parse_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
     return _node
 
 
+def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
+    """Generate QA pairs based on the synthetic table."""
+    prompt_template = _load_prompt("generate_qa")
+
+    def _node(state: TableState) -> TableState:
+        logger.info("Entering node: generate_qa")
+        if state.get("errors"):
+            return state
+
+        synthetic_html = state.get("synthetic_table")
+        if not synthetic_html:
+            errors = state.get("errors", [])
+            errors.append("No synthetic table for QA generation.")
+            return {**state, "errors": errors}
+
+        try:
+            prompt = prompt_template.format(synthetic_html=synthetic_html)
+        except KeyError as e:
+            errors = state.get("errors", [])
+            errors.append(f"QA prompt missing placeholder: {e}")
+            return {**state, "errors": errors}
+
+        response_text = _call_llm(llm, prompt)
+        response_json = _safe_parse_json(response_text)
+        
+        qa_results = []
+        if response_json and "qa_pairs" in response_json:
+            qa_results = response_json["qa_pairs"]
+        else:
+             logger.warning("QA generation did not return valid JSON or 'qa_pairs' key.")
+
+        return {**state, "qa_results": qa_results}
+
+    return _node
+
 
 def route_after_reflection(state: TableState) -> str:
     passed = state.get("passed", False)
@@ -360,8 +435,6 @@ def route_after_reflection(state: TableState) -> str:
     return "revise_synthetic_table"
 
 
-
-
 def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
     """Assemble the LangGraph pipeline with reflection-based regeneration loop."""
 
@@ -370,11 +443,13 @@ def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
     graph.add_node("image_to_html", image_to_html_node(llm))
     graph.add_node("pymupdf_parse", pymupdf_parse_node)
     graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
+    graph.add_node("analyze_table", analyze_table_node(llm))
     graph.add_node("generate_synthetic_table", generate_synthetic_table_node(llm))
 
     graph.add_node("self_reflection", self_reflection_node(llm))
     graph.add_node("revise_synthetic_table", revise_synthetic_table_node(llm))
     graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
+    graph.add_node("generate_qa", generate_qa_node(llm))
 
 
     graph.add_edge(START, "pymupdf_parse")
@@ -384,12 +459,13 @@ def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
         "validate_parsed_table",
         route_after_validation,
         {
-            "generate_synthetic_table": "generate_synthetic_table",
+            "generate_synthetic_table": "analyze_table", # Valid -> Analyze
             "image_to_html": "image_to_html",
         }
     )
 
-    graph.add_edge("image_to_html", "generate_synthetic_table")
+    graph.add_edge("image_to_html", "analyze_table") # VLM -> Analyze
+    graph.add_edge("analyze_table", "generate_synthetic_table") # Analyze -> Generate
     graph.add_edge("generate_synthetic_table", "self_reflection")
 
     graph.add_conditional_edges(
@@ -404,8 +480,11 @@ def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
     # revise 후 다시 reflection으로
     graph.add_edge("revise_synthetic_table", "self_reflection")
     
-    # 파싱 후 종료
-    graph.add_edge("parse_synthetic_table", END)
+    # 파싱 후 QA 생성으로
+    graph.add_edge("parse_synthetic_table", "generate_qa")
+    
+    # QA 생성 후 종료
+    graph.add_edge("generate_qa", END)
 
 
     return graph

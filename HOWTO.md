@@ -4,13 +4,15 @@ LangGraph 기반의 Agentic 플로우를 이용해 한국어 표 이미지를 �
 
 ## 구성
 
-플로우는 다음 5단계로 구성되어 있습니다.
+플로우는 다음 7단계로 구성되어 있습니다.
 
 1. **Image2HTML** – 표 이미지를 HTML `<table>` 구조로 복원합니다.
 2. **Validate PyMuPDF** – PyMuPDF로 파싱된 결과가 유효한지 검증합니다.
-3. **Generate Synthetic Dataset** – 동일한 구조를 유지하면서 합성 데이터를 채운 HTML 표를 생성합니다. (PyMuPDF 실패 시 Image2HTML 수행 후 진행)
-4. **Self-Reflection** – 생성된 표가 라이선스/개인정보 이슈가 없는지 점검하고, 필요시 재생성을 요청합니다.
-5. **Parse Synthetic Table** – 최종 생성된 합성 HTML 표를 구조화된 JSON 포맷으로 변환합니다.
+3. **Analyze Table** – 추출된 HTML 표의 구조와 데이터 패턴을 분석하여 요약합니다.
+4. **Generate Synthetic Dataset** – 분석된 요약을 바탕으로 동일한 구조를 유지하면서 합성 데이터를 채운 HTML 표를 생성합니다.
+5. **Self-Reflection** – 생성된 표가 라이선스/개인정보 이슈가 없는지 점검하고, 필요시 재생성을 요청합니다.
+6. **Parse Synthetic Table** – 최종 생성된 합성 HTML 표를 구조화된 JSON 포맷으로 변환합니다.
+7. **Generate QA** – 합성된 표 데이터를 바탕으로 질문-답변(QA) 쌍을 생성합니다.
 
 ## Flow Diagram
 
@@ -20,17 +22,19 @@ graph TD
     
     pymupdf_parse --> validate_parsed_table[Validate PyMuPDF]
     
-    validate_parsed_table -->|Valid| generate_synthetic_table[Generate Synthetic Table]
+    validate_parsed_table -->|Valid| analyze_table[Analyze Table]
     validate_parsed_table -->|Invalid| image_to_html[Image to HTML]
     
-    image_to_html --> generate_synthetic_table
+    image_to_html --> analyze_table
+    analyze_table --> generate_synthetic_table[Generate Synthetic Table]
     generate_synthetic_table --> self_reflection[Self Reflection]
     
     self_reflection -->|Passed| parse_synthetic_table[Parse Synthetic Table]
     self_reflection -->|Failed| revise_synthetic_table[Revise Synthetic Table]
     
     revise_synthetic_table --> self_reflection
-    parse_synthetic_table --> END[End]
+    parse_synthetic_table --> generate_qa[Generate QA]
+    generate_qa --> END[End]
 ```
 
 ## 주요 코드 설명 (Code Review Guide)
