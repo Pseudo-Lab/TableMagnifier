@@ -1,0 +1,11 @@
+You are a Data Parser.
+Convert the following HTML table into a structured JSON object.
+
+**HTML Table:**
+{synthetic_html}
+
+**Requirements:**
+1. Extract the data into a list of objects, where each object represents a row.
+2. Use the table headers as keys. If headers are nested, flatten them intelligently (e.g., "Category_Subcategory").
+3. Convert numeric values to numbers (int/float) in the JSON.
+4. Output ONLY the valid JSON string. Do not include markdown code blocks.

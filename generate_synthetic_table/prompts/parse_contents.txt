@@ -1,0 +1,10 @@
+Analyze the following HTML table and summarize its schema and content patterns.
+
+**HTML Table:**
+{html}
+
+**Instructions:**
+1. Identify the key columns and their hierarchical structure if headers are nested.
+2. For each column, describe the data type (e.g., text, integer, float, date, currency) and any specific patterns (e.g., "YYYY-MM-DD", "KRW 1,000", "Name (Team)").
+3. Note any constraints or relationships between columns (e.g., "Total = A + B").
+4. Provide a concise summary that can be used to generate realistic synthetic data matching this table's style and structure.

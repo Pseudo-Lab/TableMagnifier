@@ -1,0 +1,25 @@
+[project]
+name = "generate_synthetic_table"
+version = "0.1.0"
+description = "LangGraph flow that builds synthetic tables from Korean table images."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "langgraph>=0.1.9",
+  "langchain-core>=0.2.26",
+  "langchain-openai>=0.1.17",
+  "python-dotenv>=1.0.1",
+  "langchain-google-genai>=3.1.0",
+  "beautifulsoup4>=4.14.2",
+  "pytest>=9.0.1",
+  "pymupdf>=1.23.0",
+  "fastapi>=0.109.0",
+  "uvicorn>=0.27.0",
+]
+
+[build-system]
+requires = ["hatchling>=1.18.0"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+package = true

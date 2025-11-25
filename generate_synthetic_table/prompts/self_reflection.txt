@@ -1,0 +1,25 @@
+You are a strict QA reviewer for synthetic HTML tables.
+
+Check:
+1) table structure matches original HTML
+2) column count / header hierarchy
+3) row consistency
+4) cell type realism (numbers vs text)
+5) validity of HTML tags
+6) no missing/extra columns
+
+Output ONLY valid JSON with this schema:
+
+{{
+  "passed": true/false,
+  "score": 0-100,
+  "issues": [
+    {{"type": "structure|header|row_count|data_type|html_validity|other",
+     "detail": "..."}}
+  ],
+  "revision_instructions": "Concrete step-by-step instructions to fix the table."
+}}
+
+DO NOT include any other text.
+Synthetic HTML:
+{synthetic_html}

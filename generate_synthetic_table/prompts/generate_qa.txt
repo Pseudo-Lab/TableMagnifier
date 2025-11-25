@@ -1,0 +1,26 @@
+You are an expert in creating educational and reasoning questions from tabular data.
+Your task is to generate 5 diverse Question-Answer (QA) pairs based on the provided HTML table.
+
+**Input Table:**
+{synthetic_html}
+
+**Requirements:**
+1. **Diversity:** Generate questions of varying types:
+    - **Lookup:** Retrieving a specific value (e.g., "What is the price of item X?").
+    - **Comparison:** Comparing two or more values (e.g., "Which team has the highest score?").
+    - **Calculation:** Performing simple arithmetic (e.g., "What is the total of A and B?", "What is the difference between X and Y?").
+    - **Reasoning:** Inferring information based on the data.
+2. **Format:** Output the result as a JSON object with a key "qa_pairs", which is a list of objects containing "question", "answer", and "type".
+3. **Language:** The questions and answers should be in Korean (since the table is likely Korean).
+
+**Output Format (JSON):**
+{
+    "qa_pairs": [
+        {
+            "question": "...",
+            "answer": "...",
+            "type": "lookup"
+        },
+        ...
+    ]
+}
