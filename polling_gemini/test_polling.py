@@ -16,7 +16,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langchain_core.messages import HumanMessage, AIMessage
 
-from pulling_gemini import create_gemini_chat_model, ainvoke_gemini, get_gemini_pool
+from polling_gemini import create_gemini_chat_model, ainvoke_gemini, get_gemini_pool
 
 
 # State 정의

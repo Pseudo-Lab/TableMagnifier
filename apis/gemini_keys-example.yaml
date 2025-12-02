@@ -13,6 +13,8 @@ api_keys:
     name: "key3"
     enabled: true
 
+    
+
 # API 설정
 settings:
   model: "gemini-2.5-flash"  # 사용할 모델 설정하는 곳
