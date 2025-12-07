@@ -1,7 +1,7 @@
 You are a strict QA reviewer for synthetic HTML tables.
 
 Check:
-1) table structure matches original HTML
+1) table structure matches the original table in the image
 2) column count / header hierarchy
 3) row consistency
 4) cell type realism (numbers vs text)
@@ -21,8 +21,5 @@ Output ONLY valid JSON with this schema:
 }}
 
 DO NOT include any other text.
-Original HTML:
-{html}
-
 Synthetic HTML:
 {synthetic_html}

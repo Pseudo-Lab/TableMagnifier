@@ -18,8 +18,11 @@ LangGraph 기반의 Agentic 플로우를 이용해 한국어 표 이미지를 �
 
 ```mermaid
 graph TD
-    START[Start] --> pymupdf_parse[PyMuPDF Parse]
-    
+    START[Start] -->|Provider: OpenAI/Gemini| generate_synthetic_table_from_image[Generate Synthetic Table From Image]
+    START[Start] -->|Other Providers| pymupdf_parse[PyMuPDF Parse]
+
+    generate_synthetic_table_from_image --> self_reflection[Self Reflection]
+
     pymupdf_parse --> validate_parsed_table[Validate PyMuPDF]
     
     validate_parsed_table -->|Valid| analyze_table[Analyze Table]
@@ -27,7 +30,7 @@ graph TD
     
     image_to_html --> analyze_table
     analyze_table --> generate_synthetic_table[Generate Synthetic Table]
-    generate_synthetic_table --> self_reflection[Self Reflection]
+    generate_synthetic_table --> self_reflection
     
     self_reflection -->|Passed| parse_synthetic_table[Parse Synthetic Table]
     self_reflection -->|Failed| revise_synthetic_table[Revise Synthetic Table]

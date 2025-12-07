@@ -1,13 +1,21 @@
 
 import json
 import os
+import argparse
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+
+# Global state for the server
+class ServerState:
+    output_json_path: Path | None = None
+    base_dir: Path | None = None
+
+state = ServerState()
 
 app = FastAPI()
 
@@ -20,15 +28,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Paths
-BASE_DIR = Path(__file__).parent.parent.resolve()
-OUTPUT_JSON_PATH = BASE_DIR / "output.json"
-
-# Serve static files (for images if needed, though we might need to be careful with paths)
-# Assuming images are relative to BASE_DIR
-app.mount("/static", StaticFiles(directory=str(BASE_DIR)), name="static")
-
-
 class UpdateRequest(BaseModel):
     synthetic_json: Dict[str, Any]
     qa_results: list[Dict[str, Any]] | None = None
@@ -36,11 +35,11 @@ class UpdateRequest(BaseModel):
 
 @app.get("/api/data")
 async def get_data():
-    if not OUTPUT_JSON_PATH.exists():
-        raise HTTPException(status_code=404, detail="output.json not found. Run the generation flow first.")
+    if not state.output_json_path or not state.output_json_path.exists():
+        raise HTTPException(status_code=404, detail="Output JSON file not found.")
 
     try:
-        with open(OUTPUT_JSON_PATH, "r", encoding="utf-8") as f:
+        with open(state.output_json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
         
         # Read HTML content if paths exist
@@ -50,16 +49,16 @@ async def get_data():
         html_content = ""
         if html_table_path:
             p = Path(html_table_path)
-            if not p.is_absolute():
-                p = BASE_DIR / p
+            if not p.is_absolute() and state.base_dir:
+                p = state.base_dir / p
             if p.exists():
                 html_content = p.read_text(encoding="utf-8")
 
         synthetic_html_content = ""
         if synthetic_table_path:
             p = Path(synthetic_table_path)
-            if not p.is_absolute():
-                p = BASE_DIR / p
+            if not p.is_absolute() and state.base_dir:
+                p = state.base_dir / p
             if p.exists():
                 synthetic_html_content = p.read_text(encoding="utf-8")
 
@@ -76,29 +75,23 @@ async def get_data():
 
 @app.post("/api/save")
 async def save_data(request: UpdateRequest):
-    if not OUTPUT_JSON_PATH.exists():
-        raise HTTPException(status_code=404, detail="output.json not found.")
+    if not state.output_json_path or not state.output_json_path.exists():
+        raise HTTPException(status_code=404, detail="Output JSON file not found.")
 
     try:
         # 1. Update output.json
-        with open(OUTPUT_JSON_PATH, "r", encoding="utf-8") as f:
+        with open(state.output_json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
         
         data["synthetic_json"] = request.synthetic_json
         if request.qa_results is not None:
             data["qa_results"] = request.qa_results
         
-        with open(OUTPUT_JSON_PATH, "w", encoding="utf-8") as f:
+        with open(state.output_json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
         # 2. Update synthetic_json file if it exists
-        # We need to find the path. In output.json it might not be explicitly stored as a separate key 
-        # other than what we put in there.
-        # But based on runner.py: 
-        # synthetic_json_path = base.with_name(base.name + "_synthetic.json")
-        # And we know output.json path.
-        
-        synthetic_json_path = OUTPUT_JSON_PATH.with_name(OUTPUT_JSON_PATH.stem + "_synthetic.json")
+        synthetic_json_path = state.output_json_path.with_name(state.output_json_path.stem + "_synthetic.json")
         if synthetic_json_path.exists():
              with open(synthetic_json_path, "w", encoding="utf-8") as f:
                 json.dump(request.synthetic_json, f, ensure_ascii=False, indent=2)
@@ -108,6 +101,42 @@ async def save_data(request: UpdateRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-if __name__ == "__main__":
+def start_server():
+    parser = argparse.ArgumentParser(description="Run the annotation tool server.")
+    parser.add_argument(
+        "--file", 
+        type=Path, 
+        default=Path("output.json"),
+        help="Path to the output.json file to serve (default: output.json)"
+    )
+    parser.add_argument(
+        "--host", 
+        default="0.0.0.0", 
+        help="Host to bind to (default: 0.0.0.0)"
+    )
+    parser.add_argument(
+        "--port", 
+        type=int, 
+        default=8000, 
+        help="Port to bind to (default: 8000)"
+    )
+    
+    args = parser.parse_args()
+    
+    state.output_json_path = args.file.resolve()
+    state.base_dir = state.output_json_path.parent
+    
+    if not state.output_json_path.exists():
+        print(f"Warning: {state.output_json_path} does not exist yet.")
+    else:
+        print(f"Serving data from: {state.output_json_path}")
+
+    # Mount static files relative to the output file's directory
+    # This allows serving images if they are in the same directory structure
+    app.mount("/static", StaticFiles(directory=str(state.base_dir)), name="static")
+
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=args.host, port=args.port)
+
+if __name__ == "__main__":
+    start_server()
