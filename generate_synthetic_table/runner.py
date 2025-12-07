@@ -22,7 +22,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "image",
         type=Path,
-        help="Path to the input table image",
+        help="Path to the input table image or HTML file",
     )
     parser.add_argument(
         "--provider",

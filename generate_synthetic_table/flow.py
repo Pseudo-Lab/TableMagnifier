@@ -176,7 +176,7 @@ def validate_parsed_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
             return {**state, "valid_pymupdf": False}
 
         response_text = _call_llm(llm, prompt)
-        response_json = _safe_parse_json(response_text)
+        response_json = robust_json_parse(response_text)
         
         valid = False
         if response_json:
@@ -257,18 +257,43 @@ def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "
     return _node
 
 
+def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["TableState"], "TableState"]:
+    """Generate synthetic table directly from image (for powerful models)."""
+    prompt_template = _load_prompt("generate_synthetic_table_from_image")
+
+    def _node(state: "TableState") -> "TableState":
+        logger.info("Entering node: generate_synthetic_table_from_image")
+        if state.get("errors"):
+            return state
+
+        image_path = Path(state["image_path"])
+        if not image_path.exists():
+            errors = state.get("errors", [])
+            errors.append(f"Image not found: {image_path}")
+            return {**state, "errors": errors}
+
+        image_data_url = _encode_image(image_path)
+        
+        # Prompt doesn't have placeholders, it just expects the image
+        prompt = prompt_template
+        
+        synthetic_html = _call_llm(llm, prompt, image_urls=[image_data_url])
+        return {**state, "synthetic_table": synthetic_html}
+
+    return _node
+
+
 from .validators import robust_json_parse, validate_html
 import logging
 
 logger = logging.getLogger(__name__)
 
-def _safe_parse_json(text: str) -> Optional[dict]:
-    """Deprecated: Use validators.robust_json_parse instead."""
-    return robust_json_parse(text)
+
 
 
 def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     prompt_template = _load_prompt("self_reflection")
+    prompt_template_image = _load_prompt("self_reflection_from_image")
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: self_reflection")
@@ -276,22 +301,56 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             return state
 
         synthetic_html = state.get("synthetic_table")
+        html = state.get("html_table")
+        image_path = Path(state["image_path"])
+
         if not synthetic_html:
             errors = state.get("errors", [])
             errors.append("Synthetic table generation failed.")
             return {**state, "errors": errors}
 
-        try:
-            prompt = prompt_template.format(synthetic_html=synthetic_html)
-        except KeyError as e:
-            errors = state.get("errors", [])
-            errors.append(f"Prompt template missing placeholder: {e}")
-            return {**state, "errors": errors}
+        # If we don't have the original HTML (direct path), use the image for reflection
+        if not html:
+            if not image_path.exists():
+                 errors = state.get("errors", [])
+                 errors.append("Original image missing for reflection.")
+                 return {**state, "errors": errors}
+            
+            image_data_url = _encode_image(image_path)
+            try:
+                prompt = prompt_template_image.format(synthetic_html=synthetic_html)
+            except KeyError as e:
+                errors = state.get("errors", [])
+                errors.append(f"Reflection prompt missing placeholder: {e}")
+                return {**state, "errors": errors}
+            
+            reflection_text = _call_llm(llm, prompt, image_urls=[image_data_url])
+        
+        else:
+            # Use text-based reflection (existing logic)
+            # Note: The existing prompt only takes {synthetic_html}, 
+            # but implicitly assumes the model knows the "original HTML" from context or it's just checking validity.
+            # Wait, the existing prompt says "matches original HTML" but doesn't take {html} as input?
+            # Let's check the prompt file again.
+            # "Synthetic HTML: {synthetic_html}"
+            # It seems the previous implementation was slightly flawed or relied on the model hallucinating the original?
+            # Or maybe I should pass {html} to the original prompt too if it's available?
+            # The current prompt file only has {synthetic_html}.
+            # If I want it to compare, I should probably provide the original HTML.
+            # But for now, I will stick to the existing behavior for the text path, 
+            # and use the image path for the direct generation.
+            
+            try:
+                prompt = prompt_template.format(synthetic_html=synthetic_html, html=html)
+            except KeyError as e:
+                errors = state.get("errors", [])
+                errors.append(f"Prompt template missing placeholder: {e}")
+                return {**state, "errors": errors}
 
-        reflection_text = _call_llm(llm, prompt)
+            reflection_text = _call_llm(llm, prompt)
 
 
-        reflection_json = _safe_parse_json(reflection_text)
+        reflection_json = robust_json_parse(reflection_text)
         if reflection_json is None:
             errors = state.get("errors", [])
             errors.append("Self-reflection did not return valid JSON.")
@@ -313,6 +372,7 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
 def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     prompt_template = _load_prompt("revise_synthetic_table")
+    prompt_template_image = _load_prompt("revise_synthetic_table_from_image")
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: revise_synthetic_table")
@@ -323,25 +383,50 @@ def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], Table
         summary = state.get("table_summary")
         synthetic_html = state.get("synthetic_table")
         instructions = state.get("revision_instructions", "")
+        image_path = Path(state["image_path"])
 
-        if not html or not summary or not synthetic_html:
+        if not synthetic_html:
             errors = state.get("errors", [])
-            errors.append("Insufficient info for revision.")
+            errors.append("No synthetic table to revise.")
             return {**state, "errors": errors}
 
-        try:
-            prompt = prompt_template.format(
-                html=html,
-                summary=summary,
-                synthetic_html=synthetic_html,
-                revision_instructions=instructions,
-            )
-        except KeyError as e:
-            errors = state.get("errors", [])
-            errors.append(f"Revision prompt missing placeholder: {e}")
-            return {**state, "errors": errors}
+        # Check if we are in the "direct generation" path (missing html/summary)
+        if not html or not summary:
+            # Use image-based revision
+            if not image_path.exists():
+                 errors = state.get("errors", [])
+                 errors.append("Original image missing for revision.")
+                 return {**state, "errors": errors}
+            
+            image_data_url = _encode_image(image_path)
+            try:
+                prompt = prompt_template_image.format(
+                    synthetic_html=synthetic_html,
+                    revision_instructions=instructions
+                )
+            except KeyError as e:
+                errors = state.get("errors", [])
+                errors.append(f"Revision prompt missing placeholder: {e}")
+                return {**state, "errors": errors}
+            
+            new_synthetic_html = _call_llm(llm, prompt, image_urls=[image_data_url])
 
-        new_synthetic_html = _call_llm(llm, prompt)
+        else:
+            # Use text-based revision (existing logic)
+            try:
+                prompt = prompt_template.format(
+                    html=html,
+                    summary=summary,
+                    synthetic_html=synthetic_html,
+                    revision_instructions=instructions,
+                )
+            except KeyError as e:
+                errors = state.get("errors", [])
+                errors.append(f"Revision prompt missing placeholder: {e}")
+                return {**state, "errors": errors}
+
+            new_synthetic_html = _call_llm(llm, prompt)
+
         attempts = int(state.get("attempts", 0)) + 1
         return {**state, "synthetic_table": new_synthetic_html, "attempts": attempts}
 
@@ -372,7 +457,7 @@ def parse_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
             return {**state, "errors": errors}
 
         json_text = _call_llm(llm, prompt)
-        parsed_json = _safe_parse_json(json_text)
+        parsed_json = robust_json_parse(json_text)
         
         if parsed_json is None:
              # 파싱 실패 시 에러보다는 경고/빈값 처리 혹은 재시도 로직? 
@@ -410,7 +495,7 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             return {**state, "errors": errors}
 
         response_text = _call_llm(llm, prompt)
-        response_json = _safe_parse_json(response_text)
+        response_json = robust_json_parse(response_text)
         
         qa_results = []
         if response_json and "qa_pairs" in response_json:
@@ -435,7 +520,21 @@ def route_after_reflection(state: TableState) -> str:
     return "revise_synthetic_table"
 
 
-def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
+def load_html_input_node(state: TableState) -> TableState:
+    """Load HTML content directly from a file."""
+    logger.info("Entering node: load_html_input")
+    
+    image_path = Path(state["image_path"])
+    try:
+        html_content = image_path.read_text(encoding="utf-8")
+        return {**state, "html_table": html_content}
+    except Exception as e:
+        errors = state.get("errors", [])
+        errors.append(f"Failed to load HTML file: {e}")
+        return {**state, "errors": errors}
+
+
+def build_synthetic_table_graph(llm: ChatOpenAI, provider: str = "openai") -> StateGraph:
     """Assemble the LangGraph pipeline with reflection-based regeneration loop."""
 
     graph = StateGraph(TableState)
@@ -445,29 +544,49 @@ def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
     graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
     graph.add_node("analyze_table", analyze_table_node(llm))
     graph.add_node("generate_synthetic_table", generate_synthetic_table_node(llm))
+    graph.add_node("generate_synthetic_table_from_image", generate_synthetic_table_from_image_node(llm))
+    graph.add_node("load_html_input", load_html_input_node)
 
     graph.add_node("self_reflection", self_reflection_node(llm))
     graph.add_node("revise_synthetic_table", revise_synthetic_table_node(llm))
     graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
     graph.add_node("generate_qa", generate_qa_node(llm))
 
+    # Routing based on provider and input type
+    def route_start(state: TableState) -> str:
+        image_path = Path(state["image_path"])
+        if image_path.suffix.lower() == ".html":
+            return "load_html_input"
 
-    graph.add_edge(START, "pymupdf_parse")
+        # Powerful models go direct
+        if provider in ["openai", "gemini"]:
+            return "generate_synthetic_table_from_image"
+        # Open models / others go through multi-stage
+        return "pymupdf_parse"
+
+    graph.add_conditional_edges(START, route_start)
+
+    # HTML Input path
+    graph.add_edge("load_html_input", "analyze_table")
+
+    # Multi-stage path
     graph.add_edge("pymupdf_parse", "validate_parsed_table")
-    
     graph.add_conditional_edges(
         "validate_parsed_table",
         route_after_validation,
         {
-            "generate_synthetic_table": "analyze_table", # Valid -> Analyze
+            "generate_synthetic_table": "analyze_table",
             "image_to_html": "image_to_html",
         }
     )
-
-    graph.add_edge("image_to_html", "analyze_table") # VLM -> Analyze
-    graph.add_edge("analyze_table", "generate_synthetic_table") # Analyze -> Generate
+    graph.add_edge("image_to_html", "analyze_table")
+    graph.add_edge("analyze_table", "generate_synthetic_table")
     graph.add_edge("generate_synthetic_table", "self_reflection")
 
+    # Direct path
+    graph.add_edge("generate_synthetic_table_from_image", "self_reflection")
+
+    # Shared reflection loop
     graph.add_conditional_edges(
         "self_reflection",
         route_after_reflection,
@@ -477,15 +596,9 @@ def build_synthetic_table_graph(llm: ChatOpenAI) -> StateGraph:
         },
     )
 
-    # revise 후 다시 reflection으로
     graph.add_edge("revise_synthetic_table", "self_reflection")
-    
-    # 파싱 후 QA 생성으로
     graph.add_edge("parse_synthetic_table", "generate_qa")
-    
-    # QA 생성 후 종료
     graph.add_edge("generate_qa", END)
-
 
     return graph
 
@@ -510,7 +623,7 @@ def run_synthetic_table_flow(
         base_url=base_url,
     )
     
-    app = build_synthetic_table_graph(llm).compile()
+    app = build_synthetic_table_graph(llm, provider=provider).compile()
 
     final_state: TableState = app.invoke({
         "image_path": image_path,

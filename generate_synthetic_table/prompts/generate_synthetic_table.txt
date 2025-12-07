@@ -5,6 +5,9 @@ Your task is to generate a new HTML table that mirrors the structure of the prov
 1. **Original Table Structure:**
 {html}
 
+2. **Table Summary:**
+{summary}
+
 **Requirements:**
 1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges) as the original table.
 2. **Data:** Replace ALL cell values with new, synthetic data.
