@@ -96,23 +96,130 @@ gantt
 **누구나 청강을 통해 모임을 참여하실 수 있습니다.**  
 1. 특별한 신청 없이 정기 모임 시간에 맞추어 디스코드 #Room-CS 채널로 입장
 2. Magical Week 중 행사에 참가
-3. Pseudo Lab 행사에서 만나기
+{{ ... }}
 
 ## Acknowledgement 🙏
 
 이 프로젝트는 가짜연구소 Open Academy로 진행됩니다.
 여러분의 참여와 기여가 ‘우연한 혁명(Serendipity Revolution)’을 가능하게 합니다. 모두에게 깊은 감사를 전합니다.
-TableMagnifier is developed as part of Pseudo-Lab's Open Research Initiative. Special thanks to our contributors and the open source community for their valuable insights and contributions.
+# TableMagnifier (테이블 매그니파이어)
 
-## About Pseudo Lab 👋🏼</h2>
+TableMagnifier는 한국어 테이블 이미지를 분석하여 구조화된 합성 데이터를 생성하고, 이를 검증 및 수정할 수 있는 도구입니다. LangGraph를 기반으로 한 멀티 에이전트 워크플로우를 통해 이미지에서 HTML 테이블 구조를 추출하고, 이를 바탕으로 새로운 합성 데이터를 생성합니다.
 
-[Pseudo-Lab](https://pseudo-lab.com/) is a non-profit organization focused on advancing machine learning and AI technologies. Our core values of Sharing, Motivation, and Collaborative Joy drive us to create impactful open-source projects. With over 5k+ researchers, we are committed to advancing machine learning and AI technologies.
+## 주요 기능
+
+- **이미지 to HTML 변환**: 테이블 이미지를 HTML 구조로 변환합니다.
+- **합성 데이터 생성**: 원본 테이블의 구조를 유지하면서 새로운 합성 데이터를 생성합니다.
+- **자가 검증 및 수정 (Self-Reflection)**: 생성된 합성 데이터가 원본 구조와 일치하는지 검증하고, 필요시 자동으로 수정합니다.
+- **QA 데이터 생성**: 생성된 합성 데이터를 바탕으로 RAG 학습용 QA 쌍을 생성합니다.
+- **웹 기반 검증 도구**: 생성된 데이터를 웹 인터페이스에서 시각적으로 확인하고 직접 수정할 수 있습니다.
+
+## 설치 방법
+
+### 사전 요구 사항
+- Python 3.10 이상
+- Node.js (검증 도구 실행 시 필요)
+- OpenAI API Key 또는 Google Gemini API Key
+
+### 1. 프로젝트 클론 및 의존성 설치
+
+```bash
+git clone https://github.com/your-repo/TableMagnifier.git
+cd TableMagnifier
+
+# 가상환경 생성 및 활성화
+python3 -m venv .venv
+source .venv/bin/activate
+
+# 의존성 설치
+pip install -r requirements.txt
+playwright install  # HTML 렌더링을 위한 브라우저 설치
+```
+
+### 2. 환경 변수 설정
+
+`.env` 파일을 생성하고 API 키를 입력하세요.
+
+```bash
+OPENAI_API_KEY=sk-...
+# 또는
+GOOGLE_API_KEY=AIza...
+```
+
+## 사용 방법
+
+### 1. 합성 데이터 생성 (CLI)
+
+이미지 파일 또는 HTML 파일을 입력으로 받아 합성 데이터를 생성합니다.
+
+```bash
+# 기본 실행 (OpenAI gpt-4.1-mini 사용)
+python main.py path/to/table_image.png --save-json output.json
+
+# Gemini 모델 사용
+python main.py path/to/table_image.png --provider gemini --model gemini-1.5-flash --save-json output.json
+
+# HTML 파일을 입력으로 사용
+python main.py path/to/table.html --save-json output.json
+```
+
+**옵션 설명:**
+- `image`: 입력 이미지 또는 HTML 파일 경로 (필수)
+- `--save-json`: 결과 JSON 저장 경로 (권장)
+- `--provider`: 사용할 LLM 제공자 (`openai`, `gemini`, `vllm`)
+- `--model`: 사용할 모델명 (기본: `gpt-4.1-mini`)
+- `--temperature`: 생성 다양성 조절 (기본: 0.2)
+
+### 2. 검증 도구 실행 (Web UI)
+
+생성된 `output.json`을 웹 인터페이스에서 확인하고 수정할 수 있습니다.
+
+**서버 실행:**
+```bash
+python annotate_tools/server.py --file output.json
+```
+
+**클라이언트 실행 (별도 터미널):**
+```bash
+cd annotate_tools
+npm install
+npm run dev
+```
+브라우저에서 `http://localhost:5173`으로 접속하여 데이터를 확인하세요.
+
+## 프로젝트 구조
+
+```
+TableMagnifier/
+├── generate_synthetic_table/   # 핵심 로직 (LangGraph 워크플로우)
+│   ├── flow.py                 # 그래프 정의 및 노드 구현
+│   ├── runner.py               # 실행 유틸리티
+│   ├── validators.py           # 데이터 검증 로직
+│   └── prompts/                # LLM 프롬프트 템플릿
+├── annotate_tools/             # 웹 기반 검증 도구
+│   ├── server.py               # FastAPI 백엔드
+│   └── (React Frontend Files)
+├── tests/                      # 테스트 코드
+├── main.py                     # CLI 진입점
+└── README.md                   # 설명서
+```
+
+## 개발자 가이드
+
+### 워크플로우 수정
+`generate_synthetic_table/flow.py`에서 LangGraph의 노드와 엣지를 수정하여 워크플로우를 변경할 수 있습니다.
+
+### 프롬프트 수정
+`generate_synthetic_table/prompts/` 디렉토리의 텍스트 파일을 수정하여 LLM의 동작을 제어할 수 있습니다.
+
+## 라이선스
+MIT License
+to advancing machine learning and AI technologies.
 
 <h2>Contributors 😃</h2>
 <a href="https://github.com/Pseudo-Lab/10th-template/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Pseudo-Lab/10th-template" />
 </a>
-<br><br>
 
 <h2>License 🗞</h2>
 

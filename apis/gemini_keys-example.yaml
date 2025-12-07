@@ -1,0 +1,23 @@
+## 이 파일 key를 추가한 후에 gemini_keys.yaml 파일로 이름을 변경하여 사용하세요 ##
+
+api_keys:
+  - key: "YOUR_GEMINI_API_KEY_1"
+    name: "key1"
+    enabled: true
+    
+  - key: "YOUR_GEMINI_API_KEY_2"
+    name: "key2"
+    enabled: true
+    
+  - key: "YOUR_GEMINI_API_KEY_3"
+    name: "key3"
+    enabled: true
+
+    
+
+# API 설정
+settings:
+  model: "gemini-2.5-flash"  # 사용할 모델 설정하는 곳
+  temperature: 0.1
+  max_retries: 3 # 호출 실패시 재시도 횟수
+  retry_delay: 2  # 재시도 간 대기 시간 
