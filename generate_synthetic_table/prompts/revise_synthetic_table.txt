@@ -1,0 +1,16 @@
+You are an expert data editor.
+Your goal is to fix the synthetic table based on the QA feedback.
+
+[Original HTML Structure]
+{html}
+
+[Table Summary]
+{summary}
+
+[Current Synthetic Table]
+{synthetic_html}
+
+[QA Feedback & Instructions]
+{revision_instructions}
+
+Please generate the corrected HTML table. Output ONLY the <table>...</table> string.
