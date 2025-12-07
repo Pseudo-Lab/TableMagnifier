@@ -1,26 +1,15 @@
 [project]
-name = "generate_synthetic_table"
+name = "tablemagnifier"
 version = "0.1.0"
-description = "LangGraph flow that builds synthetic tables from Korean table images."
+description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
-  "langgraph>=0.1.9",
-  "langchain-core>=0.2.26",
-  "langchain-openai>=0.1.17",
-  "python-dotenv>=1.0.1",
-  "langchain-google-genai>=3.1.0",
-  "beautifulsoup4>=4.14.2",
-  "pytest>=9.0.1",
-  "pymupdf>=1.23.0",
-  "fastapi>=0.109.0",
-  "uvicorn>=0.27.0",
-  "playwright>=1.41.0",
+    "google-generativeai>=0.3.0",
+    "ipykernel>=7.1.0",
+    "langchain>=0.1.0",
+    "langchain-core>=0.1.0",
+    "langgraph>=0.0.30",
+    "pyyaml>=6.0",
+    "typing-extensions>=4.5.0",
 ]
-
-[build-system]
-requires = ["hatchling>=1.18.0"]
-build-backend = "hatchling.build"
-
-[tool.uv]
-package = true
