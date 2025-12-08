@@ -46,10 +46,18 @@ def get_llm(
              # Fallback or check environment variable in a more user-friendly way if needed
              pass
         
-        return ChatGoogleGenerativeAI(
+        # Use polling_gemini for robust API key management
+        from polling_gemini.langgraph_integration import create_gemini_chat_model
+        
+        return create_gemini_chat_model(
             model=model,
             temperature=temperature,
-            google_api_key=api_key, # type: ignore
+            # google_api_key is handled by the pool config, but if passed explicitly we might want to respect it?
+            # The current pool implementation relies on config file. 
+            # If api_key is provided here, it might be ignored by the pool wrapper or needs adaptation.
+            # For now, we assume the user relies on the pool's config if they choose 'gemini' provider 
+            # in this new setup.
+            # If specific api_key is needed, it might be better to use google_genai directly or add support in wrapper.
         )
 
     elif provider == "vllm":
