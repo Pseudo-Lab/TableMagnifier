@@ -37,6 +37,7 @@ ENV/
 # API Keys - 중요!
 apis/gemini_keys.yaml
 !apis/gemini_keys.yaml.template
+apis/ssh.yaml
 
 # Logs
 *.log

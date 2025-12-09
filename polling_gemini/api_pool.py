@@ -56,9 +56,14 @@ class GeminiAPIPool:
             config_path: API 키 설정 파일 경로. None이면 기본 경로 사용
         """
         if config_path is None:
-            # 기본 경로: apis/gemini_keys.yaml
             base_dir = Path(__file__).parent.parent
-            config_path = base_dir / "apis" / "gemini_keys.yaml"
+            # 먼저 ssh.yaml이 있는지 확인
+            ssh_config = base_dir / "apis" / "ssh.yaml"
+            if ssh_config.exists():
+                config_path = ssh_config
+            else:
+                # 없으면 기본 경로: apis/gemini_keys.yaml
+                config_path = base_dir / "apis" / "gemini_keys.yaml"
         
         self.config_path = Path(config_path)
         self.api_keys: List[APIKeyInfo] = []
@@ -74,7 +79,7 @@ class GeminiAPIPool:
         if not self.config_path.exists():
             raise FileNotFoundError(
                 f"API 키 설정 파일을 찾을 수 없습니다: {self.config_path}\n"
-                f"apis/gemini_keys.yaml 파일을 생성하고 API 키를 입력하세요."
+                f"apis/ssh.yaml 또는 apis/gemini_keys.yaml 파일을 생성하고 API 키를 입력하세요."
             )
         
         with open(self.config_path, 'r', encoding='utf-8') as f:
@@ -91,7 +96,7 @@ class GeminiAPIPool:
                 self.api_keys.append(api_key_info)
         
         if not self.api_keys:
-            raise ValueError("활성화된 API 키가 없습니다. gemini_keys.yaml을 확인하세요.")
+            raise ValueError("활성화된 API 키가 없습니다. 설정 파일을 확인하세요.")
         
         # 설정 로드
         self.settings = config.get('settings', {})

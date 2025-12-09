@@ -69,9 +69,8 @@ def run_flow_for_image(
     if provider == "openai" and not os.getenv("OPENAI_API_KEY"):
         msg = "OPENAI_API_KEY is not set. Add it to a .env file or your environment."
         raise RuntimeError(msg)
-    if provider == "gemini" and not os.getenv("GOOGLE_API_KEY"):
-        msg = "GOOGLE_API_KEY is not set. Add it to a .env file or your environment."
-        raise RuntimeError(msg)
+    # Gemini provider now supports key management via polling_gemini pool (ssh.yaml/gemini_keys.yaml)
+    # so we don't enforce GOOGLE_API_KEY env var here. The pool will validate keys.
 
     return run_synthetic_table_flow(
         str(image),

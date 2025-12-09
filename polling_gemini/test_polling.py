@@ -379,10 +379,12 @@ def main():
     
     # API 키 설정 확인
     config_path = project_root / "apis" / "gemini_keys.yaml"
-    if not config_path.exists():
-        print(f"\n❌ 오류: API 키 설정 파일이 없습니다: {config_path}")
+    ssh_config_path = project_root / "apis" / "ssh.yaml"
+    
+    if not config_path.exists() and not ssh_config_path.exists():
+        print(f"\n❌ 오류: API 키 설정 파일이 없습니다.")
         print("\n다음 단계를 수행하세요:")
-        print("1. apis/gemini_keys.yaml 파일을 열어 실제 API 키를 입력하세요")
+        print("1. apis/ssh.yaml 또는 apis/gemini_keys.yaml 파일을 열어 실제 API 키를 입력하세요")
         print("2. 여러 개의 API 키를 등록할 수 있습니다")
         print("3. Google AI Studio에서 무료 API 키를 발급받을 수 있습니다:")
         print("   https://makersuite.google.com/app/apikey")
