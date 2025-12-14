@@ -122,6 +122,9 @@ def run_with_args(args: argparse.Namespace) -> TableState:
 
     html_refs: list[tuple[str, Path | None]] = []
     if args.save_json:
+        # Ensure the output directory exists
+        args.save_json.parent.mkdir(parents=True, exist_ok=True)
+
         base = args.save_json.with_suffix("")
         parsed_html_path = base.with_name(base.name + "_parsed.html")
         synthetic_html_path = base.with_name(base.name + "_synthetic.html")
