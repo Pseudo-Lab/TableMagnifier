@@ -10,7 +10,7 @@ import time
 import asyncio
 import logging
 from pathlib import Path
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union
 from dataclasses import dataclass
 import google.generativeai as genai
 from google.api_core import exceptions as google_exceptions
@@ -142,16 +142,18 @@ class GeminiAPIPool:
         error_str = str(error).upper()
         return any(quota_err in error_str for quota_err in self.QUOTA_ERRORS)
     
+
+
     def generate_content(
         self,
-        prompt: str,
+        prompt: Union[str, List[Any]],
         **kwargs
     ) -> str:
         """
         Gemini API로 컨텐츠 생성 (자동 키 로테이션 포함)
         
         Args:
-            prompt: 입력 프롬프트
+            prompt: 입력 프롬프트 (문자열 또는 멀티모달 파트 리스트)
             **kwargs: GenerativeModel.generate_content에 전달할 추가 인자
             
         Returns:
@@ -171,9 +173,14 @@ class GeminiAPIPool:
             current_key = self.api_keys[self.current_key_index]
             
             try:
-                # 설정된 temperature 사용 (kwargs로 오버라이드 가능)
+                # model 인자는 GenerativeModel 초기화에 사용되므로 여기서는 제거
+                kwargs.pop('model', None)
+                
+                # temperature 설정: kwargs > settings > default
+                temp = kwargs.pop('temperature', self.settings.get('temperature', 0.7))
+                
                 generation_config = {
-                    'temperature': self.settings.get('temperature', 0.7),
+                    'temperature': temp,
                 }
                 generation_config.update(kwargs.get('generation_config', {}))
                 kwargs['generation_config'] = generation_config
@@ -222,7 +229,7 @@ class GeminiAPIPool:
     
     async def agenerate_content(
         self,
-        prompt: str,
+        prompt: Union[str, List[Any]],
         **kwargs
     ) -> str:
         """
@@ -249,9 +256,14 @@ class GeminiAPIPool:
             current_key = self.api_keys[self.current_key_index]
             
             try:
-                # 설정된 temperature 사용 (kwargs로 오버라이드 가능)
+                # model 인자는 GenerativeModel 초기화에 사용되므로 여기서는 제거
+                kwargs.pop('model', None)
+                
+                # temperature 설정: kwargs > settings > default
+                temp = kwargs.pop('temperature', self.settings.get('temperature', 0.7))
+                
                 generation_config = {
-                    'temperature': self.settings.get('temperature', 0.7),
+                    'temperature': temp,
                 }
                 generation_config.update(kwargs.get('generation_config', {}))
                 kwargs['generation_config'] = generation_config

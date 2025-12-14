@@ -4,7 +4,7 @@ GeminiAPIPool을 LangGraph와 쉽게 통합할 수 있도록 하는 래퍼 클�
 """
 
 import asyncio
-from typing import Optional, Dict, Any, List, TypedDict
+from typing import Optional, Dict, Any, List, TypedDict, Union
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.outputs import ChatResult, ChatGeneration
@@ -46,21 +46,55 @@ class GeminiPoolChatModel(BaseChatModel):
         if self.api_pool is None:
             self.api_pool = get_gemini_pool(self.config_path)
     
-    def _convert_messages_to_prompt(self, messages: List[BaseMessage]) -> str:
-        """LangChain 메시지를 Gemini 프롬프트로 변환"""
+    def _convert_messages_to_prompt(self, messages: List[BaseMessage]) -> List[Any]:
+        """LangChain 메시지를 Gemini 프롬프트(Content parts list)로 변환"""
         prompt_parts = []
         
         for message in messages:
-            if isinstance(message, SystemMessage):
-                prompt_parts.append(f"System: {message.content}")
-            elif isinstance(message, HumanMessage):
-                prompt_parts.append(f"Human: {message.content}")
-            elif isinstance(message, AIMessage):
-                prompt_parts.append(f"Assistant: {message.content}")
+            content = message.content
+            if isinstance(content, str):
+                # 텍스트 메시지
+                text_part = ""
+                if isinstance(message, SystemMessage):
+                    text_part = f"System: {content}\n"
+                elif isinstance(message, HumanMessage):
+                    text_part = f"{content}\n"
+                elif isinstance(message, AIMessage):
+                    text_part = f"Assistant: {content}\n"
+                else:
+                    text_part = f"{content}\n"
+                prompt_parts.append(text_part)
+                
+            elif isinstance(content, list):
+                # 멀티모달 메시지 (리스트)
+                for item in content:
+                    if isinstance(item, dict):
+                        item_type = item.get("type")
+                        if item_type == "text":
+                            prompt_parts.append(item.get("text", ""))
+                        elif item_type == "image_url":
+                            image_url = item.get("image_url", {})
+                            url = image_url if isinstance(image_url, str) else image_url.get("url")
+                            
+                            if url and url.startswith("data:"):
+                                # data:image/png;base64,......
+                                try:
+                                    header, base64_data = url.split(",", 1)
+                                    mime_type = header.split(":")[1].split(";")[0]
+                                    
+                                    # Gemini API expects: {'mime_type': ..., 'data': b'...'}
+                                    import base64
+                                    prompt_parts.append({
+                                        "mime_type": mime_type,
+                                        "data": base64.b64decode(base64_data)
+                                    })
+                                except Exception as e:
+                                    # 파싱 실패 시 텍스트로 남김 (디버깅용)
+                                    prompt_parts.append(f"[Image parse error: {e}]")
             else:
-                prompt_parts.append(str(message.content))
+                prompt_parts.append(str(content))
         
-        return "\n\n".join(prompt_parts)
+        return prompt_parts
     
     def _generate(
         self,
