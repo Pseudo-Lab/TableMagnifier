@@ -166,15 +166,20 @@ class GeminiAPIPool:
             current_key = self.api_keys[self.current_key_index]
             
             try:
-                # 설정된 temperature 사용 (kwargs로 오버라이드 가능)
-                generation_config = {
-                    'temperature': self.settings.get('temperature', 0.7),
-                }
-                generation_config.update(kwargs.get('generation_config', {}))
-                kwargs['generation_config'] = generation_config
+                # kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
+                temperature = kwargs.pop('temperature', self.settings.get('temperature', 0.7))
                 
-                # API 호출
-                response = self.current_model.generate_content(prompt, **kwargs)
+                # generation_config 구성
+                generation_config = {
+                    'temperature': temperature,
+                }
+                generation_config.update(kwargs.pop('generation_config', {}))
+                
+                # API 호출 (generation_config만 전달)
+                response = self.current_model.generate_content(
+                    prompt, 
+                    generation_config=generation_config
+                )
                 
                 # 성공 시 실패 카운트 리셋
                 current_key.failed_count = 0
@@ -244,18 +249,23 @@ class GeminiAPIPool:
             current_key = self.api_keys[self.current_key_index]
             
             try:
-                # 설정된 temperature 사용 (kwargs로 오버라이드 가능)
+                # kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
+                temperature = kwargs.pop('temperature', self.settings.get('temperature', 0.7))
+                
+                # generation_config 구성
                 generation_config = {
-                    'temperature': self.settings.get('temperature', 0.7),
+                    'temperature': temperature,
                 }
-                generation_config.update(kwargs.get('generation_config', {}))
-                kwargs['generation_config'] = generation_config
+                generation_config.update(kwargs.pop('generation_config', {}))
                 
                 # 비동기 API 호출 (동기 메서드를 asyncio로 래핑)
                 loop = asyncio.get_event_loop()
                 response = await loop.run_in_executor(
                     None,
-                    lambda: self.current_model.generate_content(prompt, **kwargs)
+                    lambda: self.current_model.generate_content(
+                        prompt, 
+                        generation_config=generation_config
+                    )
                 )
                 
                 # 성공 시 실패 카운트 리셋

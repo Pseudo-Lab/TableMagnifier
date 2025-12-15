@@ -101,7 +101,10 @@ gantt
 ## Acknowledgement 🙏
 
 이 프로젝트는 가짜연구소 Open Academy로 진행됩니다.
-여러분의 참여와 기여가 ‘우연한 혁명(Serendipity Revolution)’을 가능하게 합니다. 모두에게 깊은 감사를 전합니다.
+여러분의 참여와 기여가 '우연한 혁명(Serendipity Revolution)'을 가능하게 합니다. 모두에게 깊은 감사를 전합니다.
+
+---
+
 # TableMagnifier (테이블 매그니파이어)
 
 TableMagnifier는 한국어 테이블 이미지를 분석하여 구조화된 합성 데이터를 생성하고, 이를 검증 및 수정할 수 있는 도구입니다. LangGraph를 기반으로 한 멀티 에이전트 워크플로우를 통해 이미지에서 HTML 테이블 구조를 추출하고, 이를 바탕으로 새로운 합성 데이터를 생성합니다.
@@ -112,7 +115,72 @@ TableMagnifier는 한국어 테이블 이미지를 분석하여 구조화된 합
 - **합성 데이터 생성**: 원본 테이블의 구조를 유지하면서 새로운 합성 데이터를 생성합니다.
 - **자가 검증 및 수정 (Self-Reflection)**: 생성된 합성 데이터가 원본 구조와 일치하는지 검증하고, 필요시 자동으로 수정합니다.
 - **QA 데이터 생성**: 생성된 합성 데이터를 바탕으로 RAG 학습용 QA 쌍을 생성합니다.
+- **API 키 풀링**: 여러 Gemini API 키를 자동 로테이션하여 무료 할당량을 효율적으로 사용합니다.
 - **웹 기반 검증 도구**: 생성된 데이터를 웹 인터페이스에서 시각적으로 확인하고 직접 수정할 수 있습니다.
+
+## 프로젝트 구조
+
+```
+TableMagnifier/
+├── generate_synthetic_table/   # 핵심 로직 (LangGraph 워크플로우)
+│   ├── flow.py                 # 그래프 정의 및 노드 구현
+│   ├── runner.py               # 실행 유틸리티
+│   ├── cli.py                  # CLI 진입점
+│   ├── llm_factory.py          # LLM 팩토리 (OpenAI, Gemini, Gemini Pool, vLLM)
+│   ├── validators.py           # 데이터 검증 로직
+│   ├── html_to_image.py        # HTML → 이미지 변환
+│   └── prompts/                # LLM 프롬프트 템플릿
+│
+├── polling_gemini/             # Gemini API 키 풀링 시스템
+│   ├── api_pool.py             # API 키 로테이션 매니저
+│   ├── langgraph_integration.py # LangChain/LangGraph 호환 래퍼
+│   └── README.md               # 사용 가이드
+│
+├── annotate_tools/             # 웹 기반 검증 도구
+│   ├── server.py               # FastAPI 백엔드
+│   ├── App.tsx                 # React 프론트엔드
+│   └── components/             # UI 컴포넌트
+│
+├── apis/                       # API 키 설정
+│   └── gemini_keys.yaml        # Gemini API 키 목록 (gemini_pool용)
+│
+├── tests/                      # 테스트 코드
+├── main.py                     # CLI 진입점
+├── pyproject.toml              # 프로젝트 의존성
+└── README.md                   # 설명서
+```
+
+## LangGraph 워크플로우
+
+```mermaid
+flowchart TD
+    START((START)) --> RouteStart{입력 타입 확인}
+    
+    RouteStart -->|HTML 파일| LoadHTML[load_html_input]
+    RouteStart -->|이미지 + openai/gemini/gemini_pool| DirectGen[generate_synthetic_table_from_image]
+    RouteStart -->|이미지 + 기타 모델| PyMuPDF[pymupdf_parse]
+    
+    LoadHTML --> Analyze[analyze_table]
+    
+    PyMuPDF --> Validate[validate_parsed_table]
+    Validate -->|유효| Analyze
+    Validate -->|무효| ImageToHTML[image_to_html]
+    ImageToHTML --> Analyze
+    
+    Analyze --> GenSynthetic[generate_synthetic_table]
+    GenSynthetic --> SelfReflection[self_reflection]
+    
+    DirectGen --> SelfReflection
+    
+    SelfReflection --> RouteReflection{검증 결과}
+    RouteReflection -->|통과 또는 최대 시도| Parse[parse_synthetic_table]
+    RouteReflection -->|수정 필요| Revise[revise_synthetic_table]
+    
+    Revise --> SelfReflection
+    
+    Parse --> GenerateQA[generate_qa]
+    GenerateQA --> END((END))
+```
 
 ## 설치 방법
 
@@ -124,16 +192,16 @@ TableMagnifier는 한국어 테이블 이미지를 분석하여 구조화된 합
 ### 1. 프로젝트 클론 및 의존성 설치
 
 ```bash
-git clone https://github.com/your-repo/TableMagnifier.git
+git clone https://github.com/Pseudo-Lab/TableMagnifier.git
 cd TableMagnifier
 
-# 가상환경 생성 및 활성화
+# uv 사용 (권장)
+uv sync
+
+# 또는 pip 사용
 python3 -m venv .venv
 source .venv/bin/activate
-
-# 의존성 설치
-pip install -r requirements.txt
-playwright install  # HTML 렌더링을 위한 브라우저 설치
+pip install -e .
 ```
 
 ### 2. 환경 변수 설정
@@ -146,6 +214,27 @@ OPENAI_API_KEY=sk-...
 GOOGLE_API_KEY=AIza...
 ```
 
+### 3. Gemini API 키 풀링 설정 (선택사항)
+
+여러 개의 Gemini API 키를 사용하여 무료 할당량을 효율적으로 활용하려면 `apis/gemini_keys.yaml` 파일을 생성하세요:
+
+```yaml
+api_keys:
+  - name: key1
+    key: AIza...your-first-key
+    enabled: true
+  - name: key2
+    key: AIza...your-second-key
+    enabled: true
+  # 더 많은 키 추가 가능
+
+settings:
+  model: gemini-2.5-flash
+  temperature: 0.2
+  max_retries: 3
+  retry_delay: 2
+```
+
 ## 사용 방법
 
 ### 1. 합성 데이터 생성 (CLI)
@@ -153,22 +242,58 @@ GOOGLE_API_KEY=AIza...
 이미지 파일 또는 HTML 파일을 입력으로 받아 합성 데이터를 생성합니다.
 
 ```bash
-# 기본 실행 (OpenAI gpt-4.1-mini 사용)
-python main.py path/to/table_image.png --save-json output.json
+# OpenAI 사용 (기본)
+uv run python -m generate_synthetic_table.cli path/to/table_image.png --save-json output.json
 
-# Gemini 모델 사용
-python main.py path/to/table_image.png --provider gemini --model gemini-1.5-flash --save-json output.json
+# Gemini 모델 사용 (단일 API 키)
+uv run python -m generate_synthetic_table.cli path/to/table_image.png \
+  --provider gemini --model gemini-1.5-flash --save-json output.json
 
-# HTML 파일을 입력으로 사용
-python main.py path/to/table.html --save-json output.json
+# Gemini Pool 사용 (다중 API 키 자동 로테이션) ⭐ 권장
+uv run python -m generate_synthetic_table.cli path/to/table_image.png \
+  --provider gemini_pool --save-json output.json
+
+# 커스텀 설정 파일 사용
+uv run python -m generate_synthetic_table.cli path/to/table_image.png \
+  --provider gemini_pool --config-path /path/to/gemini_keys.yaml
 ```
 
 **옵션 설명:**
-- `image`: 입력 이미지 또는 HTML 파일 경로 (필수)
-- `--save-json`: 결과 JSON 저장 경로 (권장)
-- `--provider`: 사용할 LLM 제공자 (`openai`, `gemini`, `vllm`)
-- `--model`: 사용할 모델명 (기본: `gpt-4.1-mini`)
-- `--temperature`: 생성 다양성 조절 (기본: 0.2)
+| 옵션 | 설명 | 기본값 |
+|------|------|--------|
+| `image` | 입력 이미지 또는 HTML 파일 경로 | (필수) |
+| `--provider` | LLM 제공자 (`openai`, `gemini`, `gemini_pool`, `vllm`) | `openai` |
+| `--model` | 사용할 모델명 | `gpt-4.1-mini` |
+| `--temperature` | 생성 다양성 조절 | `0.2` |
+| `--config-path` | gemini_pool용 설정 파일 경로 | `apis/gemini_keys.yaml` |
+| `--save-json` | 결과 JSON 저장 경로 | (선택) |
+
+### 실행 예시 및 결과
+
+```bash
+$ uv run python -m generate_synthetic_table.cli ./image.png --provider gemini_pool
+
+# 출력 로그
+2025-12-15 10:47:42 - polling_gemini.api_pool - INFO - 총 6개의 API 키를 로드했습니다.
+2025-12-15 10:47:42 - polling_gemini.api_pool - INFO - API 키 'key1' 사용 중 (모델: gemini-2.5-flash)
+2025-12-15 10:47:42 - generate_synthetic_table.flow - INFO - Entering node: generate_synthetic_table_from_image
+2025-12-15 10:47:53 - generate_synthetic_table.flow - INFO - Entering node: self_reflection
+2025-12-15 10:48:14 - generate_synthetic_table.flow - INFO - Entering node: revise_synthetic_table
+2025-12-15 10:48:27 - generate_synthetic_table.flow - INFO - Entering node: self_reflection
+2025-12-15 10:48:33 - generate_synthetic_table.flow - INFO - Entering node: parse_synthetic_table
+2025-12-15 10:48:38 - generate_synthetic_table.flow - INFO - Entering node: generate_qa
+
+# 결과 JSON
+{
+  "image_path": "./image.png",
+  "synthetic_json": [
+    {"경과기간": "1년", "납입보험료 누계": 600000, "해지환급금": 0, "환급률": 0},
+    {"경과기간": "3년", "납입보험료 누계": 1800000, "해지환급금": 540000, "환급률": 30},
+    {"경과기간": "5년", "납입보험료 누계": 3000000, "해지환급금": 1650000, "환급률": 55},
+    ...
+  ]
+}
+```
 
 ### 2. 검증 도구 실행 (Web UI)
 
@@ -187,21 +312,37 @@ npm run dev
 ```
 브라우저에서 `http://localhost:5173`으로 접속하여 데이터를 확인하세요.
 
-## 프로젝트 구조
+## polling_gemini 모듈
 
+`polling_gemini`는 여러 Gemini API 키를 자동으로 로테이션하는 풀링 시스템입니다. 무료 할당량이 소진되면 자동으로 다음 키로 전환됩니다.
+
+### 독립 사용 예시
+
+```python
+from polling_gemini import create_gemini_chat_model, invoke_gemini
+
+# LangChain 호환 모델로 사용
+model = create_gemini_chat_model()
+response = model.invoke([HumanMessage(content="안녕하세요!")])
+
+# 간단한 함수 호출
+response = invoke_gemini("테이블 데이터를 분석해주세요.")
 ```
-TableMagnifier/
-├── generate_synthetic_table/   # 핵심 로직 (LangGraph 워크플로우)
-│   ├── flow.py                 # 그래프 정의 및 노드 구현
-│   ├── runner.py               # 실행 유틸리티
-│   ├── validators.py           # 데이터 검증 로직
-│   └── prompts/                # LLM 프롬프트 템플릿
-├── annotate_tools/             # 웹 기반 검증 도구
-│   ├── server.py               # FastAPI 백엔드
-│   └── (React Frontend Files)
-├── tests/                      # 테스트 코드
-├── main.py                     # CLI 진입점
-└── README.md                   # 설명서
+
+### LangGraph에서 사용
+
+```python
+from polling_gemini import create_gemini_chat_model
+from langgraph.graph import StateGraph
+
+model = create_gemini_chat_model()
+
+def my_node(state):
+    response = model.invoke([HumanMessage(content=state["query"])])
+    return {"response": response.content}
+
+graph = StateGraph(...)
+graph.add_node("process", my_node)
 ```
 
 ## 개발자 가이드
@@ -212,13 +353,14 @@ TableMagnifier/
 ### 프롬프트 수정
 `generate_synthetic_table/prompts/` 디렉토리의 텍스트 파일을 수정하여 LLM의 동작을 제어할 수 있습니다.
 
-## 라이선스
-MIT License
-to advancing machine learning and AI technologies.
+### LLM Provider 추가
+`generate_synthetic_table/llm_factory.py`의 `get_llm()` 함수를 수정하여 새로운 LLM provider를 추가할 수 있습니다.
+
+---
 
 <h2>Contributors 😃</h2>
-<a href="https://github.com/Pseudo-Lab/10th-template/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Pseudo-Lab/10th-template" />
+<a href="https://github.com/Pseudo-Lab/TableMagnifier/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Pseudo-Lab/TableMagnifier" />
 </a>
 
 <h2>License 🗞</h2>
