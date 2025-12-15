@@ -237,6 +237,16 @@ settings:
 
 ## 사용 방법
 
+#### UI 사용방법
+```bash
+### backend
+cd /Users/jaehyeokchoi/Desktop/TableMagnifier/pipeline_ui/backend && uv run python main.py
+
+### frontend
+cd /Users/jaehyeokchoi/Desktop/TableMagnifier/pipeline_ui/frontend && npm run dev
+```
+
+
 ### 1. 합성 데이터 생성 (CLI)
 
 이미지 파일 또는 HTML 파일을 입력으로 받아 합성 데이터를 생성합니다.

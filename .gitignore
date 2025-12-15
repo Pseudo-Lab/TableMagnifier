@@ -55,3 +55,4 @@ apis/gemini_keys.yaml
 dmypy.json
 
 # env
+.bemad/
