@@ -21,7 +21,7 @@ import {
   BatchJob, 
   PipelineResult, 
   WebSocketMessage,
-  PipelineConfig 
+  PipelineConfig
 } from './types';
 import { 
   uploadImages, 
@@ -33,6 +33,7 @@ import {
   cancelJob,
   createWebSocket 
 } from './api';
+import PipelineDiagram, { PipelineNodeStates } from './components/PipelineDiagram';
 
 // ============ Components ============
 
@@ -157,6 +158,45 @@ interface JobItemCardProps {
 
 const JobItemCard: React.FC<JobItemCardProps> = ({ item, onRetry }) => {
   const [expanded, setExpanded] = useState(false);
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+
+  // JobItem의 node_states를 PipelineDiagram에서 사용하는 형식으로 변환
+  const convertNodeStates = (): PipelineNodeStates => {
+    if (!item.node_states) {
+      // 기본 상태: 실행 중이면 첫 번째 노드 활성화
+      const defaultState: PipelineNodeStates = {
+        generate_synthetic: item.status === 'running' ? 'running' : item.status === 'completed' ? 'completed' : 'pending',
+        self_reflection: 'pending',
+        revise_synthetic: 'pending',
+        parse_synthetic: item.status === 'completed' ? 'completed' : 'pending',
+        generate_qa: item.status === 'completed' ? 'completed' : 'pending',
+      };
+      return defaultState;
+    }
+
+    // 백엔드에서 받은 node_states를 변환
+    const result: PipelineNodeStates = {
+      generate_synthetic: 'pending',
+      self_reflection: 'pending',
+      revise_synthetic: 'pending',
+      parse_synthetic: 'pending',
+      generate_qa: 'pending',
+    };
+
+    for (const [nodeId, state] of Object.entries(item.node_states)) {
+      if (nodeId in result) {
+        result[nodeId] = state.status as 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+      }
+    }
+
+    return result;
+  };
+
+  const handleNodeClick = (nodeId: string) => {
+    if (item.node_results && item.node_results[nodeId]) {
+      setSelectedNode(selectedNode === nodeId ? null : nodeId);
+    }
+  };
 
   return (
     <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -186,17 +226,57 @@ const JobItemCard: React.FC<JobItemCardProps> = ({ item, onRetry }) => {
         {expanded ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
       </div>
       
-      {expanded && item.result && (
-        <div className="border-t border-gray-700 p-4 space-y-4">
-          <ResultView result={item.result} />
-        </div>
-      )}
-      
-      {expanded && item.error && (
-        <div className="border-t border-gray-700 p-4">
-          <div className="bg-red-900/30 border border-red-700 rounded-lg p-3">
-            <p className="text-red-400 text-sm">{item.error}</p>
+      {expanded && (
+        <div className="border-t border-gray-700">
+          {/* 파이프라인 다이어그램 */}
+          <div className="p-4 bg-gray-800">
+            <PipelineDiagram
+              nodeStates={convertNodeStates()}
+              currentNode={item.current_node}
+              onNodeClick={handleNodeClick}
+              animated={item.status === 'running'}
+            />
           </div>
+
+          {/* 선택된 노드 결과 표시 */}
+          {selectedNode && item.node_results && item.node_results[selectedNode] && (
+            <div className="border-t border-gray-700 p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium text-blue-400">{selectedNode} 결과</h4>
+                <button
+                  onClick={() => setSelectedNode(null)}
+                  className="text-gray-400 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="bg-gray-900 rounded-lg p-3 max-h-48 overflow-auto">
+                <pre className="text-xs text-gray-300 whitespace-pre-wrap">
+                  {(() => {
+                    const result = item.node_results[selectedNode];
+                    return typeof result === 'string' 
+                      ? result 
+                      : JSON.stringify(result, null, 2);
+                  })()}
+                </pre>
+              </div>
+            </div>
+          )}
+
+          {/* 최종 결과 탭 */}
+          {item.result && (
+            <div className="border-t border-gray-700 p-4">
+              <ResultView result={item.result} />
+            </div>
+          )}
+          
+          {item.error && (
+            <div className="border-t border-gray-700 p-4">
+              <div className="bg-red-900/30 border border-red-700 rounded-lg p-3">
+                <p className="text-red-400 text-sm">{item.error}</p>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -317,13 +397,39 @@ const App: React.FC = () => {
 
         switch (message.type) {
           case 'item_start':
-            return { ...item, status: 'running' as const, progress: 10 };
+            return { 
+              ...item, 
+              status: 'running' as const, 
+              progress: 10,
+              node_states: message.nodes,
+              node_results: message.node_results
+            };
           case 'item_complete':
-            return { ...item, status: 'completed' as const, progress: 100, result: message.result };
+            return { 
+              ...item, 
+              status: 'completed' as const, 
+              progress: 100, 
+              result: message.result,
+              node_states: message.nodes,
+              node_results: message.node_results
+            };
           case 'item_error':
-            return { ...item, status: 'failed' as const, progress: 100, error: message.error };
+            return { 
+              ...item, 
+              status: 'failed' as const, 
+              progress: 100, 
+              error: message.error,
+              node_states: message.nodes,
+              node_results: message.node_results
+            };
           case 'progress':
-            return { ...item, progress: message.progress || item.progress, current_node: message.current_node };
+            return { 
+              ...item, 
+              progress: message.progress || item.progress, 
+              current_node: message.current_node,
+              node_states: message.nodes || item.node_states,
+              node_results: message.node_results || item.node_results
+            };
           default:
             return item;
         }

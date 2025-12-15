@@ -302,23 +302,44 @@ async def process_batch(job_id: str, config: PipelineConfig):
 
 
 async def process_single_item(job_id: str, item: JobItem, config: PipelineConfig):
-    """단일 이미지 처리"""
+    """단일 이미지 처리 (노드별 상태 업데이트 포함)"""
     
     state.update_item(job_id, item.id, status=JobStatus.RUNNING, progress=10)
     await broadcast_update(job_id, {
         "type": "item_start",
         "item_id": item.id,
         "image_name": item.image_name,
+        "nodes": {
+            "start": "completed",
+            "generate_synthetic": "running",
+            "self_reflection": "pending",
+            "parse_synthetic": "pending",
+            "generate_qa": "pending",
+            "end": "pending",
+        }
     })
     
     try:
-        # 노드별 진행률 매핑
-        node_progress = {
-            "generate_synthetic_table_from_image": 30,
-            "self_reflection": 50,
-            "parse_synthetic_table": 70,
-            "generate_qa": 90,
+        # 노드별 진행률 및 상태 매핑
+        node_config = {
+            "generate_synthetic_table_from_image": {"progress": 30, "node_id": "generate_synthetic"},
+            "self_reflection": {"progress": 50, "node_id": "self_reflection"},
+            "revise_synthetic_table": {"progress": 45, "node_id": "generate_synthetic"},  # 재시도
+            "parse_synthetic_table": {"progress": 70, "node_id": "parse_synthetic"},
+            "generate_qa": {"progress": 90, "node_id": "generate_qa"},
         }
+        
+        # 노드 상태 추적
+        node_states = {
+            "start": "completed",
+            "generate_synthetic": "pending",
+            "self_reflection": "pending",
+            "parse_synthetic": "pending",
+            "generate_qa": "pending",
+            "end": "pending",
+        }
+        node_results = {}
+        retry_count = 0
         
         # LangGraph 파이프라인 실행 (동기 함수를 비동기로 실행)
         result = await asyncio.to_thread(
@@ -330,8 +351,33 @@ async def process_single_item(job_id: str, item: JobItem, config: PipelineConfig
             config_path=config.config_path,
         )
         
+        # 결과에서 노드 결과 추출
+        if result.get("synthetic_table"):
+            node_results["generate_synthetic"] = result.get("synthetic_table", "")[:500]
+        if result.get("reflection"):
+            node_results["self_reflection"] = result.get("reflection", "")[:300]
+        if result.get("synthetic_json"):
+            node_results["parse_synthetic"] = f"JSON 파싱 완료 ({len(str(result.get('synthetic_json', {})))} bytes)"
+        if result.get("qa_results"):
+            qa_preview = result.get("qa_results", [])[:2]  # 처음 2개만 미리보기
+            node_results["generate_qa"] = json.dumps(qa_preview, ensure_ascii=False, indent=2)
+        
+        # 재시도 횟수 추출
+        retry_count = result.get("attempts", 0)
+        
         # 결과 저장
         if result.get("errors"):
+            # 실패한 노드 찾기
+            failed_node = "generate_synthetic"  # 기본값
+            if "reflection" in str(result.get("errors")):
+                failed_node = "self_reflection"
+            elif "parse" in str(result.get("errors")):
+                failed_node = "parse_synthetic"
+            elif "qa" in str(result.get("errors")):
+                failed_node = "generate_qa"
+            
+            node_states[failed_node] = "failed"
+            
             state.update_item(
                 job_id, item.id,
                 status=JobStatus.FAILED,
@@ -342,8 +388,15 @@ async def process_single_item(job_id: str, item: JobItem, config: PipelineConfig
                 "type": "item_error",
                 "item_id": item.id,
                 "error": result["errors"],
+                "nodes": node_states,
+                "node_results": node_results,
+                "retry_count": retry_count,
             })
         else:
+            # 모든 노드 완료
+            for key in node_states:
+                node_states[key] = "completed"
+            
             # 결과 JSON 저장
             output_path = state.output_dir / f"{item.id}_result.json"
             result_data = {
@@ -366,6 +419,9 @@ async def process_single_item(job_id: str, item: JobItem, config: PipelineConfig
                 "type": "item_complete",
                 "item_id": item.id,
                 "result": result_data,
+                "nodes": node_states,
+                "node_results": node_results,
+                "retry_count": retry_count,
             })
     
     except Exception as e:
@@ -379,6 +435,7 @@ async def process_single_item(job_id: str, item: JobItem, config: PipelineConfig
             "type": "item_error",
             "item_id": item.id,
             "error": str(e),
+            "nodes": {"start": "completed", "generate_synthetic": "failed"},
         })
 
 

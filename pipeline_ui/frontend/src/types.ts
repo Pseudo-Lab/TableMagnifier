@@ -2,6 +2,23 @@
 
 export type JobStatus = 'pending' | 'running' | 'completed' | 'failed' | 'paused' | 'cancelled';
 
+export type NodeStatus = 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+
+export interface NodeState {
+  status: NodeStatus;
+  startTime?: number;
+  endTime?: number;
+  retryCount?: number;
+}
+
+export interface NodeStates {
+  [nodeId: string]: NodeState;
+}
+
+export interface NodeResults {
+  [nodeId: string]: string | object | null;
+}
+
 export interface JobItem {
   id: string;
   image_path: string;
@@ -13,6 +30,8 @@ export interface JobItem {
   error?: string;
   created_at: string;
   updated_at: string;
+  node_states?: NodeStates;
+  node_results?: NodeResults;
 }
 
 export interface BatchJob {
@@ -59,4 +78,7 @@ export interface WebSocketMessage {
   total?: number;
   progress?: number;
   current_node?: string;
+  nodes?: NodeStates;
+  node_results?: NodeResults;
+  retry_count?: number;
 }
