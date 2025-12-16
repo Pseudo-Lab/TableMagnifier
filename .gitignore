@@ -56,3 +56,4 @@ dmypy.json
 
 # env
 .bemad/
+./docs/

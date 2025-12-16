@@ -240,10 +240,10 @@ settings:
 #### UI 사용방법
 ```bash
 ### backend
-cd /Users/jaehyeokchoi/Desktop/TableMagnifier/pipeline_ui/backend && uv run python main.py
+cd pipeline_ui/backend && uv run python main.py
 
 ### frontend
-cd /Users/jaehyeokchoi/Desktop/TableMagnifier/pipeline_ui/frontend && npm run dev
+cd pipeline_ui/frontend && npm run dev
 ```
 
 
