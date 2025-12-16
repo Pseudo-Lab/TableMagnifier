@@ -1,0 +1,227 @@
+name: Notify Slack on PR or Merge
+
+on:
+  pull_request:
+    types: [review_requested, synchronize, closed]
+  pull_request_review:
+    types: [submitted]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    # PR 관련 이벤트만 처리하도록 조건 개선
+    if: |
+      github.event_name == 'pull_request' ||
+      github.event_name == 'pull_request_review' ||
+      github.event_name == 'pull_request_review_comment' ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request != null)
+    steps:
+      - name: 이벤트 정보 디버깅
+        run: |
+          echo "=== 이벤트 디버깅 정보 ==="
+          echo "Event name: ${{ github.event_name }}"
+          echo "Event action: ${{ github.event.action }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Is PR event: ${{ github.event.issue.pull_request != null || github.event.pull_request != null }}"
+          
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            echo "--- Issue Comment 상세 정보 ---"
+            echo "Issue number: ${{ github.event.issue.number }}"
+            echo "Is pull request: ${{ github.event.issue.pull_request != null }}"
+            echo "Comment author: ${{ github.event.comment.user.login }}"
+            echo "Comment author type: ${{ github.event.comment.user.type }}"
+            echo "Issue author: ${{ github.event.issue.user.login }}"
+            echo "Comment body exists: ${{ github.event.comment.body != '' }}"
+          fi
+          
+          if [ "${{ github.event_name }}" = "pull_request_review_comment" ]; then
+            echo "--- PR Review Comment 상세 정보 ---"
+            echo "PR number: ${{ github.event.pull_request.number }}"
+            echo "Comment author: ${{ github.event.comment.user.login }}"
+            echo "Comment author type: ${{ github.event.comment.user.type }}"
+          fi
+          
+          if [ "${{ github.event_name }}" = "pull_request_review" ]; then
+            echo "--- PR Review 상세 정보 ---"
+            echo "PR number: ${{ github.event.pull_request.number }}"
+            echo "Review author: ${{ github.event.review.user.login }}"
+            echo "Review state: ${{ github.event.review.state }}"
+          fi
+          
+          echo "========================="
+
+      - name: GitHub username을 Slack username으로 변환
+        id: slack-user
+        run: |
+          # JSON 매핑에서 사용자 찾기
+          MAPPING='${{ secrets.GITHUBID_TO_SLACK_MAPPING }}'
+          
+          # 디버깅을 위한 로그
+          echo "Event name: ${{ github.event_name }}"
+          echo "Mapping exists: $([ -n "$MAPPING" ] && echo "Yes" || echo "No")"
+          
+          # 작성자 변환
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            AUTHOR_GITHUB="${{ github.event.issue.user.login }}"
+          else
+            AUTHOR_GITHUB="${{ github.event.pull_request.user.login }}"
+          fi
+          
+          echo "Author GitHub: $AUTHOR_GITHUB"
+          
+          if [ -n "$MAPPING" ] && [ -n "$AUTHOR_GITHUB" ]; then
+            AUTHOR_SLACK=$(echo "$MAPPING" | jq -r --arg user "$AUTHOR_GITHUB" '.[$user] // $user')
+          else
+            AUTHOR_SLACK="$AUTHOR_GITHUB"
+          fi
+          
+          echo "Author Slack: $AUTHOR_SLACK"
+          
+          # 리뷰어 변환 (pull_request_review인 경우)
+          if [ "${{ github.event_name }}" = "pull_request_review" ]; then
+            REVIEWER_GITHUB="${{ github.event.review.user.login }}"
+            echo "Reviewer GitHub: $REVIEWER_GITHUB"
+            
+            if [ -n "$MAPPING" ] && [ -n "$REVIEWER_GITHUB" ]; then
+              REVIEWER_SLACK=$(echo "$MAPPING" | jq -r --arg user "$REVIEWER_GITHUB" '.[$user] // $user')
+            else
+              REVIEWER_SLACK="$REVIEWER_GITHUB"
+            fi
+            
+            echo "Reviewer Slack: $REVIEWER_SLACK"
+            
+            if [ -n "$REVIEWER_SLACK" ]; then
+              echo "reviewer_slack=<@$REVIEWER_SLACK>" >> $GITHUB_OUTPUT
+            else
+              echo "reviewer_slack=Unknown" >> $GITHUB_OUTPUT
+            fi
+          fi
+          
+          # 댓글 작성자 변환 (comment 관련 이벤트인 경우)
+          if [ "${{ github.event_name }}" = "issue_comment" ] || [ "${{ github.event_name }}" = "pull_request_review_comment" ]; then
+            COMMENTER_GITHUB="${{ github.event.comment.user.login }}"
+            echo "Commenter GitHub: $COMMENTER_GITHUB"
+            
+            if [ -n "$MAPPING" ] && [ -n "$COMMENTER_GITHUB" ]; then
+              COMMENTER_SLACK=$(echo "$MAPPING" | jq -r --arg user "$COMMENTER_GITHUB" '.[$user] // $user')
+            else
+              COMMENTER_SLACK="$COMMENTER_GITHUB"
+            fi
+            
+            echo "Commenter Slack: $COMMENTER_SLACK"
+            
+            if [ -n "$COMMENTER_SLACK" ]; then
+              echo "commenter_slack=<@$COMMENTER_SLACK>" >> $GITHUB_OUTPUT
+            else
+              echo "commenter_slack=Unknown" >> $GITHUB_OUTPUT
+            fi
+          fi
+          
+          # 요청된 리뷰어 변환 (review_requested인 경우)
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            REQUESTED_REVIEWER_GITHUB="${{ github.event.pull_request.requested_reviewers[0].login }}"
+            echo "Requested Reviewer GitHub: $REQUESTED_REVIEWER_GITHUB"
+            
+            if [ -n "$REQUESTED_REVIEWER_GITHUB" ]; then
+              if [ -n "$MAPPING" ]; then
+                REQUESTED_REVIEWER_SLACK=$(echo "$MAPPING" | jq -r --arg user "$REQUESTED_REVIEWER_GITHUB" '.[$user] // $user')
+              else
+                REQUESTED_REVIEWER_SLACK="$REQUESTED_REVIEWER_GITHUB"
+              fi
+              echo "Requested Reviewer Slack: $REQUESTED_REVIEWER_SLACK"
+              echo "requested_reviewer_slack=<@$REQUESTED_REVIEWER_SLACK>" >> $GITHUB_OUTPUT
+            else
+              echo "requested_reviewer_slack=없음" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+          # 머지 수행자 변환 (pull_request closed+merged)
+          if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.event.action }}" = "closed" ] && [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            MERGER_GITHUB="${{ github.event.pull_request.merged_by.login }}"
+            echo "Merger GitHub: $MERGER_GITHUB"
+            if [ -n "$MAPPING" ] && [ -n "$MERGER_GITHUB" ]; then
+              MERGER_SLACK=$(echo "$MAPPING" | jq -r --arg user "$MERGER_GITHUB" '.[$user] // $user')
+            else
+              MERGER_SLACK="$MERGER_GITHUB"
+            fi
+            echo "Merger Slack: $MERGER_SLACK"
+            if [ -n "$MERGER_SLACK" ]; then
+              echo "merger_slack=<@$MERGER_SLACK>" >> $GITHUB_OUTPUT
+            else
+              echo "merger_slack=Unknown" >> $GITHUB_OUTPUT
+            fi
+          fi
+          
+          if [ -n "$AUTHOR_SLACK" ]; then
+            echo "author_slack=<@$AUTHOR_SLACK>" >> $GITHUB_OUTPUT
+          else
+            echo "author_slack=Unknown" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 리뷰 요청 알림
+        if: github.event_name == 'pull_request' && github.event.action == 'review_requested'
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {"text": ":eyes: *리뷰를 요청드립니다!*\n*작성자*: ${{ steps.slack-user.outputs.author_slack }}\n*리뷰어*: ${{ steps.slack-user.outputs.requested_reviewer_slack }}\n*PR 제목*: `${{ github.event.pull_request.title }}`\n*링크*: ${{ github.event.pull_request.html_url }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # - name: 리뷰 제출 알림
+      #   if: github.event_name == 'pull_request_review' && github.event.action == 'submitted'
+      #   uses: slackapi/slack-github-action@v1.24.0
+      #   with:
+      #     payload: |
+      #       {"text": ":white_check_mark: *리뷰가 제출되었습니다!*\n*리뷰어*: ${{ steps.slack-user.outputs.reviewer_slack }}\n*리뷰 상태*: `${{ github.event.review.state }}`\n*PR 제목*: `${{ github.event.pull_request.title }}`\n*작성자*: ${{ steps.slack-user.outputs.author_slack }}\n*링크*: ${{ github.event.pull_request.html_url }}"}
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: PR 댓글 알림
+        if: github.event_name == 'issue_comment' && github.event.action == 'created'
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {"text": ":speech_balloon: *댓글이 작성되었습니다!* \n*댓글 작성자*: ${{ steps.slack-user.outputs.commenter_slack }}\n*PR 제목*: `${{ github.event.issue.title }}`\n*PR 작성자*: ${{ steps.slack-user.outputs.author_slack }}\n*링크*: ${{ github.event.issue.html_url }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 코드 리뷰 댓글 알림
+        if: github.event_name == 'pull_request_review_comment' && github.event.action == 'created'
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {"text": ":memo: *코드 리뷰 댓글이 작성되었습니다!*\n*댓글 작성자*: ${{ steps.slack-user.outputs.commenter_slack }}\n*PR 제목*: `${{ github.event.pull_request.title }}`\n*PR 작성자*: ${{ steps.slack-user.outputs.author_slack }}\n*링크*: ${{ github.event.pull_request.html_url }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 코드 업데이트 알림
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {"text": ":rocket: *코드가 업데이트되었습니다!*\n*PR 작성자*: ${{ steps.slack-user.outputs.author_slack }}\n*PR 제목*: `${{ github.event.pull_request.title }}`\n*커밋 로그*: `${{ github.event.pull_request.head.sha }}`\n*링크*: ${{ github.event.pull_request.html_url }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 리뷰 승인 알림
+        if: github.event_name == 'pull_request_review' && github.event.action == 'submitted' && github.event.review.state == 'approved'
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {"text": ":white_check_mark: *리뷰가 승인되었습니다!*\n*리뷰어*: ${{ steps.slack-user.outputs.reviewer_slack }}\n*PR 제목*: \"${{ github.event.pull_request.title }}\"\n*작성자*: ${{ steps.slack-user.outputs.author_slack }}\n*링크*: ${{ github.event.pull_request.html_url }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: PR 머지 알림
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {"text": ":tada: *PR이 머지되었습니다!*\n*PR 번호*: #${{ github.event.pull_request.number }}\n*제목*: \"${{ github.event.pull_request.title }}\"\n*머지한 사람*: ${{ steps.slack-user.outputs.merger_slack }}\n*작성자*: ${{ steps.slack-user.outputs.author_slack }}\n*브랜치*: `${{ github.event.pull_request.head.ref }}` :arrow_right: `${{ github.event.pull_request.base.ref }}`\n*머지 커밋*: `${{ github.event.pull_request.merge_commit_sha }}`\n*링크*: ${{ github.event.pull_request.html_url }}"}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
