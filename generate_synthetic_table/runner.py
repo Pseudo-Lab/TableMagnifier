@@ -27,8 +27,13 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--provider",
         default="openai",
-        choices=["openai", "gemini", "vllm"],
-        help="LLM provider to use (default: openai)",
+        choices=["openai", "gemini", "gemini_pool", "vllm"],
+        help="LLM provider to use (default: openai). gemini_pool uses API key rotation from apis/gemini_keys.yaml",
+    )
+    parser.add_argument(
+        "--config-path",
+        type=Path,
+        help="Path to gemini_keys.yaml for gemini_pool provider (default: apis/gemini_keys.yaml)",
     )
     parser.add_argument(
         "--base-url",
@@ -60,6 +65,7 @@ def run_flow_for_image(
     model: str = "gpt-4.1-mini",
     temperature: float = 0.2,
     base_url: str | None = None,
+    config_path: str | None = None,
 ) -> TableState:
     """Execute the synthetic table flow for a given image path."""
 
@@ -72,6 +78,7 @@ def run_flow_for_image(
     if provider == "gemini" and not os.getenv("GOOGLE_API_KEY"):
         msg = "GOOGLE_API_KEY is not set. Add it to a .env file or your environment."
         raise RuntimeError(msg)
+    # gemini_pool은 apis/gemini_keys.yaml에서 키를 로드하므로 환경변수 체크 불필요
 
     return run_synthetic_table_flow(
         str(image),
@@ -79,6 +86,7 @@ def run_flow_for_image(
         model=model,
         temperature=temperature,
         base_url=base_url,
+        config_path=config_path,
     )
 
 
@@ -119,6 +127,7 @@ def run_with_args(args: argparse.Namespace) -> TableState:
         model=args.model,
         temperature=args.temperature,
         base_url=args.base_url,
+        config_path=str(args.config_path) if args.config_path else None,
     )
 
     html_refs: list[tuple[str, Path | None]] = []
