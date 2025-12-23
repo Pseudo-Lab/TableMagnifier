@@ -283,7 +283,7 @@ def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["Tabl
     return _node
 
 
-from .validators import robust_json_parse, validate_html
+from .validators import robust_json_parse, validate_html, parse_html_table_to_json
 import logging
 
 logger = logging.getLogger(__name__)
@@ -433,13 +433,16 @@ def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], Table
     return _node
 
 
-def parse_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    """Create a node that parses the synthetic HTML table into JSON."""
+def parse_synthetic_table_node(_llm: ChatOpenAI = None) -> Callable[[TableState], TableState]:
+    """
+    Create a node that parses the synthetic HTML table into JSON.
 
-    prompt_template = _load_prompt("parse_synthetic_table")
+    Uses rule-based parsing (BeautifulSoup) instead of LLM for performance.
+    LLM parameter is kept for backward compatibility but not used.
+    """
 
     def _node(state: TableState) -> TableState:
-        logger.info("Entering node: parse_synthetic_table")
+        logger.info("Entering node: parse_synthetic_table (rule-based)")
         if state.get("errors"):
             return state
 
@@ -449,23 +452,12 @@ def parse_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
             errors.append("No synthetic table to parse.")
             return {**state, "errors": errors}
 
-        try:
-            prompt = prompt_template.format(synthetic_html=synthetic_html)
-        except KeyError as e:
-            errors = state.get("errors", [])
-            errors.append(f"Parse prompt missing placeholder: {e}")
-            return {**state, "errors": errors}
+        # 규칙 기반 파싱 (LLM 호출 없음)
+        parsed_json = parse_html_table_to_json(synthetic_html)
 
-        json_text = _call_llm(llm, prompt)
-        parsed_json = robust_json_parse(json_text)
-        
         if parsed_json is None:
-             # 파싱 실패 시 에러보다는 경고/빈값 처리 혹은 재시도 로직? 
-             # 여기서는 일단 에러로 처리하지 않고 raw text만 남기거나 함.
-             # 하지만 사용자 요청은 "파싱을 진행해두려고 해" 이므로
-             # 최대한 파싱된 결과를 원함.
-             # robust_json_parse가 실패하면 None임.
-             pass
+            logger.warning("Rule-based parsing failed, table structure may be invalid")
+            # 파싱 실패해도 에러로 처리하지 않음 (기존 동작 유지)
 
         return {**state, "synthetic_json": parsed_json}
 
@@ -496,12 +488,44 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
         response_text = _call_llm(llm, prompt)
         response_json = robust_json_parse(response_text)
-        
+
         qa_results = []
         if response_json and "qa_pairs" in response_json:
             qa_results = response_json["qa_pairs"]
         else:
              logger.warning("QA generation did not return valid JSON or 'qa_pairs' key.")
+
+        return {**state, "qa_results": qa_results}
+
+    return _node
+
+
+def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
+    """Generate QA pairs directly from image (QA-only mode)."""
+    prompt_template = _load_prompt("generate_qa_from_image")
+
+    def _node(state: TableState) -> TableState:
+        logger.info("Entering node: generate_qa_from_image")
+        if state.get("errors"):
+            return state
+
+        image_path = Path(state["image_path"])
+        if not image_path.exists():
+            errors = state.get("errors", [])
+            errors.append(f"Image not found: {image_path}")
+            return {**state, "errors": errors}
+
+        image_data_url = _encode_image(image_path)
+        prompt = prompt_template
+
+        response_text = _call_llm(llm, prompt, image_urls=[image_data_url])
+        response_json = robust_json_parse(response_text)
+
+        qa_results = []
+        if response_json and "qa_pairs" in response_json:
+            qa_results = response_json["qa_pairs"]
+        else:
+            logger.warning("QA generation from image did not return valid JSON or 'qa_pairs' key.")
 
         return {**state, "qa_results": qa_results}
 
@@ -537,71 +561,89 @@ def load_html_input_node(state: TableState) -> TableState:
         return {**state, "errors": errors}
 
 
-def build_synthetic_table_graph(llm: ChatOpenAI, provider: str = "openai") -> StateGraph:
-    """Assemble the LangGraph pipeline with reflection-based regeneration loop."""
+def build_synthetic_table_graph(
+    llm: ChatOpenAI,
+    provider: str = "openai",
+    qa_only: bool = False,
+) -> StateGraph:
+    """
+    Assemble the LangGraph pipeline.
+
+    Args:
+        llm: LLM instance
+        provider: LLM provider name
+        qa_only: If True, generate QA directly from image without synthetic data generation
+    """
 
     graph = StateGraph(TableState)
 
-    graph.add_node("image_to_html", image_to_html_node(llm))
-    graph.add_node("pymupdf_parse", pymupdf_parse_node)
-    graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
-    graph.add_node("analyze_table", analyze_table_node(llm))
-    graph.add_node("generate_synthetic_table", generate_synthetic_table_node(llm))
-    graph.add_node("generate_synthetic_table_from_image", generate_synthetic_table_from_image_node(llm))
-    graph.add_node("load_html_input", load_html_input_node)
+    if qa_only:
+        # QA-only mode: 이미지에서 직접 QA 생성 (합성 데이터 생성 스킵)
+        graph.add_node("generate_qa_from_image", generate_qa_from_image_node(llm))
+        graph.add_edge(START, "generate_qa_from_image")
+        graph.add_edge("generate_qa_from_image", END)
+    else:
+        # Full pipeline mode
+        graph.add_node("image_to_html", image_to_html_node(llm))
+        graph.add_node("pymupdf_parse", pymupdf_parse_node)
+        graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
+        graph.add_node("analyze_table", analyze_table_node(llm))
+        graph.add_node("generate_synthetic_table", generate_synthetic_table_node(llm))
+        graph.add_node("generate_synthetic_table_from_image", generate_synthetic_table_from_image_node(llm))
+        graph.add_node("load_html_input", load_html_input_node)
 
-    graph.add_node("self_reflection", self_reflection_node(llm))
-    graph.add_node("revise_synthetic_table", revise_synthetic_table_node(llm))
-    graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
-    graph.add_node("generate_qa", generate_qa_node(llm))
+        graph.add_node("self_reflection", self_reflection_node(llm))
+        graph.add_node("revise_synthetic_table", revise_synthetic_table_node(llm))
+        graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
+        graph.add_node("generate_qa", generate_qa_node(llm))
 
-    # Routing based on provider and input type
-    def route_start(state: TableState) -> str:
-        image_path = Path(state["image_path"])
-        if image_path.suffix.lower() == ".html":
-            return "load_html_input"
+        # Routing based on provider and input type
+        def route_start(state: TableState) -> str:
+            image_path = Path(state["image_path"])
+            if image_path.suffix.lower() == ".html":
+                return "load_html_input"
 
-        # Powerful models go direct (gemini_pool도 멀티모달 지원)
-        if provider in ["openai", "gemini", "gemini_pool"]:
-            return "generate_synthetic_table_from_image"
-        # Open models / others go through multi-stage
-        return "pymupdf_parse"
+            # Powerful models go direct (멀티모달 지원 모델들)
+            if provider in ["openai", "gemini", "gemini_pool", "claude"]:
+                return "generate_synthetic_table_from_image"
+            # Open models / others go through multi-stage
+            return "pymupdf_parse"
 
-    graph.add_conditional_edges(START, route_start)
+        graph.add_conditional_edges(START, route_start)
 
-    # HTML Input path
-    graph.add_edge("load_html_input", "analyze_table")
+        # HTML Input path
+        graph.add_edge("load_html_input", "analyze_table")
 
-    # Multi-stage path
-    graph.add_edge("pymupdf_parse", "validate_parsed_table")
-    graph.add_conditional_edges(
-        "validate_parsed_table",
-        route_after_validation,
-        {
-            "generate_synthetic_table": "analyze_table",
-            "image_to_html": "image_to_html",
-        }
-    )
-    graph.add_edge("image_to_html", "analyze_table")
-    graph.add_edge("analyze_table", "generate_synthetic_table")
-    graph.add_edge("generate_synthetic_table", "self_reflection")
+        # Multi-stage path
+        graph.add_edge("pymupdf_parse", "validate_parsed_table")
+        graph.add_conditional_edges(
+            "validate_parsed_table",
+            route_after_validation,
+            {
+                "generate_synthetic_table": "analyze_table",
+                "image_to_html": "image_to_html",
+            }
+        )
+        graph.add_edge("image_to_html", "analyze_table")
+        graph.add_edge("analyze_table", "generate_synthetic_table")
+        graph.add_edge("generate_synthetic_table", "self_reflection")
 
-    # Direct path
-    graph.add_edge("generate_synthetic_table_from_image", "self_reflection")
+        # Direct path
+        graph.add_edge("generate_synthetic_table_from_image", "self_reflection")
 
-    # Shared reflection loop
-    graph.add_conditional_edges(
-        "self_reflection",
-        route_after_reflection,
-        {
-            "parse_synthetic_table": "parse_synthetic_table",
-            "revise_synthetic_table": "revise_synthetic_table",
-        },
-    )
+        # Shared reflection loop
+        graph.add_conditional_edges(
+            "self_reflection",
+            route_after_reflection,
+            {
+                "parse_synthetic_table": "parse_synthetic_table",
+                "revise_synthetic_table": "revise_synthetic_table",
+            },
+        )
 
-    graph.add_edge("revise_synthetic_table", "self_reflection")
-    graph.add_edge("parse_synthetic_table", "generate_qa")
-    graph.add_edge("generate_qa", END)
+        graph.add_edge("revise_synthetic_table", "self_reflection")
+        graph.add_edge("parse_synthetic_table", "generate_qa")
+        graph.add_edge("generate_qa", END)
 
     return graph
 
@@ -612,14 +654,29 @@ def run_synthetic_table_flow(
     image_path: str,
     *,
     provider: str = "openai",
-    model: str = "gpt-4.1-mini",
+    model: str = "gpt-4o-mini",
     temperature: float = 0.2,
     base_url: str | None = None,
     config_path: str | None = None,
+    qa_only: bool = False,
 ) -> TableState:
+    """
+    Run the synthetic table generation flow.
+
+    Args:
+        image_path: Path to the input image or HTML file
+        provider: LLM provider (openai, gemini, gemini_pool, claude, vllm)
+        model: Model name
+        temperature: Sampling temperature
+        base_url: Custom base URL for vLLM
+        config_path: Config path for gemini_pool
+        qa_only: If True, skip synthetic data generation and only generate QA from image
+
+    Returns:
+        Final TableState with results
+    """
     load_dotenv()
-    
-    # Provider check is done in runner, but good to have here too or rely on factory
+
     llm = get_llm(
         provider=provider,
         model=model,
@@ -627,12 +684,12 @@ def run_synthetic_table_flow(
         base_url=base_url,
         config_path=config_path,
     )
-    
-    app = build_synthetic_table_graph(llm, provider=provider).compile()
+
+    app = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only).compile()
 
     final_state: TableState = app.invoke({
         "image_path": image_path,
-        "attempts": 0,   # ✅ 시작 시 명시
+        "attempts": 0,
         "errors": [],
     })
     return final_state

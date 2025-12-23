@@ -27,8 +27,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--provider",
         default="openai",
-        choices=["openai", "gemini", "gemini_pool", "vllm"],
-        help="LLM provider to use (default: openai). gemini_pool uses API key rotation from apis/gemini_keys.yaml",
+        choices=["openai", "gemini", "gemini_pool", "claude", "vllm"],
+        help="LLM provider to use (default: openai). gemini_pool uses API key rotation from apis/gemini_keys.yaml. claude uses ANTHROPIC_API_KEY.",
     )
     parser.add_argument(
         "--config-path",
@@ -55,6 +55,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Optional path to save the parsed result as JSON (HTML saved separately)",
     )
+    parser.add_argument(
+        "--qa-only",
+        action="store_true",
+        help="Generate QA pairs directly from image without synthetic data generation (faster)",
+    )
     return parser
 
 
@@ -62,21 +67,25 @@ def run_flow_for_image(
     image: Path,
     *,
     provider: str = "openai",
-    model: str = "gpt-4.1-mini",
+    model: str = "gpt-4o-mini",
     temperature: float = 0.2,
     base_url: str | None = None,
     config_path: str | None = None,
+    qa_only: bool = False,
 ) -> TableState:
     """Execute the synthetic table flow for a given image path."""
 
     load_dotenv()
-    
+
     # Basic env check based on provider
     if provider == "openai" and not os.getenv("OPENAI_API_KEY"):
         msg = "OPENAI_API_KEY is not set. Add it to a .env file or your environment."
         raise RuntimeError(msg)
     if provider == "gemini" and not os.getenv("GOOGLE_API_KEY"):
         msg = "GOOGLE_API_KEY is not set. Add it to a .env file or your environment."
+        raise RuntimeError(msg)
+    if provider == "claude" and not os.getenv("ANTHROPIC_API_KEY"):
+        msg = "ANTHROPIC_API_KEY is not set. Add it to a .env file or your environment."
         raise RuntimeError(msg)
     # gemini_pool은 apis/gemini_keys.yaml에서 키를 로드하므로 환경변수 체크 불필요
 
@@ -87,6 +96,7 @@ def run_flow_for_image(
         temperature=temperature,
         base_url=base_url,
         config_path=config_path,
+        qa_only=qa_only,
     )
 
 
@@ -128,6 +138,7 @@ def run_with_args(args: argparse.Namespace) -> TableState:
         temperature=args.temperature,
         base_url=args.base_url,
         config_path=str(args.config_path) if args.config_path else None,
+        qa_only=getattr(args, 'qa_only', False),
     )
 
     html_refs: list[tuple[str, Path | None]] = []
