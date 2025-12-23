@@ -53,4 +53,6 @@ apis/gemini_keys.yaml
 .dmypy.json
 dmypy.json
 
-# env
+# database 
+info/
+token.json
