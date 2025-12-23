@@ -132,6 +132,7 @@ def _filter_json_safe_state(state: TableState, *, html_paths: Iterable[tuple[str
         "reflection": state.get("reflection"),
         "errors": state.get("errors"),
         "synthetic_json": state.get("synthetic_json"),
+        "qa_results": state.get("qa_results"),
     }
 
     for label, path in html_paths:
