@@ -509,9 +509,12 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
 
 def route_after_reflection(state: TableState) -> str:
+    # 에러가 있으면 더 이상 진행하지 않고 파싱으로 이동 (또는 종료)
+    if state.get("errors"):
+        return "parse_synthetic_table"
+    
     passed = state.get("passed", False)
     attempts = int(state.get("attempts", 0))
-
 
     if passed:
         return "parse_synthetic_table"
@@ -558,8 +561,8 @@ def build_synthetic_table_graph(llm: ChatOpenAI, provider: str = "openai") -> St
         if image_path.suffix.lower() == ".html":
             return "load_html_input"
 
-        # Powerful models go direct
-        if provider in ["openai", "gemini"]:
+        # Powerful models go direct (gemini_pool도 멀티모달 지원)
+        if provider in ["openai", "gemini", "gemini_pool"]:
             return "generate_synthetic_table_from_image"
         # Open models / others go through multi-stage
         return "pymupdf_parse"
@@ -612,6 +615,7 @@ def run_synthetic_table_flow(
     model: str = "gpt-4.1-mini",
     temperature: float = 0.2,
     base_url: str | None = None,
+    config_path: str | None = None,
 ) -> TableState:
     load_dotenv()
     
@@ -621,6 +625,7 @@ def run_synthetic_table_flow(
         model=model,
         temperature=temperature,
         base_url=base_url,
+        config_path=config_path,
     )
     
     app = build_synthetic_table_graph(llm, provider=provider).compile()

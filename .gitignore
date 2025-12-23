@@ -35,6 +35,7 @@ ENV/
 .DS_Store
 
 # API Keys - 중요!
+
 apis/gemini_keys.yaml
 !apis/gemini_keys.yaml.template
 
@@ -56,3 +57,10 @@ dmypy.json
 # database 
 info/
 token.json
+
+# env
+.bemad/
+./docs/
+./pipeline_ui/backend/checkpoints/
+./pipeline_ui/backend/output/
+./pipeline_ui/backend/uploads/

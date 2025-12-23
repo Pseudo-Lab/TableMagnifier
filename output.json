@@ -1,0 +1,9 @@
+{
+  "image_path": "path/to/table_image.png",
+  "table_summary": null,
+  "reflection": null,
+  "errors": [
+    "Image not found: path/to/table_image.png"
+  ],
+  "synthetic_json": null
+}
