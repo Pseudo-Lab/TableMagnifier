@@ -13,6 +13,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from dotenv import load_dotenv
 import fitz  # PyMuPDF
+import yaml
 
 
 MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
@@ -20,6 +21,8 @@ MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
 
 class TableState(TypedDict, total=False):
     image_path: str
+    image_paths: List[str]  # For multi-image inputs
+    domain: str             # Domain for prompt customization
     html_table: str
     table_summary: str
     synthetic_table: str
@@ -70,23 +73,59 @@ def _call_llm(
     return response.content if isinstance(response.content, str) else json.dumps(response.content)
 
 
-def _load_prompt(name: str) -> str:
-    """Load a prompt text from the prompts directory."""
-    # __file__ 없는 환경(노트북) 대비
+def _load_yaml_prompts(filename: str) -> Dict[str, str]:
+    """Load prompts from a yaml file, with caching."""
+    if filename in _PROMPTS_CACHE:
+        return _PROMPTS_CACHE[filename]
+    
     base_dir = Path(__file__).parent if "__file__" in globals() else Path.cwd()
-    prompt_path = base_dir / "prompts" / f"{name}.txt"
+    path = base_dir / "prompts" / filename
+    
+    if not path.exists():
+        # Fallback for domain files that might not exist
+        return {}
+        
     try:
-        return prompt_path.read_text(encoding="utf-8")
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"Prompt file not found: {prompt_path}") from e
+        content = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if not isinstance(content, dict):
+            return {}
+        _PROMPTS_CACHE[filename] = content
+        return content
+    except Exception as e:
+        # Log error?
+        print(f"Error loading prompt file {filename}: {e}")
+        return {}
+
+
+def _load_prompt(name: str, domain: str | None = None) -> str:
+    """
+    Load a prompt by name, optionally overriding with domain-specific version.
+    Loads from prompts/default.yaml and prompts/{domain}.yaml.
+    """
+    default_prompts = _load_yaml_prompts("default.yaml")
+    
+    prompt = default_prompts.get(name, "")
+    
+    if domain:
+        domain_prompts = _load_yaml_prompts(f"{domain}.yaml")
+        if name in domain_prompts:
+            prompt = domain_prompts[name]
+            
+    if not prompt:
+        # Fallback to old behavior: try reading text file directly? 
+        # Or just raise error. The migration should be complete.
+        raise ValueError(f"Prompt '{name}' not found in default.yaml or {domain}.yaml")
+        
+    return prompt
 
 
 def image_to_html_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    prompt = _load_prompt("image_to_html")
-
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: image_to_html")
         
+        # Load prompt dynamically
+        prompt = _load_prompt("image_to_html", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -160,10 +199,11 @@ def route_after_validation(state: TableState) -> str:
 
 def validate_parsed_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     """Validate the table parsed by PyMuPDF."""
-    prompt_template = _load_prompt("validate_parsed_table")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: validate_parsed_table")
+        prompt_template = _load_prompt("validate_parsed_table", state.get("domain"))
         
         html = state.get("html_table")
         if not html:
@@ -190,12 +230,14 @@ def validate_parsed_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
 
 def analyze_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     """Analyze the table to generate a summary of its structure and content."""
-    prompt_template = _load_prompt("parse_contents")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: analyze_table")
         if state.get("errors"):
             return state
+
+        prompt_template = _load_prompt("parse_contents", state.get("domain"))
 
         html = state.get("html_table")
         if not html:
@@ -219,12 +261,13 @@ def analyze_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "TableState"]:
     """Create a node that generates a synthetic dataset with the same structure."""
 
-    prompt_template = _load_prompt("generate_synthetic_table")
-
     def _node(state: "TableState") -> "TableState":
         logger.info("Entering node: generate_synthetic_table")
         if state.get("errors"):
             return state
+        
+        prompt_template = _load_prompt("generate_synthetic_table", state.get("domain"))
+        
         html = state.get("html_table")
         summary = state.get("table_summary")
 
@@ -259,12 +302,13 @@ def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "
 
 def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["TableState"], "TableState"]:
     """Generate synthetic table directly from image (for powerful models)."""
-    prompt_template = _load_prompt("generate_synthetic_table_from_image")
 
     def _node(state: "TableState") -> "TableState":
         logger.info("Entering node: generate_synthetic_table_from_image")
         if state.get("errors"):
             return state
+
+        prompt_template = _load_prompt("generate_synthetic_table_from_image", state.get("domain"))
 
         image_path = Path(state["image_path"])
         if not image_path.exists():
@@ -292,11 +336,13 @@ logger = logging.getLogger(__name__)
 
 
 def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    prompt_template = _load_prompt("self_reflection")
-    prompt_template_image = _load_prompt("self_reflection_from_image")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: self_reflection")
+        prompt_template = _load_prompt("self_reflection", state.get("domain"))
+        prompt_template_image = _load_prompt("self_reflection_from_image", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -327,19 +373,6 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             reflection_text = _call_llm(llm, prompt, image_urls=[image_data_url])
         
         else:
-            # Use text-based reflection (existing logic)
-            # Note: The existing prompt only takes {synthetic_html}, 
-            # but implicitly assumes the model knows the "original HTML" from context or it's just checking validity.
-            # Wait, the existing prompt says "matches original HTML" but doesn't take {html} as input?
-            # Let's check the prompt file again.
-            # "Synthetic HTML: {synthetic_html}"
-            # It seems the previous implementation was slightly flawed or relied on the model hallucinating the original?
-            # Or maybe I should pass {html} to the original prompt too if it's available?
-            # The current prompt file only has {synthetic_html}.
-            # If I want it to compare, I should probably provide the original HTML.
-            # But for now, I will stick to the existing behavior for the text path, 
-            # and use the image path for the direct generation.
-            
             try:
                 prompt = prompt_template.format(synthetic_html=synthetic_html, html=html)
             except KeyError as e:
@@ -371,11 +404,13 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
 
 def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    prompt_template = _load_prompt("revise_synthetic_table")
-    prompt_template_image = _load_prompt("revise_synthetic_table_from_image")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: revise_synthetic_table")
+        prompt_template = _load_prompt("revise_synthetic_table", state.get("domain"))
+        prompt_template_image = _load_prompt("revise_synthetic_table_from_image", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -466,10 +501,11 @@ def parse_synthetic_table_node(_llm: ChatOpenAI = None) -> Callable[[TableState]
 
 def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     """Generate QA pairs based on the synthetic table."""
-    prompt_template = _load_prompt("generate_qa")
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: generate_qa")
+        prompt_template = _load_prompt("generate_qa", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -502,23 +538,34 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
 def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     """Generate QA pairs directly from image (QA-only mode)."""
-    prompt_template = _load_prompt("generate_qa_from_image")
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: generate_qa_from_image")
+        prompt_template = _load_prompt("generate_qa_from_image", state.get("domain"))
+
         if state.get("errors"):
             return state
 
-        image_path = Path(state["image_path"])
-        if not image_path.exists():
-            errors = state.get("errors", [])
-            errors.append(f"Image not found: {image_path}")
-            return {**state, "errors": errors}
+        if state.get("image_paths"):
+             image_paths = [Path(p) for p in state["image_paths"]]
+        else:
+            image_path = Path(state["image_path"])
+            if not image_path.exists():
+                errors = state.get("errors", [])
+                errors.append(f"Image not found: {image_path}")
+                return {**state, "errors": errors}
+            image_paths = [image_path]
 
-        image_data_url = _encode_image(image_path)
+        image_data_urls = []
+        for img_p in image_paths:
+             if img_p.exists():
+                 image_data_urls.append(_encode_image(img_p))
+             else:
+                 logger.warning(f"Skipping missing image in batch: {img_p}")
+
         prompt = prompt_template
 
-        response_text = _call_llm(llm, prompt, image_urls=[image_data_url])
+        response_text = _call_llm(llm, prompt, image_urls=image_data_urls)
         response_json = robust_json_parse(response_text)
 
         qa_results = []
@@ -659,6 +706,8 @@ def run_synthetic_table_flow(
     base_url: str | None = None,
     config_path: str | None = None,
     qa_only: bool = False,
+    image_paths: List[str] | None = None,
+    domain: str | None = None,
 ) -> TableState:
     """
     Run the synthetic table generation flow.
@@ -671,6 +720,8 @@ def run_synthetic_table_flow(
         base_url: Custom base URL for vLLM
         config_path: Config path for gemini_pool
         qa_only: If True, skip synthetic data generation and only generate QA from image
+        image_paths: Optional list of image paths for multi-image processing
+        domain: Optional domain for prompt customization (e.g. 'public')
 
     Returns:
         Final TableState with results
@@ -687,11 +738,17 @@ def run_synthetic_table_flow(
 
     app = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only).compile()
 
-    final_state: TableState = app.invoke({
+    initial_state = {
         "image_path": image_path,
         "attempts": 0,
         "errors": [],
-    })
+    }
+    if image_paths:
+        initial_state["image_paths"] = image_paths
+    if domain:
+        initial_state["domain"] = domain
+
+    final_state: TableState = app.invoke(initial_state)
     return final_state
 
 

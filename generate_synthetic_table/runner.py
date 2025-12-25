@@ -14,6 +14,16 @@ from dotenv import load_dotenv
 
 from .flow import TableState, run_synthetic_table_flow
 
+try:
+    from data_organizer import TableDataOrganizer
+except ImportError:
+    # Fallback if running from a package context where root is not in path yet
+    # Assuming the user runs from root, this should be fine. 
+    # But just in case, we can try to add parent to path.
+    import sys
+    sys.path.append(str(Path(__file__).parent.parent))
+    from data_organizer import TableDataOrganizer
+
 
 def build_arg_parser() -> argparse.ArgumentParser:
     """Create the common argument parser used by CLI entrypoints."""
@@ -73,6 +83,33 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=3,
         help="Maximum number of parallel workers for batch processing (default: 3)",
     )
+    parser.add_argument(
+        "--sampling",
+        action="store_true",
+        help="Enable random sampling of images per table (for QA generation)",
+    )
+    parser.add_argument(
+        "--min-k",
+        type=int,
+        default=2,
+        help="Minimum number of images to sample per table (default: 2)",
+    )
+    parser.add_argument(
+        "--max-k",
+        type=int,
+        default=3,
+        help="Maximum number of images to sample per table (default: 3)",
+    )
+    parser.add_argument(
+        "--num-samples",
+        type=int,
+        default=1,
+        help="Number of random batches to generate per table (default: 1)",
+    )
+    parser.add_argument(
+        "--domain",
+        help="Domain for prompt customization (e.g., 'public'). Auto-detected if input starts with 'P_'.",
+    )
     return parser
 
 
@@ -85,6 +122,7 @@ def run_flow_for_image(
     base_url: str | None = None,
     config_path: str | None = None,
     qa_only: bool = False,
+    domain: str | None = None,
 ) -> TableState:
     """Execute the synthetic table flow for a given image path."""
 
@@ -110,6 +148,7 @@ def run_flow_for_image(
         base_url=base_url,
         config_path=config_path,
         qa_only=qa_only,
+        domain=domain,
     )
 
 
@@ -159,9 +198,20 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
             qa_only=getattr(args, 'qa_only', False),
             output_dir=getattr(args, 'output_dir', None),
             max_workers=getattr(args, 'max_workers', 3),
+            sampling=getattr(args, 'sampling', False),
+            min_k=getattr(args, 'min_k', 2),
+            max_k=getattr(args, 'max_k', 3),
+            num_samples=getattr(args, 'num_samples', 1),
+            domain=args.domain,
         )
 
     # Single file processing
+    # Auto-detect domain if not provided
+    domain = args.domain
+    if not domain and input_path.name.startswith("P_"):
+        domain = "public"
+        print(f"Auto-detected domain: {domain}")
+
     result = run_flow_for_image(
         input_path,
         provider=args.provider,
@@ -170,6 +220,7 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
         base_url=args.base_url,
         config_path=str(args.config_path) if args.config_path else None,
         qa_only=getattr(args, 'qa_only', False),
+        domain=domain,
     )
 
     html_refs: list[tuple[str, Path | None]] = []
@@ -212,6 +263,11 @@ def run_batch_for_folder(
     qa_only: bool = False,
     output_dir: Path | None = None,
     max_workers: int = 3,
+    sampling: bool = False,
+    min_k: int = 2,
+    max_k: int = 3,
+    num_samples: int = 1,
+    domain: str | None = None,
 ) -> Dict[str, any]:
     """
     Execute the flow for all images in a folder (batch processing).
@@ -248,33 +304,83 @@ def run_batch_for_folder(
         output_dir = folder / "qa_output"
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Auto-detect domain if not provided
+    if not domain and folder.name.startswith("P_"):
+        domain = "public"
+        
     print(f"Found {len(image_files)} images in {folder}")
     print(f"Output directory: {output_dir}")
+    if domain:
+        print(f"Domain: {domain}")
     print(f"Using {max_workers} parallel workers")
     print()
+
+    # Try to organize data if using Data Organizer naming convention
+    organizer = TableDataOrganizer(str(folder))
+    grouped_batches = organizer.get_batches(
+        sampling=sampling,
+        min_k=min_k,
+        max_k=max_k,
+        num_samples=num_samples
+    )
+
+    batch_tasks = []
+
+    if grouped_batches:
+        print(f"Organized into {len(grouped_batches)} table groups/batches.")
+        # Flatten the structure roughly for processing: key -> list of batches
+        # get_batches returns { "key": [ [img1, img2], [img3, img4] ] }
+        for table_key, batches_list in grouped_batches.items():
+            for i, batch_images in enumerate(batches_list):
+                 batch_tasks.append({
+                     "name": f"{table_key}_sample_{i}" if sampling else table_key,
+                     "images": batch_images
+                 })
+    else:
+        # Fallback to flat list if no pattern matched
+         print("No matching table groups found. processing images individually.")
+         for img in image_files:
+             batch_tasks.append({
+                 "name": img.stem,
+                 "images": [str(img)]
+             })
+             
+    if not batch_tasks:
+         print(f"No tasks created for {folder}")
+         return {"total": 0, "success": 0, "failed": 0, "results": []}
+
+    print(f"Created {len(batch_tasks)} tasks.")
 
     results = []
     success_count = 0
     failed_count = 0
 
-    def process_single(image_path: Path) -> Dict:
-        """Process a single image and return result."""
+    def process_task(task: Dict) -> Dict:
+        """Process a task (single image or batch)."""
+        images = task["images"]
+        name = task["name"]
+        
+        # Primary image is the first one for naming/path purposes if needed
+        primary_image_path = Path(images[0])
+        
         try:
             result = run_synthetic_table_flow(
-                str(image_path),
+                image_path=str(primary_image_path), # Pass first image as primary "path" (legacy)
+                image_paths=images,                 # Pass all images
                 provider=provider,
                 model=model,
                 temperature=temperature,
                 base_url=base_url,
                 config_path=config_path,
                 qa_only=qa_only,
+                domain=domain,
             )
 
             # Save individual result
-            output_file = output_dir / f"{image_path.stem}_qa.json"
+            output_file = output_dir / f"{name}_qa.json"
             output_data = {
-                "image_path": str(image_path),
-                "image_name": image_path.name,
+                "name": name,
+                "image_paths": images,
                 "qa_results": result.get("qa_results", []),
                 "errors": result.get("errors", []),
             }
@@ -288,7 +394,7 @@ def run_batch_for_folder(
             )
 
             return {
-                "image": image_path.name,
+                "name": name,
                 "status": "success" if not result.get("errors") else "partial",
                 "qa_count": len(result.get("qa_results", [])),
                 "output_file": str(output_file),
@@ -297,7 +403,7 @@ def run_batch_for_folder(
 
         except Exception as e:
             return {
-                "image": image_path.name,
+                "name": name,
                 "status": "failed",
                 "qa_count": 0,
                 "error": str(e),
@@ -305,40 +411,40 @@ def run_batch_for_folder(
 
     # Parallel processing with ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_image = {
-            executor.submit(process_single, img): img
-            for img in image_files
+        future_to_task = {
+            executor.submit(process_task, task): task
+            for task in batch_tasks
         }
 
-        for future in as_completed(future_to_image):
-            image_path = future_to_image[future]
+        for future in as_completed(future_to_task):
+            task = future_to_task[future]
             try:
                 result = future.result()
                 results.append(result)
 
                 if result["status"] == "success":
                     success_count += 1
-                    print(f"✅ {result['image']} - {result['qa_count']} QA pairs")
+                    print(f"✅ {result['name']} - {result['qa_count']} QA pairs")
                 elif result["status"] == "partial":
                     success_count += 1
-                    print(f"⚠️ {result['image']} - {result['qa_count']} QA pairs (with errors)")
+                    print(f"⚠️ {result['name']} - {result['qa_count']} QA pairs (with errors)")
                 else:
                     failed_count += 1
-                    print(f"❌ {result['image']} - {result.get('error', 'Unknown error')}")
+                    print(f"❌ {result['name']} - {result.get('error', 'Unknown error')}")
 
             except Exception as e:
                 failed_count += 1
-                print(f"❌ {image_path.name} - {e}")
+                print(f"❌ {task['name']} - {e}")
                 results.append({
-                    "image": image_path.name,
+                    "name": task['name'],
                     "status": "failed",
                     "error": str(e),
                 })
-
+ 
     # Save summary
     summary = {
         "folder": str(folder),
-        "total": len(image_files),
+        "total": len(batch_tasks),
         "success": success_count,
         "failed": failed_count,
         "qa_only": qa_only,
