@@ -13,6 +13,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from dotenv import load_dotenv
 import fitz  # PyMuPDF
+import yaml
 
 
 MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
@@ -20,6 +21,8 @@ MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
 
 class TableState(TypedDict, total=False):
     image_path: str
+    image_paths: List[str]  # For multi-image inputs
+    domain: str             # Domain for prompt customization
     html_table: str
     table_summary: str
     synthetic_table: str
@@ -70,23 +73,59 @@ def _call_llm(
     return response.content if isinstance(response.content, str) else json.dumps(response.content)
 
 
-def _load_prompt(name: str) -> str:
-    """Load a prompt text from the prompts directory."""
-    # __file__ 없는 환경(노트북) 대비
+def _load_yaml_prompts(filename: str) -> Dict[str, str]:
+    """Load prompts from a yaml file, with caching."""
+    if filename in _PROMPTS_CACHE:
+        return _PROMPTS_CACHE[filename]
+    
     base_dir = Path(__file__).parent if "__file__" in globals() else Path.cwd()
-    prompt_path = base_dir / "prompts" / f"{name}.txt"
+    path = base_dir / "prompts" / filename
+    
+    if not path.exists():
+        # Fallback for domain files that might not exist
+        return {}
+        
     try:
-        return prompt_path.read_text(encoding="utf-8")
-    except FileNotFoundError as e:
-        raise FileNotFoundError(f"Prompt file not found: {prompt_path}") from e
+        content = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if not isinstance(content, dict):
+            return {}
+        _PROMPTS_CACHE[filename] = content
+        return content
+    except Exception as e:
+        # Log error?
+        print(f"Error loading prompt file {filename}: {e}")
+        return {}
+
+
+def _load_prompt(name: str, domain: str | None = None) -> str:
+    """
+    Load a prompt by name, optionally overriding with domain-specific version.
+    Loads from prompts/default.yaml and prompts/{domain}.yaml.
+    """
+    default_prompts = _load_yaml_prompts("default.yaml")
+    
+    prompt = default_prompts.get(name, "")
+    
+    if domain:
+        domain_prompts = _load_yaml_prompts(f"{domain}.yaml")
+        if name in domain_prompts:
+            prompt = domain_prompts[name]
+            
+    if not prompt:
+        # Fallback to old behavior: try reading text file directly? 
+        # Or just raise error. The migration should be complete.
+        raise ValueError(f"Prompt '{name}' not found in default.yaml or {domain}.yaml")
+        
+    return prompt
 
 
 def image_to_html_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    prompt = _load_prompt("image_to_html")
-
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: image_to_html")
         
+        # Load prompt dynamically
+        prompt = _load_prompt("image_to_html", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -160,10 +199,11 @@ def route_after_validation(state: TableState) -> str:
 
 def validate_parsed_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     """Validate the table parsed by PyMuPDF."""
-    prompt_template = _load_prompt("validate_parsed_table")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: validate_parsed_table")
+        prompt_template = _load_prompt("validate_parsed_table", state.get("domain"))
         
         html = state.get("html_table")
         if not html:
@@ -190,12 +230,14 @@ def validate_parsed_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
 
 def analyze_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     """Analyze the table to generate a summary of its structure and content."""
-    prompt_template = _load_prompt("parse_contents")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: analyze_table")
         if state.get("errors"):
             return state
+
+        prompt_template = _load_prompt("parse_contents", state.get("domain"))
 
         html = state.get("html_table")
         if not html:
@@ -219,12 +261,13 @@ def analyze_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "TableState"]:
     """Create a node that generates a synthetic dataset with the same structure."""
 
-    prompt_template = _load_prompt("generate_synthetic_table")
-
     def _node(state: "TableState") -> "TableState":
         logger.info("Entering node: generate_synthetic_table")
         if state.get("errors"):
             return state
+        
+        prompt_template = _load_prompt("generate_synthetic_table", state.get("domain"))
+        
         html = state.get("html_table")
         summary = state.get("table_summary")
 
@@ -259,12 +302,13 @@ def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "
 
 def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["TableState"], "TableState"]:
     """Generate synthetic table directly from image (for powerful models)."""
-    prompt_template = _load_prompt("generate_synthetic_table_from_image")
 
     def _node(state: "TableState") -> "TableState":
         logger.info("Entering node: generate_synthetic_table_from_image")
         if state.get("errors"):
             return state
+
+        prompt_template = _load_prompt("generate_synthetic_table_from_image", state.get("domain"))
 
         image_path = Path(state["image_path"])
         if not image_path.exists():
@@ -283,7 +327,7 @@ def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["Tabl
     return _node
 
 
-from .validators import robust_json_parse, validate_html
+from .validators import robust_json_parse, validate_html, parse_html_table_to_json
 import logging
 
 logger = logging.getLogger(__name__)
@@ -292,11 +336,13 @@ logger = logging.getLogger(__name__)
 
 
 def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    prompt_template = _load_prompt("self_reflection")
-    prompt_template_image = _load_prompt("self_reflection_from_image")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: self_reflection")
+        prompt_template = _load_prompt("self_reflection", state.get("domain"))
+        prompt_template_image = _load_prompt("self_reflection_from_image", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -327,19 +373,6 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             reflection_text = _call_llm(llm, prompt, image_urls=[image_data_url])
         
         else:
-            # Use text-based reflection (existing logic)
-            # Note: The existing prompt only takes {synthetic_html}, 
-            # but implicitly assumes the model knows the "original HTML" from context or it's just checking validity.
-            # Wait, the existing prompt says "matches original HTML" but doesn't take {html} as input?
-            # Let's check the prompt file again.
-            # "Synthetic HTML: {synthetic_html}"
-            # It seems the previous implementation was slightly flawed or relied on the model hallucinating the original?
-            # Or maybe I should pass {html} to the original prompt too if it's available?
-            # The current prompt file only has {synthetic_html}.
-            # If I want it to compare, I should probably provide the original HTML.
-            # But for now, I will stick to the existing behavior for the text path, 
-            # and use the image path for the direct generation.
-            
             try:
                 prompt = prompt_template.format(synthetic_html=synthetic_html, html=html)
             except KeyError as e:
@@ -371,11 +404,13 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
 
 def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    prompt_template = _load_prompt("revise_synthetic_table")
-    prompt_template_image = _load_prompt("revise_synthetic_table_from_image")
+    pass # Prompt loaded inside node
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: revise_synthetic_table")
+        prompt_template = _load_prompt("revise_synthetic_table", state.get("domain"))
+        prompt_template_image = _load_prompt("revise_synthetic_table_from_image", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -433,13 +468,16 @@ def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], Table
     return _node
 
 
-def parse_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    """Create a node that parses the synthetic HTML table into JSON."""
+def parse_synthetic_table_node(_llm: ChatOpenAI = None) -> Callable[[TableState], TableState]:
+    """
+    Create a node that parses the synthetic HTML table into JSON.
 
-    prompt_template = _load_prompt("parse_synthetic_table")
+    Uses rule-based parsing (BeautifulSoup) instead of LLM for performance.
+    LLM parameter is kept for backward compatibility but not used.
+    """
 
     def _node(state: TableState) -> TableState:
-        logger.info("Entering node: parse_synthetic_table")
+        logger.info("Entering node: parse_synthetic_table (rule-based)")
         if state.get("errors"):
             return state
 
@@ -449,23 +487,12 @@ def parse_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
             errors.append("No synthetic table to parse.")
             return {**state, "errors": errors}
 
-        try:
-            prompt = prompt_template.format(synthetic_html=synthetic_html)
-        except KeyError as e:
-            errors = state.get("errors", [])
-            errors.append(f"Parse prompt missing placeholder: {e}")
-            return {**state, "errors": errors}
+        # 규칙 기반 파싱 (LLM 호출 없음)
+        parsed_json = parse_html_table_to_json(synthetic_html)
 
-        json_text = _call_llm(llm, prompt)
-        parsed_json = robust_json_parse(json_text)
-        
         if parsed_json is None:
-             # 파싱 실패 시 에러보다는 경고/빈값 처리 혹은 재시도 로직? 
-             # 여기서는 일단 에러로 처리하지 않고 raw text만 남기거나 함.
-             # 하지만 사용자 요청은 "파싱을 진행해두려고 해" 이므로
-             # 최대한 파싱된 결과를 원함.
-             # robust_json_parse가 실패하면 None임.
-             pass
+            logger.warning("Rule-based parsing failed, table structure may be invalid")
+            # 파싱 실패해도 에러로 처리하지 않음 (기존 동작 유지)
 
         return {**state, "synthetic_json": parsed_json}
 
@@ -474,10 +501,11 @@ def parse_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableS
 
 def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     """Generate QA pairs based on the synthetic table."""
-    prompt_template = _load_prompt("generate_qa")
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: generate_qa")
+        prompt_template = _load_prompt("generate_qa", state.get("domain"))
+
         if state.get("errors"):
             return state
 
@@ -496,12 +524,55 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
         response_text = _call_llm(llm, prompt)
         response_json = robust_json_parse(response_text)
-        
+
         qa_results = []
         if response_json and "qa_pairs" in response_json:
             qa_results = response_json["qa_pairs"]
         else:
              logger.warning("QA generation did not return valid JSON or 'qa_pairs' key.")
+
+        return {**state, "qa_results": qa_results}
+
+    return _node
+
+
+def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
+    """Generate QA pairs directly from image (QA-only mode)."""
+
+    def _node(state: TableState) -> TableState:
+        logger.info("Entering node: generate_qa_from_image")
+        prompt_template = _load_prompt("generate_qa_from_image", state.get("domain"))
+
+        if state.get("errors"):
+            return state
+
+        if state.get("image_paths"):
+             image_paths = [Path(p) for p in state["image_paths"]]
+        else:
+            image_path = Path(state["image_path"])
+            if not image_path.exists():
+                errors = state.get("errors", [])
+                errors.append(f"Image not found: {image_path}")
+                return {**state, "errors": errors}
+            image_paths = [image_path]
+
+        image_data_urls = []
+        for img_p in image_paths:
+             if img_p.exists():
+                 image_data_urls.append(_encode_image(img_p))
+             else:
+                 logger.warning(f"Skipping missing image in batch: {img_p}")
+
+        prompt = prompt_template
+
+        response_text = _call_llm(llm, prompt, image_urls=image_data_urls)
+        response_json = robust_json_parse(response_text)
+
+        qa_results = []
+        if response_json and "qa_pairs" in response_json:
+            qa_results = response_json["qa_pairs"]
+        else:
+            logger.warning("QA generation from image did not return valid JSON or 'qa_pairs' key.")
 
         return {**state, "qa_results": qa_results}
 
@@ -537,71 +608,89 @@ def load_html_input_node(state: TableState) -> TableState:
         return {**state, "errors": errors}
 
 
-def build_synthetic_table_graph(llm: ChatOpenAI, provider: str = "openai") -> StateGraph:
-    """Assemble the LangGraph pipeline with reflection-based regeneration loop."""
+def build_synthetic_table_graph(
+    llm: ChatOpenAI,
+    provider: str = "openai",
+    qa_only: bool = False,
+) -> StateGraph:
+    """
+    Assemble the LangGraph pipeline.
+
+    Args:
+        llm: LLM instance
+        provider: LLM provider name
+        qa_only: If True, generate QA directly from image without synthetic data generation
+    """
 
     graph = StateGraph(TableState)
 
-    graph.add_node("image_to_html", image_to_html_node(llm))
-    graph.add_node("pymupdf_parse", pymupdf_parse_node)
-    graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
-    graph.add_node("analyze_table", analyze_table_node(llm))
-    graph.add_node("generate_synthetic_table", generate_synthetic_table_node(llm))
-    graph.add_node("generate_synthetic_table_from_image", generate_synthetic_table_from_image_node(llm))
-    graph.add_node("load_html_input", load_html_input_node)
+    if qa_only:
+        # QA-only mode: 이미지에서 직접 QA 생성 (합성 데이터 생성 스킵)
+        graph.add_node("generate_qa_from_image", generate_qa_from_image_node(llm))
+        graph.add_edge(START, "generate_qa_from_image")
+        graph.add_edge("generate_qa_from_image", END)
+    else:
+        # Full pipeline mode
+        graph.add_node("image_to_html", image_to_html_node(llm))
+        graph.add_node("pymupdf_parse", pymupdf_parse_node)
+        graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
+        graph.add_node("analyze_table", analyze_table_node(llm))
+        graph.add_node("generate_synthetic_table", generate_synthetic_table_node(llm))
+        graph.add_node("generate_synthetic_table_from_image", generate_synthetic_table_from_image_node(llm))
+        graph.add_node("load_html_input", load_html_input_node)
 
-    graph.add_node("self_reflection", self_reflection_node(llm))
-    graph.add_node("revise_synthetic_table", revise_synthetic_table_node(llm))
-    graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
-    graph.add_node("generate_qa", generate_qa_node(llm))
+        graph.add_node("self_reflection", self_reflection_node(llm))
+        graph.add_node("revise_synthetic_table", revise_synthetic_table_node(llm))
+        graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
+        graph.add_node("generate_qa", generate_qa_node(llm))
 
-    # Routing based on provider and input type
-    def route_start(state: TableState) -> str:
-        image_path = Path(state["image_path"])
-        if image_path.suffix.lower() == ".html":
-            return "load_html_input"
+        # Routing based on provider and input type
+        def route_start(state: TableState) -> str:
+            image_path = Path(state["image_path"])
+            if image_path.suffix.lower() == ".html":
+                return "load_html_input"
 
-        # Powerful models go direct (gemini_pool도 멀티모달 지원)
-        if provider in ["openai", "gemini", "gemini_pool"]:
-            return "generate_synthetic_table_from_image"
-        # Open models / others go through multi-stage
-        return "pymupdf_parse"
+            # Powerful models go direct (멀티모달 지원 모델들)
+            if provider in ["openai", "gemini", "gemini_pool", "claude"]:
+                return "generate_synthetic_table_from_image"
+            # Open models / others go through multi-stage
+            return "pymupdf_parse"
 
-    graph.add_conditional_edges(START, route_start)
+        graph.add_conditional_edges(START, route_start)
 
-    # HTML Input path
-    graph.add_edge("load_html_input", "analyze_table")
+        # HTML Input path
+        graph.add_edge("load_html_input", "analyze_table")
 
-    # Multi-stage path
-    graph.add_edge("pymupdf_parse", "validate_parsed_table")
-    graph.add_conditional_edges(
-        "validate_parsed_table",
-        route_after_validation,
-        {
-            "generate_synthetic_table": "analyze_table",
-            "image_to_html": "image_to_html",
-        }
-    )
-    graph.add_edge("image_to_html", "analyze_table")
-    graph.add_edge("analyze_table", "generate_synthetic_table")
-    graph.add_edge("generate_synthetic_table", "self_reflection")
+        # Multi-stage path
+        graph.add_edge("pymupdf_parse", "validate_parsed_table")
+        graph.add_conditional_edges(
+            "validate_parsed_table",
+            route_after_validation,
+            {
+                "generate_synthetic_table": "analyze_table",
+                "image_to_html": "image_to_html",
+            }
+        )
+        graph.add_edge("image_to_html", "analyze_table")
+        graph.add_edge("analyze_table", "generate_synthetic_table")
+        graph.add_edge("generate_synthetic_table", "self_reflection")
 
-    # Direct path
-    graph.add_edge("generate_synthetic_table_from_image", "self_reflection")
+        # Direct path
+        graph.add_edge("generate_synthetic_table_from_image", "self_reflection")
 
-    # Shared reflection loop
-    graph.add_conditional_edges(
-        "self_reflection",
-        route_after_reflection,
-        {
-            "parse_synthetic_table": "parse_synthetic_table",
-            "revise_synthetic_table": "revise_synthetic_table",
-        },
-    )
+        # Shared reflection loop
+        graph.add_conditional_edges(
+            "self_reflection",
+            route_after_reflection,
+            {
+                "parse_synthetic_table": "parse_synthetic_table",
+                "revise_synthetic_table": "revise_synthetic_table",
+            },
+        )
 
-    graph.add_edge("revise_synthetic_table", "self_reflection")
-    graph.add_edge("parse_synthetic_table", "generate_qa")
-    graph.add_edge("generate_qa", END)
+        graph.add_edge("revise_synthetic_table", "self_reflection")
+        graph.add_edge("parse_synthetic_table", "generate_qa")
+        graph.add_edge("generate_qa", END)
 
     return graph
 
@@ -612,14 +701,33 @@ def run_synthetic_table_flow(
     image_path: str,
     *,
     provider: str = "openai",
-    model: str = "gpt-4.1-mini",
+    model: str = "gpt-4o-mini",
     temperature: float = 0.2,
     base_url: str | None = None,
     config_path: str | None = None,
+    qa_only: bool = False,
+    image_paths: List[str] | None = None,
+    domain: str | None = None,
 ) -> TableState:
+    """
+    Run the synthetic table generation flow.
+
+    Args:
+        image_path: Path to the input image or HTML file
+        provider: LLM provider (openai, gemini, gemini_pool, claude, vllm)
+        model: Model name
+        temperature: Sampling temperature
+        base_url: Custom base URL for vLLM
+        config_path: Config path for gemini_pool
+        qa_only: If True, skip synthetic data generation and only generate QA from image
+        image_paths: Optional list of image paths for multi-image processing
+        domain: Optional domain for prompt customization (e.g. 'public')
+
+    Returns:
+        Final TableState with results
+    """
     load_dotenv()
-    
-    # Provider check is done in runner, but good to have here too or rely on factory
+
     llm = get_llm(
         provider=provider,
         model=model,
@@ -627,14 +735,20 @@ def run_synthetic_table_flow(
         base_url=base_url,
         config_path=config_path,
     )
-    
-    app = build_synthetic_table_graph(llm, provider=provider).compile()
 
-    final_state: TableState = app.invoke({
+    app = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only).compile()
+
+    initial_state = {
         "image_path": image_path,
-        "attempts": 0,   # ✅ 시작 시 명시
+        "attempts": 0,
         "errors": [],
-    })
+    }
+    if image_paths:
+        initial_state["image_paths"] = image_paths
+    if domain:
+        initial_state["domain"] = domain
+
+    final_state: TableState = app.invoke(initial_state)
     return final_state
 
 

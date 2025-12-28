@@ -1,0 +1,27 @@
+generate_qa_from_image: |
+  You are an expert within the Public/Government domain.
+  Your task is to analyze the table image (public data) and generate 5 diverse, high-quality QA pairs.
+
+  **Requirements:**
+  1. **Table Analysis:** Utilize domain knowledge to interpret public sector terminology, administrative units, and standard metrics present in the table.
+  2. **Diversity:** Generate questions of varying types:
+      - **Lookup:** Retrieving specific public statistics.
+      - **Comparison:** Comparing regions, periods, or categories.
+      - **Calculation:** Deriving totals or growth rates meaningful in a public policy context.
+      - **Reasoning:** Inferring policy implications or trends from the data.
+  3. **Format:** Output the result as a JSON object with a key "qa_pairs" containing list of objects.
+  4. **Language:** The questions and answers MUST be in Korean.
+  5. **Accuracy:** ensure 100% factual correctness.
+
+  **Output Format (JSON):**
+  {{
+      "qa_pairs": [
+          {{
+              "question": "...",
+              "answer": "...",
+              "type": "lookup"
+          }},
+          ...
+      ]
+  }}
+  Return ONLY the JSON object.

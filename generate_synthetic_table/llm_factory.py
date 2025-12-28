@@ -6,6 +6,7 @@ from typing import Optional
 from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_anthropic import ChatAnthropic
 
 # polling_gemini 모듈에서 GeminiPoolChatModel 임포트
 from polling_gemini import GeminiPoolChatModel, create_gemini_chat_model
@@ -23,8 +24,8 @@ def get_llm(
     Factory to create a Chat Model based on the provider.
 
     Args:
-        provider: 'openai', 'gemini', 'gemini_pool', or 'vllm'
-        model: Model name (e.g., 'gpt-4', 'gemini-1.5-flash')
+        provider: 'openai', 'gemini', 'gemini_pool', 'claude', or 'vllm'
+        model: Model name (e.g., 'gpt-4', 'gemini-1.5-flash', 'claude-sonnet-4-20250514')
         temperature: Sampling temperature
         base_url: Optional base URL for vLLM or custom OpenAI endpoints
         api_key: Optional API key override
@@ -50,7 +51,7 @@ def get_llm(
         if not os.getenv("GOOGLE_API_KEY") and not api_key:
              # Fallback or check environment variable in a more user-friendly way if needed
              pass
-        
+
         return ChatGoogleGenerativeAI(
             model=model,
             temperature=temperature,
@@ -65,12 +66,22 @@ def get_llm(
             temperature=temperature,
         )
 
+    elif provider == "claude":
+        # Anthropic Claude API
+        # ANTHROPIC_API_KEY 환경변수 또는 api_key 파라미터 사용
+        anthropic_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        return ChatAnthropic(
+            model=model,
+            temperature=temperature,
+            api_key=anthropic_key,
+        )
+
     elif provider == "vllm":
         # vLLM is OpenAI-compatible
         if not base_url:
             # Default to local vLLM if not specified, though usually user should provide it
             base_url = "http://localhost:8000/v1"
-        
+
         return ChatOpenAI(
             model=model,
             temperature=temperature,

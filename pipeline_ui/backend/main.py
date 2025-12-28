@@ -23,6 +23,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import uvicorn
+from asyncio import Semaphore
 
 # 프로젝트 루트를 path에 추가
 import sys
@@ -84,6 +85,7 @@ class PipelineConfig(BaseModel):
     model: str = "gemini-2.0-flash"
     temperature: float = 0.2
     config_path: Optional[str] = None
+    max_concurrent: int = 3  # 동시 처리 수 (API rate limit 고려)
 
 
 class RunPipelineRequest(BaseModel):
@@ -274,22 +276,47 @@ async def run_pipeline(request: RunPipelineRequest):
 
 
 async def process_batch(job_id: str, config: PipelineConfig):
-    """배치 처리 실행"""
+    """배치 처리 실행 (병렬 처리)"""
     batch = state.jobs.get(job_id)
     if not batch:
         return
-    
+
     batch.status = JobStatus.RUNNING
-    
-    for item in batch.items:
-        if item.status == JobStatus.COMPLETED:
-            continue  # 이미 완료된 항목 스킵 (재개 시)
-        
+
+    # Semaphore로 동시 처리 수 제한
+    sem = Semaphore(config.max_concurrent)
+
+    async def process_with_semaphore(item: JobItem):
+        """Semaphore로 동시 처리 수 제한하며 실행"""
+        # 취소 상태 확인
         if batch.status == JobStatus.CANCELLED:
-            break
-        
-        await process_single_item(job_id, item, config)
-    
+            return
+
+        async with sem:
+            # 취소 상태 재확인 (semaphore 대기 중 취소될 수 있음)
+            if batch.status == JobStatus.CANCELLED:
+                return
+            await process_single_item(job_id, item, config)
+
+    # 처리할 항목 필터링 (이미 완료된 항목 제외)
+    items_to_process = [
+        item for item in batch.items
+        if item.status != JobStatus.COMPLETED
+    ]
+
+    # 병렬 처리 시작 알림
+    await broadcast_update(job_id, {
+        "type": "batch_parallel_start",
+        "job_id": job_id,
+        "total": len(items_to_process),
+        "max_concurrent": config.max_concurrent,
+    })
+
+    # 병렬 처리 실행
+    if items_to_process:
+        tasks = [process_with_semaphore(item) for item in items_to_process]
+        await asyncio.gather(*tasks, return_exceptions=True)
+
     # 최종 상태 업데이트
     state._save_checkpoint(job_id)
     await broadcast_update(job_id, {
