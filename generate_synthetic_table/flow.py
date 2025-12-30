@@ -18,6 +18,9 @@ import yaml
 
 MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
 
+# 프롬프트 캐시 (YAML 파일 로딩 결과 저장), 캐시가 선언안되어있어서 넣음
+_PROMPTS_CACHE: Dict[str, Dict[str, str]] = {}
+
 
 class TableState(TypedDict, total=False):
     image_path: str
@@ -327,16 +330,18 @@ def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["Tabl
     return _node
 
 
-from .validators import robust_json_parse, validate_html, parse_html_table_to_json
+from .validators import robust_json_parse, validate_html, parse_html_table_to_json, compare_tables_with_sql, compare_tables_with_repl
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-
-
 def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    pass # Prompt loaded inside node
+    """
+    합성 테이블 품질 검증 노드.
+    1단계: SQL 기반 객관적 비교 (Pandas + pandasql)
+    2단계: LLM 기반 주관적 평가 (기존 로직)
+    """
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: self_reflection")
@@ -355,6 +360,67 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             errors.append("Synthetic table generation failed.")
             return {**state, "errors": errors}
 
+        # ============================================
+        # 3단계 검증 체인: pandasql → REPL → G-Eval (LLM)
+        # ============================================
+        validation_issues = []
+        validation_passed = True
+        validation_method = None
+        
+        if html:
+            # ---- 1단계: pandasql 기반 SQL 비교 ----
+            logger.info("[1/3] Running pandasql-based table comparison...")
+            sql_passed, sql_issues = compare_tables_with_sql(html, synthetic_html)
+            
+            if sql_passed:
+                logger.info("[1/3] pandasql validation PASSED")
+                validation_passed = True
+                validation_method = "pandasql"
+            else:
+                logger.warning(f"[1/3] pandasql found {len(sql_issues)} issues, trying REPL...")
+                
+                # ---- 2단계: LangChain REPL 기반 비교 ----
+                logger.info("[2/3] Running REPL-based table comparison...")
+                repl_passed, repl_issues = compare_tables_with_repl(html, synthetic_html)
+                
+                if repl_passed:
+                    logger.info("[2/3] REPL validation PASSED (pandasql issues were false positive)")
+                    validation_passed = True
+                    validation_method = "repl"
+                else:
+                    # 두 방법 모두 실패 → 구체적인 이슈와 함께 실패 반환
+                    logger.warning(f"[2/3] REPL also found issues, will proceed to G-Eval (LLM)...")
+                    validation_passed = False
+                    validation_issues = sql_issues + repl_issues
+                    validation_method = "failed_before_geval"
+                    
+                    # pandasql, REPL 모두 실패시 LLM에게 넘기기 전에 
+                    # 명확한 구조적 오류면 바로 실패 처리
+                    structural_issues = [i for i in validation_issues 
+                                        if "행 수" in i or "열 수" in i or "Shape" in i]
+                    
+                    if structural_issues:
+                        revision_instructions = "구조적 검증에서 문제가 발견되었습니다:\n" + "\n".join(structural_issues)
+                        return {
+                            **state,
+                            "reflection": f"Structural validation failed",
+                            "reflection_json": {
+                                "passed": False,
+                                "validation_method": "pandasql+repl",
+                                "sql_issues": sql_issues,
+                                "repl_issues": repl_issues,
+                                "revision_instructions": revision_instructions,
+                            },
+                            "revision_instructions": revision_instructions,
+                            "passed": False,
+                        }
+                    
+                    # 구조는 맞지만 데이터 불일치 → LLM G-Eval로 최종 판단
+                    logger.info("[3/3] Proceeding to G-Eval (LLM) for final judgment...")
+
+        # ============================================
+        # 3단계: G-Eval - LLM 기반 주관적 평가 (기존 로직)
+        # ============================================
         # If we don't have the original HTML (direct path), use the image for reflection
         if not html:
             if not image_path.exists():
@@ -391,6 +457,18 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
         passed = bool(reflection_json.get("passed", False))
         revision_instructions = reflection_json.get("revision_instructions", "")
+        
+        # 검증 결과를 reflection_json에 추가
+        reflection_json["validation"] = {
+            "method": validation_method if validation_method else "geval",
+            "passed_early": validation_passed and validation_method in ["pandasql", "repl"],
+            "issues": validation_issues,
+        }
+        
+        # pandasql 또는 REPL에서 이미 통과했으면 LLM 결과 무시하고 통과 처리
+        if validation_method in ["pandasql", "repl"]:
+            passed = True
+            revision_instructions = ""
 
         return {
             **state,
