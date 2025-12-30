@@ -1,0 +1,94 @@
+generate_qa: |
+  You are an expert in insurance policies, claims, and coverage analysis.
+  Your task is to generate 5 diverse, high-quality Question-Answer (QA) pairs based on the provided synthetic insurance HTML table.
+
+  **Input Table:**
+  {synthetic_html}
+
+  **Requirements:**
+  1. **Diversity:** Generate questions of varying types with an insurance focus:
+      - **Lookup:** Retrieving specific coverage limits, premium amounts, or deductibles (e.g., "What is the deductible for Plan A?").
+      - **Comparison:** Comparing benefits between different plans or rider options (e.g., "Which plan offers higher accidental death coverage?").
+      - **Calculation:** Calculating potential claim payouts or annual premiums (e.g., "If the insured is hospitalized for 5 days, what is the total benefit amount?").
+      - **Reasoning:** Inferring eligibility or coverage scope (e.g., "Is dental treatment covered under the Basic plan?").
+  2. **Format:** Output the result as a JSON object with a key "qa_pairs", which is a list of objects containing "question", "answer", and "type".
+  3. **Language:** The questions and answers MUST be in Korean.
+  4. **Accuracy:** Ensure all answers are factually correct based on the data in the table.
+
+  **Output Format (JSON):**
+  {{
+      "qa_pairs": [
+          {{
+              "question": "...",
+              "answer": "...",
+              "type": "lookup"
+          }},
+          ...
+      ]
+  }}
+
+generate_qa_from_image: |
+  You are an expert in insurance policies, claims, and coverage analysis.
+  Your task is to analyze the insurance table image and generate 5 diverse, high-quality QA pairs.
+
+  **Requirements:**
+  1. **Table Analysis:** Interpret insurance terminology (Premium, Deductible, Co-pay, Rider, Exclusions).
+  2. **Diversity:** Generate questions of varying types:
+      - **Lookup:** Retrieving specific coverage limits, premium amounts, or deductibles.
+      - **Comparison:** Comparing benefits between different plans or rider options.
+      - **Calculation:** Calculating potential claim payouts or annual premiums.
+      - **Reasoning:** Inferring eligibility or coverage scope/exclusions.
+  3. **Format:** Output the result as a JSON object with a key "qa_pairs", which is a list of objects containing "question", "answer", and "type".
+  4. **Language:** The questions and answers MUST be in Korean.
+  5. **Accuracy:** Ensure 100% factual correctness.
+
+  **Output Format (JSON):**
+  {{
+      "qa_pairs": [
+          {{
+              "question": "...",
+              "answer": "...",
+              "type": "lookup"
+          }},
+          ...
+      ]
+  }}
+  Return ONLY the JSON object.
+
+generate_synthetic_table: |
+  You are a Synthetic Data Generator specializing in Insurance Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic insurance data.
+
+  **Inputs:**
+  1. **Original Table Structure:**
+  {html}
+
+  2. **Table Summary:**
+  {summary}
+
+  **Requirements:**
+  1. **Structure:** Keep the exact same HTML structure.
+  2. **Data:** Replace ALL cell values with new, synthetic insurance data.
+      - Use realistic Korean insurance plan names (e.g., "SafeLife Plus", "Family Care"), coverage types, premiums (KRW), and terms.
+      - Ensure consistency: e.g., higher premiums for better coverage.
+      - Do NOT use real private data.
+  3. **Consistency:** Ensure mathematical consistency (e.g., monthly premium * 12 = annual).
+  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+generate_synthetic_table_from_image: |
+  You are a Synthetic Data Generator specializing in Insurance Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic insurance data.
+
+  **Inputs:**
+  1. **Image:** An image of an insurance table.
+
+  **Requirements:**
+  1. **Structure Preservation:** Accurately reconstruct the table structure.
+  2. **Data Generation:** Replace ALL cell values with new, synthetic insurance data.
+      - Use realistic Korean insurance terms, plan names, coverage amounts (KRW).
+      - Contexts: Life insurance, Health insurance, Auto insurance, etc.
+  3. **Styling:** Use **Tailwind CSS** classes (same as default).
+      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
+      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
+      - `class="border border-slate-300 p-2"` on `<td>`.
+  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
