@@ -24,6 +24,8 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import uvicorn
 from asyncio import Semaphore
+from pymongo.mongo_client import MongoClient
+import os
 
 # 프로젝트 루트를 path에 추가
 import sys
@@ -98,6 +100,16 @@ class RetryRequest(BaseModel):
     item_ids: Optional[List[str]] = None  # None이면 실패한 모든 항목 재시도
 
 
+class UpdateAnnotationRequest(BaseModel):
+    synthetic_json: Dict[str, Any]
+    qa_results: list[Dict[str, Any]] | None = None
+
+
+class SaveToDbRequest(BaseModel):
+    collection_name: str
+    password: Optional[str] = None
+
+
 # ============ State Management ============
 
 class PipelineState:
@@ -112,6 +124,8 @@ class PipelineState:
         self.output_dir.mkdir(exist_ok=True)
         self.upload_dir = Path("./uploads")
         self.upload_dir.mkdir(exist_ok=True)
+        self.mongo_client: Optional[MongoClient] = None
+        self.db_password: Optional[str] = None
     
     def create_batch_job(self, image_paths: List[str]) -> BatchJob:
         job_id = str(uuid.uuid4())[:8]
@@ -588,6 +602,105 @@ async def get_result(item_id: str):
     
     with open(result_path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+# ============ Annotation Endpoints ============
+
+@app.get("/api/annotate/data/{item_id}")
+async def get_annotate_data(item_id: str):
+    """주석 도구용 데이터 조회"""
+    result_path = state.output_dir / f"{item_id}_result.json"
+    if not result_path.exists():
+        raise HTTPException(status_code=404, detail="Result file not found")
+
+    try:
+        with open(result_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        # annotate_tools가 기대하는 형식으로 변환 또는 그대로 반환
+        # image_path가 절대 경로인지 확인하고 URL로 변환 필요할 수 있음
+        # 프론트엔드에서 /uploads/...로 접근 가능한지 확인
+        
+        # 이미지 경로 처리
+        # uploads 디렉토리에 있는 경우 URL 경로로 변경 (프론트엔드 편의성)
+        # 하지만 원본 경로를 유지하고 프론트엔드가 처리하는게 나을 수도 있음. 
+        # 여기서는 있는 그대로 반환.
+        
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/annotate/save/{item_id}")
+async def save_annotate_data(item_id: str, request: UpdateAnnotationRequest):
+    """주석 데이터 로컬 파일 업데이트"""
+    result_path = state.output_dir / f"{item_id}_result.json"
+    if not result_path.exists():
+        raise HTTPException(status_code=404, detail="Result file not found")
+
+    try:
+        with open(result_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        # 데이터 업데이트
+        data["synthetic_json"] = request.synthetic_json
+        if request.qa_results is not None:
+             data["qa_results"] = request.qa_results
+        
+        with open(result_path, "w", encoding="utf-8") as f:
+             json.dump(data, f, ensure_ascii=False, indent=2)
+             
+        return {"status": "success", "message": "Annotation saved locally"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/annotate/save_to_db/{item_id}")
+async def save_annotate_to_db(item_id: str, request: SaveToDbRequest):
+    """주석 데이터 DB 저장"""
+    result_path = state.output_dir / f"{item_id}_result.json"
+    if not result_path.exists():
+        raise HTTPException(status_code=404, detail="Result file not found")
+
+    # Get password
+    password = request.password or state.db_password or os.environ.get("MONGODB_PASSWORD")
+    if not password:
+         raise HTTPException(status_code=400, detail="MongoDB password is required.")
+
+    try:
+        with open(result_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        # Connect to MongoDB if needed
+        if not state.mongo_client:
+             uri = f"mongodb+srv://TableMagnifier:{password}@tablemagnifier.gf5mkkc.mongodb.net/?appName=TableMagnifier"
+             state.mongo_client = MongoClient(uri, tls=True, tlsAllowInvalidCertificates=True)
+        
+        # Format for DB
+        db_json = {
+            "Domain": request.collection_name,
+            "ImageFileName": Path(data.get("image_path", "unknown")).name,
+            "ImageFileID": item_id, # Use item_id as file ID if mapping not available
+            "HTMLText": data.get("html_table", ""),
+            "SyntheticJSON": data.get("synthetic_json", {}),
+            "QAPair": data.get("qa_results", []),
+            "Evaluation_Result": {}
+        }
+        
+        # Insert
+        db = state.mongo_client['TableInformation']
+        collection = db[request.collection_name]
+        result = collection.insert_one(db_json)
+        
+        return {
+            "status": "success", 
+            "message": f"Data saved to MongoDB collection '{request.collection_name}'", 
+            "inserted_id": str(result.inserted_id)
+        }
+
+    except Exception as e:
+        print(f"DB Save Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to save to DB: {str(e)}")
 
 
 # Static files (업로드된 이미지 서빙)

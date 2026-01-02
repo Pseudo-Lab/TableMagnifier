@@ -211,6 +211,9 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
     if not domain and input_path.name.startswith("P_"):
         domain = "public"
         print(f"Auto-detected domain: {domain}")
+    elif not domain and input_path.name.startswith("I_"):
+        domain = "insurance"
+        print(f"Auto-detected domain: {domain}")
 
     result = run_flow_for_image(
         input_path,
@@ -307,6 +310,8 @@ def run_batch_for_folder(
     # Auto-detect domain if not provided
     if not domain and folder.name.startswith("P_"):
         domain = "public"
+    elif not domain and folder.name.startswith("I_"):
+        domain = "insurance"
         
     print(f"Found {len(image_files)} images in {folder}")
     print(f"Output directory: {output_dir}")

@@ -17,6 +17,7 @@ import yaml
 
 
 MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
+_PROMPTS_CACHE = {}  # Cache for loaded prompt files
 
 
 class TableState(TypedDict, total=False):
