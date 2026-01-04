@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TableGenerationResult } from './types';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+// Changed API Port to 8001 (Pipeline UI Backend)
+const API_BASE_URL = 'http://localhost:8001/api';
 
 const App: React.FC = () => {
   const [data, setData] = useState<TableGenerationResult | null>(null);
@@ -10,12 +11,30 @@ const App: React.FC = () => {
   const [jsonInput, setJsonInput] = useState<string>('');
   const [qaInput, setQaInput] = useState<string>('');
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [dbStatus, setDbStatus] = useState<string | null>(null);
+  const [showDbModal, setShowDbModal] = useState<boolean>(false);
+  const [dbPassword, setDbPassword] = useState<string>('');
+  const [collectionName, setCollectionName] = useState<string>('Public');
+  const [itemId, setItemId] = useState<string | null>(null);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    // Get ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    setItemId(id);
+    if (!id) {
+      setError("No Item ID provided in URL (e.g. ?id=xyz)");
+    } else {
+      fetchData(id);
+    }
+  }, []);
+
+  const fetchData = async (id: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/data`);
+      // Changed endpoint to /api/annotate/data/{id}
+      const response = await fetch(`${API_BASE_URL}/annotate/data/${id}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
@@ -30,16 +49,16 @@ const App: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handleSave = async () => {
     setSaveStatus('Saving...');
     try {
       const parsedJson = JSON.parse(jsonInput);
       const parsedQa = JSON.parse(qaInput);
-      const response = await fetch(`${API_BASE_URL}/save`, {
+
+      if (!itemId) throw new Error("No Item ID");
+
+      // Changed endpoint to /api/annotate/save/{id}
+      const response = await fetch(`${API_BASE_URL}/annotate/save/${itemId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +84,37 @@ const App: React.FC = () => {
     }
   };
 
+  const handleSaveToDb = async () => {
+    setDbStatus('Saving to DB...');
+    try {
+      if (!itemId) throw new Error("No Item ID");
+
+      // Changed endpoint to /api/annotate/save_to_db/{id}
+      const response = await fetch(`${API_BASE_URL}/annotate/save_to_db/${itemId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          collection_name: collectionName,
+          password: dbPassword || undefined // Only send if set
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.detail || 'Failed to save to DB');
+      }
+
+      setDbStatus('Saved to DB successfully!');
+      setTimeout(() => setDbStatus(null), 3000);
+      setShowDbModal(false);
+    } catch (err) {
+      setDbStatus('Error saving to DB');
+      alert(err instanceof Error ? err.message : 'Unknown DB Error');
+    }
+  };
+
   const getImageUrl = (path: string) => {
     // Assuming path is relative or absolute, we need to convert it to a static URL served by backend
     // Backend serves static files from BASE_DIR at /static
@@ -75,7 +125,8 @@ const App: React.FC = () => {
 
     // Quick hack: just use the filename if it's in the same dir
     const filename = path.split('/').pop();
-    return `http://localhost:8000/static/${filename}`;
+    // Use :8001 for images (Pipeline Backend)
+    return `http://localhost:8001/output/${filename}`;
   };
 
   if (isLoading && !data) {
@@ -86,13 +137,13 @@ const App: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-4">
         <div className="text-red-500 text-xl mb-4">Error: {error}</div>
-        <button onClick={fetchData} className="bg-blue-600 px-4 py-2 rounded">Retry</button>
+        <button onClick={() => itemId && fetchData(itemId)} className="bg-blue-600 px-4 py-2 rounded">Retry</button>
       </div>
     );
   }
 
   if (!data) {
-    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">No data found. Make sure the server is running and output.json exists.</div>;
+    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">No data found. Check the ID in URL.</div>;
   }
 
   return (
@@ -104,6 +155,13 @@ const App: React.FC = () => {
           </h1>
           <div className="flex items-center space-x-4">
             {saveStatus && <span className={saveStatus.includes('Error') ? 'text-red-400' : 'text-green-400'}>{saveStatus}</span>}
+            {dbStatus && <span className={dbStatus.includes('Error') ? 'text-red-400' : 'text-green-400'}>{dbStatus}</span>}
+            <button
+              onClick={() => setShowDbModal(true)}
+              className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded-lg transition-colors"
+            >
+              Save to DB
+            </button>
             <button
               onClick={handleSave}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors"
@@ -169,6 +227,57 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {showDbModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gray-800 p-8 rounded-xl border border-gray-700 max-w-md w-full">
+            <h2 className="text-2xl font-bold text-white mb-6">Save to MongoDB</h2>
+
+            <div className="mb-4">
+              <label className="block text-gray-400 mb-2">Collection Name (Domain)</label>
+              <select
+                value={collectionName}
+                onChange={(e) => setCollectionName(e.target.value)}
+                className="w-full bg-gray-900 border border-gray-600 text-white p-3 rounded-lg"
+              >
+                <option value="Academic">Academic</option>
+                <option value="Business">Business</option>
+                <option value="Finance">Finance</option>
+                <option value="Insurance">Insurance</option>
+                <option value="Medical">Medical</option>
+                <option value="Public">Public</option>
+              </select>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-gray-400 mb-2">DB Password (Optional if env set)</label>
+              <input
+                type="password"
+                value={dbPassword}
+                onChange={(e) => setDbPassword(e.target.value)}
+                placeholder="Enter MongoDB Password"
+                className="w-full bg-gray-900 border border-gray-600 text-white p-3 rounded-lg"
+              />
+            </div>
+
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowDbModal(false)}
+                className="px-4 py-2 text-gray-400 hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveToDb}
+                className="px-6 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold"
+              >
+                Confirm Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

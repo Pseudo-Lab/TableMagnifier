@@ -18,13 +18,11 @@ class TableDataOrganizer:
 
     def _organize_data(self):
         """Scans the data directory and groups images by table ID."""
-        # Regex to parse filenames: P_origin_{group}_{table}_{index}.png or P_origin_{group}_{table}.png
-        # We want to group by "group_table"
+        # Public: P_origin_{group}_{table}_{index}.png or P_origin_{group}_{table}.png
+        p_pattern = re.compile(r"P_origin_(\d+)_(\d+)(?:_(\d+))?\.png")
         
-        # Pattern covers: group, table, index (optional)
-        # e.g., P_origin_1_11_0.png -> group=1, table=11, index=0
-        # e.g., P_origin_1_2.png -> group=1, table=2, index=-1 (conceptually)
-        pattern = re.compile(r"P_origin_(\d+)_(\d+)(?:_(\d+))?\.png")
+        # Insurance: I_table_{table}_{index}.png or I_table_{table}.png
+        i_pattern = re.compile(r"I_table_(\d+)(?:_(\d+))?\.png")
 
         if not self.data_root.exists():
             print(f"Warning: Directory {self.data_root} does not exist.")
@@ -35,21 +33,32 @@ class TableDataOrganizer:
                 if not file.endswith(".png"):
                     continue
                 
-                match = pattern.match(file)
-                if match:
-                    group_id = match.group(1)
-                    table_id = match.group(2)
-                    index = match.group(3)
+                # Check Public pattern
+                m_p = p_pattern.match(file)
+                if m_p:
+                    group_id = m_p.group(1)
+                    table_id = m_p.group(2)
+                    index = m_p.group(3)
                     
-                    # If index is missing (e.g. single file per table), treat as 0 or handle logically
-                    # For sorting purposes, we can treat None as -1 so it comes first, or just 0
                     idx_val = int(index) if index is not None else -1
-                    
-                    # Create a unique key for grouping: "group_{g}_table_{t}"
                     key = f"P_origin_{group_id}_{table_id}"
                     
                     abs_path = str(Path(root) / file)
                     self.grouped_data[key].append((idx_val, abs_path))
+                    continue
+
+                # Check Insurance pattern
+                m_i = i_pattern.match(file)
+                if m_i:
+                    table_id = m_i.group(1)
+                    index = m_i.group(2)
+                    
+                    idx_val = int(index) if index is not None else -1
+                    key = f"I_table_{table_id}"
+                    
+                    abs_path = str(Path(root) / file)
+                    self.grouped_data[key].append((idx_val, abs_path))
+                    continue
 
         # Sort each group by index
         for key in self.grouped_data:

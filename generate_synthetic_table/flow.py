@@ -17,6 +17,7 @@ import yaml
 
 
 MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
+_PROMPTS_CACHE = {}  # Cache for loaded prompt files
 
 # 프롬프트 캐시 (YAML 파일 로딩 결과 저장), 캐시가 선언안되어있어서 넣음
 _PROMPTS_CACHE: Dict[str, Dict[str, str]] = {}
