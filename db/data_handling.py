@@ -21,7 +21,7 @@ def get_drive_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "info/client.json",
+                "client.json",
                 SCOPES
             )
             creds = flow.run_local_server(
@@ -128,21 +128,18 @@ def table_json_format():
         "Evaluation_Result":{}}
     return db_json
 
+# download_file_bytes(service, file_id)
 
 def database_data_insert(PASSWORD):
     service = get_drive_service()
-    import sys
-    sys.exit(2)
     START_FOLDER_ID = ""
     folders = child_folders(service, START_FOLDER_ID)
-    print(folders)
 
     domains = {}
     for folder in folders:
         domains[f'{folder["name"]}'] = folder["id"]
 
-
-    for domain in domains.keys():
+    for domain in tqdm(domains.keys()):
         collection = mongo_client(PASSWORD, domain)
         domain_folder = child_folders(service, domains[f"{domain}"])
         
@@ -170,8 +167,8 @@ def database_data_insert(PASSWORD):
                 file_json['Domain'] = domain
                 file_json['ImageFileName'] = file_name
                 file_json["ImageFileID"] = file_id
-                print(file_json)
-                collection.insert_one(file_json)
+                if not file_name.endswith(".md"):
+                    collection.insert_one(file_json)
 
 
 if __name__ == '__main__':
