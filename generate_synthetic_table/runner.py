@@ -110,6 +110,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--domain",
         help="Domain for prompt customization (e.g., 'public'). Auto-detected if input starts with 'P_'.",
     )
+    parser.add_argument(
+        "--pair-mode",
+        action="store_true",
+        help="Enable sequential pair processing (0-1, 2-3...) for Public data. Overrides sampling.",
+    )
     return parser
 
 
@@ -202,7 +207,9 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
             min_k=getattr(args, 'min_k', 2),
             max_k=getattr(args, 'max_k', 3),
             num_samples=getattr(args, 'num_samples', 1),
+
             domain=args.domain,
+            pair_mode=getattr(args, 'pair_mode', False),
         )
 
     # Single file processing
@@ -271,6 +278,7 @@ def run_batch_for_folder(
     max_k: int = 3,
     num_samples: int = 1,
     domain: str | None = None,
+    pair_mode: bool = False,
 ) -> Dict[str, any]:
     """
     Execute the flow for all images in a folder (batch processing).
@@ -318,15 +326,24 @@ def run_batch_for_folder(
     if domain:
         print(f"Domain: {domain}")
     print(f"Using {max_workers} parallel workers")
+    if pair_mode:
+        print("Pair Mode: ENABLED (0-1, 2-3...)")
     print()
 
     # Try to organize data if using Data Organizer naming convention
     organizer = TableDataOrganizer(str(folder))
+
+    # Auto-enable Pair Mode for Public domain if not explicitly requested
+    if domain == "public" and not pair_mode:
+        print("Auto-enabling Pair Mode for Public domain.")
+        pair_mode = True
+
     grouped_batches = organizer.get_batches(
         sampling=sampling,
         min_k=min_k,
         max_k=max_k,
-        num_samples=num_samples
+        num_samples=num_samples,
+        pair_mode=pair_mode
     )
 
     batch_tasks = []
@@ -337,8 +354,15 @@ def run_batch_for_folder(
         # get_batches returns { "key": [ [img1, img2], [img3, img4] ] }
         for table_key, batches_list in grouped_batches.items():
             for i, batch_images in enumerate(batches_list):
+                 if pair_mode:
+                    task_name = f"{table_key}_pair_{i}"
+                 elif sampling:
+                    task_name = f"{table_key}_sample_{i}"
+                 else:
+                    task_name = table_key
+
                  batch_tasks.append({
-                     "name": f"{table_key}_sample_{i}" if sampling else table_key,
+                     "name": task_name,
                      "images": batch_images
                  })
     else:

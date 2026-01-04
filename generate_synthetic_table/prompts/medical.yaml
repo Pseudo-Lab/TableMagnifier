@@ -1,0 +1,129 @@
+generate_qa: |
+  You are an 'AI Data Researcher' specialized in building high-quality QA datasets based on medical records and clinical data.
+  Your mission is to analyze the provided medical table data (HTML) and generate Question-Answer (QA) pairs that fit the specified Reasoning Type definitions.
+
+  **Input Table:**
+  {synthetic_html}
+
+  ### [Instructions]
+  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  2. **Domain Suitability**: Questions must maintain medical professionalism and accurately handle patient vital signs, diagnosis names, medication dosages, lab values, and prognosis.
+  3. **Strict Constraints**:
+     - Answers must be derived ONLY from the table (and provided context). No external knowledge.
+     - Each QA pair must correspond to exactly one Reasoning Type.
+     - Output format must strictly follow JSON.
+     - **Privacy**: Assume patient names/IDs are pseudonymized synthetic data.
+     - Questions and Answers MUST be written in Korean.
+
+  ### [Validation Criteria]
+  - Is the answer uniquely determined within the table?
+  - Is the reasoning process (Annotation) logically flawless?
+  - Is the question clear and unambiguous? (e.g., "Patient in bad condition" -> "Patient with systolic BP under 90mmHg")
+
+  ### [Reasoning Type Definitions (Medical Domain)]
+  (1) lookup: Retrieve specific patient lab results or medication info without condition/calculation. (e.g., "What is the blood glucose level of Patient ID-101?")
+  (2) filter: Select rows/columns meeting specific conditions (abnormal range, specific disease). (e.g., "List all patients with temperature above 38°C.")
+  (3) aggregate: Statistical aggregation of patient group data (Mean LOS, Prevalence). (e.g., "What is the average age of patients in Ward A?")
+  (4) compare: Compare efficacy between treatment groups or patient status pre/post. (e.g., "Is cholesterol level lower post-medication than pre-medication?")
+  (5) arithmetic: Specific calculation beyond simple comparison (BMI, total dosage, delta). (e.g., "What is the BMI calculated from this patient's height and weight?")
+  (6) temporal: Deduce progression of symptoms or changes between admission/discharge. (e.g., "At which point was inflammation higher: Day 3 or Day 7?")
+  (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "Who is the attending physician of the patient prescribed the highest dosage?")
+  (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which group is at risk of hypertension?" -> implies Systolic/Diastolic BP columns)
+  (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is the 2nd test result?" -> implies column next to 1st test)
+  (10) long_sequence (Context-Dependent): Requires interpreting 'Clinical Protocol' or 'Exclusion Criteria' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question text",
+        "answer": "Answer text",
+        "type": "lookup",
+        "reasoning_annotation": "Step-by-step logic to derive answer",
+        "context": null
+      }},
+      ... (One per Reasoning Type => Total 10)
+    ]
+  }}
+
+generate_qa_from_image: |
+  You are an 'AI Data Researcher' specialized in building high-quality QA datasets based on medical records and clinical data.
+  Your mission is to analyze the provided medical table image and generate Question-Answer (QA) pairs that fit the specified Reasoning Type definitions.
+
+  ### [Instructions]
+  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  2. **Domain Suitability**: Questions must maintain medical professionalism and accurately handle patient vital signs, diagnosis names, medication dosages, lab values, and prognosis.
+  3. **Strict Constraints**:
+     - Answers must be derived ONLY from the table (and provided context). No external knowledge.
+     - Each QA pair must correspond to exactly one Reasoning Type.
+     - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+
+  ### [Validation Criteria]
+  - Is the answer uniquely determined within the table?
+  - Is the reasoning process (Annotation) logically flawless?
+  - Is the question clear and unambiguous? (e.g., "Patient in bad condition" -> "Patient with systolic BP under 90mmHg")
+
+  ### [Reasoning Type Definitions (Medical Domain)]
+  (1) lookup: Retrieve specific patient lab results or medication info without condition/calculation. (e.g., "What is the blood glucose level of Patient ID-101?")
+  (2) filter: Select rows/columns meeting specific conditions (abnormal range, specific disease). (e.g., "List all patients with temperature above 38°C.")
+  (3) aggregate: Statistical aggregation of patient group data (Mean LOS, Prevalence). (e.g., "What is the average age of patients in Ward A?")
+  (4) compare: Compare efficacy between treatment groups or patient status pre/post. (e.g., "Is cholesterol level lower post-medication than pre-medication?")
+  (5) arithmetic: Specific calculation beyond simple comparison (BMI, total dosage, delta). (e.g., "What is the BMI calculated from this patient's height and weight?")
+  (6) temporal: Deduce progression of symptoms or changes between admission/discharge. (e.g., "At which point was inflammation higher: Day 3 or Day 7?")
+  (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "Who is the attending physician of the patient prescribed the highest dosage?")
+  (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which group is at risk of hypertension?" -> implies Systolic/Diastolic BP columns)
+  (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is the 2nd test result?" -> implies column next to 1st test)
+  (10) long_sequence (Context-Dependent): Requires interpreting 'Clinical Protocol' or 'Exclusion Criteria' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question text",
+        "answer": "Answer text",
+        "type": "lookup",
+        "reasoning_annotation": "Step-by-step logic to derive answer",
+        "context": null
+      }},
+      ... (One per Reasoning Type => Total 10)
+    ]
+  }}
+  Return ONLY the JSON object.
+
+generate_synthetic_table: |
+  You are a Synthetic Data Generator specializing in Medical Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic medical data.
+
+  **Inputs:**
+  1. **Original Table Structure:**
+  {html}
+
+  2. **Table Summary:**
+  {summary}
+
+  **Requirements:**
+  1. **Structure:** Keep the exact same HTML structure.
+  2. **Data:** Replace ALL cell values with new, synthetic medical data.
+      - Use realistic Korean patient names (pseudonymized), diagnosis codes (ICD-10 style but synthetic), medication names, and lab values.
+      - Contexts: Patient Charts, Lab Reports, Prescription Lists, Clinical Trials.
+      - Do NOT use real private data.
+  3. **Consistency:** Ensure medical consistency (e.g., proper units for blood pressure, temperature).
+  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+generate_synthetic_table_from_image: |
+  You are a Synthetic Data Generator specializing in Medical Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic medical data.
+
+  **Inputs:**
+  1. **Image:** An image of a medical table.
+
+  **Requirements:**
+  1. **Structure Preservation:** Accurately reconstruct the table structure.
+  2. **Data Generation:** Replace ALL cell values with new, synthetic medical data.
+      - Use realistic Korean medical terms, patient info (synthetic).
+  3. **Styling:** Use **Tailwind CSS** classes (same as default).
+      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
+      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
+      - `class="border border-slate-300 p-2"` on `<td>`.
+  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.

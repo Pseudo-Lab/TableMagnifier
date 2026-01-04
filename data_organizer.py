@@ -71,7 +71,8 @@ class TableDataOrganizer:
                     sampling: bool = False, 
                     min_k: int = 2, 
                     max_k: int = 3, 
-                    num_samples: int = 1) -> Dict[str, List[List[str]]]:
+                    num_samples: int = 1,
+                    pair_mode: bool = False) -> Dict[str, List[List[str]]]:
         """
         Generates batches of images for each table.
         
@@ -80,6 +81,7 @@ class TableDataOrganizer:
             min_k: Minimum number of images to sample (inclusive, used if sampling=True).
             max_k: Maximum number of images to sample (inclusive, used if sampling=True).
             num_samples: Number of random batches to generate per table (used if sampling=True).
+            pair_mode: If True, returns sequential pairs (e.g. indices 0-1, 2-3) regardless of sampling settings.
             
         Returns:
             A dictionary where keys are table identifiers and values are LISTS of image lists (batches).
@@ -90,6 +92,17 @@ class TableDataOrganizer:
         results = {}
 
         for key, images in self.grouped_data.items():
+            if pair_mode:
+                # Pair mode: strictly sequential pairs [0,1], [2,3], ...
+                # images are already sorted by index in _organize_data
+                table_batches = []
+                for i in range(0, len(images), 2):
+                    batch = images[i : i + 2]
+                    if batch:
+                        table_batches.append(batch)
+                results[key] = table_batches
+                continue
+
             if not sampling:
                 # Return all images as a single batch
                 results[key] = [images]
@@ -126,23 +139,31 @@ class TableDataOrganizer:
                 
         return results
 
-if __name__ == "__main__":
-    # Test existing directory
-    organizer = TableDataOrganizer("data")
-    
-    print("=== Default Mode (All Images) ===")
-    batches_default = organizer.get_batches(sampling=False)
-    # Print first 2 keys
-    for k in list(batches_default.keys())[:2]:
-        print(f"Table: {k}")
-        for batch in batches_default[k]:
-            print(f"  Batch size: {len(batch)}")
-            # print(batch) # Uncomment to see paths
+    if __name__ == "__main__":
+        # Test existing directory
+        organizer = TableDataOrganizer("data")
+        
+        print("=== Default Mode (All Images) ===")
+        batches_default = organizer.get_batches(sampling=False)
+        # Print first 2 keys
+        for k in list(batches_default.keys())[:2]:
+            print(f"Table: {k}")
+            for batch in batches_default[k]:
+                print(f"  Batch size: {len(batch)}")
+                # print(batch) # Uncomment to see paths
 
-    print("\n=== Sampling Mode (2-3 images) ===")
-    batches_sampled = organizer.get_batches(sampling=True, min_k=2, max_k=3, num_samples=2)
-    for k in list(batches_sampled.keys())[:2]:
-        print(f"Table: {k}")
-        for i, batch in enumerate(batches_sampled[k]):
-            print(f"  Sample {i+1}: size {len(batch)}")
-            # print(batch) # Uncomment to see paths
+        print("\n=== Sampling Mode (2-3 images) ===")
+        batches_sampled = organizer.get_batches(sampling=True, min_k=2, max_k=3, num_samples=2)
+        for k in list(batches_sampled.keys())[:2]:
+            print(f"Table: {k}")
+            for i, batch in enumerate(batches_sampled[k]):
+                print(f"  Sample {i+1}: size {len(batch)}")
+                # print(batch) # Uncomment to see paths
+
+        print("\n=== Pair Mode (Sequential 0-1, 2-3) ===")
+        batches_pairs = organizer.get_batches(pair_mode=True)
+        for k in list(batches_pairs.keys())[:2]:
+            print(f"Table: {k}")
+            for i, batch in enumerate(batches_pairs[k]):
+                print(f"  Pair {i+1}: size {len(batch)}")
+                # print(batch)

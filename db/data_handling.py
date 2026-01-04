@@ -21,7 +21,7 @@ def get_drive_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "/Users/seyeon/Desktop/데이터구축/TableMagnifier/info/client.json",
+                "info/client.json",
                 SCOPES
             )
             creds = flow.run_local_server(
@@ -131,8 +131,11 @@ def table_json_format():
 
 def database_data_insert(PASSWORD):
     service = get_drive_service()
+    import sys
+    sys.exit(2)
     START_FOLDER_ID = ""
     folders = child_folders(service, START_FOLDER_ID)
+    print(folders)
 
     domains = {}
     for folder in folders:
