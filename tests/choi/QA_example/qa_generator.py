@@ -21,6 +21,7 @@ from typing import Optional, Dict, Any, List, Union
 from dataclasses import dataclass, asdict
 from enum import Enum
 import sys
+from agentjson import parse, RepairOptions
 
 # 프로젝트 루트 추가
 project_root = Path(__file__).parent.parent
@@ -170,18 +171,23 @@ class InsuranceTableQAGenerator:
         self.system_prompt = QA_GENERATOR_SYSTEM_PROMPT
         
     def _parse_json_response(self, response: str) -> Dict[str, Any]:
-        """LLM 응답에서 JSON 추출 및 파싱"""
+        """LLM 응답에서 JSON 추출 및 파싱 (agentjson 사용)"""
+        
         try:
-            # JSON 블록 추출 시도
-            if "```json" in response:
-                json_str = response.split("```json")[1].split("```")[0].strip()
-            elif "```" in response:
-                json_str = response.split("```")[1].split("```")[0].strip()
-            else:
-                json_str = response.strip()
+            result = parse(
+                response,
+                RepairOptions(mode="auto", top_k=1)
+            )
             
-            return json.loads(json_str)
-        except json.JSONDecodeError as e:
+            if result.status in ("strict_ok", "repaired"):
+                if result.status == "repaired":
+                    logger.debug(f"JSON 자동 복구됨: {len(result.best.repairs)}개 수정 적용")
+                return result.best.value
+            else:
+                logger.warning(f"JSON 복구 실패: status={result.status}")
+                return {"error": "repair_failed", "raw_response": response}
+                
+        except Exception as e:
             logger.error(f"JSON 파싱 실패: {e}")
             logger.debug(f"원본 응답: {response}")
             return {"error": str(e), "raw_response": response}

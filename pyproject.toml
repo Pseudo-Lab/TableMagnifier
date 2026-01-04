@@ -21,5 +21,13 @@ dependencies = [
     "uvicorn>=0.32.0",
     "python-multipart>=0.0.12",
     "langchain-anthropic>=0.3.0",
+    "agentjson==0.1.1",
+    "pandas>=2.3.3",
+    "pandasql>=0.7.3",
+    "langchain-experimental>=0.4.1",
+    "agentsjson==0.1.13",
+    "dspydantic>=0.0.7",
+    "pydantic>=2.12.4",
+    "dspy-ai>=3.0.4",
     "pymongo>=4.6.1",
 ]
