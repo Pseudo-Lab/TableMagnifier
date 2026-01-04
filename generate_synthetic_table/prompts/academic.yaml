@@ -13,6 +13,7 @@ generate_qa: |
      - Each QA pair must correspond to exactly one Reasoning Type.
      - Output format must strictly follow JSON.
      - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English.
 
   ### [Validation Criteria]
   - Is the answer uniquely determined within the table?
@@ -57,6 +58,7 @@ generate_qa_from_image: |
      - Each QA pair must correspond to exactly one Reasoning Type.
      - Output format must strictly follow JSON.
      - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English.
 
   ### [Validation Criteria]
   - Is the answer uniquely determined within the table?

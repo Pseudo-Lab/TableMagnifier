@@ -6,7 +6,7 @@
 
 # Default Configuration
 TARGET="data"
-DEFAULT_ARGS="--provider gemini_pool --model gemini-2.5-flash-lite"
+DEFAULT_ARGS="--provider gemini_pool --model gemini-3-flash-preview"
 
 # Check if the first argument is a path (i.e., does not start with '-')
 if [[ "$1" != -* ]] && [[ -n "$1" ]]; then

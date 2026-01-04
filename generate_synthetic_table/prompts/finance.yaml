@@ -12,6 +12,8 @@ generate_qa: |
      - Answers must be derived ONLY from the table (and provided context). No external knowledge.
      - Each QA pair must correspond to exactly one Reasoning Type.
      - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English.
 
   ### [Validation Criteria]
   - Is the answer uniquely determined within the table?
@@ -55,6 +57,8 @@ generate_qa_from_image: |
      - Answers must be derived ONLY from the table (and provided context). No external knowledge.
      - Each QA pair must correspond to exactly one Reasoning Type.
      - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English.
 
   ### [Validation Criteria]
   - Is the answer uniquely determined within the table?
