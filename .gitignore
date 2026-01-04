@@ -65,3 +65,4 @@ token.json
 ./pipeline_ui/backend/output/
 ./pipeline_ui/backend/uploads/
 ./pipeline_ui/frontend/node_modules/*
+
