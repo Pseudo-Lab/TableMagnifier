@@ -21,7 +21,7 @@ from typing import Optional, Dict, Any, List, Union
 from dataclasses import dataclass, asdict
 from enum import Enum
 import sys
-from agentjson import parse, RepairOptions
+from json_repair import repair_json
 
 # 프로젝트 루트 추가
 project_root = Path(__file__).parent.parent
@@ -174,18 +174,18 @@ class InsuranceTableQAGenerator:
         """LLM 응답에서 JSON 추출 및 파싱 (agentjson 사용)"""
         
         try:
-            result = parse(
-                response,
-                RepairOptions(mode="auto", top_k=1)
-            )
+            result = repair_json(response, return_objects=True)
             
-            if result.status in ("strict_ok", "repaired"):
-                if result.status == "repaired":
-                    logger.debug(f"JSON 자동 복구됨: {len(result.best.repairs)}개 수정 적용")
-                return result.best.value
+            if isinstance(result, dict):
+                logger.debug(f"JSON 파싱 성공")
+                return result
+            elif isinstance(result, list):
+                logger.warning(f"JSON 파싱 결과가 리스트입니다. 딕셔너리로 변환을 시도합니다.")
+                # 질문 리스트라고 가정
+                return {"questions": result}
             else:
-                logger.warning(f"JSON 복구 실패: status={result.status}")
-                return {"error": "repair_failed", "raw_response": response}
+                logger.warning(f"JSON 파싱 실패 (예상치 못한 타입): {type(result)}")
+                return {"error": "parsing_failed", "raw_response": response}
                 
         except Exception as e:
             logger.error(f"JSON 파싱 실패: {e}")

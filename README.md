@@ -355,18 +355,37 @@ graph = StateGraph(...)
 graph.add_node("process", my_node)
 ```
 
-## 개발자 가이드
+## 🗄️ Google Drive & MongoDB 통합 (Data Handling)
 
-### 워크플로우 수정
-`generate_synthetic_table/flow.py`에서 LangGraph의 노드와 엣지를 수정하여 워크플로우를 변경할 수 있습니다.
+`db/data_handling.py` 모듈을 사용하여 Google Drive에 저장된 데이터를 자동으로 탐색하고 MongoDB에 메타데이터를 저장할 수 있습니다.
 
-### 프롬프트 수정
-`generate_synthetic_table/prompts/` 디렉토리의 텍스트 파일을 수정하여 LLM의 동작을 제어할 수 있습니다.
+### 1. 사전 설정
+1.  **Google Drive API 활성화**: [Google Cloud Console](https://console.cloud.google.com/)에서 프로젝트를 생성하고 Drive API를 활성화하세요.
+2.  **OAuth 클라이언트 ID**: '데스크톱 앱' 유형의 OAuth 클라이언트 ID를 생성하고 `client.json` 파일을 다운로드하세요.
+3.  **파일 배치**: 다운로드한 `client.json` 파일을 프로젝트 내 `info/` 폴더 또는 지정된 경로에 배치하세요.
 
-### LLM Provider 추가
-`generate_synthetic_table/llm_factory.py`의 `get_llm()` 함수를 수정하여 새로운 LLM provider를 추가할 수 있습니다.
+### 2. 주요 기능 및 사용법
+- **자동 드라이브 탐색**: 지정된 `START_FOLDER_ID`를 기준으로 도메인별 폴더를 탐색합니다.
+- **메타데이터 저장**: 탐색된 파일의 ID, 이름, 도메인 정보를 MongoDB의 `TableInformation` 데이터베이스에 저장합니다.
+- **이미지 다운로드**: `download_file_bytes()`를 사용하여 특정 이미지를 바이트 형태로 가져올 수 있습니다.
+
+### 3. 실행 방법
+`db/data_handling.py` 파일 내의 설정을 확인하거나, 다음과 같은 환경 변수를 사용하여 설정을 관리할 수 있습니다.
+
+*   `GOOGLE_DRIVE_CLIENT_JSON`: `client.json` 파일의 경로 (기본값: `info/client.json`)
+*   `GOOGLE_DRIVE_START_FOLDER_ID`: 탐색을 시작할 Google Drive 폴더 ID
+
+```bash
+# 환경 변수 설정 예시 (PowerShell)
+$env:GOOGLE_DRIVE_START_FOLDER_ID="your_folder_id_here"
+uv run python db/data_handling.py
+```
+
+> [!IMPORTANT]
+> 실행 전 반드시 `client.json` 파일을 `info/` 폴더에 배치하고, 대상 폴더 ID를 확인하세요.
 
 ---
+
 
 <h2>Contributors 😃</h2>
 <a href="https://github.com/Pseudo-Lab/TableMagnifier/graphs/contributors">

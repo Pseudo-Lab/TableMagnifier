@@ -1,18 +1,10 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14'",
     "python_full_version == '3.13.*'",
     "python_full_version < '3.13'",
-]
-
-[[package]]
-name = "agentjson"
-version = "0.1.1"
-source = { registry = "https://pypi.org/simple" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/e9/91199eee92c0193b78f1f2ff8b54ff42b3f71fd92331919954d45e2fbca2/agentjson-0.1.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:a3bab02a2b245dc8ccc55195ab16cf2f4a8e54d69cbee2d669b1af73a67c4062", size = 517490, upload-time = "2025-12-13T08:02:04.477Z" },
 ]
 
 [[package]]
@@ -3315,7 +3307,6 @@ name = "tablemagnifier"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "agentjson" },
     { name = "agentsjson" },
     { name = "beautifulsoup4" },
     { name = "dotenv" },
@@ -3324,6 +3315,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "google-generativeai" },
     { name = "ipykernel" },
+    { name = "json-repair" },
     { name = "langchain" },
     { name = "langchain-anthropic" },
     { name = "langchain-core" },
@@ -3344,7 +3336,6 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "agentjson", specifier = "==0.1.1" },
     { name = "agentsjson", specifier = "==0.1.13" },
     { name = "beautifulsoup4", specifier = ">=4.14.3" },
     { name = "dotenv", specifier = ">=0.9.9" },
@@ -3353,6 +3344,7 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.115.0" },
     { name = "google-generativeai", specifier = ">=0.3.0" },
     { name = "ipykernel", specifier = ">=7.1.0" },
+    { name = "json-repair", specifier = ">=0.25.3" },
     { name = "langchain", specifier = ">=0.1.0" },
     { name = "langchain-anthropic", specifier = ">=0.3.0" },
     { name = "langchain-core", specifier = ">=0.1.0" },
