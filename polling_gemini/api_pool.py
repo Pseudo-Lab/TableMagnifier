@@ -16,11 +16,7 @@ import google.generativeai as genai
 from google.api_core import exceptions as google_exceptions
 
 
-# 로깅 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+# 모듈 레벨 로거 (전역 설정은 애플리케이션에서 관리)
 logger = logging.getLogger(__name__)
 
 
@@ -286,16 +282,19 @@ class GeminiAPIPool:
         
         while attempts < max_attempts:
             current_key = self.api_keys[self.current_key_index]
-            
+
             try:
-                # kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
-                temperature = kwargs.pop('temperature', self.settings.get('temperature', 0.7))
-                
+                # kwargs 복사본 생성 (재시도 시 원본 유지)
+                call_kwargs = kwargs.copy()
+
+                # call_kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
+                temperature = call_kwargs.pop('temperature', self.settings.get('temperature', 0.7))
+
                 # generation_config 구성
                 generation_config = {
                     'temperature': temperature,
                 }
-                generation_config.update(kwargs.pop('generation_config', {}))
+                generation_config.update(call_kwargs.pop('generation_config', {}))
                 
                 # 비동기 API 호출 (동기 메서드를 asyncio로 래핑)
                 loop = asyncio.get_event_loop()
