@@ -494,10 +494,10 @@ def run_batch_for_folder(
     """
     load_dotenv()
 
-    # Find all image files
+    # Find all image files (recursive)
     image_extensions = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
     image_files = sorted([
-        f for f in folder.iterdir()
+        f for f in folder.rglob("*")
         if f.is_file() and f.suffix.lower() in image_extensions
     ])
 

@@ -5,8 +5,8 @@
 # ==============================================================================
 
 # Default Configuration
-TARGET="data"
-DEFAULT_ARGS="--provider claude --model claude-sonnet-4.5 --domain public"
+TARGET="data/Public/Table/P_origin_0"
+DEFAULT_ARGS="--provider claude --model claude-sonnet-4-5 --domain public --qa-only --pair-mode"
 
 # Check if the first argument is a path (i.e., does not start with '-')
 if [[ "$1" != -* ]] && [[ -n "$1" ]]; then
@@ -33,3 +33,4 @@ fi
 # Run the pipeline
 # Note: "$@" appends any remaining arguments, allowing overrides of defaults
 uv run python -m generate_synthetic_table.cli "$TARGET" $DEFAULT_ARGS "$@"
+
