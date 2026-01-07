@@ -13,8 +13,8 @@ generate_qa: |
       - **Reasoning:** Inferring eligibility or coverage scope (e.g., "Is dental treatment covered under the Basic plan?").
   2. **Format:** Output the result as a JSON object with a key "qa_pairs", which is a list of objects containing "question", "answer", and "type".
   3. **Language:** The questions and answers MUST be in Korean.
-  4. **Reasoning Language:** reasoning_annotation MUST be written in English.
-  4. **Accuracy:** Ensure all answers are factually correct based on the data in the table.
+  4. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+  5. **Accuracy:** Ensure all answers are factually correct based on the data in the table.
 
   **Output Format (JSON):**
   {{
@@ -41,8 +41,8 @@ generate_qa_from_image: |
       - **Reasoning:** Inferring eligibility or coverage scope/exclusions.
   3. **Format:** Output the result as a JSON object with a key "qa_pairs", which is a list of objects containing "question", "answer", and "type".
   4. **Language:** The questions and answers MUST be in Korean.
-  5. **Reasoning Language:** reasoning_annotation MUST be written in English.
-  5. **Accuracy:** Ensure 100% factual correctness.
+  5. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+  6. **Accuracy:** Ensure 100% factual correctness.
 
   **Output Format (JSON):**
   {{
