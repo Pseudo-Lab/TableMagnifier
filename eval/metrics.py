@@ -217,6 +217,13 @@ class EvalResult:
     contains_match: float
     bleu_score: float = 0.0
     numeric_match: Optional[float] = None
+    # LLM-as-Judge 결과
+    judge_correctness: Optional[float] = None
+    judge_completeness: Optional[float] = None
+    judge_relevance: Optional[float] = None
+    judge_overall_score: Optional[float] = None
+    judge_is_correct: Optional[bool] = None
+    judge_explanation: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         result = {
@@ -231,6 +238,13 @@ class EvalResult:
         }
         if self.numeric_match is not None:
             result["numeric_match"] = self.numeric_match
+        if self.judge_overall_score is not None:
+            result["judge_correctness"] = self.judge_correctness
+            result["judge_completeness"] = self.judge_completeness
+            result["judge_relevance"] = self.judge_relevance
+            result["judge_overall_score"] = self.judge_overall_score
+            result["judge_is_correct"] = self.judge_is_correct
+            result["judge_explanation"] = self.judge_explanation
         return result
 
 
@@ -242,10 +256,15 @@ class AggregatedMetrics:
     f1_score_avg: float = 0.0
     contains_match_avg: float = 0.0
     bleu_score_avg: float = 0.0
+    judge_overall_avg: Optional[float] = None
+    judge_correctness_avg: Optional[float] = None
+    judge_completeness_avg: Optional[float] = None
+    judge_relevance_avg: Optional[float] = None
+    judge_accuracy: Optional[float] = None  # judge_is_correct의 비율
     by_type: Dict[str, Dict[str, float]] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        result = {
             "total_count": self.total_count,
             "exact_match": self.exact_match_avg,
             "f1_score": self.f1_score_avg,
@@ -253,6 +272,13 @@ class AggregatedMetrics:
             "bleu_score": self.bleu_score_avg,
             "by_type": self.by_type,
         }
+        if self.judge_overall_avg is not None:
+            result["judge_overall_avg"] = self.judge_overall_avg
+            result["judge_correctness_avg"] = self.judge_correctness_avg
+            result["judge_completeness_avg"] = self.judge_completeness_avg
+            result["judge_relevance_avg"] = self.judge_relevance_avg
+            result["judge_accuracy"] = self.judge_accuracy
+        return result
 
 
 def compute_metrics(
@@ -315,6 +341,21 @@ def aggregate_metrics(results: List[EvalResult]) -> AggregatedMetrics:
     cm_sum = sum(r.contains_match for r in results)
     bleu_sum = sum(r.bleu_score for r in results)
 
+    # LLM-as-Judge 메트릭 집계
+    judge_results = [r for r in results if r.judge_overall_score is not None]
+    judge_overall_avg = None
+    judge_correctness_avg = None
+    judge_completeness_avg = None
+    judge_relevance_avg = None
+    judge_accuracy = None
+    
+    if judge_results:
+        judge_overall_avg = sum(r.judge_overall_score for r in judge_results) / len(judge_results)
+        judge_correctness_avg = sum(r.judge_correctness for r in judge_results) / len(judge_results)
+        judge_completeness_avg = sum(r.judge_completeness for r in judge_results) / len(judge_results)
+        judge_relevance_avg = sum(r.judge_relevance for r in judge_results) / len(judge_results)
+        judge_accuracy = sum(1 for r in judge_results if r.judge_is_correct) / len(judge_results)
+
     # 유형별 집계
     by_type: Dict[str, Dict[str, List[float]]] = {}
     for r in results:
@@ -347,5 +388,10 @@ def aggregate_metrics(results: List[EvalResult]) -> AggregatedMetrics:
         f1_score_avg=f1_sum / total,
         contains_match_avg=cm_sum / total,
         bleu_score_avg=bleu_sum / total,
+        judge_overall_avg=judge_overall_avg,
+        judge_correctness_avg=judge_correctness_avg,
+        judge_completeness_avg=judge_completeness_avg,
+        judge_relevance_avg=judge_relevance_avg,
+        judge_accuracy=judge_accuracy,
         by_type=type_metrics,
     )

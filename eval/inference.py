@@ -92,12 +92,30 @@ class VLLMClient(InferenceClient):
             "Authorization": f"Bearer {api_key}",
         }
 
-    async def generate(self, prompt: str, **kwargs) -> str:
-        """단일 프롬프트에 대한 응답 생성"""
+    async def generate(
+        self,
+        prompt: str,
+        image_paths: Optional[List[str]] = None,
+        **kwargs
+    ) -> str:
+        """단일 프롬프트에 대한 응답 생성 (멀티 이미지 지원)"""
         async with httpx.AsyncClient(timeout=self.timeout) as client:
+            # 멀티 이미지 지원: content를 배열로 구성
+            content = [{"type": "text", "text": prompt}]
+            
+            # 이미지 추가 (멀티모달)
+            if image_paths:
+                for img_path in image_paths:
+                    img_data = self._encode_image(img_path)
+                    if img_data:
+                        content.append({
+                            "type": "image_url",
+                            "image_url": {"url": img_data}
+                        })
+            
             payload = {
                 "model": kwargs.get("model", self.model),
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": [{"role": "user", "content": content}],
                 "max_tokens": kwargs.get("max_tokens", self.max_tokens),
                 "temperature": kwargs.get("temperature", self.temperature),
             }
@@ -111,6 +129,31 @@ class VLLMClient(InferenceClient):
             data = response.json()
 
             return data["choices"][0]["message"]["content"]
+    
+    def _encode_image(self, image_path: str) -> Optional[str]:
+        """이미지를 base64로 인코딩"""
+        try:
+            path = Path(image_path)
+            if not path.exists():
+                # 상대 경로 시 workspace 기준으로 재시도
+                workspace_path = Path("/workspace/TableMagnifier") / image_path
+                if workspace_path.exists():
+                    path = workspace_path
+                else:
+                    return None
+
+            mime = "image/png"
+            suffix = path.suffix.lower()
+            if suffix in {".jpg", ".jpeg"}:
+                mime = "image/jpeg"
+            elif suffix == ".webp":
+                mime = "image/webp"
+
+            encoded = base64.b64encode(path.read_bytes()).decode("utf-8")
+            return f"data:{mime};base64,{encoded}"
+        except Exception as e:
+            logger.warning(f"Failed to encode image {image_path}: {e}")
+            return None
 
     async def generate_batch(
         self,
@@ -129,7 +172,11 @@ class VLLMClient(InferenceClient):
                 prediction = ""
 
                 try:
-                    prediction = await self.generate(req.prompt, **kwargs)
+                    prediction = await self.generate(
+                        req.prompt,
+                        image_paths=req.image_paths,
+                        **kwargs
+                    )
                 except Exception as e:
                     error = str(e)
                     logger.warning(f"Request {req.id} failed: {e}")
@@ -231,7 +278,12 @@ class OpenAIClient(InferenceClient):
         try:
             path = Path(image_path)
             if not path.exists():
-                return None
+                # 상대 경로 시 workspace 기준으로 재시도
+                workspace_path = Path("/workspace/TableMagnifier") / image_path
+                if workspace_path.exists():
+                    path = workspace_path
+                else:
+                    return None
 
             mime = "image/png"
             suffix = path.suffix.lower()
@@ -369,7 +421,12 @@ class AnthropicClient(InferenceClient):
         try:
             path = Path(image_path)
             if not path.exists():
-                return None
+                # 상대 경로 시 workspace 기준으로 재시도
+                workspace_path = Path("/workspace/TableMagnifier") / image_path
+                if workspace_path.exists():
+                    path = workspace_path
+                else:
+                    return None
 
             media_type = "image/png"
             suffix = path.suffix.lower()

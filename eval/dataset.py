@@ -285,6 +285,7 @@ def create_inference_prompts(
 
         request = {
             "id": item.id,
+            "question": item.question,
             "prompt": prompt,
             "ground_truth": item.answer,
             "qa_type": item.qa_type,

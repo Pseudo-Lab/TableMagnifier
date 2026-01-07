@@ -33,21 +33,28 @@ from .inference import (
     get_client,
     run_inference,
 )
+from .llm_judge import judge_batch, create_judge_client
 
 logger = logging.getLogger(__name__)
 
 
-def evaluate_predictions(
+async def evaluate_predictions(
     predictions: List[Dict[str, Any]],
     ground_truths: Optional[List[Dict[str, Any]]] = None,
+    use_judge: bool = False,
+    judge_client: Optional[InferenceClient] = None,
+    questions: Optional[List[str]] = None,
 ) -> tuple[List[EvalResult], AggregatedMetrics]:
     """
     예측 결과를 평가합니다.
 
     Args:
         predictions: 예측 결과 리스트
-            [{"id": "...", "prediction": "...", "ground_truth": "...", "qa_type": "..."}]
+            [{"id": "...", "prediction": "...", "ground_truth": "...", "qa_type": "...", "question": "..."}]
         ground_truths: 정답 리스트 (옵션, predictions에 ground_truth가 없을 때 사용)
+        use_judge: LLM-as-Judge 사용 여부
+        judge_client: Judge용 클라이언트 (use_judge=True일 때 필요)
+        questions: 질문 리스트 (use_judge=True일 때 필요, predictions에 question이 없으면 사용)
 
     Returns:
         (개별 결과 리스트, 집계 메트릭)
@@ -58,11 +65,20 @@ def evaluate_predictions(
     gt_map = {}
     if ground_truths:
         gt_map = {gt["id"]: gt for gt in ground_truths}
+    
+    # 질문 매핑 생성
+    question_map = {}
+    if questions:
+        for i, q in enumerate(questions):
+            if i < len(predictions):
+                pred_id = predictions[i].get("id", f"item_{i}")
+                question_map[pred_id] = q
 
     for pred in predictions:
         pred_id = pred.get("id", "")
         prediction = pred.get("prediction", "")
         qa_type = pred.get("qa_type", "unknown")
+        question = pred.get("question", question_map.get(pred_id, ""))
 
         # ground_truth 찾기
         if "ground_truth" in pred:
@@ -81,6 +97,32 @@ def evaluate_predictions(
             id=pred_id,
         )
         results.append(result)
+
+    # LLM-as-Judge 평가
+    if use_judge and judge_client:
+        logger.info("Running LLM-as-Judge evaluation...")
+        judge_items = [
+            {
+                "id": r.id,
+                "question": predictions[i].get("question", question_map.get(r.id, "")),
+                "ground_truth": r.ground_truth,
+                "prediction": r.prediction,
+            }
+            for i, r in enumerate(results)
+        ]
+        judge_results = await judge_batch(judge_client, judge_items, show_progress=True)
+        
+        # Judge 결과를 EvalResult에 병합
+        judge_map = {jr.id: jr for jr in judge_results}
+        for result in results:
+            if result.id in judge_map:
+                jr = judge_map[result.id]
+                result.judge_correctness = jr.correctness
+                result.judge_completeness = jr.completeness
+                result.judge_relevance = jr.relevance
+                result.judge_overall_score = jr.overall_score
+                result.judge_is_correct = jr.is_correct
+                result.judge_explanation = jr.explanation
 
     aggregated = aggregate_metrics(results)
     return results, aggregated
@@ -153,6 +195,14 @@ def print_report(aggregated: AggregatedMetrics) -> None:
     print(f"  F1 Score:       {aggregated.f1_score_avg:.4f} ({aggregated.f1_score_avg * 100:.2f}%)")
     print(f"  Contains Match: {aggregated.contains_match_avg:.4f} ({aggregated.contains_match_avg * 100:.2f}%)")
     print(f"  BLEU Score:     {aggregated.bleu_score_avg:.4f}")
+    
+    if aggregated.judge_overall_avg is not None:
+        print(f"\nLLM-as-Judge Metrics:")
+        print(f"  Overall Score:  {aggregated.judge_overall_avg:.4f} ({aggregated.judge_overall_avg * 100:.2f}%)")
+        print(f"  Correctness:    {aggregated.judge_correctness_avg:.4f} ({aggregated.judge_correctness_avg * 100:.2f}%)")
+        print(f"  Completeness:   {aggregated.judge_completeness_avg:.4f} ({aggregated.judge_completeness_avg * 100:.2f}%)")
+        print(f"  Relevance:      {aggregated.judge_relevance_avg:.4f} ({aggregated.judge_relevance_avg * 100:.2f}%)")
+        print(f"  Accuracy:       {aggregated.judge_accuracy:.4f} ({aggregated.judge_accuracy * 100:.2f}%)")
 
     if aggregated.by_type:
         print(f"\nMetrics by QA Type:")
@@ -173,6 +223,10 @@ async def run_evaluation(
     output_dir: Optional[Path] = None,
     prompt_template: Optional[str] = None,
     include_images: bool = False,
+    use_judge: bool = False,
+    judge_provider: str = "openai",
+    judge_model: Optional[str] = None,
+    judge_api_key: Optional[str] = None,
     **client_kwargs,
 ) -> tuple[List[EvalResult], AggregatedMetrics]:
     """
@@ -236,11 +290,26 @@ async def run_evaluation(
             "prediction": r.prediction,
             "ground_truth": r.ground_truth,
             "qa_type": r.qa_type,
+            "question": p.get("question", ""),
         }
-        for r in responses
+        for r, p in zip(responses, prompts)
     ]
 
-    results, aggregated = evaluate_predictions(predictions)
+    judge_client = None
+    if use_judge:
+        judge_client = create_judge_client(
+            provider=judge_provider,
+            model=judge_model,
+            api_key=judge_api_key,
+        )
+
+    questions = [p.get("question", "") for p in prompts]
+    results, aggregated = await evaluate_predictions(
+        predictions,
+        use_judge=use_judge,
+        judge_client=judge_client,
+        questions=questions,
+    )
 
     # 6. 리포트 생성 및 저장
     print_report(aggregated)
