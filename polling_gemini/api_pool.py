@@ -140,6 +140,7 @@ class GeminiAPIPool:
     def generate_content(
         self,
         prompt: str,
+        return_full_response: bool = False,
         **kwargs
     ) -> str:
         """
@@ -147,10 +148,11 @@ class GeminiAPIPool:
         
         Args:
             prompt: 입력 프롬프트
+            return_full_response: True면 (text, usage_metadata) 튜플 반환
             **kwargs: GenerativeModel.generate_content에 전달할 추가 인자
             
         Returns:
-            생성된 텍스트
+            생성된 텍스트, 또는 (텍스트, usage_metadata) 튜플
             
         Raises:
             Exception: 모든 API 키로 시도했으나 실패한 경우
@@ -185,6 +187,10 @@ class GeminiAPIPool:
                 current_key.failed_count = 0
                 current_key.last_error = None
                 
+                if return_full_response:
+                    # usage_metadata 추출
+                    usage_metadata = getattr(response, 'usage_metadata', None)
+                    return response.text, usage_metadata
                 return response.text
                 
             except google_exceptions.ResourceExhausted as e:

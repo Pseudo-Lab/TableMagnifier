@@ -13,6 +13,7 @@ from typing import Dict, Iterable, List
 from dotenv import load_dotenv
 
 from .flow import TableState, run_synthetic_table_flow
+from .notion_uploader import upload_to_notion
 
 try:
     from data_organizer import TableDataOrganizer
@@ -110,6 +111,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--domain",
         help="Domain for prompt customization (e.g., 'public'). Auto-detected if input starts with 'P_'.",
     )
+    parser.add_argument(
+        "--upload-notion",
+        action="store_true",
+        help="Upload QA results to Notion database (requires domain to be specified)",
+    )
+    parser.add_argument(
+        "--notion-config",
+        type=Path,
+        help="Path to config file with Notion API key and database IDs (default: apis/gemini_keys.yaml)",
+    )
     return parser
 
 
@@ -203,6 +214,8 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
             max_k=getattr(args, 'max_k', 3),
             num_samples=getattr(args, 'num_samples', 1),
             domain=args.domain,
+            upload_notion=getattr(args, 'upload_notion', False),
+            notion_config=str(args.notion_config) if getattr(args, 'notion_config', None) else None,
         )
 
     # Single file processing
@@ -252,6 +265,39 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
         payload = _filter_json_safe_state(result, html_paths=[])
         print(json.dumps(payload, ensure_ascii=False, indent=2))
 
+    # Upload to Notion if requested (single file)
+    if getattr(args, 'upload_notion', False):
+        if not domain:
+            print("\n⚠️  --upload-notion requires --domain to be specified. Skipping upload.")
+        else:
+            qa_results = result.get("qa_results", [])
+            if qa_results:
+                print(f"\n{'='*50}")
+                print(f"Uploading to Notion (domain: {domain})...")
+                try:
+                    notion_results = [{
+                        "image_path": str(input_path),
+                        "qa_results": qa_results,
+                        "table_summary": result.get("table_summary"),
+                        "token_usage": result.get("token_usage", 0),
+                    }]
+                    notion_config = str(args.notion_config) if getattr(args, 'notion_config', None) else None
+                    upload_summary = upload_to_notion(
+                        domain=domain,
+                        results=notion_results,
+                        config_path=notion_config,
+                        verbose=True,
+                        provider=args.provider,
+                    )
+                    print(f"\n✅ Notion upload complete: {upload_summary['success']}/{upload_summary['total']} succeeded")
+                except ImportError as e:
+                    print(f"\n❌ Notion upload failed: {e}")
+                    print("   Install with: pip install notion-client")
+                except Exception as e:
+                    print(f"\n❌ Notion upload failed: {e}")
+            else:
+                print("\n⚠️  No QA results to upload.")
+
     return result
 
 
@@ -271,6 +317,8 @@ def run_batch_for_folder(
     max_k: int = 3,
     num_samples: int = 1,
     domain: str | None = None,
+    upload_notion: bool = False,
+    notion_config: str | None = None,
 ) -> Dict[str, any]:
     """
     Execute the flow for all images in a folder (batch processing).
@@ -469,6 +517,50 @@ def run_batch_for_folder(
     print(f"Batch processing complete!")
     print(f"Total: {len(image_files)}, Success: {success_count}, Failed: {failed_count}")
     print(f"Summary saved to: {summary_file}")
+
+    # Upload to Notion if requested
+    if upload_notion:
+        if not domain:
+            print("\n⚠️  --upload-notion requires --domain to be specified. Skipping upload.")
+        else:
+            print(f"\n{'='*50}")
+            print(f"Uploading to Notion (domain: {domain})...")
+            
+            # Prepare results for Notion upload
+            # Load the actual QA results from saved files
+            notion_results = []
+            for result in results:
+                if result.get("status") in ("success", "partial"):
+                    output_file = result.get("output_file")
+                    if output_file and Path(output_file).exists():
+                        try:
+                            data = json.loads(Path(output_file).read_text(encoding="utf-8"))
+                            notion_results.append({
+                                "image_path": data.get("name", result.get("name")),
+                                "qa_results": data.get("qa_results", []),
+                                "table_summary": data.get("table_summary"),
+                            })
+                        except Exception as e:
+                            print(f"⚠️  Failed to load {output_file}: {e}")
+            
+            if notion_results:
+                try:
+                    upload_summary = upload_to_notion(
+                        domain=domain,
+                        results=notion_results,
+                        config_path=notion_config,
+                        verbose=True,
+                        provider=provider,
+                    )
+                    summary["notion_upload"] = upload_summary
+                    print(f"\n✅ Notion upload complete: {upload_summary['success']}/{upload_summary['total']} succeeded")
+                except ImportError as e:
+                    print(f"\n❌ Notion upload failed: {e}")
+                    print("   Install with: pip install notion-client")
+                except Exception as e:
+                    print(f"\n❌ Notion upload failed: {e}")
+            else:
+                print("⚠️  No successful results to upload.")
 
     return summary
 

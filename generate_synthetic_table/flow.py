@@ -36,6 +36,7 @@ class TableState(TypedDict, total=False):
     errors: List[str]
     synthetic_json: dict            # 파싱된 합성 데이터 JSON
     qa_results: List[Dict]          # 생성된 QA 쌍
+    token_usage: int                # QA 생성에 사용된 총 토큰 수
 
 
 def _encode_image(image_path: Path) -> str:
@@ -55,8 +56,18 @@ def _encode_image(image_path: Path) -> str:
 
 
 def _call_llm(
-    llm: ChatOpenAI, prompt: str, image_urls: Optional[List[str]] = None) -> str:
-    """Call the multi-modal LLM with optional multiple images."""
+    llm: ChatOpenAI, prompt: str, image_urls: Optional[List[str]] = None, return_token_usage: bool = False) -> str:
+    """Call the multi-modal LLM with optional multiple images.
+    
+    Args:
+        llm: The LLM instance
+        prompt: The text prompt
+        image_urls: Optional list of image URLs
+        return_token_usage: If True, returns tuple of (content, total_tokens)
+    
+    Returns:
+        Response content string, or tuple of (content, total_tokens) if return_token_usage=True
+    """
 
     content: List[Dict] = [{"type": "text", "text": prompt}]
 
@@ -71,7 +82,31 @@ def _call_llm(
                 })
 
     response = llm.invoke([HumanMessage(content=content)])
-    return response.content if isinstance(response.content, str) else json.dumps(response.content)
+    response_content = response.content if isinstance(response.content, str) else json.dumps(response.content)
+    
+    if return_token_usage:
+        # Extract token usage from response metadata
+        token_usage = 0
+        if hasattr(response, 'response_metadata'):
+            usage_metadata = response.response_metadata.get('usage', {})
+            # OpenAI/Gemini format
+            token_usage = usage_metadata.get('total_tokens', 0)
+            # Fallback: prompt_tokens + completion_tokens
+            if not token_usage:
+                token_usage = usage_metadata.get('prompt_tokens', 0) + usage_metadata.get('completion_tokens', 0)
+            # Fallback: input_tokens + output_tokens
+            if not token_usage:
+                token_usage = usage_metadata.get('input_tokens', 0) + usage_metadata.get('output_tokens', 0)
+        # Alternative: usage_metadata attribute (dict or object)
+        if not token_usage and hasattr(response, 'usage_metadata') and response.usage_metadata:
+            usage = response.usage_metadata
+            if isinstance(usage, dict):
+                token_usage = usage.get('total_tokens', 0) or (usage.get('input_tokens', 0) + usage.get('output_tokens', 0))
+            else:
+                token_usage = getattr(usage, 'total_tokens', 0) or (getattr(usage, 'input_tokens', 0) + getattr(usage, 'output_tokens', 0))
+        return response_content, token_usage
+    
+    return response_content
 
 
 def _load_yaml_prompts(filename: str) -> Dict[str, str]:
@@ -566,7 +601,7 @@ def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], Table
 
         prompt = prompt_template
 
-        response_text = _call_llm(llm, prompt, image_urls=image_data_urls)
+        response_text, token_usage = _call_llm(llm, prompt, image_urls=image_data_urls, return_token_usage=True)
         response_json = robust_json_parse(response_text)
 
         qa_results = []
@@ -575,7 +610,7 @@ def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], Table
         else:
             logger.warning("QA generation from image did not return valid JSON or 'qa_pairs' key.")
 
-        return {**state, "qa_results": qa_results}
+        return {**state, "qa_results": qa_results, "token_usage": token_usage}
 
     return _node
 

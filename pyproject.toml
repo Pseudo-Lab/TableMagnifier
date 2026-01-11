@@ -22,4 +22,5 @@ dependencies = [
     "python-multipart>=0.0.12",
     "langchain-anthropic>=0.3.0",
     "pymongo>=4.6.1",
+    "notion-client>=2.0.0",
 ]

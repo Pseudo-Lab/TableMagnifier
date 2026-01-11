@@ -190,20 +190,37 @@ class GeminiPoolChatModel(BaseChatModel):
             if has_images:
                 # 멀티모달 콘텐츠 - Gemini 형식으로 변환
                 gemini_content = self._convert_messages_to_gemini_content(messages)
-                response_text = self.api_pool.generate_content(
+                response_text, usage_metadata = self.api_pool.generate_content(
                     gemini_content,
+                    return_full_response=True,
                     **generation_params
                 )
             else:
                 # 텍스트만 있는 경우 - 단순 프롬프트
                 prompt = self._convert_messages_to_prompt(messages)
-                response_text = self.api_pool.generate_content(
+                response_text, usage_metadata = self.api_pool.generate_content(
                     prompt,
+                    return_full_response=True,
                     **generation_params
                 )
             
+            # 토큰 사용량 메타데이터 구성
+            response_metadata = {}
+            usage_metadata_dict = None
+            if usage_metadata:
+                usage_metadata_dict = {
+                    "input_tokens": getattr(usage_metadata, 'prompt_token_count', 0),
+                    "output_tokens": getattr(usage_metadata, 'candidates_token_count', 0),
+                    "total_tokens": getattr(usage_metadata, 'total_token_count', 0),
+                }
+                response_metadata["usage"] = usage_metadata_dict
+            
             # ChatResult 형식으로 변환
-            message = AIMessage(content=response_text)
+            message = AIMessage(
+                content=response_text,
+                response_metadata=response_metadata,
+                usage_metadata=usage_metadata_dict,
+            )
             generation = ChatGeneration(message=message)
             
             return ChatResult(generations=[generation])
