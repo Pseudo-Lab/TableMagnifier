@@ -1,0 +1,19 @@
+{
+  "base_url": "",
+  "model": "",
+  "api_key": "EMPTY",
+  "max_tokens": 512,
+  "temperature": 0.0,
+  "max_concurrent": 2,
+  "judge": {
+    "enabled": false,
+    "provider": "vllm",
+    "model": "",
+    "base_url": "",
+    "api_key": "EMPTY",
+    "max_tokens": 512,
+    "temperature": 0.0,
+    "max_concurrent": 2
+  }
+}
+

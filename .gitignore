@@ -35,6 +35,11 @@ ENV/
 .DS_Store
 
 # API Keys - 중요!
+.env
+.env.local
+.env.development
+.env.test
+.env.production
 
 apis/gemini_keys.yaml
 !apis/gemini_keys.yaml.template
@@ -60,8 +65,11 @@ token.json
 
 # env
 .bemad/
-./docs/
-./pipeline_ui/backend/checkpoints/*
-./pipeline_ui/backend/output/
-./pipeline_ui/backend/uploads/
-./pipeline_ui/frontend/node_modules/*
+docs/
+pipeline_ui/backend/checkpoints/*
+pipeline_ui/backend/output/*
+pipeline_ui/backend/uploads/*
+
+# Frontend (Node.js)
+pipeline_ui/frontend/node_modules/*
+pipeline_ui/frontend/package-lock.json

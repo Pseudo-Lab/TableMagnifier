@@ -14,6 +14,7 @@ generate_qa: |
       - **Reasoning:** Inferring information based on the data.
   2. **Format:** Output the result as a JSON object with a key "qa_pairs", which is a list of objects containing "question", "answer", and "type".
   3. **Language:** The questions and answers should be in Korean (since the table is likely Korean).
+  4. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
 
   **Output Format (JSON):**
   {{
@@ -40,7 +41,8 @@ generate_qa_from_image: |
       - **Reasoning:** Inferring information based on the data.
   3. **Format:** Output the result as a JSON object with a key "qa_pairs", which is a list of objects containing "question", "answer", and "type".
   4. **Language:** The questions and answers MUST be in Korean (since the table is likely Korean).
-  5. **Accuracy:** Ensure all answers are factually correct based on the data visible in the image.
+  5. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+  6. **Accuracy:** Ensure all answers are factually correct based on the data visible in the image.
 
   **Output Format (JSON):**
   {{

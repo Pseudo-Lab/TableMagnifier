@@ -1,0 +1,130 @@
+generate_qa: |
+  You are an 'AI Data Researcher' specialized in building high-quality QA datasets based on financial market and accounting data.
+  Your mission is to analyze the provided financial table data (HTML) and generate Question-Answer (QA) pairs that fit the specified Reasoning Type definitions.
+
+  **Input Table:**
+  {synthetic_html}
+
+  ### [Instructions]
+  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  2. **Domain Suitability**: Questions must maintain a financial professional tone and accurately handle stock prices, financial statements (Assets, Liabilities, Equity), investment metrics (PER, PBR, ROE), interest rates, and exchange rates.
+  3. **Strict Constraints**:
+     - Answers must be derived ONLY from the table (and provided context). No external knowledge.
+     - Each QA pair must correspond to exactly one Reasoning Type.
+     - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+
+  ### [Validation Criteria]
+  - Is the answer uniquely determined within the table?
+  - Is the reasoning process (Annotation) logically flawless?
+  - Is the question clear and unambiguous? (e.g., "Most undervalued stock" -> "Stock with lowest PER")
+
+  ### [Reasoning Type Definitions (Finance Domain)]
+  (1) lookup: Retrieve specific stock price or financial figures without condition/calculation. (e.g., "What is Samsung Electronics' 2023 dividend?")
+  (2) filter: Select rows/columns meeting specific conditions (Market Cap cap, specific sector). (e.g., "List all companies with Debt Ratio under 100%.")
+  (3) aggregate: Statistical aggregation of portfolio or time-series data using Sum/Avg etc. (e.g., "What is the total valuation of held stocks?")
+  (4) compare: Compare financial health between companies or investment metrics. (e.g., "Which company has a higher ROE, Company A or B?")
+  (5) arithmetic: Specific calculation beyond simple comparison (valuation gain/loss, net change). (e.g., "What is the return rate (%) of current price vs buy price?")
+  (6) temporal: Identify stock trends or quarterly performance flows. (e.g., "Which company has increased operating profit for 4 consecutive quarters?")
+  (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "Who is the largest shareholder of the company with #1 Market Cap?")
+  (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which stock has strong dividend tendency?" -> implies Dividend Yield column)
+  (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is Net Income?" -> implies continuation from Operating Profit column context)
+  (10) long_sequence (Context-Dependent): Requires interpreting 'Market Outlook' or 'Investment Strategy' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question text",
+        "answer": "Answer text",
+        "type": "lookup",
+        "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
+        "context": null
+      }},
+      ... (One per Reasoning Type => Total 10)
+    ]
+  }}
+
+generate_qa_from_image: |
+  You are an 'AI Data Researcher' specialized in building high-quality QA datasets based on financial market and accounting data.
+  Your mission is to analyze the provided financial table image and generate Question-Answer (QA) pairs that fit the specified Reasoning Type definitions.
+
+  ### [Instructions]
+  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  2. **Domain Suitability**: Questions must maintain a financial professional tone and accurately handle stock prices, financial statements (Assets, Liabilities, Equity), investment metrics (PER, PBR, ROE), interest rates, and exchange rates.
+  3. **Strict Constraints**:
+     - Answers must be derived ONLY from the table (and provided context). No external knowledge.
+     - Each QA pair must correspond to exactly one Reasoning Type.
+     - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+
+  ### [Validation Criteria]
+  - Is the answer uniquely determined within the table?
+  - Is the reasoning process (Annotation) logically flawless?
+  - Is the question clear and unambiguous? (e.g., "Most undervalued stock" -> "Stock with lowest PER")
+
+  ### [Reasoning Type Definitions (Finance Domain)]
+  (1) lookup: Retrieve specific stock price or financial figures without condition/calculation. (e.g., "What is Samsung Electronics' 2023 dividend?")
+  (2) filter: Select rows/columns meeting specific conditions (Market Cap cap, specific sector). (e.g., "List all companies with Debt Ratio under 100%.")
+  (3) aggregate: Statistical aggregation of portfolio or time-series data using Sum/Avg etc. (e.g., "What is the total valuation of held stocks?")
+  (4) compare: Compare financial health between companies or investment metrics. (e.g., "Which company has a higher ROE, Company A or B?")
+  (5) arithmetic: Specific calculation beyond simple comparison (valuation gain/loss, net change). (e.g., "What is the return rate (%) of current price vs buy price?")
+  (6) temporal: Identify stock trends or quarterly performance flows. (e.g., "Which company has increased operating profit for 4 consecutive quarters?")
+  (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "Who is the largest shareholder of the company with #1 Market Cap?")
+  (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which stock has strong dividend tendency?" -> implies Dividend Yield column)
+  (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is Net Income?" -> implies continuation from Operating Profit column context)
+  (10) long_sequence (Context-Dependent): Requires interpreting 'Market Outlook' or 'Investment Strategy' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question text",
+        "answer": "Answer text",
+        "type": "lookup",
+        "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
+        "context": null
+      }},
+      ... (One per Reasoning Type => Total 10)
+    ]
+  }}
+  Return ONLY the JSON object.
+
+generate_synthetic_table: |
+  You are a Synthetic Data Generator specializing in Financial Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic financial data.
+
+  **Inputs:**
+  1. **Original Table Structure:**
+  {html}
+
+  2. **Table Summary:**
+  {summary}
+
+  **Requirements:**
+  1. **Structure:** Keep the exact same HTML structure.
+  2. **Data:** Replace ALL cell values with new, synthetic financial data.
+      - Use realistic Korean company names (e.g., KOSPI listed mock names), stock tickers, and realistic currency values (KRW, USD).
+      - Contexts: Balance Sheets, Income Statements, Stock Portfolios, Tax Records.
+      - Do NOT use real private data.
+  3. **Consistency:** Ensure mathematical consistency (e.g., Assets = Liabilities + Equity).
+  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+generate_synthetic_table_from_image: |
+  You are a Synthetic Data Generator specializing in Financial Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic financial data.
+
+  **Inputs:**
+  1. **Image:** An image of a financial table.
+
+  **Requirements:**
+  1. **Structure Preservation:** Accurately reconstruct the table structure.
+  2. **Data Generation:** Replace ALL cell values with new, synthetic financial data.
+      - Use realistic Korean company names, financial metrics.
+  3. **Styling:** Use **Tailwind CSS** classes (same as default).
+      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
+      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
+      - `class="border border-slate-300 p-2"` on `<td>`.
+  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.

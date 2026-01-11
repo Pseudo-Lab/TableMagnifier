@@ -1,0 +1,130 @@
+generate_qa: |
+  You are an 'AI Data Researcher' specialized in building high-quality QA datasets based on business and corporate data.
+  Your mission is to analyze the provided business table data (HTML) and generate Question-Answer (QA) pairs that fit the specified Reasoning Type definitions.
+
+  **Input Table:**
+  {synthetic_html}
+
+  ### [Instructions]
+  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  2. **Domain Suitability**: Questions must maintain a business tone and accurately handle revenue, profit margins, growth rates, market share, and employee performance metrics.
+  3. **Strict Constraints**:
+     - Answers must be derived ONLY from the table (and provided context). No external knowledge.
+     - Each QA pair must correspond to exactly one Reasoning Type.
+     - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+
+  ### [Validation Criteria]
+  - Is the answer uniquely determined within the table?
+  - Is the reasoning process (Annotation) logically flawless?
+  - Is the question clear and unambiguous? (e.g., "Best performance" -> "Branch with highest Revenue")
+
+  ### [Reasoning Type Definitions (Business Domain)]
+  (1) lookup: Retrieve specific performance values of departments or products without condition/calculation. (e.g., "What is the Q1 Revenue of Branch A?")
+  (2) filter: Select rows/columns meeting specific conditions (goals met, budget range). (e.g., "List all products with operating margin over 20%.")
+  (3) aggregate: Statistical aggregation of performance data (Sum, Avg, Max, Min). (e.g., "What is the total annual revenue of all branches?")
+  (4) compare: Compare performance YoY or between competitors/departments. (e.g., "Did marketing budget increase compared to last year?")
+  (5) arithmetic: Specific calculation beyond simple comparison (growth rate, profit difference). (e.g., "What is the sales volume difference between Product A and Product B?")
+  (6) temporal: Identify quarterly/yearly trends. (e.g., "Which department showed continuous revenue growth over the last 3 years?")
+  (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "What is the name of the Branch Manager of the branch with the #1 Revenue?")
+  (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which is the most profitable project?" -> implies Profit Margin column)
+  (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is Q4 performance?" -> implies continuation from Q1-Q3 context)
+  (10) long_sequence (Context-Dependent): Requires interpreting 'Management Goals' or 'Market Conditions' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question text",
+        "answer": "Answer text",
+        "type": "lookup",
+        "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
+        "context": null
+      }},
+      ... (One per Reasoning Type => Total 10)
+    ]
+  }}
+
+generate_qa_from_image: |
+  You are an 'AI Data Researcher' specialized in building high-quality QA datasets based on business and corporate data.
+  Your mission is to analyze the provided business table image and generate Question-Answer (QA) pairs that fit the specified Reasoning Type definitions.
+
+  ### [Instructions]
+  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  2. **Domain Suitability**: Questions must maintain a business tone and accurately handle revenue, profit margins, growth rates, market share, and employee performance metrics.
+  3. **Strict Constraints**:
+     - Answers must be derived ONLY from the table (and provided context). No external knowledge.
+     - Each QA pair must correspond to exactly one Reasoning Type.
+     - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+
+  ### [Validation Criteria]
+  - Is the answer uniquely determined within the table?
+  - Is the reasoning process (Annotation) logically flawless?
+  - Is the question clear and unambiguous? (e.g., "Best performance" -> "Branch with highest Revenue")
+
+  ### [Reasoning Type Definitions (Business Domain)]
+  (1) lookup: Retrieve specific performance values of departments or products without condition/calculation. (e.g., "What is the Q1 Revenue of Branch A?")
+  (2) filter: Select rows/columns meeting specific conditions (goals met, budget range). (e.g., "List all products with operating margin over 20%.")
+  (3) aggregate: Statistical aggregation of performance data (Sum, Avg, Max, Min). (e.g., "What is the total annual revenue of all branches?")
+  (4) compare: Compare performance YoY or between competitors/departments. (e.g., "Did marketing budget increase compared to last year?")
+  (5) arithmetic: Specific calculation beyond simple comparison (growth rate, profit difference). (e.g., "What is the sales volume difference between Product A and Product B?")
+  (6) temporal: Identify quarterly/yearly trends. (e.g., "Which department showed continuous revenue growth over the last 3 years?")
+  (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "What is the name of the Branch Manager of the branch with the #1 Revenue?")
+  (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which is the most profitable project?" -> implies Profit Margin column)
+  (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is Q4 performance?" -> implies continuation from Q1-Q3 context)
+  (10) long_sequence (Context-Dependent): Requires interpreting 'Management Goals' or 'Market Conditions' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question text",
+        "answer": "Answer text",
+        "type": "lookup",
+        "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
+        "context": null
+      }},
+      ... (One per Reasoning Type => Total 10)
+    ]
+  }}
+  Return ONLY the JSON object.
+
+generate_synthetic_table: |
+  You are a Synthetic Data Generator specializing in Business Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic business data.
+
+  **Inputs:**
+  1. **Original Table Structure:**
+  {html}
+
+  2. **Table Summary:**
+  {summary}
+
+  **Requirements:**
+  1. **Structure:** Keep the exact same HTML structure.
+  2. **Data:** Replace ALL cell values with new, synthetic business data.
+      - Use realistic Korean company names, department names, product lines, and financial metrics.
+      - Contexts: Sales Reports, Inventory, HR Employee Lists, Marketing Campaigns.
+      - Do NOT use real private data.
+  3. **Consistency:** Ensure mathematical consistency (e.g., Q1 + Q2 + Q3 + Q4 = Total).
+  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+generate_synthetic_table_from_image: |
+  You are a Synthetic Data Generator specializing in Business Data.
+  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic business data.
+
+  **Inputs:**
+  1. **Image:** An image of a business table.
+
+  **Requirements:**
+  1. **Structure Preservation:** Accurately reconstruct the table structure.
+  2. **Data Generation:** Replace ALL cell values with new, synthetic business data.
+      - Use realistic Korean company names, products, sales figures.
+  3. **Styling:** Use **Tailwind CSS** classes (same as default).
+      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
+      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
+      - `class="border border-slate-300 p-2"` on `<td>`.
+  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.

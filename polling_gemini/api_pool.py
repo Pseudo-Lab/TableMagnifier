@@ -16,11 +16,7 @@ import google.generativeai as genai
 from google.api_core import exceptions as google_exceptions
 
 
-# 로깅 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+# 모듈 레벨 로거 (전역 설정은 애플리케이션에서 관리)
 logger = logging.getLogger(__name__)
 
 
@@ -137,17 +133,34 @@ class GeminiAPIPool:
         error_str = str(error).upper()
         return any(quota_err in error_str for quota_err in self.QUOTA_ERRORS)
     
+    def _extract_retry_delay(self, error: Exception) -> int:
+        """에러 메시지에서 retry_delay 값을 추출"""
+        import re
+        error_str = str(error)
+        # "Please retry in 33.601039835s" 또는 "retry_delay { seconds: 33 }" 패턴 찾기
+        match = re.search(r'retry in (\d+(?:\.\d+)?)', error_str)
+        if match:
+            return int(float(match.group(1))) + 1  # 여유 1초 추가
+        match = re.search(r'seconds:\s*(\d+)', error_str)
+        if match:
+            return int(match.group(1)) + 1
+        return 60  # 기본 60초 대기
+
     def generate_content(
         self,
         prompt: str,
+        auto_wait: bool = True,
+        max_wait_cycles: int = 3,
         return_full_response: bool = False,
         **kwargs
     ) -> str:
         """
-        Gemini API로 컨텐츠 생성 (자동 키 로테이션 포함)
+        Gemini API로 컨텐츠 생성 (자동 키 로테이션 및 할당량 대기 포함)
         
         Args:
             prompt: 입력 프롬프트
+            auto_wait: 모든 키가 할당량 초과 시 자동 대기 여부
+            max_wait_cycles: 최대 대기 사이클 수 (각 사이클은 retry_delay만큼 대기)
             return_full_response: True면 (text, usage_metadata) 튜플 반환
             **kwargs: GenerativeModel.generate_content에 전달할 추가 인자
             
@@ -160,66 +173,88 @@ class GeminiAPIPool:
         max_retries = self.settings.get('max_retries', 3)
         retry_delay = self.settings.get('retry_delay', 2)
         
-        last_error = None
-        attempts = 0
-        max_attempts = len(self.api_keys) * max_retries
+        wait_cycles = 0
         
-        while attempts < max_attempts:
-            current_key = self.api_keys[self.current_key_index]
+        while wait_cycles <= max_wait_cycles:
+            last_error = None
+            attempts = 0
+            max_attempts = len(self.api_keys) * max_retries
+            all_keys_exhausted = False
             
-            try:
-                # kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
-                temperature = kwargs.pop('temperature', self.settings.get('temperature', 0.7))
+            while attempts < max_attempts:
+                current_key = self.api_keys[self.current_key_index]
                 
-                # generation_config 구성
-                generation_config = {
-                    'temperature': temperature,
-                }
-                generation_config.update(kwargs.pop('generation_config', {}))
-                
-                # API 호출 (generation_config만 전달)
-                response = self.current_model.generate_content(
-                    prompt, 
-                    generation_config=generation_config
-                )
-                
-                # 성공 시 실패 카운트 리셋
-                current_key.failed_count = 0
-                current_key.last_error = None
-                
-                if return_full_response:
-                    # usage_metadata 추출
-                    usage_metadata = getattr(response, 'usage_metadata', None)
-                    return response.text, usage_metadata
-                return response.text
-                
-            except google_exceptions.ResourceExhausted as e:
-                # 할당량 초과 - 즉시 키 로테이션
-                logger.warning(f"API 키 '{current_key.name}' 할당량 초과. 다음 키로 전환합니다.")
-                current_key.failed_count += 1
-                current_key.last_error = str(e)
-                last_error = e
-                
-                if not self._rotate_key():
-                    break
+                try:
+                    # kwargs 복사본 생성 (반복 호출 시 원본 유지)
+                    call_kwargs = kwargs.copy()
                     
-            except Exception as e:
-                # 기타 에러
-                logger.warning(f"API 호출 실패 (키: {current_key.name}): {e}")
-                current_key.failed_count += 1
-                current_key.last_error = str(e)
-                last_error = e
-                
-                # 할당량 관련 에러인 경우 키 로테이션
-                if self._is_quota_error(e):
-                    logger.info("할당량 관련 에러로 판단되어 키를 전환합니다.")
+                    # kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
+                    temperature = call_kwargs.pop('temperature', self.settings.get('temperature', 0.7))
+                    
+                    # generation_config 구성
+                    generation_config = {
+                        'temperature': temperature,
+                    }
+                    generation_config.update(call_kwargs.pop('generation_config', {}))
+                    
+                    # API 호출 (generation_config만 전달)
+                    response = self.current_model.generate_content(
+                        prompt, 
+                        generation_config=generation_config
+                    )
+                    
+                    # 성공 시 실패 카운트 리셋
+                    current_key.failed_count = 0
+                    current_key.last_error = None
+                    
+                    if return_full_response:
+                        # usage_metadata 추출
+                        usage_metadata = getattr(response, 'usage_metadata', None)
+                        return response.text, usage_metadata
+                    return response.text
+                    
+                except google_exceptions.ResourceExhausted as e:
+                    # 할당량 초과 - 즉시 키 로테이션
+                    logger.warning(f"API 키 '{current_key.name}' 할당량 초과. 다음 키로 전환합니다.")
+                    current_key.failed_count += 1
+                    current_key.last_error = str(e)
+                    last_error = e
+                    
                     if not self._rotate_key():
+                        all_keys_exhausted = True
                         break
-                else:
-                    # 일반 에러는 재시도
-                    time.sleep(retry_delay)
+                        
+                except Exception as e:
+                    # 기타 에러
+                    logger.warning(f"API 호출 실패 (키: {current_key.name}): {e}")
+                    current_key.failed_count += 1
+                    current_key.last_error = str(e)
+                    last_error = e
+                    
+                    # 할당량 관련 에러인 경우 키 로테이션
+                    if self._is_quota_error(e):
+                        logger.info("할당량 관련 에러로 판단되어 키를 전환합니다.")
+                        if not self._rotate_key():
+                            all_keys_exhausted = True
+                            break
+                    else:
+                        # 일반 에러는 재시도
+                        time.sleep(retry_delay)
+                
+                attempts += 1
             
-            attempts += 1
+            # 모든 키 소진 시 대기 후 재시도
+            if all_keys_exhausted and auto_wait and wait_cycles < max_wait_cycles:
+                wait_time = self._extract_retry_delay(last_error)
+                logger.info(f"⏳ 모든 API 키 할당량 초과. {wait_time}초 대기 후 재시도... ({wait_cycles + 1}/{max_wait_cycles})")
+                time.sleep(wait_time)
+                wait_cycles += 1
+                # 모든 키 실패 카운트 리셋
+                for key in self.api_keys:
+                    key.failed_count = 0
+                continue
+            else:
+                break
         
         # 모든 시도 실패
         error_msg = f"모든 API 키로 시도했으나 실패했습니다. 마지막 에러: {last_error}"
@@ -253,16 +288,19 @@ class GeminiAPIPool:
         
         while attempts < max_attempts:
             current_key = self.api_keys[self.current_key_index]
-            
+
             try:
-                # kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
-                temperature = kwargs.pop('temperature', self.settings.get('temperature', 0.7))
-                
+                # kwargs 복사본 생성 (재시도 시 원본 유지)
+                call_kwargs = kwargs.copy()
+
+                # call_kwargs에서 temperature 추출 (있으면 사용, 없으면 설정값 사용)
+                temperature = call_kwargs.pop('temperature', self.settings.get('temperature', 0.7))
+
                 # generation_config 구성
                 generation_config = {
                     'temperature': temperature,
                 }
-                generation_config.update(kwargs.pop('generation_config', {}))
+                generation_config.update(call_kwargs.pop('generation_config', {}))
                 
                 # 비동기 API 호출 (동기 메서드를 asyncio로 래핑)
                 loop = asyncio.get_event_loop()
