@@ -24,6 +24,9 @@ source ../../.venv/bin/activate
 
 # 서버 실행
 python main.py
+
+# OR 의존성 설치 및 서버 실행
+uv run python main.py
 ```
 
 백엔드가 http://localhost:8001 에서 실행됩니다.
