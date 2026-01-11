@@ -12,7 +12,15 @@ from typing import Dict, Iterable, List
 
 from dotenv import load_dotenv
 
-from .flow import TableState, run_synthetic_table_flow
+from .flow import (
+    TableState,
+    run_synthetic_table_flow,
+    list_checkpoints,
+    get_checkpoint_state,
+    delete_checkpoint,
+    clear_all_checkpoints,
+    resume_from_checkpoint,
+)
 
 try:
     from data_organizer import TableDataOrganizer
@@ -115,6 +123,56 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Enable sequential pair processing (0-1, 2-3...) for Public data. Overrides sampling.",
     )
+
+    # 체크포인팅 옵션
+    checkpoint_group = parser.add_argument_group("Checkpointing Options")
+    checkpoint_group.add_argument(
+        "--checkpoint",
+        action="store_true",
+        help="Enable checkpointing for resumable execution",
+    )
+    checkpoint_group.add_argument(
+        "--checkpoint-dir",
+        type=Path,
+        help="Directory to store checkpoint files (default: ./checkpoints)",
+    )
+    checkpoint_group.add_argument(
+        "--thread-id",
+        help="Custom thread ID for checkpoint (auto-generated from image path if not provided)",
+    )
+    checkpoint_group.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume from existing checkpoint if available",
+    )
+
+    # 체크포인트 관리 서브커맨드
+    checkpoint_group.add_argument(
+        "--list-checkpoints",
+        action="store_true",
+        help="List all saved checkpoints and exit",
+    )
+    checkpoint_group.add_argument(
+        "--show-checkpoint",
+        metavar="THREAD_ID",
+        help="Show details of a specific checkpoint and exit",
+    )
+    checkpoint_group.add_argument(
+        "--delete-checkpoint",
+        metavar="THREAD_ID",
+        help="Delete a specific checkpoint and exit",
+    )
+    checkpoint_group.add_argument(
+        "--clear-checkpoints",
+        action="store_true",
+        help="Delete all checkpoints and exit",
+    )
+    checkpoint_group.add_argument(
+        "--resume-checkpoint",
+        metavar="THREAD_ID",
+        help="Resume execution from a specific checkpoint thread ID",
+    )
+
     return parser
 
 
@@ -128,8 +186,31 @@ def run_flow_for_image(
     config_path: str | None = None,
     qa_only: bool = False,
     domain: str | None = None,
+    # 체크포인팅 옵션
+    enable_checkpointing: bool = False,
+    thread_id: str | None = None,
+    checkpoint_dir: str | None = None,
+    resume: bool = False,
 ) -> TableState:
-    """Execute the synthetic table flow for a given image path."""
+    """Execute the synthetic table flow for a given image path.
+
+    Args:
+        image: Path to the input image or HTML file
+        provider: LLM provider
+        model: Model name
+        temperature: Sampling temperature
+        base_url: Custom base URL
+        config_path: Config path for gemini_pool
+        qa_only: Generate QA only without synthetic data
+        domain: Domain for prompt customization
+        enable_checkpointing: Enable checkpointing for resumable execution
+        thread_id: Custom thread ID for checkpoint
+        checkpoint_dir: Directory to store checkpoint files
+        resume: Resume from existing checkpoint if available
+
+    Returns:
+        Final TableState with results
+    """
 
     load_dotenv()
 
@@ -154,6 +235,10 @@ def run_flow_for_image(
         config_path=config_path,
         qa_only=qa_only,
         domain=domain,
+        enable_checkpointing=enable_checkpointing,
+        thread_id=thread_id,
+        checkpoint_dir=checkpoint_dir,
+        resume=resume,
     )
 
 
@@ -186,10 +271,96 @@ def _filter_json_safe_state(state: TableState, *, html_paths: Iterable[tuple[str
     return payload
 
 
-def run_with_args(args: argparse.Namespace) -> TableState | Dict:
+def run_with_args(args: argparse.Namespace) -> TableState | Dict | None:
     """Run the flow using parsed CLI arguments and handle optional persistence."""
 
+    # 체크포인트 디렉토리 설정
+    checkpoint_dir = str(args.checkpoint_dir) if getattr(args, 'checkpoint_dir', None) else None
+
+    # ========================================
+    # 체크포인트 관리 명령 처리
+    # ========================================
+
+    # --list-checkpoints: 모든 체크포인트 목록 출력
+    if getattr(args, 'list_checkpoints', False):
+        checkpoints = list_checkpoints(checkpoint_dir)
+        if not checkpoints:
+            print("No checkpoints found.")
+        else:
+            print(f"Found {len(checkpoints)} checkpoint(s):\n")
+            print(f"{'Thread ID':<12} {'Created At':<25} {'Parent ID':<12}")
+            print("-" * 50)
+            for cp in checkpoints:
+                print(f"{cp['thread_id']:<12} {cp['created_at'] or 'N/A':<25} {cp['parent_id'] or 'N/A':<12}")
+        return None
+
+    # --show-checkpoint: 특정 체크포인트 상세 정보
+    if getattr(args, 'show_checkpoint', None):
+        thread_id = args.show_checkpoint
+        state = get_checkpoint_state(thread_id, checkpoint_dir)
+        if state:
+            print(f"Checkpoint: {thread_id}\n")
+            print(f"Image Path: {state.get('image_path', 'N/A')}")
+            print(f"Attempts: {state.get('attempts', 0)}")
+            print(f"Passed: {state.get('passed', 'N/A')}")
+            print(f"Errors: {state.get('errors', [])}")
+            print(f"\nHas HTML Table: {bool(state.get('html_table'))}")
+            print(f"Has Synthetic Table: {bool(state.get('synthetic_table'))}")
+            print(f"Has QA Results: {bool(state.get('qa_results'))}")
+            if state.get('qa_results'):
+                print(f"QA Count: {len(state.get('qa_results', []))}")
+        else:
+            print(f"Checkpoint not found: {thread_id}")
+        return None
+
+    # --delete-checkpoint: 특정 체크포인트 삭제
+    if getattr(args, 'delete_checkpoint', None):
+        thread_id = args.delete_checkpoint
+        if delete_checkpoint(thread_id, checkpoint_dir):
+            print(f"✅ Deleted checkpoint: {thread_id}")
+        else:
+            print(f"❌ Failed to delete checkpoint: {thread_id}")
+        return None
+
+    # --clear-checkpoints: 모든 체크포인트 삭제
+    if getattr(args, 'clear_checkpoints', False):
+        count = clear_all_checkpoints(checkpoint_dir)
+        print(f"✅ Cleared {count} checkpoint(s)")
+        return None
+
+    # --resume-checkpoint: 특정 체크포인트에서 재개
+    if getattr(args, 'resume_checkpoint', None):
+        thread_id = args.resume_checkpoint
+        print(f"Resuming from checkpoint: {thread_id}")
+        result = resume_from_checkpoint(
+            thread_id,
+            provider=args.provider,
+            model=args.model,
+            temperature=args.temperature,
+            base_url=args.base_url,
+            config_path=str(args.config_path) if args.config_path else None,
+            qa_only=getattr(args, 'qa_only', False),
+            checkpoint_dir=checkpoint_dir,
+        )
+        if result:
+            print(f"✅ Resumed and completed execution")
+            payload = _filter_json_safe_state(result, html_paths=[])
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+            return result
+        else:
+            print(f"❌ Failed to resume from checkpoint: {thread_id}")
+            return None
+
+    # ========================================
+    # 일반 실행 흐름
+    # ========================================
+
     input_path = args.image
+
+    # 체크포인팅 옵션 추출
+    enable_checkpointing = getattr(args, 'checkpoint', False)
+    thread_id = getattr(args, 'thread_id', None)
+    resume = getattr(args, 'resume', False)
 
     # Check if input is a folder -> batch processing
     if input_path.is_dir():
@@ -207,9 +378,11 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
             min_k=getattr(args, 'min_k', 2),
             max_k=getattr(args, 'max_k', 3),
             num_samples=getattr(args, 'num_samples', 1),
-
             domain=args.domain,
             pair_mode=getattr(args, 'pair_mode', False),
+            # 체크포인팅 옵션
+            enable_checkpointing=enable_checkpointing,
+            checkpoint_dir=checkpoint_dir,
         )
 
     # Single file processing
@@ -222,6 +395,12 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
         domain = "insurance"
         print(f"Auto-detected domain: {domain}")
 
+    # 체크포인팅 활성화 시 메시지 출력
+    if enable_checkpointing:
+        print(f"🔄 Checkpointing enabled" + (f" (thread_id: {thread_id})" if thread_id else ""))
+        if resume:
+            print(f"   Resume mode: ON")
+
     result = run_flow_for_image(
         input_path,
         provider=args.provider,
@@ -231,6 +410,11 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict:
         config_path=str(args.config_path) if args.config_path else None,
         qa_only=getattr(args, 'qa_only', False),
         domain=domain,
+        # 체크포인팅 옵션
+        enable_checkpointing=enable_checkpointing,
+        thread_id=thread_id,
+        checkpoint_dir=checkpoint_dir,
+        resume=resume,
     )
 
     html_refs: list[tuple[str, Path | None]] = []
@@ -279,6 +463,9 @@ def run_batch_for_folder(
     num_samples: int = 1,
     domain: str | None = None,
     pair_mode: bool = False,
+    # 체크포인팅 옵션
+    enable_checkpointing: bool = False,
+    checkpoint_dir: str | None = None,
 ) -> Dict[str, any]:
     """
     Execute the flow for all images in a folder (batch processing).
@@ -293,16 +480,24 @@ def run_batch_for_folder(
         qa_only: Generate QA only without synthetic data
         output_dir: Output directory for results
         max_workers: Number of parallel workers
+        sampling: Enable random sampling
+        min_k: Minimum images per sample
+        max_k: Maximum images per sample
+        num_samples: Number of samples per table
+        domain: Domain for prompt customization
+        pair_mode: Enable pair processing mode
+        enable_checkpointing: Enable checkpointing for each task
+        checkpoint_dir: Directory to store checkpoint files
 
     Returns:
         Summary dict with results and statistics
     """
     load_dotenv()
 
-    # Find all image files
+    # Find all image files (recursive)
     image_extensions = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
     image_files = sorted([
-        f for f in folder.iterdir()
+        f for f in folder.rglob("*")
         if f.is_file() and f.suffix.lower() in image_extensions
     ])
 
@@ -328,6 +523,8 @@ def run_batch_for_folder(
     print(f"Using {max_workers} parallel workers")
     if pair_mode:
         print("Pair Mode: ENABLED (0-1, 2-3...)")
+    if enable_checkpointing:
+        print(f"🔄 Checkpointing: ENABLED (dir: {checkpoint_dir or 'default'})")
     print()
 
     # Try to organize data if using Data Organizer naming convention
@@ -388,10 +585,13 @@ def run_batch_for_folder(
         """Process a task (single image or batch)."""
         images = task["images"]
         name = task["name"]
-        
+
         # Primary image is the first one for naming/path purposes if needed
         primary_image_path = Path(images[0])
-        
+
+        # 배치 처리에서는 task name을 thread_id로 사용
+        task_thread_id = name if enable_checkpointing else None
+
         try:
             result = run_synthetic_table_flow(
                 image_path=str(primary_image_path), # Pass first image as primary "path" (legacy)
@@ -403,6 +603,11 @@ def run_batch_for_folder(
                 config_path=config_path,
                 qa_only=qa_only,
                 domain=domain,
+                # 체크포인팅 옵션
+                enable_checkpointing=enable_checkpointing,
+                thread_id=task_thread_id,
+                checkpoint_dir=checkpoint_dir,
+                resume=True,  # 배치에서는 항상 resume 시도
             )
 
             # Save individual result
@@ -479,6 +684,8 @@ def run_batch_for_folder(
         "qa_only": qa_only,
         "provider": provider,
         "model": model,
+        "checkpointing_enabled": enable_checkpointing,
+        "checkpoint_dir": checkpoint_dir,
         "results": results,
     }
 

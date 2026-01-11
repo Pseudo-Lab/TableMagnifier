@@ -4,23 +4,32 @@ from __future__ import annotations
 
 import base64
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Dict, List, TypedDict, Callable, Optional
 
+import fitz  # PyMuPDF
+import yaml
+from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
-from dotenv import load_dotenv
-import fitz  # PyMuPDF
-import yaml
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.sqlite import SqliteSaver
 
+from .validators import (
+    robust_json_parse,
+    validate_html,
+    parse_html_table_to_json,
+    compare_tables_with_sql,
+    compare_tables_with_repl,
+)
+
+logger = logging.getLogger(__name__)
 
 MAX_ATTEMPTS = 2  # 최대 재생성 시도 횟수
-_PROMPTS_CACHE = {}  # Cache for loaded prompt files
-
-# 프롬프트 캐시 (YAML 파일 로딩 결과 저장), 캐시가 선언안되어있어서 넣음
-_PROMPTS_CACHE: Dict[str, Dict[str, str]] = {}
+_PROMPTS_CACHE: Dict[str, Dict[str, str]] = {}  # 프롬프트 캐시 (YAML 파일 로딩 결과 저장)
 
 
 class TableState(TypedDict, total=False):
@@ -138,7 +147,7 @@ def image_to_html_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
         image_path = Path(state["image_path"])
         if not image_path.exists():
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append(f"Image not found: {image_path}")
             return {**state, "errors": errors, "attempts": attempts}
 
@@ -245,14 +254,14 @@ def analyze_table_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
         html = state.get("html_table")
         if not html:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append("No HTML table to analyze.")
             return {**state, "errors": errors}
 
         try:
             prompt = prompt_template.format(html=html)
         except KeyError as e:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append(f"Analysis prompt missing placeholder: {e}")
             return {**state, "errors": errors}
 
@@ -276,7 +285,7 @@ def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "
         summary = state.get("table_summary")
 
         if not html:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append("Insufficient information to generate synthetic table.")
             return {**state, "errors": errors}
         
@@ -294,7 +303,7 @@ def generate_synthetic_table_node(llm: ChatOpenAI) -> Callable[["TableState"], "
             # 만약 프롬프트 파일에 {summary}가 없다면 format에서 무시되거나 에러가 날 수 있음.
             # 여기서는 프롬프트 파일도 확인/수정해야 할 수 있음.
             # 일단 에러 처리.
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append(f"Prompt template missing placeholder: {e}")
             return {**state, "errors": errors}
 
@@ -316,7 +325,7 @@ def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["Tabl
 
         image_path = Path(state["image_path"])
         if not image_path.exists():
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append(f"Image not found: {image_path}")
             return {**state, "errors": errors}
 
@@ -331,10 +340,6 @@ def generate_synthetic_table_from_image_node(llm: ChatOpenAI) -> Callable[["Tabl
     return _node
 
 
-from .validators import robust_json_parse, validate_html, parse_html_table_to_json, compare_tables_with_sql, compare_tables_with_repl
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
@@ -357,7 +362,7 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
         image_path = Path(state["image_path"])
 
         if not synthetic_html:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append("Synthetic table generation failed.")
             return {**state, "errors": errors}
 
@@ -425,7 +430,7 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
         # If we don't have the original HTML (direct path), use the image for reflection
         if not html:
             if not image_path.exists():
-                 errors = state.get("errors", [])
+                 errors = list(state.get("errors", []))
                  errors.append("Original image missing for reflection.")
                  return {**state, "errors": errors}
             
@@ -433,7 +438,7 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             try:
                 prompt = prompt_template_image.format(synthetic_html=synthetic_html)
             except KeyError as e:
-                errors = state.get("errors", [])
+                errors = list(state.get("errors", []))
                 errors.append(f"Reflection prompt missing placeholder: {e}")
                 return {**state, "errors": errors}
             
@@ -443,7 +448,7 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             try:
                 prompt = prompt_template.format(synthetic_html=synthetic_html, html=html)
             except KeyError as e:
-                errors = state.get("errors", [])
+                errors = list(state.get("errors", []))
                 errors.append(f"Prompt template missing placeholder: {e}")
                 return {**state, "errors": errors}
 
@@ -452,7 +457,7 @@ def self_reflection_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
         reflection_json = robust_json_parse(reflection_text)
         if reflection_json is None:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append("Self-reflection did not return valid JSON.")
             return {**state, "errors": errors, "reflection": reflection_text}
 
@@ -500,7 +505,7 @@ def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], Table
         image_path = Path(state["image_path"])
 
         if not synthetic_html:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append("No synthetic table to revise.")
             return {**state, "errors": errors}
 
@@ -508,7 +513,7 @@ def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], Table
         if not html or not summary:
             # Use image-based revision
             if not image_path.exists():
-                 errors = state.get("errors", [])
+                 errors = list(state.get("errors", []))
                  errors.append("Original image missing for revision.")
                  return {**state, "errors": errors}
             
@@ -519,7 +524,7 @@ def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], Table
                     revision_instructions=instructions
                 )
             except KeyError as e:
-                errors = state.get("errors", [])
+                errors = list(state.get("errors", []))
                 errors.append(f"Revision prompt missing placeholder: {e}")
                 return {**state, "errors": errors}
             
@@ -535,7 +540,7 @@ def revise_synthetic_table_node(llm: ChatOpenAI) -> Callable[[TableState], Table
                     revision_instructions=instructions,
                 )
             except KeyError as e:
-                errors = state.get("errors", [])
+                errors = list(state.get("errors", []))
                 errors.append(f"Revision prompt missing placeholder: {e}")
                 return {**state, "errors": errors}
 
@@ -562,7 +567,7 @@ def parse_synthetic_table_node(_llm: ChatOpenAI = None) -> Callable[[TableState]
 
         synthetic_html = state.get("synthetic_table")
         if not synthetic_html:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append("No synthetic table to parse.")
             return {**state, "errors": errors}
 
@@ -590,14 +595,14 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
 
         synthetic_html = state.get("synthetic_table")
         if not synthetic_html:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append("No synthetic table for QA generation.")
             return {**state, "errors": errors}
 
         try:
             prompt = prompt_template.format(synthetic_html=synthetic_html)
         except KeyError as e:
-            errors = state.get("errors", [])
+            errors = list(state.get("errors", []))
             errors.append(f"QA prompt missing placeholder: {e}")
             return {**state, "errors": errors}
 
@@ -630,7 +635,7 @@ def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], Table
         else:
             image_path = Path(state["image_path"])
             if not image_path.exists():
-                errors = state.get("errors", [])
+                errors = list(state.get("errors", []))
                 errors.append(f"Image not found: {image_path}")
                 return {**state, "errors": errors}
             image_paths = [image_path]
@@ -682,7 +687,7 @@ def load_html_input_node(state: TableState) -> TableState:
         html_content = image_path.read_text(encoding="utf-8")
         return {**state, "html_table": html_content}
     except Exception as e:
-        errors = state.get("errors", [])
+        errors = list(state.get("errors", []))
         errors.append(f"Failed to load HTML file: {e}")
         return {**state, "errors": errors}
 
@@ -776,6 +781,59 @@ def build_synthetic_table_graph(
 
 from .llm_factory import get_llm
 
+# 전역 체크포인터 저장소 (thread_id별 상태 관리)
+_checkpointer_cache: Dict[str, SqliteSaver] = {}
+
+
+def get_checkpointer(
+    checkpoint_dir: str | None = None,
+    use_memory: bool = False,
+) -> MemorySaver | SqliteSaver:
+    """
+    체크포인터 인스턴스를 생성하거나 캐시에서 가져옵니다.
+
+    Args:
+        checkpoint_dir: SQLite 체크포인트 파일 저장 디렉토리 (None이면 기본 경로)
+        use_memory: True면 인메모리 체크포인터 사용 (테스트용)
+
+    Returns:
+        체크포인터 인스턴스
+    """
+    if use_memory:
+        return MemorySaver()
+
+    if checkpoint_dir is None:
+        base_dir = Path(__file__).parent.parent
+        checkpoint_dir = str(base_dir / "checkpoints")
+
+    # 디렉토리 생성
+    checkpoint_path = Path(checkpoint_dir)
+    checkpoint_path.mkdir(parents=True, exist_ok=True)
+
+    db_path = str(checkpoint_path / "langgraph_checkpoints.db")
+
+    if db_path not in _checkpointer_cache:
+        _checkpointer_cache[db_path] = SqliteSaver.from_conn_string(db_path)
+        logger.info(f"Created checkpointer at: {db_path}")
+
+    return _checkpointer_cache[db_path]
+
+
+def generate_thread_id(image_path: str) -> str:
+    """
+    이미지 경로 기반으로 고유한 thread_id 생성.
+
+    Args:
+        image_path: 입력 이미지 경로
+
+    Returns:
+        8자리 해시 기반 thread_id
+    """
+    import hashlib
+    path_hash = hashlib.md5(image_path.encode()).hexdigest()[:8]
+    return path_hash
+
+
 def run_synthetic_table_flow(
     image_path: str,
     *,
@@ -787,6 +845,11 @@ def run_synthetic_table_flow(
     qa_only: bool = False,
     image_paths: List[str] | None = None,
     domain: str | None = None,
+    # 체크포인팅 옵션
+    enable_checkpointing: bool = False,
+    thread_id: str | None = None,
+    checkpoint_dir: str | None = None,
+    resume: bool = False,
 ) -> TableState:
     """
     Run the synthetic table generation flow.
@@ -801,6 +864,10 @@ def run_synthetic_table_flow(
         qa_only: If True, skip synthetic data generation and only generate QA from image
         image_paths: Optional list of image paths for multi-image processing
         domain: Optional domain for prompt customization (e.g. 'public')
+        enable_checkpointing: 체크포인팅 활성화 여부
+        thread_id: 체크포인트 식별자 (None이면 이미지 경로 기반 자동 생성)
+        checkpoint_dir: 체크포인트 저장 디렉토리
+        resume: True면 기존 체크포인트에서 재개 시도
 
     Returns:
         Final TableState with results
@@ -815,7 +882,33 @@ def run_synthetic_table_flow(
         config_path=config_path,
     )
 
-    app = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only).compile()
+    graph = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only)
+
+    # 체크포인팅 설정
+    if enable_checkpointing:
+        checkpointer = get_checkpointer(checkpoint_dir)
+        app = graph.compile(checkpointer=checkpointer)
+
+        # thread_id 설정
+        if thread_id is None:
+            thread_id = generate_thread_id(image_path)
+
+        run_config = {"configurable": {"thread_id": thread_id}}
+        logger.info(f"Checkpointing enabled with thread_id: {thread_id}")
+
+        # 재개 모드
+        if resume:
+            existing_state = get_checkpoint_state(thread_id, checkpoint_dir)
+            if existing_state:
+                logger.info(f"Resuming from checkpoint: {thread_id}")
+                # 기존 상태에서 재개 (invoke에 None 전달하면 마지막 상태에서 계속)
+                final_state: TableState = app.invoke(None, config=run_config)
+                return final_state
+            else:
+                logger.warning(f"No checkpoint found for thread_id: {thread_id}, starting fresh")
+    else:
+        app = graph.compile()
+        run_config = {}
 
     initial_state = {
         "image_path": image_path,
@@ -827,7 +920,220 @@ def run_synthetic_table_flow(
     if domain:
         initial_state["domain"] = domain
 
-    final_state: TableState = app.invoke(initial_state)
+    final_state: TableState = app.invoke(initial_state, config=run_config if enable_checkpointing else None)
+    return final_state
+
+
+def get_checkpoint_state(
+    thread_id: str,
+    checkpoint_dir: str | None = None,
+) -> Optional[TableState]:
+    """
+    저장된 체크포인트 상태를 조회합니다.
+
+    Args:
+        thread_id: 체크포인트 식별자
+        checkpoint_dir: 체크포인트 저장 디렉토리
+
+    Returns:
+        저장된 상태 또는 None
+    """
+    try:
+        checkpointer = get_checkpointer(checkpoint_dir)
+        config = {"configurable": {"thread_id": thread_id}}
+        checkpoint = checkpointer.get(config)
+
+        if checkpoint and "channel_values" in checkpoint:
+            return checkpoint["channel_values"]
+        return None
+    except Exception as e:
+        logger.warning(f"Failed to get checkpoint state: {e}")
+        return None
+
+
+def list_checkpoints(checkpoint_dir: str | None = None) -> List[Dict[str, Any]]:
+    """
+    저장된 모든 체크포인트 목록을 반환합니다.
+
+    Args:
+        checkpoint_dir: 체크포인트 저장 디렉토리
+
+    Returns:
+        체크포인트 정보 리스트
+    """
+    import sqlite3
+
+    if checkpoint_dir is None:
+        base_dir = Path(__file__).parent.parent
+        checkpoint_dir = str(base_dir / "checkpoints")
+
+    db_path = Path(checkpoint_dir) / "langgraph_checkpoints.db"
+
+    if not db_path.exists():
+        return []
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+        cursor = conn.cursor()
+
+        # LangGraph SQLite 스키마에서 체크포인트 조회
+        cursor.execute("""
+            SELECT DISTINCT thread_id, created_at, parent_id
+            FROM checkpoints
+            ORDER BY created_at DESC
+        """)
+
+        checkpoints = []
+        for row in cursor.fetchall():
+            checkpoints.append({
+                "thread_id": row[0],
+                "created_at": row[1],
+                "parent_id": row[2],
+            })
+
+        conn.close()
+        return checkpoints
+    except Exception as e:
+        logger.warning(f"Failed to list checkpoints: {e}")
+        return []
+
+
+def delete_checkpoint(
+    thread_id: str,
+    checkpoint_dir: str | None = None,
+) -> bool:
+    """
+    특정 체크포인트를 삭제합니다.
+
+    Args:
+        thread_id: 삭제할 체크포인트의 thread_id
+        checkpoint_dir: 체크포인트 저장 디렉토리
+
+    Returns:
+        삭제 성공 여부
+    """
+    import sqlite3
+
+    if checkpoint_dir is None:
+        base_dir = Path(__file__).parent.parent
+        checkpoint_dir = str(base_dir / "checkpoints")
+
+    db_path = Path(checkpoint_dir) / "langgraph_checkpoints.db"
+
+    if not db_path.exists():
+        return False
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM checkpoints WHERE thread_id = ?", (thread_id,))
+        cursor.execute("DELETE FROM writes WHERE thread_id = ?", (thread_id,))
+
+        deleted_count = cursor.rowcount
+        conn.commit()
+        conn.close()
+
+        logger.info(f"Deleted checkpoint: {thread_id}")
+        return deleted_count > 0
+    except Exception as e:
+        logger.error(f"Failed to delete checkpoint: {e}")
+        return False
+
+
+def clear_all_checkpoints(checkpoint_dir: str | None = None) -> int:
+    """
+    모든 체크포인트를 삭제합니다.
+
+    Args:
+        checkpoint_dir: 체크포인트 저장 디렉토리
+
+    Returns:
+        삭제된 체크포인트 수
+    """
+    import sqlite3
+
+    if checkpoint_dir is None:
+        base_dir = Path(__file__).parent.parent
+        checkpoint_dir = str(base_dir / "checkpoints")
+
+    db_path = Path(checkpoint_dir) / "langgraph_checkpoints.db"
+
+    if not db_path.exists():
+        return 0
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT COUNT(*) FROM checkpoints")
+        count = cursor.fetchone()[0]
+
+        cursor.execute("DELETE FROM checkpoints")
+        cursor.execute("DELETE FROM writes")
+
+        conn.commit()
+        conn.close()
+
+        logger.info(f"Cleared {count} checkpoints")
+        return count
+    except Exception as e:
+        logger.error(f"Failed to clear checkpoints: {e}")
+        return 0
+
+
+def resume_from_checkpoint(
+    thread_id: str,
+    *,
+    provider: str = "openai",
+    model: str = "gpt-4o-mini",
+    temperature: float = 0.2,
+    base_url: str | None = None,
+    config_path: str | None = None,
+    qa_only: bool = False,
+    checkpoint_dir: str | None = None,
+) -> Optional[TableState]:
+    """
+    체크포인트에서 실행을 재개합니다.
+
+    Args:
+        thread_id: 재개할 체크포인트의 thread_id
+        provider: LLM provider
+        model: Model name
+        temperature: Sampling temperature
+        base_url: Custom base URL for vLLM
+        config_path: Config path for gemini_pool
+        qa_only: QA-only 모드 여부
+        checkpoint_dir: 체크포인트 저장 디렉토리
+
+    Returns:
+        최종 상태 또는 None (체크포인트 없음)
+    """
+    # 기존 체크포인트 확인
+    existing_state = get_checkpoint_state(thread_id, checkpoint_dir)
+    if not existing_state:
+        logger.error(f"No checkpoint found for thread_id: {thread_id}")
+        return None
+
+    load_dotenv()
+
+    llm = get_llm(
+        provider=provider,
+        model=model,
+        temperature=temperature,
+        base_url=base_url,
+        config_path=config_path,
+    )
+
+    graph = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only)
+    checkpointer = get_checkpointer(checkpoint_dir)
+    app = graph.compile(checkpointer=checkpointer)
+
+    run_config = {"configurable": {"thread_id": thread_id}}
+
+    logger.info(f"Resuming execution from checkpoint: {thread_id}")
+    final_state: TableState = app.invoke(None, config=run_config)
+
     return final_state
 
 
@@ -835,4 +1141,12 @@ __all__ = [
     "TableState",
     "build_synthetic_table_graph",
     "run_synthetic_table_flow",
+    # 체크포인팅 API
+    "get_checkpointer",
+    "generate_thread_id",
+    "get_checkpoint_state",
+    "list_checkpoints",
+    "delete_checkpoint",
+    "clear_all_checkpoints",
+    "resume_from_checkpoint",
 ]

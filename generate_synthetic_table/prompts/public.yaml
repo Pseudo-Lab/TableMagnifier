@@ -13,7 +13,7 @@ generate_qa: |
      - Each QA pair must correspond to exactly one Reasoning Type.
      - Output format must strictly follow JSON.
      - Questions and Answers MUST be written in Korean.
-     - reasoning_annotation MUST be written in English.
+     - reasoning_annotation MUST be written in English and MUST be a single string (not a list).
 
   ### [Validation Criteria]
   - Is the answer uniquely determined within the table?
@@ -39,7 +39,7 @@ generate_qa: |
         "question": "Question text",
         "answer": "Answer text",
         "type": "lookup",
-        "reasoning_annotation": "Step-by-step logic to derive answer",
+        "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
         "context": null
       }},
       ... (One per Reasoning Type => Total 10)
