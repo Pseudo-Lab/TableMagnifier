@@ -151,6 +151,7 @@ class GeminiAPIPool:
         prompt: str,
         auto_wait: bool = True,
         max_wait_cycles: int = 3,
+        return_full_response: bool = False,
         **kwargs
     ) -> str:
         """
@@ -160,10 +161,11 @@ class GeminiAPIPool:
             prompt: 입력 프롬프트
             auto_wait: 모든 키가 할당량 초과 시 자동 대기 여부
             max_wait_cycles: 최대 대기 사이클 수 (각 사이클은 retry_delay만큼 대기)
+            return_full_response: True면 (text, usage_metadata) 튜플 반환
             **kwargs: GenerativeModel.generate_content에 전달할 추가 인자
             
         Returns:
-            생성된 텍스트
+            생성된 텍스트, 또는 (텍스트, usage_metadata) 튜플
             
         Raises:
             Exception: 모든 API 키로 시도했으나 실패한 경우
@@ -205,6 +207,10 @@ class GeminiAPIPool:
                     current_key.failed_count = 0
                     current_key.last_error = None
                     
+                    if return_full_response:
+                        # usage_metadata 추출
+                        usage_metadata = getattr(response, 'usage_metadata', None)
+                        return response.text, usage_metadata
                     return response.text
                     
                 except google_exceptions.ResourceExhausted as e:

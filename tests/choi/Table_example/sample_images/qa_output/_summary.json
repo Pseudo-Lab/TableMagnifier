@@ -1,0 +1,20 @@
+{
+  "folder": "tests/choi/Table_example/sample_images",
+  "total": 1,
+  "success": 1,
+  "failed": 0,
+  "qa_only": true,
+  "provider": "gemini_pool",
+  "model": "gpt-4o-mini",
+  "checkpointing_enabled": false,
+  "checkpoint_dir": null,
+  "results": [
+    {
+      "name": "I_table_78_pair_0",
+      "status": "success",
+      "qa_count": 10,
+      "output_file": "tests/choi/Table_example/sample_images/qa_output/I_table_78_pair_0_qa.json",
+      "errors": []
+    }
+  ]
+}
