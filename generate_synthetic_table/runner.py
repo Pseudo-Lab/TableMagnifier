@@ -34,6 +34,25 @@ except ImportError:
     from data_organizer import TableDataOrganizer
 
 
+# Domain auto-detection mapping: prefix -> domain name
+_DOMAIN_PREFIX_MAP = {
+    "M_": "medical",
+    "P_": "public",
+    "I_": "insurance",
+    "F_": "finance",
+    "A_": "academic",
+    "B_": "business",
+}
+
+
+def _auto_detect_domain(name: str) -> str | None:
+    """Auto-detect domain from file/folder name prefix."""
+    for prefix, domain in _DOMAIN_PREFIX_MAP.items():
+        if name.startswith(prefix):
+            return domain
+    return None
+
+
 def build_arg_parser() -> argparse.ArgumentParser:
     """Create the common argument parser used by CLI entrypoints."""
 
@@ -401,12 +420,10 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict | None:
     # Single file processing
     # Auto-detect domain if not provided
     domain = args.domain
-    if not domain and input_path.name.startswith("P_"):
-        domain = "public"
-        print(f"Auto-detected domain: {domain}")
-    elif not domain and input_path.name.startswith("I_"):
-        domain = "insurance"
-        print(f"Auto-detected domain: {domain}")
+    if not domain:
+        domain = _auto_detect_domain(input_path.name)
+        if domain:
+            print(f"Auto-detected domain: {domain}")
 
     # 체크포인팅 활성화 시 메시지 출력
     if enable_checkpointing:
@@ -559,10 +576,8 @@ def run_batch_for_folder(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Auto-detect domain if not provided
-    if not domain and folder.name.startswith("P_"):
-        domain = "public"
-    elif not domain and folder.name.startswith("I_"):
-        domain = "insurance"
+    if not domain:
+        domain = _auto_detect_domain(folder.name)
         
     print(f"Found {len(image_files)} images in {folder}")
     print(f"Output directory: {output_dir}")

@@ -271,12 +271,50 @@ uv run python -m generate_synthetic_table.cli path/to/table_image.png \
 **옵션 설명:**
 | 옵션 | 설명 | 기본값 |
 |------|------|--------|
-| `image` | 입력 이미지 또는 HTML 파일 경로 | (필수) |
-| `--provider` | LLM 제공자 (`openai`, `gemini`, `gemini_pool`, `vllm`) | `openai` |
-| `--model` | 사용할 모델명 | `gpt-4.1-mini` |
+| `image` | 입력 이미지, HTML 파일, 또는 폴더 경로 | (필수) |
+| `--provider` | LLM 제공자 (`openai`, `gemini`, `gemini_pool`, `claude`, `vllm`) | `openai` |
+| `--model` | 사용할 모델명 | `gpt-4o-mini` |
 | `--temperature` | 생성 다양성 조절 | `0.2` |
 | `--config-path` | gemini_pool용 설정 파일 경로 | `apis/gemini_keys.yaml` |
+| `--base-url` | vLLM 또는 OpenAI 호환 엔드포인트 URL | (선택) |
 | `--save-json` | 결과 JSON 저장 경로 | (선택) |
+| `--domain` | 프롬프트 도메인 (`medical`, `public`, `insurance`, `finance`, `academic`, `business`) | 자동 감지 |
+| `--qa-only` | 합성 데이터 생성 없이 이미지에서 직접 QA만 생성 | `false` |
+| `--output-dir` | 배치 처리 결과 저장 디렉토리 | `./qa_output` |
+| `--max-workers` | 배치 처리 시 병렬 워커 수 | `3` |
+| `--sampling` | 테이블당 랜덤 이미지 샘플링 활성화 | `false` |
+| `--min-k` | 테이블당 최소 샘플링 이미지 수 | `2` |
+| `--max-k` | 테이블당 최대 샘플링 이미지 수 | `3` |
+| `--num-samples` | 테이블당 생성할 랜덤 배치 수 | `1` |
+| `--pair-mode` | Public 데이터용 순차 페어 처리 (0-1, 2-3...) | `false` |
+
+### 도메인별 프롬프트
+
+`--domain` 옵션을 사용하여 특정 도메인에 맞는 프롬프트를 적용할 수 있습니다. 각 도메인별 프롬프트는 `generate_synthetic_table/prompts/` 폴더에 정의되어 있습니다.
+
+| 도메인 | 설명 | 자동 감지 조건 |
+|--------|------|----------------|
+| `medical` | 의료 데이터 (환자 바이탈, 진단명, 약물 용량, 검사 수치 등) | ✅ 파일/폴더명이 `M_`로 시작 |
+| `public` | 공공 데이터 | ✅ 파일/폴더명이 `P_`로 시작 |
+| `insurance` | 보험 데이터 | ✅ 파일/폴더명이 `I_`로 시작 |
+| `finance` | 금융 데이터 | ✅ 파일/폴더명이 `F_`로 시작 |
+| `academic` | 학술 데이터 | ✅ 파일/폴더명이 `A_`로 시작 |
+| `business` | 비즈니스 데이터 | ✅ 파일/폴더명이 `B_`로 시작 |
+
+**도메인 사용 예시:**
+```bash
+# Medical 도메인으로 합성 데이터 생성
+uv run python -m generate_synthetic_table.cli path/to/medical_table.png \
+  --domain medical --provider gemini_pool --save-json output.json
+
+# 폴더 배치 처리 (Medical 도메인)
+uv run python -m generate_synthetic_table.cli ./Medical/Table/ \
+  --domain medical --max-workers 5 --output-dir ./output
+
+# QA만 생성 (합성 데이터 생성 단계 스킵)
+uv run python -m generate_synthetic_table.cli path/to/table.png \
+  --domain medical --qa-only --save-json output.json
+```
 
 ### 실행 예시 및 결과
 
