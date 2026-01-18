@@ -316,7 +316,146 @@ uv run python -m generate_synthetic_table.cli path/to/table.png \
   --domain medical --qa-only --save-json output.json
 ```
 
-### 실행 예시 및 결과
+### 2. JSON 입력 기반 배치 처리 (run_pipeline_json.py)
+
+JSON 파일로 이미지 경로 쌍을 정의하여 여러 pair를 한 번에 처리할 수 있습니다. 이 방식은 대량의 데이터를 구조화된 형태로 처리할 때 유용합니다.
+
+#### 2.1 JSON 입력 형식
+
+**구조화된 형식 (권장):**
+```json
+[
+  {
+    "pair_id": "P_origin_0_1",
+    "image_paths": [
+      "data/Public/Table/P_origin_0/P_origin_0_1_0.png",
+      "data/Public/Table/P_origin_0/P_origin_0_1_1.png"
+    ],
+    "domain": "public"
+  },
+  {
+    "pair_id": "F_table_1",
+    "image_paths": [
+      "data/Finance/Table/F_table_1/F_table_1_0.png",
+      "data/Finance/Table/F_table_1/F_table_1_1.png"
+    ],
+    "domain": "finance"
+  }
+]
+```
+
+**레거시 형식 (배열 - 하위 호환성 지원):**
+```json
+[
+  [
+    "data/Public/Table/P_origin_0/P_origin_0_1_0.png",
+    "data/Public/Table/P_origin_0/P_origin_0_1_1.png"
+  ],
+  [
+    "data/Finance/Table/F_table_1/F_table_1_0.png",
+    "data/Finance/Table/F_table_1/F_table_1_1.png"
+  ]
+]
+```
+
+**구조화된 형식의 장점:**
+- `pair_id`: 원하는 식별자를 직접 지정 가능
+- `domain`: 각 pair마다 다른 domain 지정 가능 (CLI `--domain`보다 우선)
+- 출력 결과와 입력 형식의 일관성
+
+#### 2.2 기본 사용법
+
+```bash
+# 기본 실행 (구조화된 출력)
+uv run python run_pipeline_json.py \
+  --input test_input.json \
+  --output-dir output_results \
+  --domain public
+
+# QA만 생성 (테이블 생성 스킵)
+uv run python run_pipeline_json.py \
+  --input test_input.json \
+  --output-dir output_qa_only \
+  --qa-only
+
+# Notion 데이터베이스에 자동 업로드
+uv run python run_pipeline_json.py \
+  --input test_input.json \
+  --output-dir output_with_notion \
+  --domain public \
+  --upload-to-notion
+```
+
+#### 2.3 옵션 설명
+
+| 옵션 | 설명 | 기본값 |
+|------|------|--------|
+| `--input` | JSON 입력 파일 경로 | (필수) |
+| `--data-root` | 이미지 파일 검색 기준 디렉토리 | `data` |
+| `--output-dir` | 결과 JSON 저장 디렉토리 | `output_json` |
+| `--provider` | LLM 제공자 | `gemini_pool` |
+| `--model` | 사용할 모델명 | `gemini-1.5-flash` |
+| `--config-path` | Gemini Pool 설정 파일 경로 | `apis/gemini_keys.yaml` |
+| `--domain` | 도메인 강제 지정 | 자동 감지 |
+| `--qa-only` | 테이블 생성 스킵, QA만 생성 | `false` |
+| `--upload-to-notion` | QA 결과를 Notion DB에 업로드 | `false` |
+
+#### 2.4 출력 형식
+
+결과는 `{output-dir}/pipeline_output.json`에 다음과 같은 구조로 저장됩니다:
+
+```json
+[
+  {
+    "pair_id": "P_origin_0_1_0",
+    "image_paths": [
+      "data/Public/Table/P_origin_0/P_origin_0_1_0.png",
+      "data/Public/Table/P_origin_0/P_origin_0_1_1.png"
+    ],
+    "domain": "public",
+    "tables": [null, null],
+    "qa_results": [
+      {
+        "question": "필기 과목명 '디지털 전자회로'의 문제수는 몇 문제인가요?",
+        "answer": "20문제",
+        "type": "lookup",
+        "reasoning_annotation": "...",
+        "context": null
+      }
+    ],
+    "metadata": {
+      "provider": "gemini_pool",
+      "model": "gemini-1.5-flash",
+      "qa_only": true
+    },
+    "notion_upload": {
+      "success": true,
+      "created_count": 10
+    }
+  }
+]
+```
+
+#### 2.5 Notion 업로드 설정
+
+`--upload-to-notion` 플래그를 사용하려면 `apis/gemini_keys.yaml`에 Notion 관련 설정이 필요합니다:
+
+```yaml
+# Notion API 키
+notion_key: secret_...
+
+# 도메인별 데이터베이스 ID
+notion_databases:
+  public: your_database_id_here
+  finance: another_database_id
+  insurance: yet_another_database_id
+```
+
+**Notion 업로드 시 주의사항:**
+- Notion database에 자동으로 필요한 속성(Domain, Image, Question, Answer, Type 등)이 생성됩니다
+- 업로드 실패 시에도 파이프라인은 중단되지 않으며, 결과 JSON에 에러 정보가 기록됩니다
+
+### 3. 실행 예시 및 결과
 
 ```bash
 $ uv run python -m generate_synthetic_table.cli ./image.png --provider gemini_pool
