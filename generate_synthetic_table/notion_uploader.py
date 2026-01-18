@@ -151,6 +151,12 @@ class NotionUploader:
         if "Provider" not in db_properties:
             properties_to_add["Provider"] = {"select": {}}
         
+        if "reasoning_annotation" not in db_properties:
+            properties_to_add["reasoning_annotation"] = {"rich_text": {}}
+        
+        if "context" not in db_properties:
+            properties_to_add["context"] = {"rich_text": {}}
+        
         if properties_to_add:
             print(f"  📝 Adding missing properties: {list(properties_to_add.keys())}")
             self.client.databases.update(
@@ -231,6 +237,8 @@ class NotionUploader:
             question = qa.get("question", qa.get("Q", ""))
             answer = qa.get("answer", qa.get("A", ""))
             qa_type = qa.get("type", "unknown")
+            reasoning_annotation = qa.get("reasoning_annotation", "")
+            context = qa.get("context", "")
             
             # Build page properties for this QA
             properties = {
@@ -283,6 +291,24 @@ class NotionUploader:
                     "number": tokens_per_qa
                 },
                 "Provider": build_property_value("Provider", provider, "select"),
+                "reasoning_annotation": {
+                    "rich_text": [
+                        {
+                            "text": {
+                                "content": reasoning_annotation[:2000] if reasoning_annotation else ""
+                            }
+                        }
+                    ]
+                },
+                "context": {
+                    "rich_text": [
+                        {
+                            "text": {
+                                "content": context[:2000] if context else ""
+                            }
+                        }
+                    ]
+                },
             }
             
             # Create the page (row)
