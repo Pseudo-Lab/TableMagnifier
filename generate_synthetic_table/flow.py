@@ -911,6 +911,8 @@ def run_synthetic_table_flow(
     temperature: float = 0.2,
     base_url: str | None = None,
     config_path: str | None = None,
+    azure_deployment: str | None = None,
+    azure_endpoint: str | None = None,
     qa_only: bool = False,
     image_paths: List[str] | None = None,
     domain: str | None = None,
@@ -925,11 +927,13 @@ def run_synthetic_table_flow(
 
     Args:
         image_path: Path to the input image or HTML file
-        provider: LLM provider (openai, gemini, gemini_pool, claude, vllm)
+        provider: LLM provider (openai, azure, gemini, gemini_pool, claude, vllm)
         model: Model name
         temperature: Sampling temperature
         base_url: Custom base URL for vLLM
         config_path: Config path for gemini_pool
+        azure_deployment: Azure OpenAI deployment name
+        azure_endpoint: Azure OpenAI endpoint URL
         qa_only: If True, skip synthetic data generation and only generate QA from image
         image_paths: Optional list of image paths for multi-image processing
         domain: Optional domain for prompt customization (e.g. 'public')

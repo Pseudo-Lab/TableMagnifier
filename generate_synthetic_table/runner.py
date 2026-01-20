@@ -53,6 +53,15 @@ def _auto_detect_domain(name: str) -> str | None:
     return None
 
 
+def _save_upload_log(image_path: str) -> None:
+    """Save uploaded image path to log file."""
+    log_file = Path("tests/choi/upload_fin.txt")
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(log_file, 'a', encoding='utf-8') as f:
+        f.write(f"{image_path}\n")
+
+
 def build_arg_parser() -> argparse.ArgumentParser:
     """Create the common argument parser used by CLI entrypoints."""
 
@@ -67,8 +76,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--provider",
         default="openai",
-        choices=["openai", "gemini", "gemini_pool", "claude", "vllm"],
-        help="LLM provider to use (default: openai). gemini_pool uses API key rotation from apis/gemini_keys.yaml. claude uses ANTHROPIC_API_KEY.",
+        choices=["openai", "azure", "gemini", "gemini_pool", "claude", "vllm"],
+        help="LLM provider to use (default: openai). azure uses Azure OpenAI. gemini_pool uses API key rotation from apis/gemini_keys.yaml. claude uses ANTHROPIC_API_KEY.",
     )
     parser.add_argument(
         "--config-path",
@@ -78,6 +87,14 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--base-url",
         help="Custom Base URL for vLLM or OpenAI-compatible endpoints",
+    )
+    parser.add_argument(
+        "--azure-deployment",
+        help="Azure OpenAI deployment name (required for azure provider)",
+    )
+    parser.add_argument(
+        "--azure-endpoint",
+        help="Azure OpenAI endpoint URL (required for azure provider)",
     )
     parser.add_argument(
         "--model",
@@ -203,6 +220,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=Path,
         help="Path to config file with Notion API key and database IDs (default: apis/gemini_keys.yaml)",
     )
+    parser.add_argument(
+        "--upload-log",
+        action="store_true",
+        help="Save uploaded image paths to tests/choi/upload_fin.txt for tracking",
+    )
     return parser
 
 
@@ -214,6 +236,8 @@ def run_flow_for_image(
     temperature: float = 0.2,
     base_url: str | None = None,
     config_path: str | None = None,
+    azure_deployment: str | None = None,
+    azure_endpoint: str | None = None,
     qa_only: bool = False,
     domain: str | None = None,
     # 체크포인팅 옵션
@@ -231,6 +255,8 @@ def run_flow_for_image(
         temperature: Sampling temperature
         base_url: Custom base URL
         config_path: Config path for gemini_pool
+        azure_deployment: Azure OpenAI deployment name
+        azure_endpoint: Azure OpenAI endpoint URL
         qa_only: Generate QA only without synthetic data
         domain: Domain for prompt customization
         enable_checkpointing: Enable checkpointing for resumable execution
@@ -248,13 +274,14 @@ def run_flow_for_image(
     if provider == "openai" and not os.getenv("OPENAI_API_KEY"):
         msg = "OPENAI_API_KEY is not set. Add it to a .env file or your environment."
         raise RuntimeError(msg)
+    # azure는 yaml 파일에서도 읽을 수 있으므로 여기서 체크하지 않음 (get_llm에서 체크)
     if provider == "gemini" and not os.getenv("GOOGLE_API_KEY"):
         msg = "GOOGLE_API_KEY is not set. Add it to a .env file or your environment."
         raise RuntimeError(msg)
     if provider == "claude" and not os.getenv("ANTHROPIC_API_KEY"):
         msg = "ANTHROPIC_API_KEY is not set. Add it to a .env file or your environment."
         raise RuntimeError(msg)
-    # gemini_pool은 apis/gemini_keys.yaml에서 키를 로드하므로 환경변수 체크 불필요
+    # gemini_pool과 azure는 apis/gemini_keys.yaml에서 키를 로드하므로 환경변수 체크 불필요
 
     return run_synthetic_table_flow(
         str(image),
@@ -263,6 +290,8 @@ def run_flow_for_image(
         temperature=temperature,
         base_url=base_url,
         config_path=config_path,
+        azure_deployment=azure_deployment,
+        azure_endpoint=azure_endpoint,
         qa_only=qa_only,
         domain=domain,
         enable_checkpointing=enable_checkpointing,
@@ -401,6 +430,8 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict | None:
             temperature=args.temperature,
             base_url=args.base_url,
             config_path=str(args.config_path) if args.config_path else None,
+            azure_deployment=getattr(args, 'azure_deployment', None),
+            azure_endpoint=getattr(args, 'azure_endpoint', None),
             qa_only=getattr(args, 'qa_only', False),
             output_dir=getattr(args, 'output_dir', None),
             max_workers=getattr(args, 'max_workers', 3),
@@ -415,6 +446,7 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict | None:
             checkpoint_dir=checkpoint_dir,
             upload_notion=getattr(args, 'upload_notion', False),
             notion_config=str(args.notion_config) if getattr(args, 'notion_config', None) else None,
+            upload_log=getattr(args, 'upload_log', False),
         )
 
     # Single file processing
@@ -438,6 +470,8 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict | None:
         temperature=args.temperature,
         base_url=args.base_url,
         config_path=str(args.config_path) if args.config_path else None,
+        azure_deployment=getattr(args, 'azure_deployment', None),
+        azure_endpoint=getattr(args, 'azure_endpoint', None),
         qa_only=getattr(args, 'qa_only', False),
         domain=domain,
         # 체크포인팅 옵션
@@ -498,6 +532,11 @@ def run_with_args(args: argparse.Namespace) -> TableState | Dict | None:
                         provider=args.provider,
                     )
                     print(f"\n✅ Notion upload complete: {upload_summary['success']}/{upload_summary['total']} succeeded")
+                    
+                    # Save uploaded image path to log file if requested
+                    if getattr(args, 'upload_log', False) and upload_summary['success'] > 0:
+                        _save_upload_log(str(input_path))
+                        
                 except ImportError as e:
                     print(f"\n❌ Notion upload failed: {e}")
                     print("   Install with: pip install notion-client")
@@ -517,6 +556,8 @@ def run_batch_for_folder(
     temperature: float = 0.2,
     base_url: str | None = None,
     config_path: str | None = None,
+    azure_deployment: str | None = None,
+    azure_endpoint: str | None = None,
     qa_only: bool = False,
     output_dir: Path | None = None,
     max_workers: int = 3,
@@ -531,6 +572,7 @@ def run_batch_for_folder(
     checkpoint_dir: str | None = None,
     upload_notion: bool = False,
     notion_config: str | None = None,
+    upload_log: bool = False,
 ) -> Dict[str, any]:
     """
     Execute the flow for all images in a folder (batch processing).
@@ -542,6 +584,8 @@ def run_batch_for_folder(
         temperature: Sampling temperature
         base_url: Custom base URL
         config_path: Config path for gemini_pool
+        azure_deployment: Azure OpenAI deployment name
+        azure_endpoint: Azure OpenAI endpoint URL
         qa_only: Generate QA only without synthetic data
         output_dir: Output directory for results
         max_workers: Number of parallel workers
@@ -664,6 +708,8 @@ def run_batch_for_folder(
                 temperature=temperature,
                 base_url=base_url,
                 config_path=config_path,
+                azure_deployment=azure_deployment,
+                azure_endpoint=azure_endpoint,
                 qa_only=qa_only,
                 domain=domain,
                 # 체크포인팅 옵션
@@ -767,6 +813,12 @@ def run_batch_for_folder(
                                     )
                                     notion_upload_success += 1
                                     print(f"   📤 Uploaded to Notion: {upload_result.get('created_count', 0)} rows (tokens: {token_usage})")
+                                    
+                                    # Save to upload log if requested
+                                    if upload_log:
+                                        image_paths = data.get("image_paths", [])
+                                        for img_path in image_paths:
+                                            _save_upload_log(img_path)
                         except Exception as e:
                             notion_upload_failed += 1
                             print(f"   ⚠️ Notion upload failed: {e}")
@@ -795,6 +847,12 @@ def run_batch_for_folder(
                                     )
                                     notion_upload_success += 1
                                     print(f"   📤 Uploaded to Notion: {upload_result.get('created_count', 0)} rows (tokens: {token_usage})")
+                                    
+                                    # Save to upload log if requested
+                                    if upload_log:
+                                        image_paths = data.get("image_paths", [])
+                                        for img_path in image_paths:
+                                            _save_upload_log(img_path)
                         except Exception as e:
                             notion_upload_failed += 1
                             print(f"   ⚠️ Notion upload failed: {e}")
