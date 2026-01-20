@@ -73,3 +73,10 @@ pipeline_ui/backend/uploads/*
 # Frontend (Node.js)
 pipeline_ui/frontend/node_modules/*
 pipeline_ui/frontend/package-lock.json
+
+
+I_origin_0/*
+I_origin_1/*
+I_origin_2/*
+
+output/*

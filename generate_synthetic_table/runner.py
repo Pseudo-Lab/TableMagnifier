@@ -696,6 +696,7 @@ def run_batch_for_folder(
                 "status": "success" if not result.get("errors") else "partial",
                 "qa_count": len(result.get("qa_results", [])),
                 "output_file": str(output_file),
+                "token_usage": result.get("token_usage", 0),
                 "errors": result.get("errors", []),
             }
 
@@ -706,6 +707,28 @@ def run_batch_for_folder(
                 "qa_count": 0,
                 "error": str(e),
             }
+
+    # Initialize Notion uploader if needed
+    notion_uploader = None
+    notion_upload_success = 0
+    notion_upload_failed = 0
+    
+    if upload_notion:
+        if not domain:
+            print("⚠️  --upload-notion requires --domain to be specified. Notion upload disabled.")
+            upload_notion = False
+        else:
+            try:
+                from .notion_uploader import NotionUploader
+                notion_uploader = NotionUploader(config_path=notion_config)
+                print(f"📤 Notion upload enabled (domain: {domain})")
+            except ImportError as e:
+                print(f"⚠️  Notion upload disabled: {e}")
+                print("   Install with: pip install notion-client")
+                upload_notion = False
+            except Exception as e:
+                print(f"⚠️  Notion upload disabled: {e}")
+                upload_notion = False
 
     # Parallel processing with ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -723,9 +746,58 @@ def run_batch_for_folder(
                 if result["status"] == "success":
                     success_count += 1
                     print(f"✅ {result['name']} - {result['qa_count']} QA pairs")
+                    
+                    # Upload to Notion immediately after QA generation
+                    if upload_notion and notion_uploader and result.get("output_file"):
+                        try:
+                            output_file = Path(result["output_file"])
+                            if output_file.exists():
+                                data = json.loads(output_file.read_text(encoding="utf-8"))
+                                qa_results = data.get("qa_results", [])
+                                if qa_results:
+                                    # Use token_usage from result (already available)
+                                    token_usage = result.get("token_usage", 0)
+                                    upload_result = notion_uploader.upload_qa_result(
+                                        domain=domain,
+                                        image_path=data.get("name", result["name"]),
+                                        qa_results=qa_results,
+                                        table_summary=data.get("table_summary"),
+                                        token_usage=token_usage,
+                                        provider=provider,
+                                    )
+                                    notion_upload_success += 1
+                                    print(f"   📤 Uploaded to Notion: {upload_result.get('created_count', 0)} rows (tokens: {token_usage})")
+                        except Exception as e:
+                            notion_upload_failed += 1
+                            print(f"   ⚠️ Notion upload failed: {e}")
+                    
                 elif result["status"] == "partial":
                     success_count += 1
                     print(f"⚠️ {result['name']} - {result['qa_count']} QA pairs (with errors)")
+                    
+                    # Upload partial results to Notion
+                    if upload_notion and notion_uploader and result.get("output_file"):
+                        try:
+                            output_file = Path(result["output_file"])
+                            if output_file.exists():
+                                data = json.loads(output_file.read_text(encoding="utf-8"))
+                                qa_results = data.get("qa_results", [])
+                                if qa_results:
+                                    # Use token_usage from result
+                                    token_usage = result.get("token_usage", 0)
+                                    upload_result = notion_uploader.upload_qa_result(
+                                        domain=domain,
+                                        image_path=data.get("name", result["name"]),
+                                        qa_results=qa_results,
+                                        table_summary=data.get("table_summary"),
+                                        token_usage=token_usage,
+                                        provider=provider,
+                                    )
+                                    notion_upload_success += 1
+                                    print(f"   📤 Uploaded to Notion: {upload_result.get('created_count', 0)} rows (tokens: {token_usage})")
+                        except Exception as e:
+                            notion_upload_failed += 1
+                            print(f"   ⚠️ Notion upload failed: {e}")
                 else:
                     failed_count += 1
                     print(f"❌ {result['name']} - {result.get('error', 'Unknown error')}")
@@ -752,6 +824,15 @@ def run_batch_for_folder(
         "checkpoint_dir": checkpoint_dir,
         "results": results,
     }
+    
+    # Add Notion upload summary if enabled
+    if upload_notion and notion_uploader:
+        summary["notion_upload"] = {
+            "enabled": True,
+            "success": notion_upload_success,
+            "failed": notion_upload_failed,
+            "total": notion_upload_success + notion_upload_failed,
+        }
 
     summary_file = output_dir / "_summary.json"
     summary_file.write_text(
@@ -763,52 +844,9 @@ def run_batch_for_folder(
     print(f"{'='*50}")
     print(f"Batch processing complete!")
     print(f"Total: {len(image_files)}, Success: {success_count}, Failed: {failed_count}")
+    if upload_notion and notion_uploader:
+        print(f"Notion Upload: {notion_upload_success} succeeded, {notion_upload_failed} failed")
     print(f"Summary saved to: {summary_file}")
-
-    # Upload to Notion if requested
-    if upload_notion:
-        if not domain:
-            print("\n⚠️  --upload-notion requires --domain to be specified. Skipping upload.")
-        else:
-            print(f"\n{'='*50}")
-            print(f"Uploading to Notion (domain: {domain})...")
-            
-            # Prepare results for Notion upload
-            # Load the actual QA results from saved files
-            notion_results = []
-            for result in results:
-                if result.get("status") in ("success", "partial"):
-                    output_file = result.get("output_file")
-                    if output_file and Path(output_file).exists():
-                        try:
-                            data = json.loads(Path(output_file).read_text(encoding="utf-8"))
-                            notion_results.append({
-                                "image_path": data.get("name", result.get("name")),
-                                "qa_results": data.get("qa_results", []),
-                                "table_summary": data.get("table_summary"),
-                                "token_usage": data.get("token_usage", 0),
-                            })
-                        except Exception as e:
-                            print(f"⚠️  Failed to load {output_file}: {e}")
-            
-            if notion_results:
-                try:
-                    upload_summary = upload_to_notion(
-                        domain=domain,
-                        results=notion_results,
-                        config_path=notion_config,
-                        verbose=True,
-                        provider=provider,
-                    )
-                    summary["notion_upload"] = upload_summary
-                    print(f"\n✅ Notion upload complete: {upload_summary['success']}/{upload_summary['total']} succeeded")
-                except ImportError as e:
-                    print(f"\n❌ Notion upload failed: {e}")
-                    print("   Install with: pip install notion-client")
-                except Exception as e:
-                    print(f"\n❌ Notion upload failed: {e}")
-            else:
-                print("⚠️  No successful results to upload.")
 
     return summary
 

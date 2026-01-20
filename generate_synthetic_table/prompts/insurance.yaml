@@ -15,6 +15,7 @@ generate_qa: |
   3. **Language:** The questions and answers MUST be in Korean.
   4. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
   5. **Accuracy:** Ensure all answers are factually correct based on the data in the table.
+  7. **Context:** Include the specific table cells or rows that were used to answer the question.
 
   **Output Format (JSON):**
   {{
@@ -22,7 +23,9 @@ generate_qa: |
           {{
               "question": "...",
               "answer": "...",
-              "type": "lookup"
+              "type": "lookup",
+              "reasoning_annotation": "Detailed explanation of how the answer was derived (in English, single string)",
+              "context": "Specific table cells/rows used (e.g., 'Row 2, Column 3: Premium amount')"
           }},
           ...
       ]
@@ -43,6 +46,7 @@ generate_qa_from_image: |
   4. **Language:** The questions and answers MUST be in Korean.
   5. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
   6. **Accuracy:** Ensure 100% factual correctness.
+  7. **Context:** Include specific cell references or table sections used to derive the answer.
 
   **Output Format (JSON):**
   {{
@@ -50,7 +54,9 @@ generate_qa_from_image: |
           {{
               "question": "...",
               "answer": "...",
-              "type": "lookup"
+              "type": "lookup",
+              "reasoning_annotation": "Step-by-step reasoning process in English (single string)",
+              "context": "Table location used (e.g., 'Premium column, Row 3')"
           }},
           ...
       ]
