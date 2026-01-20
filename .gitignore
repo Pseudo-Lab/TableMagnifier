@@ -62,6 +62,8 @@ dmypy.json
 # database 
 info/
 token.json
+*.json
+test_input.json
 
 # env
 .bemad/
