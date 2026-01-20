@@ -99,23 +99,47 @@ def _call_llm(
     if return_token_usage:
         # Extract token usage from response metadata
         token_usage = 0
-        if hasattr(response, 'response_metadata'):
-            usage_metadata = response.response_metadata.get('usage', {})
-            # OpenAI/Gemini format
+        
+        logger.info(f"=== TOKEN DEBUG START ===")
+        logger.info(f"Response type: {type(response)}")
+        logger.info(f"Has usage_metadata: {hasattr(response, 'usage_metadata')}")
+        logger.info(f"Has response_metadata: {hasattr(response, 'response_metadata')}")
+        
+        # Try response.usage_metadata first (Gemini pool format)
+        if hasattr(response, 'usage_metadata') and response.usage_metadata:
+            usage = response.usage_metadata
+            logger.info(f"usage_metadata type: {type(usage)}")
+            logger.info(f"usage_metadata value: {usage}")
+            
+            if isinstance(usage, dict):
+                token_usage = usage.get('total_tokens', 0)
+                if not token_usage:
+                    token_usage = usage.get('input_tokens', 0) + usage.get('output_tokens', 0)
+            else:
+                token_usage = getattr(usage, 'total_tokens', 0)
+                if not token_usage:
+                    token_usage = getattr(usage, 'input_tokens', 0) + getattr(usage, 'output_tokens', 0)
+            
+            logger.info(f"Extracted token_usage from usage_metadata: {token_usage}")
+        
+        # Fallback: response.response_metadata (OpenAI format)
+        if not token_usage and hasattr(response, 'response_metadata'):
+            metadata = response.response_metadata
+            logger.info(f"response_metadata: {metadata}")
+            usage_metadata = metadata.get('usage', {})
+            logger.info(f"usage from response_metadata: {usage_metadata}")
+            
             token_usage = usage_metadata.get('total_tokens', 0)
-            # Fallback: prompt_tokens + completion_tokens
             if not token_usage:
                 token_usage = usage_metadata.get('prompt_tokens', 0) + usage_metadata.get('completion_tokens', 0)
-            # Fallback: input_tokens + output_tokens
             if not token_usage:
                 token_usage = usage_metadata.get('input_tokens', 0) + usage_metadata.get('output_tokens', 0)
-        # Alternative: usage_metadata attribute (dict or object)
-        if not token_usage and hasattr(response, 'usage_metadata') and response.usage_metadata:
-            usage = response.usage_metadata
-            if isinstance(usage, dict):
-                token_usage = usage.get('total_tokens', 0) or (usage.get('input_tokens', 0) + usage.get('output_tokens', 0))
-            else:
-                token_usage = getattr(usage, 'total_tokens', 0) or (getattr(usage, 'input_tokens', 0) + getattr(usage, 'output_tokens', 0))
+            
+            logger.info(f"Extracted token_usage from response_metadata: {token_usage}")
+        
+        logger.info(f"Final token_usage: {token_usage}")
+        logger.info(f"=== TOKEN DEBUG END ===")
+        
         return response_content, token_usage
     
     return response_content
@@ -641,7 +665,11 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
             errors.append(f"QA prompt missing placeholder: {e}")
             return {**state, "errors": errors}
 
-        response_text = _call_llm(llm, prompt)
+        response_text, token_usage = _call_llm(llm, prompt, return_token_usage=True)
+        
+        # Debug log for token usage
+        logger.info(f"QA generation token usage: {token_usage}")
+        
         response_json = robust_json_parse(response_text)
 
         qa_results = []
@@ -650,7 +678,8 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
         else:
              logger.warning("QA generation did not return valid JSON or 'qa_pairs' key.")
 
-        return {**state, "qa_results": qa_results}
+        logger.info(f"Returning token_usage: {token_usage}")
+        return {**state, "qa_results": qa_results, "token_usage": token_usage}
 
     return _node
 
@@ -685,6 +714,10 @@ def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], Table
         prompt = prompt_template
 
         response_text, token_usage = _call_llm(llm, prompt, image_urls=image_data_urls, return_token_usage=True)
+        
+        # Debug log for token usage
+        logger.info(f"QA generation token usage: {token_usage}")
+        
         response_json = robust_json_parse(response_text)
 
         qa_results = []
@@ -693,6 +726,7 @@ def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], Table
         else:
             logger.warning("QA generation from image did not return valid JSON or 'qa_pairs' key.")
 
+        logger.info(f"Returning token_usage: {token_usage}")
         return {**state, "qa_results": qa_results, "token_usage": token_usage}
 
     return _node
@@ -877,6 +911,8 @@ def run_synthetic_table_flow(
     temperature: float = 0.2,
     base_url: str | None = None,
     config_path: str | None = None,
+    azure_deployment: str | None = None,
+    azure_endpoint: str | None = None,
     qa_only: bool = False,
     image_paths: List[str] | None = None,
     domain: str | None = None,
@@ -891,11 +927,13 @@ def run_synthetic_table_flow(
 
     Args:
         image_path: Path to the input image or HTML file
-        provider: LLM provider (openai, gemini, gemini_pool, claude, vllm)
+        provider: LLM provider (openai, azure, gemini, gemini_pool, claude, vllm)
         model: Model name
         temperature: Sampling temperature
         base_url: Custom base URL for vLLM
         config_path: Config path for gemini_pool
+        azure_deployment: Azure OpenAI deployment name
+        azure_endpoint: Azure OpenAI endpoint URL
         qa_only: If True, skip synthetic data generation and only generate QA from image
         image_paths: Optional list of image paths for multi-image processing
         domain: Optional domain for prompt customization (e.g. 'public')
