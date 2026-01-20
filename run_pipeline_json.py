@@ -4,6 +4,7 @@ import os
 import sys
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from dotenv import load_dotenv
 
@@ -33,90 +34,73 @@ def resolve_paths(pair: List[str], data_root: Path) -> List[Path]:
             return []
     return paths
 
-def run_pipeline(
-    json_input: List[List[str]],
+def process_single_pair(
+    pair_input: Any,
+    index: int,
+    total_count: int,
     data_root: Path,
-    output_dir: Path,
-    provider: str = "gemini_pool",
-    model: str = "gemini-2.5-flash",
-    config_path: str = "apis/gemini_keys.yaml",
-    arg_domain: str = None,
-    qa_only: bool = False,
-    upload_to_notion: bool = False
-):
-    output_dir.mkdir(parents=True, exist_ok=True)
+    provider: str,
+    model: str,
+    config_path: str,
+    arg_domain: str,
+    qa_only: bool,
+    notion_uploader: Any
+) -> Dict:
+    """Process a single pair of images."""
     
-    # Initialize Notion uploader if needed
-    notion_uploader = None
-    if upload_to_notion:
-        try:
-            notion_uploader = NotionUploader(config_path=config_path)
-            print("✅ Notion uploader initialized")
-        except Exception as e:
-            print(f"⚠️  Warning: Failed to initialize Notion uploader: {e}")
-            print("   Continuing without Notion upload...")
+    # Extract pair info
+    if isinstance(pair_input, dict):
+        # Structured format
+        pair_id_override = pair_input.get("pair_id")
+        pair_ids = pair_input.get("image_paths", [])
+        domain_override = pair_input.get("domain")
+        
+        print(f"\n[Pair {index+1}/{total_count}] Processing: {pair_id_override or pair_ids}")
+    else:
+        # Legacy format (array)
+        pair_id_override = None
+        pair_ids = pair_input
+        domain_override = None
+        
+        print(f"\n[Pair {index+1}/{total_count}] Processing: {pair_ids}")
     
-    final_results = []
+    paths = resolve_paths(pair_ids, data_root)
+    if len(paths) != len(pair_ids):
+        print(f"[Pair {index+1}] Skipping due to missing files.")
+        return {
+            "pair_id": pair_id_override or f"error_{index}",
+            "image_paths": pair_ids,
+            "error": "Missing files"
+        }
 
-    for i, pair_input in enumerate(json_input):
-        # Support both formats:
-        # 1. Legacy: ["path1", "path2"]
-        # 2. Structured: {"pair_id": "...", "image_paths": [...], "domain": "..."}
-        
-        if isinstance(pair_input, dict):
-            # Structured format
-            pair_id_override = pair_input.get("pair_id")
-            pair_ids = pair_input.get("image_paths", [])
-            domain_override = pair_input.get("domain")
-            
-            print(f"\nProcessing Pair {i+1}/{len(json_input)}: {pair_id_override or pair_ids}")
-        else:
-            # Legacy format (array)
-            pair_id_override = None
-            pair_ids = pair_input
-            domain_override = None
-            
-            print(f"\nProcessing Pair {i+1}/{len(json_input)}: {pair_ids}")
-        
-        paths = resolve_paths(pair_ids, data_root)
-        if len(paths) != len(pair_ids):
-            print(f"Skipping pair {pair_ids} due to missing files.")
-            final_results.append({
-                "pair_id": pair_id_override or f"error_{i}",
-                "image_paths": pair_ids,
-                "error": "Missing files"
-            })
-            continue
-
-        # Detect domain: priority order is domain_override > arg_domain > auto_detect
-        domain = domain_override or arg_domain
-        if not domain:
-            domain = _auto_detect_domain(pair_ids[0])
-            if not domain: 
-                # fallback try second
-                domain = _auto_detect_domain(pair_ids[1]) if len(pair_ids) > 1 else None
-        
-        print(f"Domain: {domain}")
-        
-        # Generate pair_id from override or common path elements
-        if pair_id_override:
-            pair_id = pair_id_override
-        else:
-            pair_id = Path(paths[0]).stem if paths else f"pair_{i}"
-
-        # Store paths as strings
-        image_paths_str = [str(p) for p in paths]
-        
-        # Initialize result structure
-        pair_tables = []
-        pair_qa = []
-        
-        # Logic Branching: Use qa_only flag OR domain-based logic
-        should_skip_tables = qa_only or (domain == "public")
-        
+    # Detect domain: priority order is domain_override > arg_domain > auto_detect
+    domain = domain_override or arg_domain
+    if not domain:
+        domain = _auto_detect_domain(pair_ids[0])
+        if not domain: 
+            # fallback try second
+            domain = _auto_detect_domain(pair_ids[1]) if len(pair_ids) > 1 else None
+    
+    # Generate pair_id from override or common path elements
+    if pair_id_override:
+        pair_id = pair_id_override
+    else:
+        pair_id = Path(paths[0]).stem if paths else f"pair_{index}"
+    
+    # Store paths as strings
+    image_paths_str = [str(p) for p in paths]
+    
+    # Initialize result structure
+    pair_tables = []
+    pair_qa = []
+    
+    # Logic Branching: Use qa_only flag OR domain-based logic
+    should_skip_tables = qa_only or (domain == "public")
+    
+    try:
         if should_skip_tables:
-            # QA only mode (either forced by flag or public domain)
-            print(f"Mode: QA only (tables skipped)")
+            # QA only mode
+            print(f"[Pair {index+1}] Mode: QA only (tables skipped)")
             
             # QA Generation (Pair)
             qa_state = run_synthetic_table_flow(
@@ -132,17 +116,16 @@ def run_pipeline(
             if qa_state.get("qa_results"):
                 pair_qa = qa_state["qa_results"]
             
-            # Tables are None when skipped
             pair_tables = [None] * len(paths)
             
         else:
-            # Full mode: Individual Tables + Pair QA
-            print("Mode: Synthetic Table + QA")
+            # Full mode: Both Tables + Pair QA
+            print(f"[Pair {index+1}] Mode: Synthetic Table + QA")
             
             # 1. Generate Tables Individually
             temp_tables = []
             for path in paths:
-                print(f"  Generating table for {path.name}...")
+                print(f"  [Pair {index+1}] Generating table for {path.name}...")
                 table_state = run_synthetic_table_flow(
                     image_path=str(path),
                     provider=provider,
@@ -154,7 +137,7 @@ def run_pipeline(
                 
                 # Check errors
                 if table_state.get("errors"):
-                    print(f"    Error generating table: {table_state['errors']}")
+                    print(f"    [Pair {index+1}] Error generating table: {table_state['errors']}")
                 
                 # Filter state
                 safe_state = {
@@ -168,7 +151,7 @@ def run_pipeline(
             pair_tables = temp_tables
 
             # 2. Generate QA for the Pair
-            print(f"  Generating QA for pair...")
+            print(f"  [Pair {index+1}] Generating QA for pair...")
             qa_state = run_synthetic_table_flow(
                 image_path=str(paths[0]),
                 image_paths=image_paths_str,
@@ -178,7 +161,7 @@ def run_pipeline(
                 qa_only=True,  # Focus on QA from these images
                 domain=domain
             )
-             
+                
             if qa_state.get("qa_results"):
                 pair_qa = qa_state["qa_results"]
 
@@ -199,7 +182,7 @@ def run_pipeline(
         # Upload to Notion if enabled
         if notion_uploader and pair_qa:
             try:
-                print(f"  Uploading to Notion database...")
+                print(f"  [Pair {index+1}] Uploading to Notion database...")
                 upload_result = notion_uploader.upload_qa_result(
                     domain=domain or "unknown",
                     image_path=pair_id,  # Use pair_id as identifier
@@ -210,21 +193,91 @@ def run_pipeline(
                     "success": True,
                     "created_count": upload_result.get("created_count", 0)
                 }
-                print(f"  ✅ Uploaded {upload_result.get('created_count', 0)} QA rows to Notion")
+                print(f"  ✅ [Pair {index+1}] Uploaded {upload_result.get('created_count', 0)} QA rows to Notion")
             except Exception as e:
                 result_item["notion_upload"] = {
                     "success": False,
                     "error": str(e)
                 }
-                print(f"  ❌ Notion upload failed: {e}")
+                print(f"  ❌ [Pair {index+1}] Notion upload failed: {e}")
         
-        final_results.append(result_item)
+        return result_item
 
+    except Exception as e:
+        print(f"❌ [Pair {index+1}] Critical error: {e}")
+        return {
+            "pair_id": pair_id,
+            "image_paths": image_paths_str,
+            "error": str(e)
+        }
+
+def run_pipeline(
+    json_input: List[List[str]],
+    data_root: Path,
+    output_dir: Path,
+    provider: str = "gemini_pool",
+    model: str = "gemini-2.5-flash",
+    config_path: str = "apis/gemini_keys.yaml",
+    arg_domain: str = None,
+    qa_only: bool = False,
+    upload_to_notion: bool = False,
+    max_workers: int = 3
+):
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Initialize Notion uploader if needed
+    notion_uploader = None
+    if upload_to_notion:
+        try:
+            notion_uploader = NotionUploader(config_path=config_path)
+            print("✅ Notion uploader initialized")
+        except Exception as e:
+            print(f"⚠️  Warning: Failed to initialize Notion uploader: {e}")
+            print("   Continuing without Notion upload...")
+    
+    final_results = []
+    total_count = len(json_input)
+    
+    print(f"Starting pipeline with {max_workers} workers for {total_count} pairs...")
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Create futures
+        futures = {
+            executor.submit(
+                process_single_pair,
+                item,
+                i,
+                total_count,
+                data_root,
+                provider,
+                model,
+                config_path,
+                arg_domain,
+                qa_only,
+                notion_uploader
+            ): i for i, item in enumerate(json_input)
+        }
         
-        # Save intermediate per pair (optional, but good for safety)
-        # pair_name = "_".join(pair_ids)
-        # (output_dir / f"{pair_name}.json").write_text(json.dumps(result_item, ensure_ascii=False, indent=2), encoding="utf-8")
+        # Collect results as they finish
+        for future in as_completed(futures):
+            i = futures[future]
+            try:
+                result = future.result()
+                final_results.append(result)
+                
+                # Save intermediate per pair (optional)
+                # pair_id = result.get("pair_id", f"pair_{i}")
+                # safe_name = "".join([c for c in pair_id if c.isalnum() or c in ('-','_')])
+                # (output_dir / f"{safe_name}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+                
+            except Exception as e:
+                print(f"❌ Failed to process pair index {i}: {e}")
 
+    # Sort results by original index for consistency (optional but nice)
+    # Note: final_results might process out of order. If we want original order, we'd need to track it better,
+    # but strictly speaking JSON lists don't guarantee order if we are just dumping a collection. 
+    # Let's just dump.
+    
     # Save Final JSON
     output_file = output_dir / "pipeline_output.json"
     with open(output_file, "w", encoding="utf-8") as f:
@@ -244,6 +297,7 @@ def main():
     parser.add_argument("--domain", help="Force specific domain")
     parser.add_argument("--qa-only", action="store_true", help="Skip table generation, only generate QA (applies to all domains)")
     parser.add_argument("--upload-to-notion", action="store_true", help="Upload QA results to Notion database")
+    parser.add_argument("--max-workers", type=int, default=3, help="Maximum number of parallel workers (default: 3)")
 
     args = parser.parse_args()
 
@@ -276,7 +330,8 @@ def main():
         config_path=args.config_path,
         arg_domain=args.domain,
         qa_only=args.qa_only,
-        upload_to_notion=args.upload_to_notion
+        upload_to_notion=args.upload_to_notion,
+        max_workers=args.max_workers
     )
 
 if __name__ == "__main__":
