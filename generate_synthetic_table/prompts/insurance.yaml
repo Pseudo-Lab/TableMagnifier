@@ -65,38 +65,67 @@ generate_qa_from_image: |
 
 generate_synthetic_table: |
   You are a Synthetic Data Generator specializing in Insurance Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic insurance data.
+
+  **CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA**
+  Your task is to generate a new HTML table with the SAME STRUCTURE as the original but COMPLETELY DIFFERENT insurance data values.
+  The goal is to create realistic synthetic insurance data that looks like it could come from the same domain, but with entirely different plans, coverage amounts, and terms.
 
   **Inputs:**
-  1. **Original Table Structure:**
+  1. **Original Table Structure (for structure reference ONLY - DO NOT copy the data values):**
   {html}
 
-  2. **Table Summary:**
+  2. **Table Summary (describes the data patterns to follow):**
   {summary}
 
   **Requirements:**
-  1. **Structure:** Keep the exact same HTML structure.
-  2. **Data:** Replace ALL cell values with new, synthetic insurance data.
-      - Use realistic Korean insurance plan names (e.g., "SafeLife Plus", "Family Care"), coverage types, premiums (KRW), and terms.
-      - Ensure consistency: e.g., higher premiums for better coverage.
-      - Do NOT use real private data.
-  3. **Consistency:** Ensure mathematical consistency (e.g., monthly premium * 12 = annual).
-  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges).
+  2. **Headers:** Keep header text the same (column names, category labels).
+  3. **Data Transformation - MANDATORY:**
+     - **ALL data cell values MUST be replaced with completely new synthetic values.**
+     - **DO NOT copy any original data values** - generate fresh, realistic alternatives.
+     - For plan names: Generate new Korean insurance plan names (e.g., "안심보장플러스" → "가족사랑보험", "SafeLife" → "행복지킴이")
+     - For coverage amounts: Generate new realistic amounts in KRW (different values)
+     - For premiums: Generate new realistic premium amounts
+     - For terms/conditions: Generate new coverage terms
+     - For dates: Generate new plausible dates
+  4. **Domain Consistency:**
+     - Ensure insurance logic (higher premiums for better coverage, monthly*12=annual)
+     - Use realistic Korean insurance terminology
+     - Contexts: Life insurance, Health insurance, Auto insurance
+  5. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+  **Example Transformation:**
+  - Original: "무배당 건강보험" → Synthetic: "실속형 의료보험"
+  - Original: "보장한도 1억원" → Synthetic: "보장한도 5천만원"
+  - Original: "월 보험료 35,000원" → Synthetic: "월 보험료 52,000원"
+
+  Remember: The synthetic table should look like a completely different insurance dataset from the same domain.
 
 generate_synthetic_table_from_image: |
   You are a Synthetic Data Generator specializing in Insurance Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic insurance data.
+
+  **CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA**
+  Your task is NOT to OCR/transcribe the image. Instead, you must:
+  1. Understand the table's STRUCTURE from the image
+  2. Understand it's an INSURANCE table
+  3. Generate COMPLETELY NEW synthetic insurance data that fits the domain but uses different values
 
   **Inputs:**
-  1. **Image:** An image of an insurance table.
+  1. **Image:** An image of an insurance table. Use this to understand structure and domain ONLY.
 
   **Requirements:**
   1. **Structure Preservation:** Accurately reconstruct the table structure.
-  2. **Data Generation:** Replace ALL cell values with new, synthetic insurance data.
-      - Use realistic Korean insurance terms, plan names, coverage amounts (KRW).
-      - Contexts: Life insurance, Health insurance, Auto insurance, etc.
-  3. **Styling:** Use **Tailwind CSS** classes (same as default).
+  2. **Headers:** Keep header text (column names, category labels) the same as in the image.
+  3. **Data Generation - CRITICAL:**
+     - **DO NOT copy the data values from the image** - this is NOT an OCR task
+     - Generate COMPLETELY NEW synthetic insurance values for all data cells
+     - For plan names: Generate new insurance plan names (different from what you see)
+     - For coverage/premiums: Generate new realistic amounts
+     - For terms: Generate new coverage terms
+  4. **Styling:** Use **Tailwind CSS** classes (same as default).
       - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
       - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
       - `class="border border-slate-300 p-2"` on `<td>`.
-  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+  Remember: The output should be a new synthetic insurance dataset, not a transcription of the original.

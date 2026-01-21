@@ -94,37 +94,68 @@ generate_qa_from_image: |
 
 generate_synthetic_table: |
   You are a Synthetic Data Generator specializing in Academic Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic academic data.
+
+  **CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA**
+  Your task is to generate a new HTML table with the SAME STRUCTURE as the original but COMPLETELY DIFFERENT academic data values.
+  The goal is to create realistic synthetic academic data that looks like it could come from the same domain, but with entirely different students, courses, and metrics.
 
   **Inputs:**
-  1. **Original Table Structure:**
+  1. **Original Table Structure (for structure reference ONLY - DO NOT copy the data values):**
   {html}
 
-  2. **Table Summary:**
+  2. **Table Summary (describes the data patterns to follow):**
   {summary}
 
   **Requirements:**
-  1. **Structure:** Keep the exact same HTML structure.
-  2. **Data:** Replace ALL cell values with new, synthetic academic data.
-      - Use realistic Korean student names, university names, course titles, and grades.
-      - Contexts: Transcripts, Research Papers, Enrollment Stats, Faculty Lists.
-      - Do NOT use real private data.
-  3. **Consistency:** Ensure mathematical consistency (e.g., sum of credits, correct GPA calculations if visible).
-  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges).
+  2. **Headers:** Keep header text the same (column names, category labels).
+  3. **Data Transformation - MANDATORY:**
+     - **ALL data cell values MUST be replaced with completely new synthetic values.**
+     - **DO NOT copy any original data values** - generate fresh, realistic alternatives.
+     - For student names: Generate new Korean student names (e.g., "김철수" → "이영희", "학생A" → "학생B")
+     - For university names: Generate new Korean university names
+     - For course titles: Generate new course names
+     - For grades/scores: Generate new realistic values
+     - For model names (if research table): Generate new model/method names
+     - For dates: Generate new plausible dates
+  4. **Domain Consistency:**
+     - Ensure academic logic (credits sum correctly, GPA calculations valid)
+     - Use realistic Korean academic terminology
+     - Contexts: Transcripts, Research Papers, Enrollment Stats, Faculty Lists
+  5. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+  **Example Transformation:**
+  - Original: "서울대학교" → Synthetic: "고려대학교"
+  - Original: "학점 4.2" → Synthetic: "학점 3.8"
+  - Original: "BERT-Large" → Synthetic: "RoBERTa-Base"
+
+  Remember: The synthetic table should look like a completely different academic dataset from the same domain.
 
 generate_synthetic_table_from_image: |
   You are a Synthetic Data Generator specializing in Academic Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic academic data.
+
+  **CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA**
+  Your task is NOT to OCR/transcribe the image. Instead, you must:
+  1. Understand the table's STRUCTURE from the image
+  2. Understand it's an ACADEMIC table
+  3. Generate COMPLETELY NEW synthetic academic data that fits the domain but uses different values
 
   **Inputs:**
-  1. **Image:** An image of an academic table.
+  1. **Image:** An image of an academic table. Use this to understand structure and domain ONLY.
 
   **Requirements:**
   1. **Structure Preservation:** Accurately reconstruct the table structure.
-  2. **Data Generation:** Replace ALL cell values with new, synthetic academic data.
-      - Use realistic Korean student names, course titles, grades, research topics.
-  3. **Styling:** Use **Tailwind CSS** classes (same as default).
+  2. **Headers:** Keep header text (column names, category labels) the same as in the image.
+  3. **Data Generation - CRITICAL:**
+     - **DO NOT copy the data values from the image** - this is NOT an OCR task
+     - Generate COMPLETELY NEW synthetic academic values for all data cells
+     - For student/model names: Generate new names (different from what you see)
+     - For grades/scores: Generate new realistic values
+     - For course/research topics: Generate new titles
+  4. **Styling:** Use **Tailwind CSS** classes (same as default).
       - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
       - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
       - `class="border border-slate-300 p-2"` on `<td>`.
-  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+
+  Remember: The output should be a new synthetic academic dataset, not a transcription of the original.

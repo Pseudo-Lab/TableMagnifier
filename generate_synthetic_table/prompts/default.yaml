@@ -78,43 +78,82 @@ generate_qa_from_image: |
   Return ONLY the JSON object, no additional text.
 
 generate_synthetic_table: |
-  You are a Synthetic Data Generator.
-  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic data.
+  You are a Synthetic Data Generator specialized in creating completely NEW data while preserving table structure.
+
+  **CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA**
+  Your task is to generate a new HTML table that has the SAME STRUCTURE as the original but with COMPLETELY DIFFERENT, newly generated data values.
+  The goal is to create realistic synthetic data that looks like it could come from the same domain, but with entirely different entities, names, numbers, and values.
 
   **Inputs:**
-  1. **Original Table Structure:**
+  1. **Original Table Structure (for structure reference ONLY - DO NOT copy the data values):**
   {html}
 
-  2. **Table Summary:**
+  2. **Table Summary (describes the data patterns to follow):**
   {summary}
 
   **Requirements:**
-  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges) as the original table.
-  2. **Data:** Replace ALL cell values with new, synthetic data.
-      - Use realistic Korean names, organizations, and values suitable for the context.
-      - Ensure the data is consistent with the column types and patterns described in the summary.
-      - Do NOT use real private data.
-  3. **Consistency:** Ensure mathematical consistency if applicable (e.g., sums, percentages).
-  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. Do not include markdown code blocks.
+  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, rowspan, colspan, merges) as the original.
+  2. **Headers:** Keep header text the same (column names, row labels that describe categories).
+  3. **Data Transformation - MANDATORY:**
+     - **ALL data cell values MUST be replaced with completely new synthetic values.**
+     - **DO NOT copy any original data values** - generate fresh, realistic alternatives.
+     - For names: Generate new Korean names (e.g., 김철수 → 이영희, 박민수 → 정하늘)
+     - For organizations: Generate new realistic Korean organization names
+     - For numbers: Generate new realistic numbers that follow the same pattern/range but are different values
+     - For dates: Generate new plausible dates
+     - For addresses: Generate new realistic Korean addresses
+     - For any other text: Generate semantically similar but different content
+  4. **Domain Consistency:**
+     - Analyze the summary to understand the domain context (finance, medical, public, etc.)
+     - Generate data that is realistic for that specific domain
+     - Maintain internal consistency (e.g., totals should sum correctly, percentages should add up)
+  5. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example Transformation (showing the expected behavior):**
+  - Original: "삼성전자" → Synthetic: "한국테크"
+  - Original: "1,500,000" → Synthetic: "2,340,000"
+  - Original: "2024-01-15" → Synthetic: "2024-03-22"
+  - Original: "서울시 강남구" → Synthetic: "부산시 해운대구"
+
+  Remember: The synthetic table should look like a completely different dataset from the same domain, not a copy of the original.
 
 generate_synthetic_table_from_image: |
-  You are a Synthetic Data Generator specialized in Korean documents.
-  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic data.
+  You are a Synthetic Data Generator specialized in creating completely NEW data from Korean document images.
+
+  **CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA**
+  Your task is NOT to OCR/transcribe the image. Instead, you must:
+  1. Understand the table's STRUCTURE from the image
+  2. Understand the DOMAIN and data patterns from the image
+  3. Generate COMPLETELY NEW synthetic data that fits the same domain but uses different values
 
   **Inputs:**
-  1. **Image:** An image of a table containing Korean text.
+  1. **Image:** An image of a table containing Korean text. Use this to understand structure and domain ONLY.
 
   **Requirements:**
   1. **Structure Preservation:** Accurately reconstruct the table structure, including `rowspan` and `colspan` attributes for merged cells.
-  2. **Data Generation:** Replace ALL cell values with new, synthetic data.
-      - Use realistic Korean names, organizations, and values suitable for the context of the table in the image.
-      - Ensure the data is consistent with the column types (e.g., dates, numbers, text).
-      - Do NOT use real private data.
-  3. **Styling:** Use **Tailwind CSS** classes to style the table.
+  2. **Headers:** Keep header text (column names, category labels) the same as in the image.
+  3. **Data Generation - CRITICAL:**
+     - **DO NOT copy the data values from the image** - this is NOT an OCR task
+     - Generate COMPLETELY NEW synthetic values for all data cells
+     - Analyze the domain from the image (finance, medical, public, etc.) and generate appropriate data
+     - For names: Generate new Korean names different from what you see
+     - For organizations: Generate new realistic Korean organization names
+     - For numbers: Generate new realistic numbers in similar ranges but different values
+     - For dates: Generate new plausible dates
+     - For addresses: Generate new realistic Korean addresses
+     - The synthetic table should look like a DIFFERENT dataset from the same domain
+  4. **Styling:** Use **Tailwind CSS** classes to style the table.
       - Add `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` to the `<table>` tag.
       - Add `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` to `<th>` tags.
       - Add `class="border border-slate-300 p-2"` to `<td>` tags.
-  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. Do not include markdown code blocks.
+  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example of Expected Behavior:**
+  If the image shows a table with employee "김철수" and salary "3,500,000":
+  - WRONG (OCR copy): "김철수", "3,500,000"
+  - CORRECT (synthetic): "이영희", "4,200,000"
+
+  Remember: The output should be a new synthetic dataset, not a transcription of the original.
 
 image_to_html: |
   You are an AI assistant specialized in OCR and HTML generation.
