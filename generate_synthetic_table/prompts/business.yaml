@@ -95,7 +95,7 @@ generate_qa_from_image: |
 generate_synthetic_table: |
   You are a Synthetic Data Generator specializing in Business Data.
 
-  **CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA**
+  **⚠️ CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA ⚠️**
   Your task is to generate a new HTML table with the SAME STRUCTURE as the original but COMPLETELY DIFFERENT business data values.
   The goal is to create realistic synthetic business data that looks like it could come from the same domain, but with entirely different companies, employees, products, and metrics.
 
@@ -107,54 +107,77 @@ generate_synthetic_table: |
   {summary}
 
   **Requirements:**
-  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges).
-  2. **Headers:** Keep header text the same (column names, category labels).
-  3. **Data Transformation - MANDATORY:**
+  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges, rowspan, colspan).
+  2. **Headers:** Keep header text the same (column names, category labels like 기업경쟁력, 시장경쟁력).
+  3. **⚠️ Data Transformation - ABSOLUTELY MANDATORY ⚠️:**
      - **ALL data cell values MUST be replaced with completely new synthetic values.**
-     - **DO NOT copy any original data values** - generate fresh, realistic alternatives.
-     - For company names: Generate new Korean company names (e.g., "삼성물산" → "현대상사", "A팀" → "B팀")
-     - For employee names: Generate new Korean names
-     - For product names: Generate new product line names
-     - For revenue/sales figures: Generate new realistic amounts (different values)
-     - For dates: Generate new plausible dates
-  4. **Domain Consistency:**
+     - **NEVER copy any original data values** - generate fresh, realistic alternatives.
+     - For company/team names: Generate DIFFERENT names (e.g., "A팀" → "B팀")
+     - For employee names: Generate DIFFERENT Korean names (e.g., "김OO" → "박OO")
+     - For business metrics: Generate DIFFERENT numbers (e.g., "100억" → "150억")
+     - For strategy/description text: Write DIFFERENT content with similar structure
+     - For bullet point items: Create DIFFERENT but domain-appropriate content
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). **Observe and mimic the original image's visual style:**
+      - Look at the original image's color scheme and design
+      - Use appropriate Tailwind color classes to match the original style
+      - Basic structure: `<table class="w-full border-collapse text-sm">`
+      - Headers/cells: Include `border`, `px-4 py-3`, appropriate colors
+      - Lists: `class="list-disc ml-5 space-y-1"`
+      - **DO NOT use inline style attributes**
+  5. **Domain Consistency:**
      - Ensure business logic (Q1+Q2+Q3+Q4=Total, percentages add up)
      - Use realistic Korean business terminology
      - Contexts: Sales Reports, Inventory, HR Employee Lists, Marketing Campaigns
-  5. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  6. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
 
-  **Example Transformation:**
-  - Original: "영업1팀" → Synthetic: "마케팅2팀"
-  - Original: "매출 5억원" → Synthetic: "매출 7.3억원"
-  - Original: "김부장" → Synthetic: "박과장"
+  **Example Transformation (Generic):**
+  - Original name: "A팀" → Synthetic: "B팀"
+  - Original amount: "5억원" → Synthetic: "7.3억원"
+  - Original description: "신규 사업 추진" → Synthetic: "해외 시장 진출"
 
+  ⚠️ If the generated content is identical or very similar to the original, the output is INVALID.
   Remember: The synthetic table should look like a completely different business dataset from the same domain.
 
 generate_synthetic_table_from_image: |
   You are a Synthetic Data Generator specializing in Business Data.
 
-  **CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA**
+  **⚠️ CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA ⚠️**
   Your task is NOT to OCR/transcribe the image. Instead, you must:
-  1. Understand the table's STRUCTURE from the image
-  2. Understand it's a BUSINESS table
-  3. Generate COMPLETELY NEW synthetic business data that fits the domain but uses different values
+  1. Understand the table's STRUCTURE from the image (rows, columns, merged cells, nested structures)
+  2. Understand it's a BUSINESS table (기업경쟁력, 시장경쟁력, 매출, 실적 등)
+  3. Generate COMPLETELY NEW synthetic business data that fits the domain but uses ENTIRELY DIFFERENT values
 
   **Inputs:**
   1. **Image:** An image of a business table. Use this to understand structure and domain ONLY.
 
   **Requirements:**
-  1. **Structure Preservation:** Accurately reconstruct the table structure.
-  2. **Headers:** Keep header text (column names, category labels) the same as in the image.
-  3. **Data Generation - CRITICAL:**
-     - **DO NOT copy the data values from the image** - this is NOT an OCR task
-     - Generate COMPLETELY NEW synthetic business values for all data cells
-     - For company/team names: Generate new names (different from what you see)
-     - For sales/revenue figures: Generate new realistic amounts
-     - For employee names: Generate new Korean names
-  4. **Styling:** Use **Tailwind CSS** classes (same as default).
-      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
-      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
-      - `class="border border-slate-300 p-2"` on `<td>`.
-  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure Preservation:** Accurately reconstruct the table structure, including `rowspan` and `colspan` for merged cells.
+  2. **Headers:** Keep header text (column names, category labels like 기업경쟁력, 차별화 요소) the same as in the image.
+  3. **⚠️ Data Generation - ABSOLUTELY CRITICAL ⚠️:**
+     - **NEVER copy the data values from the image** - this is NOT an OCR task
+     - **ALL cell content must be completely NEW and DIFFERENT from the original**
+     - Generate COMPLETELY NEW synthetic business values for all data cells:
+       * For company/team names: Generate DIFFERENT names (e.g., "A팀" → "B팀")
+       * For business metrics: Generate DIFFERENT numbers (e.g., "100억" → "150억")
+       * For strategy/description text: Write DIFFERENT content with similar structure
+       * For bullet point items: Create DIFFERENT but domain-appropriate items
+       * For employee names: Generate DIFFERENT Korean names (e.g., "김OO" → "박OO")
+     - The synthetic table should look like a COMPLETELY DIFFERENT business report from the same industry
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). **Observe and mimic the original image's visual style:**
+      - Look at the original image's color scheme and design
+      - Use appropriate Tailwind color classes to match the original style
+      - Basic structure: `<table class="w-full border-collapse text-sm">`
+      - Headers/cells: Include `border`, `px-4 py-3`, appropriate colors
+      - Lists: `class="list-disc ml-5 space-y-1"`
+      - **DO NOT use inline style attributes**
+  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
 
+  **Example of Expected Behavior (Generic):**
+  If the image shows a business table with:
+  - Team name: "영업팀" → Generate different: "마케팅팀"
+  - Revenue: "10억원" → Generate different: "15억원"
+  - Strategy: "시장 확대" → Generate different: "신규 진출"
+  - Bullet point items → Generate completely different items
+
+  ⚠️ If the generated content is identical or very similar to the image, the output is INVALID.
   Remember: The output should be a new synthetic business dataset, not a transcription of the original.

@@ -80,7 +80,7 @@ generate_qa_from_image: |
 generate_synthetic_table: |
   You are a Synthetic Data Generator specialized in creating completely NEW data while preserving table structure.
 
-  **CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA**
+  **⚠️ CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA ⚠️**
   Your task is to generate a new HTML table that has the SAME STRUCTURE as the original but with COMPLETELY DIFFERENT, newly generated data values.
   The goal is to create realistic synthetic data that looks like it could come from the same domain, but with entirely different entities, names, numbers, and values.
 
@@ -94,37 +94,42 @@ generate_synthetic_table: |
   **Requirements:**
   1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, rowspan, colspan, merges) as the original.
   2. **Headers:** Keep header text the same (column names, row labels that describe categories).
-  3. **Data Transformation - MANDATORY:**
+  3. **⚠️ Data Transformation - ABSOLUTELY MANDATORY ⚠️:**
      - **ALL data cell values MUST be replaced with completely new synthetic values.**
-     - **DO NOT copy any original data values** - generate fresh, realistic alternatives.
-     - For names: Generate new Korean names (e.g., 김철수 → 이영희, 박민수 → 정하늘)
-     - For organizations: Generate new realistic Korean organization names
-     - For numbers: Generate new realistic numbers that follow the same pattern/range but are different values
-     - For dates: Generate new plausible dates
-     - For addresses: Generate new realistic Korean addresses
-     - For any other text: Generate semantically similar but different content
-  4. **Domain Consistency:**
-     - Analyze the summary to understand the domain context (finance, medical, public, etc.)
+     - **NEVER copy any original data values** - generate fresh, realistic alternatives.
+     - For names: Generate DIFFERENT Korean names (e.g., "김OO" → "박OO")
+     - For organizations: Generate DIFFERENT names (e.g., "A회사" → "B회사")
+     - For numbers: Generate DIFFERENT numbers in similar ranges
+     - For descriptions/text: Write DIFFERENT content with similar structure
+     - For dates: Generate DIFFERENT plausible dates
+     - For addresses: Generate DIFFERENT realistic Korean addresses
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). Preserve the original table's visual style:
+      - Basic structure: `<table class="w-full border-collapse text-sm">`
+      - Headers/cells: Include `border`, `px-4 py-3`, `font-semibold` as appropriate
+      - Lists: `class="list-disc ml-5 space-y-1"`
+      - **DO NOT use inline style attributes**
+  5. **Domain Consistency:**
+     - Analyze the summary to understand the domain context
      - Generate data that is realistic for that specific domain
-     - Maintain internal consistency (e.g., totals should sum correctly, percentages should add up)
-  5. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+     - Maintain internal consistency (e.g., totals should sum correctly)
+  6. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
 
-  **Example Transformation (showing the expected behavior):**
-  - Original: "삼성전자" → Synthetic: "한국테크"
-  - Original: "1,500,000" → Synthetic: "2,340,000"
-  - Original: "2024-01-15" → Synthetic: "2024-03-22"
-  - Original: "서울시 강남구" → Synthetic: "부산시 해운대구"
+  **Example Transformation:**
+  - Original name: "A회사" → Synthetic: "B회사"
+  - Original number: "1,500,000" → Synthetic: "2,340,000"
+  - Original text: "[어떤 내용]" → Synthetic: "[다른 내용]"
 
-  Remember: The synthetic table should look like a completely different dataset from the same domain, not a copy of the original.
+  ⚠️ If the generated content is identical or very similar to the original, the output is INVALID.
+  Remember: The synthetic table should look like a completely different dataset from the same domain.
 
 generate_synthetic_table_from_image: |
   You are a Synthetic Data Generator specialized in creating completely NEW data from Korean document images.
 
-  **CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA**
+  **⚠️ CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA ⚠️**
   Your task is NOT to OCR/transcribe the image. Instead, you must:
-  1. Understand the table's STRUCTURE from the image
+  1. Understand the table's STRUCTURE from the image (rows, columns, merged cells, nested structures)
   2. Understand the DOMAIN and data patterns from the image
-  3. Generate COMPLETELY NEW synthetic data that fits the same domain but uses different values
+  3. Generate COMPLETELY NEW synthetic data that fits the same domain but uses ENTIRELY DIFFERENT values
 
   **Inputs:**
   1. **Image:** An image of a table containing Korean text. Use this to understand structure and domain ONLY.
@@ -132,28 +137,35 @@ generate_synthetic_table_from_image: |
   **Requirements:**
   1. **Structure Preservation:** Accurately reconstruct the table structure, including `rowspan` and `colspan` attributes for merged cells.
   2. **Headers:** Keep header text (column names, category labels) the same as in the image.
-  3. **Data Generation - CRITICAL:**
-     - **DO NOT copy the data values from the image** - this is NOT an OCR task
-     - Generate COMPLETELY NEW synthetic values for all data cells
-     - Analyze the domain from the image (finance, medical, public, etc.) and generate appropriate data
-     - For names: Generate new Korean names different from what you see
-     - For organizations: Generate new realistic Korean organization names
-     - For numbers: Generate new realistic numbers in similar ranges but different values
-     - For dates: Generate new plausible dates
-     - For addresses: Generate new realistic Korean addresses
-     - The synthetic table should look like a DIFFERENT dataset from the same domain
-  4. **Styling:** Use **Tailwind CSS** classes to style the table.
-      - Add `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` to the `<table>` tag.
-      - Add `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` to `<th>` tags.
-      - Add `class="border border-slate-300 p-2"` to `<td>` tags.
+  3. **⚠️ Data Generation - ABSOLUTELY CRITICAL ⚠️:**
+     - **NEVER copy the data values from the image** - this is NOT an OCR task
+     - **ALL cell content must be completely NEW and DIFFERENT from the original**
+     - Generate COMPLETELY NEW synthetic values for all data cells:
+       * For names: Generate DIFFERENT Korean names (e.g., "김OO" → "박OO")
+       * For organizations/teams: Generate DIFFERENT names (e.g., "A팀" → "B팀")
+       * For numbers/amounts: Generate DIFFERENT numbers in similar ranges
+       * For descriptions/text: Write DIFFERENT content with similar structure
+       * For dates: Generate DIFFERENT plausible dates
+     - The synthetic table should look like a COMPLETELY DIFFERENT dataset from the same domain
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). **Observe the original image's visual style and mimic it:**
+      - Look at the original image's color scheme (header background, borders, text colors)
+      - Match the visual design as closely as possible using appropriate Tailwind color classes
+      - If the original has colored headers, use similar colors (e.g., blue → `bg-blue-600`, gray → `bg-slate-600`)
+      - Basic structure classes:
+        * `<table>`: `class="w-full border-collapse text-sm"`
+        * `<th>`: Include `border`, `px-4 py-3`, `font-semibold` and appropriate background color
+        * `<td>`: Include `border`, `px-4 py-3`
+        * `<ul>`: `class="list-disc ml-5 space-y-1"`
+      - **DO NOT use inline style attributes** (e.g., style="...")
   5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
 
   **Example of Expected Behavior:**
-  If the image shows a table with employee "김철수" and salary "3,500,000":
-  - WRONG (OCR copy): "김철수", "3,500,000"
-  - CORRECT (synthetic): "이영희", "4,200,000"
+  - Name in image: "홍길동" → Generate: "김영수"
+  - Amount in image: "1,500만원" → Generate: "2,300만원"
+  - Style: If original has blue header → use blue Tailwind classes
 
-  Remember: The output should be a new synthetic dataset, not a transcription of the original.
+  ⚠️ If the generated content is identical or very similar to the image, the output is INVALID.
+  Remember: The output should be a new synthetic dataset with similar visual style but different data.
 
 image_to_html: |
   You are an AI assistant specialized in OCR and HTML generation.
@@ -163,11 +175,12 @@ image_to_html: |
   1. **Structure Preservation:** Accurately reconstruct the table structure, including `rowspan` and `colspan` attributes for merged cells.
   2. **Text Fidelity:** Transcribe the text within the cells exactly as it appears in the image, preserving the Korean language.
   3. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. Do not include markdown code blocks (```html ... ```) or any other text.
-  4. **Styling:** Use **Tailwind CSS** classes to style the table.
-      - Add `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` to the `<table>` tag.
-      - Add `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` to `<th>` tags.
-      - Add `class="border border-slate-300 p-2"` to `<td>` tags.
-      - Ensure the design looks clean and professional, similar to a standard document table.
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). **Mimic the original image's visual style:**
+      - Observe the original image's colors (header background, borders, text)
+      - Use appropriate Tailwind color classes to match the original style
+      - Basic structure: `<table class="w-full border-collapse text-sm">`
+      - Headers/cells: Include `border`, `px-4 py-3`, appropriate colors
+      - Lists: `class="list-disc ml-5 space-y-1"`
 
 parse_contents: |
   Analyze the following HTML table and summarize its schema and content patterns.
@@ -233,12 +246,19 @@ self_reflection: |
   You are a strict QA reviewer for synthetic HTML tables.
 
   Check:
-  1) table structure matches original HTML
+  1) table structure matches original HTML (rows, columns, merges)
   2) column count / header hierarchy
   3) row consistency
   4) cell type realism (numbers vs text)
   5) validity of HTML tags
   6) no missing/extra columns
+  7) **⚠️ DATA ORIGINALITY CHECK (CRITICAL) ⚠️:**
+     - The synthetic data MUST be DIFFERENT from the original
+     - If data values are identical or very similar to the original, mark as FAILED
+     - Names, numbers, descriptions should all be different
+  8) **Styling check:**
+     - Should use Tailwind CSS classes, NOT inline styles
+     - Check for style="..." attributes and flag them as issues
 
   Output ONLY valid JSON with this schema:
 
@@ -246,7 +266,7 @@ self_reflection: |
     "passed": true/false,
     "score": 0-100,
     "issues": [
-      {{"type": "structure|header|row_count|data_type|html_validity|other",
+      {{"type": "structure|header|row_count|data_type|html_validity|data_originality|styling|other",
        "detail": "..."}}
     ],
     "revision_instructions": "Concrete step-by-step instructions to fix the table."
@@ -263,12 +283,19 @@ self_reflection_from_image: |
   You are a strict QA reviewer for synthetic HTML tables.
 
   Check:
-  1) table structure matches the original table in the image
+  1) table structure matches the original table in the image (rows, columns, merges)
   2) column count / header hierarchy
   3) row consistency
   4) cell type realism (numbers vs text)
   5) validity of HTML tags
   6) no missing/extra columns
+  7) **⚠️ DATA ORIGINALITY CHECK (CRITICAL) ⚠️:**
+     - The synthetic data MUST be DIFFERENT from what appears in the image
+     - If data values appear to be copied/transcribed from the image, mark as FAILED
+     - This is NOT an OCR task - data should be newly generated
+  8) **Styling check:**
+     - Should use Tailwind CSS classes, NOT inline styles
+     - Check for style="..." attributes and flag them as issues
 
   Output ONLY valid JSON with this schema:
 
@@ -276,7 +303,7 @@ self_reflection_from_image: |
     "passed": true/false,
     "score": 0-100,
     "issues": [
-      {{"type": "structure|header|row_count|data_type|html_validity|other",
+      {{"type": "structure|header|row_count|data_type|html_validity|data_originality|styling|other",
        "detail": "..."}}
     ],
     "revision_instructions": "Concrete step-by-step instructions to fix the table."

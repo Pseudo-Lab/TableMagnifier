@@ -1,12 +1,199 @@
 import argparse
 import json
 import os
+import re
+import random
 import sys
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from dotenv import load_dotenv
+
+
+# ============================================================
+# Style Variation Configuration
+# ============================================================
+
+GOOGLE_FONTS = [
+    ("Noto Sans KR", "Noto+Sans+KR:wght@400;500;600;700"),
+    ("Pretendard", None),  # Self-hosted or system font
+    ("IBM Plex Sans KR", "IBM+Plex+Sans+KR:wght@400;500;600;700"),
+    ("Nanum Gothic", "Nanum+Gothic:wght@400;700"),
+    ("Nanum Myeongjo", "Nanum+Myeongjo:wght@400;700"),
+    ("Gothic A1", "Gothic+A1:wght@400;500;600;700"),
+    ("Do Hyeon", "Do+Hyeon"),
+    ("Jua", "Jua"),
+    ("Gowun Dodum", "Gowun+Dodum"),
+    ("Gowun Batang", "Gowun+Batang:wght@400;700"),
+]
+
+COLOR_SCHEMES = [
+    # (name, header_bg_from, header_bg_to, header_text, header_border, body_hover, body_border, text_color)
+    ("indigo", "indigo-600", "indigo-700", "white", "indigo-400", "indigo-50", "slate-200", "slate-700"),
+    ("slate", "slate-600", "slate-700", "white", "slate-500", "slate-50", "slate-300", "slate-700"),
+    ("emerald", "emerald-600", "emerald-700", "white", "emerald-400", "emerald-50", "slate-200", "slate-700"),
+    ("blue", "blue-600", "blue-700", "white", "blue-400", "blue-50", "slate-200", "slate-700"),
+    ("purple", "purple-600", "purple-700", "white", "purple-400", "purple-50", "slate-200", "slate-700"),
+    ("teal", "teal-600", "teal-700", "white", "teal-400", "teal-50", "slate-200", "slate-700"),
+    ("amber", "amber-600", "amber-700", "white", "amber-400", "amber-50", "slate-200", "slate-800"),
+    ("rose", "rose-600", "rose-700", "white", "rose-400", "rose-50", "slate-200", "slate-700"),
+    ("cyan", "cyan-600", "cyan-700", "white", "cyan-400", "cyan-50", "slate-200", "slate-700"),
+    ("stone", "stone-600", "stone-700", "white", "stone-500", "stone-50", "stone-300", "stone-700"),
+    # Light header variants
+    ("light-blue", "blue-100", "blue-200", "blue-900", "blue-300", "blue-50", "blue-200", "slate-700"),
+    ("light-gray", "gray-100", "gray-200", "gray-800", "gray-300", "gray-50", "gray-200", "gray-700"),
+    ("light-green", "green-100", "green-200", "green-900", "green-300", "green-50", "green-200", "slate-700"),
+]
+
+TABLE_STYLES = [
+    # (name, table_extra_classes, has_shadow, has_rounded, stripe_odd)
+    ("default", "", False, False, False),
+    ("shadow", "shadow-lg", True, False, False),
+    ("rounded", "rounded-lg overflow-hidden", False, True, False),
+    ("shadow-rounded", "shadow-lg rounded-lg overflow-hidden", True, True, False),
+    ("striped", "", False, False, True),
+    ("striped-rounded", "rounded-lg overflow-hidden", False, True, True),
+]
+
+FONT_SIZES = ["text-xs", "text-sm", "text-base"]
+
+
+def get_random_style() -> Dict[str, Any]:
+    """Generate a random style configuration."""
+    font_name, font_url = random.choice(GOOGLE_FONTS)
+    color = random.choice(COLOR_SCHEMES)
+    table_style = random.choice(TABLE_STYLES)
+    font_size = random.choice(FONT_SIZES)
+
+    return {
+        "font_name": font_name,
+        "font_url": font_url,
+        "color_name": color[0],
+        "header_bg_from": color[1],
+        "header_bg_to": color[2],
+        "header_text": color[3],
+        "header_border": color[4],
+        "body_hover": color[5],
+        "body_border": color[6],
+        "text_color": color[7],
+        "table_style_name": table_style[0],
+        "table_extra_classes": table_style[1],
+        "has_shadow": table_style[2],
+        "has_rounded": table_style[3],
+        "stripe_odd": table_style[4],
+        "font_size": font_size,
+    }
+
+
+def apply_style_to_html(table_html: str, style: Dict[str, Any]) -> str:
+    """Apply style variations to the table HTML by replacing Tailwind classes."""
+    html = table_html
+
+    # Replace header gradient colors
+    # Pattern: bg-gradient-to-r from-{color}-{shade} to-{color}-{shade}
+    html = re.sub(
+        r'from-\w+-\d+\s+to-\w+-\d+',
+        f'from-{style["header_bg_from"]} to-{style["header_bg_to"]}',
+        html
+    )
+
+    # Replace header text color
+    html = re.sub(
+        r'(<thead[^>]*class="[^"]*?)text-white',
+        f'\\1text-{style["header_text"]}',
+        html
+    )
+
+    # Replace header border color
+    html = re.sub(
+        r'border-\w+-300(?=\s|")',
+        f'border-{style["header_border"]}',
+        html
+    )
+
+    # Replace hover color
+    html = re.sub(
+        r'hover:bg-\w+-50',
+        f'hover:bg-{style["body_hover"]}',
+        html
+    )
+
+    # Replace body border color
+    html = re.sub(
+        r'border-slate-200',
+        f'border-{style["body_border"]}',
+        html
+    )
+
+    # Replace text color
+    html = re.sub(
+        r'text-slate-700',
+        f'text-{style["text_color"]}',
+        html
+    )
+    html = re.sub(
+        r'text-slate-600',
+        f'text-{style["text_color"]}',
+        html
+    )
+
+    # Replace font size in table tag
+    html = re.sub(
+        r'(<table[^>]*class="[^"]*?)text-(?:xs|sm|base)',
+        f'\\1{style["font_size"]}',
+        html
+    )
+
+    # Add table extra classes (shadow, rounded)
+    if style["table_extra_classes"]:
+        html = re.sub(
+            r'<table\s+class="([^"]*)"',
+            f'<table class="\\1 {style["table_extra_classes"]}"',
+            html
+        )
+
+    # Add striped rows if enabled
+    if style["stripe_odd"]:
+        # Add odd:bg-{color}-50 to tr elements in tbody
+        html = re.sub(
+            r'(<tr[^>]*class="[^"]*hover:bg-)',
+            f'<tr class="odd:bg-{style["body_hover"]} hover:bg-',
+            html
+        )
+
+    return html
+
+
+def build_html_document(table_html: str, style: Dict[str, Any]) -> str:
+    """Build complete HTML document with fonts and styles."""
+
+    # Google Fonts link
+    font_link = ""
+    if style["font_url"]:
+        font_link = f'<link rel="preconnect" href="https://fonts.googleapis.com">\n    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n    <link href="https://fonts.googleapis.com/css2?family={style["font_url"]}&display=swap" rel="stylesheet">'
+
+    # Font family CSS
+    font_css = f"""
+    <style>
+        body, table, th, td {{
+            font-family: '{style["font_name"]}', 'Malgun Gothic', sans-serif;
+        }}
+    </style>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    {font_link}
+    {font_css}
+</head>
+<body class="bg-white p-4">
+{table_html}
+</body>
+</html>"""
 
 # Add parent directory to path to allow imports if running from root
 sys.path.append(str(Path(__file__).parent))
@@ -14,6 +201,72 @@ sys.path.append(str(Path(__file__).parent))
 from generate_synthetic_table.runner import run_synthetic_table_flow, _auto_detect_domain
 from generate_synthetic_table.flow import TableState
 from generate_synthetic_table.notion_uploader import NotionUploader
+
+
+def save_synthetic_table_as_html(
+    synthetic_table: str,
+    output_path: Path,
+    pair_id: str,
+    table_index: int,
+    randomize_style: bool = True
+) -> Tuple[Optional[str], Optional[Dict[str, Any]]]:
+    """Save synthetic table as HTML file with optional style randomization.
+
+    Args:
+        synthetic_table: The HTML table string
+        output_path: Directory to save the file
+        pair_id: Identifier for the pair
+        table_index: Index of the table within the pair
+        randomize_style: Whether to apply random style variations
+
+    Returns:
+        Tuple of (html_filepath, style_info) or (None, None) if failed
+    """
+    if not synthetic_table:
+        return None, None
+
+    # Clean up markdown code blocks if present
+    table_html = synthetic_table
+    if table_html.startswith("```html"):
+        table_html = table_html[7:]
+    if table_html.startswith("```"):
+        table_html = table_html[3:]
+    if table_html.endswith("```"):
+        table_html = table_html[:-3]
+    table_html = table_html.strip()
+
+    # Apply style randomization if enabled
+    style_info = None
+    if randomize_style:
+        style_info = get_random_style()
+        table_html = apply_style_to_html(table_html, style_info)
+        full_html = build_html_document(table_html, style_info)
+    else:
+        # Basic HTML without style randomization
+        full_html = f"""<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white p-4">
+{table_html}
+</body>
+</html>"""
+
+    # Create html subdirectory
+    html_dir = output_path / "html"
+    html_dir.mkdir(parents=True, exist_ok=True)
+
+    # Save file
+    safe_pair_id = "".join([c for c in pair_id if c.isalnum() or c in ('-', '_')])
+    html_filename = f"{safe_pair_id}_table_{table_index}.html"
+    html_filepath = html_dir / html_filename
+
+    html_filepath.write_text(full_html, encoding="utf-8")
+
+    return str(html_filepath), style_info
 
 def resolve_paths(pair: List[str], data_root: Path) -> List[Path]:
     """Resolves a list of relative paths to absolute Paths."""
@@ -39,12 +292,14 @@ def process_single_pair(
     index: int,
     total_count: int,
     data_root: Path,
+    output_dir: Path,
     provider: str,
     model: str,
     config_path: str,
     arg_domain: str,
     qa_only: bool,
-    notion_uploader: Any
+    notion_uploader: Any,
+    randomize_style: bool = True
 ) -> Dict:
     """Process a single pair of images."""
     
@@ -132,6 +387,7 @@ def process_single_pair(
                     model=model,
                     config_path=config_path,
                     qa_only=False,  # We want the table
+                    skip_qa=True,   # Skip QA here - we'll generate QA for the pair later
                     domain=domain
                 )
                 
@@ -139,12 +395,29 @@ def process_single_pair(
                 if table_state.get("errors"):
                     print(f"    [Pair {index+1}] Error generating table: {table_state['errors']}")
                 
+                # Save synthetic table as HTML file with style randomization
+                html_path = None
+                style_info = None
+                if table_state.get("synthetic_table"):
+                    html_path, style_info = save_synthetic_table_as_html(
+                        synthetic_table=table_state.get("synthetic_table"),
+                        output_path=output_dir,
+                        pair_id=pair_id,
+                        table_index=len(temp_tables),
+                        randomize_style=randomize_style
+                    )
+                    if html_path:
+                        style_desc = f" (font: {style_info['font_name']}, color: {style_info['color_name']})" if style_info else ""
+                        print(f"    [Pair {index+1}] Saved HTML: {html_path}{style_desc}")
+
                 # Filter state
                 safe_state = {
                     "image_path": str(path),
                     "synthetic_table": table_state.get("synthetic_table"),
                     "synthetic_json": table_state.get("synthetic_json"),
                     "table_summary": table_state.get("table_summary"),
+                    "html_path": html_path,
+                    "style_info": style_info,  # Store applied style for reference
                 }
                 temp_tables.append(safe_state)
             
@@ -221,7 +494,8 @@ def run_pipeline(
     arg_domain: str = None,
     qa_only: bool = False,
     upload_to_notion: bool = False,
-    max_workers: int = 3
+    max_workers: int = 3,
+    randomize_style: bool = True
 ):
     output_dir.mkdir(parents=True, exist_ok=True)
     
@@ -249,12 +523,14 @@ def run_pipeline(
                 i,
                 total_count,
                 data_root,
+                output_dir,
                 provider,
                 model,
                 config_path,
                 arg_domain,
                 qa_only,
-                notion_uploader
+                notion_uploader,
+                randomize_style
             ): i for i, item in enumerate(json_input)
         }
         
@@ -298,6 +574,8 @@ def main():
     parser.add_argument("--qa-only", action="store_true", help="Skip table generation, only generate QA (applies to all domains)")
     parser.add_argument("--upload-to-notion", action="store_true", help="Upload QA results to Notion database")
     parser.add_argument("--max-workers", type=int, default=3, help="Maximum number of parallel workers (default: 3)")
+    parser.add_argument("--randomize-style", action="store_true", default=True, help="Randomize HTML table styles (fonts, colors) for diversity (default: True)")
+    parser.add_argument("--no-randomize-style", dest="randomize_style", action="store_false", help="Disable style randomization")
 
     args = parser.parse_args()
 
@@ -331,7 +609,8 @@ def main():
         arg_domain=args.domain,
         qa_only=args.qa_only,
         upload_to_notion=args.upload_to_notion,
-        max_workers=args.max_workers
+        max_workers=args.max_workers,
+        randomize_style=args.randomize_style
     )
 
 if __name__ == "__main__":
