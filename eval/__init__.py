@@ -28,6 +28,13 @@ from .evaluate import (
     evaluate_predictions,
     run_evaluation,
 )
+from .evaluate_vllm import (
+    EvalConfig,
+    load_qa_from_pipeline_output,
+    evaluate_domain,
+    evaluate_all_domains,
+    DOMAIN_DIRS,
+)
 
 __all__ = [
     # Dataset
@@ -50,4 +57,10 @@ __all__ = [
     # Evaluate
     "evaluate_predictions",
     "run_evaluation",
+    # vLLM Evaluate
+    "EvalConfig",
+    "load_qa_from_pipeline_output",
+    "evaluate_domain",
+    "evaluate_all_domains",
+    "DOMAIN_DIRS",
 ]

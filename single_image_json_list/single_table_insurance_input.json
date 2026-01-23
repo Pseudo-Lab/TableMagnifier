@@ -1,0 +1,1572 @@
+[
+  {
+    "index": 0,
+    "pair_id": "I_origin_0_I_table_0",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_0.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_0"
+  },
+  {
+    "index": 1,
+    "pair_id": "I_origin_0_I_table_1",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_1.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_1"
+  },
+  {
+    "index": 2,
+    "pair_id": "I_origin_0_I_table_10",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_10.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_10"
+  },
+  {
+    "index": 3,
+    "pair_id": "I_origin_0_I_table_11",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_11.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_11"
+  },
+  {
+    "index": 4,
+    "pair_id": "I_origin_0_I_table_12_0",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_12_0.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_12_0"
+  },
+  {
+    "index": 5,
+    "pair_id": "I_origin_0_I_table_12_1",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_12_1.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_12_1"
+  },
+  {
+    "index": 6,
+    "pair_id": "I_origin_0_I_table_13",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_13.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_13"
+  },
+  {
+    "index": 7,
+    "pair_id": "I_origin_0_I_table_14",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_14.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_14"
+  },
+  {
+    "index": 8,
+    "pair_id": "I_origin_0_I_table_15",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_15.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_15"
+  },
+  {
+    "index": 9,
+    "pair_id": "I_origin_0_I_table_16",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_16.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_16"
+  },
+  {
+    "index": 10,
+    "pair_id": "I_origin_0_I_table_17",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_17.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_17"
+  },
+  {
+    "index": 11,
+    "pair_id": "I_origin_0_I_table_18",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_18.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_18"
+  },
+  {
+    "index": 12,
+    "pair_id": "I_origin_0_I_table_19_0",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_0.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_0"
+  },
+  {
+    "index": 13,
+    "pair_id": "I_origin_0_I_table_19_1",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_1.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_1"
+  },
+  {
+    "index": 14,
+    "pair_id": "I_origin_0_I_table_19_10",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_10.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_10"
+  },
+  {
+    "index": 15,
+    "pair_id": "I_origin_0_I_table_19_11",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_11.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_11"
+  },
+  {
+    "index": 16,
+    "pair_id": "I_origin_0_I_table_19_12",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_12.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_12"
+  },
+  {
+    "index": 17,
+    "pair_id": "I_origin_0_I_table_19_13",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_13.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_13"
+  },
+  {
+    "index": 18,
+    "pair_id": "I_origin_0_I_table_19_14",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_14.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_14"
+  },
+  {
+    "index": 19,
+    "pair_id": "I_origin_0_I_table_19_15",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_15.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_15"
+  },
+  {
+    "index": 20,
+    "pair_id": "I_origin_0_I_table_19_16",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_16.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_16"
+  },
+  {
+    "index": 21,
+    "pair_id": "I_origin_0_I_table_19_17",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_17.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_17"
+  },
+  {
+    "index": 22,
+    "pair_id": "I_origin_0_I_table_19_18",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_18.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_18"
+  },
+  {
+    "index": 23,
+    "pair_id": "I_origin_0_I_table_19_19",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_19.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_19"
+  },
+  {
+    "index": 24,
+    "pair_id": "I_origin_0_I_table_19_2",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_2.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_2"
+  },
+  {
+    "index": 25,
+    "pair_id": "I_origin_0_I_table_19_20",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_20.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_20"
+  },
+  {
+    "index": 26,
+    "pair_id": "I_origin_0_I_table_19_21",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_21.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_21"
+  },
+  {
+    "index": 27,
+    "pair_id": "I_origin_0_I_table_19_3",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_3.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_3"
+  },
+  {
+    "index": 28,
+    "pair_id": "I_origin_0_I_table_19_4",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_4.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_4"
+  },
+  {
+    "index": 29,
+    "pair_id": "I_origin_0_I_table_19_5",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_5.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_5"
+  },
+  {
+    "index": 30,
+    "pair_id": "I_origin_0_I_table_19_6",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_6.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_6"
+  },
+  {
+    "index": 31,
+    "pair_id": "I_origin_0_I_table_19_7",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_7.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_7"
+  },
+  {
+    "index": 32,
+    "pair_id": "I_origin_0_I_table_19_8",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_8.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_8"
+  },
+  {
+    "index": 33,
+    "pair_id": "I_origin_0_I_table_19_9",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_19_9.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_19_9"
+  },
+  {
+    "index": 34,
+    "pair_id": "I_origin_0_I_table_2",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_2.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_2"
+  },
+  {
+    "index": 35,
+    "pair_id": "I_origin_0_I_table_20_0",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_0.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_0"
+  },
+  {
+    "index": 36,
+    "pair_id": "I_origin_0_I_table_20_1",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_1.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_1"
+  },
+  {
+    "index": 37,
+    "pair_id": "I_origin_0_I_table_20_2",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_2.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_2"
+  },
+  {
+    "index": 38,
+    "pair_id": "I_origin_0_I_table_20_3",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_3.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_3"
+  },
+  {
+    "index": 39,
+    "pair_id": "I_origin_0_I_table_20_4",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_4.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_4"
+  },
+  {
+    "index": 40,
+    "pair_id": "I_origin_0_I_table_20_5",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_5.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_5"
+  },
+  {
+    "index": 41,
+    "pair_id": "I_origin_0_I_table_20_6",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_6.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_6"
+  },
+  {
+    "index": 42,
+    "pair_id": "I_origin_0_I_table_20_7",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_7.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_7"
+  },
+  {
+    "index": 43,
+    "pair_id": "I_origin_0_I_table_20_8",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_8.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_8"
+  },
+  {
+    "index": 44,
+    "pair_id": "I_origin_0_I_table_20_9",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_20_9.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_20_9"
+  },
+  {
+    "index": 45,
+    "pair_id": "I_origin_0_I_table_21",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_21.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_21"
+  },
+  {
+    "index": 46,
+    "pair_id": "I_origin_0_I_table_22",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_22.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_22"
+  },
+  {
+    "index": 47,
+    "pair_id": "I_origin_0_I_table_23",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_23.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_23"
+  },
+  {
+    "index": 48,
+    "pair_id": "I_origin_0_I_table_24",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_24.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_24"
+  },
+  {
+    "index": 49,
+    "pair_id": "I_origin_0_I_table_25",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_25.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_25"
+  },
+  {
+    "index": 50,
+    "pair_id": "I_origin_0_I_table_26",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_26.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_26"
+  },
+  {
+    "index": 51,
+    "pair_id": "I_origin_0_I_table_27",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_27.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_27"
+  },
+  {
+    "index": 52,
+    "pair_id": "I_origin_0_I_table_28",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_28.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_28"
+  },
+  {
+    "index": 53,
+    "pair_id": "I_origin_0_I_table_29",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_29.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_29"
+  },
+  {
+    "index": 54,
+    "pair_id": "I_origin_0_I_table_3",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_3.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_3"
+  },
+  {
+    "index": 55,
+    "pair_id": "I_origin_0_I_table_30",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_30.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_30"
+  },
+  {
+    "index": 56,
+    "pair_id": "I_origin_0_I_table_31",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_31.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_31"
+  },
+  {
+    "index": 57,
+    "pair_id": "I_origin_0_I_table_32",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_32.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_32"
+  },
+  {
+    "index": 58,
+    "pair_id": "I_origin_0_I_table_33",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_33.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_33"
+  },
+  {
+    "index": 59,
+    "pair_id": "I_origin_0_I_table_34",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_34.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_34"
+  },
+  {
+    "index": 60,
+    "pair_id": "I_origin_0_I_table_35",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_35.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_35"
+  },
+  {
+    "index": 61,
+    "pair_id": "I_origin_0_I_table_36",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_36.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_36"
+  },
+  {
+    "index": 62,
+    "pair_id": "I_origin_0_I_table_37",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_37.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_37"
+  },
+  {
+    "index": 63,
+    "pair_id": "I_origin_0_I_table_38",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_38.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_38"
+  },
+  {
+    "index": 64,
+    "pair_id": "I_origin_0_I_table_39",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_39.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_39"
+  },
+  {
+    "index": 65,
+    "pair_id": "I_origin_0_I_table_4",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_4.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_4"
+  },
+  {
+    "index": 66,
+    "pair_id": "I_origin_0_I_table_40_0",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_40_0.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_40_0"
+  },
+  {
+    "index": 67,
+    "pair_id": "I_origin_0_I_table_40_1",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_40_1.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_40_1"
+  },
+  {
+    "index": 68,
+    "pair_id": "I_origin_0_I_table_41",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_41.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_41"
+  },
+  {
+    "index": 69,
+    "pair_id": "I_origin_0_I_table_42",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_42.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_42"
+  },
+  {
+    "index": 70,
+    "pair_id": "I_origin_0_I_table_43",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_43.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_43"
+  },
+  {
+    "index": 71,
+    "pair_id": "I_origin_0_I_table_44",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_44.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_44"
+  },
+  {
+    "index": 72,
+    "pair_id": "I_origin_0_I_table_45",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_45.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_45"
+  },
+  {
+    "index": 73,
+    "pair_id": "I_origin_0_I_table_46",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_46.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_46"
+  },
+  {
+    "index": 74,
+    "pair_id": "I_origin_0_I_table_47",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_47.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_47"
+  },
+  {
+    "index": 75,
+    "pair_id": "I_origin_0_I_table_48",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_48.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_48"
+  },
+  {
+    "index": 76,
+    "pair_id": "I_origin_0_I_table_49",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_49.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_49"
+  },
+  {
+    "index": 77,
+    "pair_id": "I_origin_0_I_table_5",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_5.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_5"
+  },
+  {
+    "index": 78,
+    "pair_id": "I_origin_0_I_table_50",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_50.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_50"
+  },
+  {
+    "index": 79,
+    "pair_id": "I_origin_0_I_table_51",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_51.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_51"
+  },
+  {
+    "index": 80,
+    "pair_id": "I_origin_0_I_table_52",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_52.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_52"
+  },
+  {
+    "index": 81,
+    "pair_id": "I_origin_0_I_table_53",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_53.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_53"
+  },
+  {
+    "index": 82,
+    "pair_id": "I_origin_0_I_table_54",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_54.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_54"
+  },
+  {
+    "index": 83,
+    "pair_id": "I_origin_0_I_table_55",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_55.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_55"
+  },
+  {
+    "index": 84,
+    "pair_id": "I_origin_0_I_table_56",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_56.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_56"
+  },
+  {
+    "index": 85,
+    "pair_id": "I_origin_0_I_table_57",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_57.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_57"
+  },
+  {
+    "index": 86,
+    "pair_id": "I_origin_0_I_table_58",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_58.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_58"
+  },
+  {
+    "index": 87,
+    "pair_id": "I_origin_0_I_table_59",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_59.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_59"
+  },
+  {
+    "index": 88,
+    "pair_id": "I_origin_0_I_table_6",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_6.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_6"
+  },
+  {
+    "index": 89,
+    "pair_id": "I_origin_0_I_table_60",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_60.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_60"
+  },
+  {
+    "index": 90,
+    "pair_id": "I_origin_0_I_table_61",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_61.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_61"
+  },
+  {
+    "index": 91,
+    "pair_id": "I_origin_0_I_table_62",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_62.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_62"
+  },
+  {
+    "index": 92,
+    "pair_id": "I_origin_0_I_table_63",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_63.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_63"
+  },
+  {
+    "index": 93,
+    "pair_id": "I_origin_0_I_table_64_0",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_0.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_0"
+  },
+  {
+    "index": 94,
+    "pair_id": "I_origin_0_I_table_64_1",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_1.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_1"
+  },
+  {
+    "index": 95,
+    "pair_id": "I_origin_0_I_table_64_10",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_10.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_10"
+  },
+  {
+    "index": 96,
+    "pair_id": "I_origin_0_I_table_64_11",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_11.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_11"
+  },
+  {
+    "index": 97,
+    "pair_id": "I_origin_0_I_table_64_12",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_12.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_12"
+  },
+  {
+    "index": 98,
+    "pair_id": "I_origin_0_I_table_64_13",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_13.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_13"
+  },
+  {
+    "index": 99,
+    "pair_id": "I_origin_0_I_table_64_14",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_14.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_14"
+  },
+  {
+    "index": 100,
+    "pair_id": "I_origin_0_I_table_64_15",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_15.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_15"
+  },
+  {
+    "index": 101,
+    "pair_id": "I_origin_0_I_table_64_16",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_16.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_16"
+  },
+  {
+    "index": 102,
+    "pair_id": "I_origin_0_I_table_64_17",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_17.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_17"
+  },
+  {
+    "index": 103,
+    "pair_id": "I_origin_0_I_table_64_18",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_18.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_18"
+  },
+  {
+    "index": 104,
+    "pair_id": "I_origin_0_I_table_64_19",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_19.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_19"
+  },
+  {
+    "index": 105,
+    "pair_id": "I_origin_0_I_table_64_2",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_2.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_2"
+  },
+  {
+    "index": 106,
+    "pair_id": "I_origin_0_I_table_64_20",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_20.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_20"
+  },
+  {
+    "index": 107,
+    "pair_id": "I_origin_0_I_table_64_21",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_21.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_21"
+  },
+  {
+    "index": 108,
+    "pair_id": "I_origin_0_I_table_64_22",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_22.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_22"
+  },
+  {
+    "index": 109,
+    "pair_id": "I_origin_0_I_table_64_23",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_23.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_23"
+  },
+  {
+    "index": 110,
+    "pair_id": "I_origin_0_I_table_64_24",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_24.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_24"
+  },
+  {
+    "index": 111,
+    "pair_id": "I_origin_0_I_table_64_25",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_25.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_25"
+  },
+  {
+    "index": 112,
+    "pair_id": "I_origin_0_I_table_64_26",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_26.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_26"
+  },
+  {
+    "index": 113,
+    "pair_id": "I_origin_0_I_table_64_27",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_27.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_27"
+  },
+  {
+    "index": 114,
+    "pair_id": "I_origin_0_I_table_64_3",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_3.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_3"
+  },
+  {
+    "index": 115,
+    "pair_id": "I_origin_0_I_table_64_4",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_4.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_4"
+  },
+  {
+    "index": 116,
+    "pair_id": "I_origin_0_I_table_64_5",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_5.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_5"
+  },
+  {
+    "index": 117,
+    "pair_id": "I_origin_0_I_table_64_6",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_6.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_6"
+  },
+  {
+    "index": 118,
+    "pair_id": "I_origin_0_I_table_64_7",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_7.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_7"
+  },
+  {
+    "index": 119,
+    "pair_id": "I_origin_0_I_table_64_8",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_8.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_8"
+  },
+  {
+    "index": 120,
+    "pair_id": "I_origin_0_I_table_64_9",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_64_9.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_64_9"
+  },
+  {
+    "index": 121,
+    "pair_id": "I_origin_0_I_table_65_0",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_65_0.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_65_0"
+  },
+  {
+    "index": 122,
+    "pair_id": "I_origin_0_I_table_65_1",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_65_1.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_65_1"
+  },
+  {
+    "index": 123,
+    "pair_id": "I_origin_0_I_table_65_2",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_65_2.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_65_2"
+  },
+  {
+    "index": 124,
+    "pair_id": "I_origin_0_I_table_66",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_66.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_66"
+  },
+  {
+    "index": 125,
+    "pair_id": "I_origin_0_I_table_67",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_67.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_67"
+  },
+  {
+    "index": 126,
+    "pair_id": "I_origin_0_I_table_68",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_68.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_68"
+  },
+  {
+    "index": 127,
+    "pair_id": "I_origin_0_I_table_69",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_69.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_69"
+  },
+  {
+    "index": 128,
+    "pair_id": "I_origin_0_I_table_7",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_7.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_7"
+  },
+  {
+    "index": 129,
+    "pair_id": "I_origin_0_I_table_70",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_70.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_70"
+  },
+  {
+    "index": 130,
+    "pair_id": "I_origin_0_I_table_71",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_71.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_71"
+  },
+  {
+    "index": 131,
+    "pair_id": "I_origin_0_I_table_72",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_72.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_72"
+  },
+  {
+    "index": 132,
+    "pair_id": "I_origin_0_I_table_73",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_73.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_73"
+  },
+  {
+    "index": 133,
+    "pair_id": "I_origin_0_I_table_74",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_74.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_74"
+  },
+  {
+    "index": 134,
+    "pair_id": "I_origin_0_I_table_75",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_75.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_75"
+  },
+  {
+    "index": 135,
+    "pair_id": "I_origin_0_I_table_76",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_76.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_76"
+  },
+  {
+    "index": 136,
+    "pair_id": "I_origin_0_I_table_77",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_77.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_77"
+  },
+  {
+    "index": 137,
+    "pair_id": "I_origin_0_I_table_8",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_8.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_8"
+  },
+  {
+    "index": 138,
+    "pair_id": "I_origin_0_I_table_9",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_0/I_table_9.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_0",
+    "table_id": "I_table_9"
+  },
+  {
+    "index": 139,
+    "pair_id": "I_origin_1_I_table_78",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_1/I_table_78.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_1",
+    "table_id": "I_table_78"
+  },
+  {
+    "index": 140,
+    "pair_id": "I_origin_2_I_table_79",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_79.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_79"
+  },
+  {
+    "index": 141,
+    "pair_id": "I_origin_2_I_table_80",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_80.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_80"
+  },
+  {
+    "index": 142,
+    "pair_id": "I_origin_2_I_table_81",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_81.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_81"
+  },
+  {
+    "index": 143,
+    "pair_id": "I_origin_2_I_table_82",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_82.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_82"
+  },
+  {
+    "index": 144,
+    "pair_id": "I_origin_2_I_table_83",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_83.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_83"
+  },
+  {
+    "index": 145,
+    "pair_id": "I_origin_2_I_table_84",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_84.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_84"
+  },
+  {
+    "index": 146,
+    "pair_id": "I_origin_2_I_table_85",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_85.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_85"
+  },
+  {
+    "index": 147,
+    "pair_id": "I_origin_2_I_table_86",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_86.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_86"
+  },
+  {
+    "index": 148,
+    "pair_id": "I_origin_2_I_table_87",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_87.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_87"
+  },
+  {
+    "index": 149,
+    "pair_id": "I_origin_2_I_table_88",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_88.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_88"
+  },
+  {
+    "index": 150,
+    "pair_id": "I_origin_2_I_table_89",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_89.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_89"
+  },
+  {
+    "index": 151,
+    "pair_id": "I_origin_2_I_table_90",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_90.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_90"
+  },
+  {
+    "index": 152,
+    "pair_id": "I_origin_2_I_table_91",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_91.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_91"
+  },
+  {
+    "index": 153,
+    "pair_id": "I_origin_2_I_table_92",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_92.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_92"
+  },
+  {
+    "index": 154,
+    "pair_id": "I_origin_2_I_table_93",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_93.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_93"
+  },
+  {
+    "index": 155,
+    "pair_id": "I_origin_2_I_table_94",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_94.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_94"
+  },
+  {
+    "index": 156,
+    "pair_id": "I_origin_2_I_table_95",
+    "image_paths": [
+      "data/Insurance/Table/I_origin_2/I_table_95.png"
+    ],
+    "domain": "Insurance",
+    "origin": "I_origin_2",
+    "table_id": "I_table_95"
+  }
+]

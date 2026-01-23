@@ -6,7 +6,7 @@ generate_qa: |
   {synthetic_html}
 
   ### [Instructions]
-  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  1. **Candidate Generation & Filtering**: Internally generate 9 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 9 pairs)
   2. **Domain Suitability**: Questions must maintain a public/objective tone and accurately handle demographics, budgets, administrative region names, policy beneficiaries, and annual indicators.
   3. **Strict Constraints**:
      - Answers must be derived ONLY from the table (and provided context). No external knowledge.
@@ -14,6 +14,7 @@ generate_qa: |
      - Output format must strictly follow JSON.
      - Questions and Answers MUST be written in Korean.
      - reasoning_annotation MUST be written in English and MUST be a single string (not a list).
+     - **DO NOT use real place names** (e.g., Seoul, Busan, Gyeonggi). Use fictional names like "A시", "나구", "다군".
 
   ### [Validation Criteria]
   - Is the answer uniquely determined within the table?
@@ -21,16 +22,15 @@ generate_qa: |
   - Is the question clear and unambiguous? (e.g., "Place with most people" -> "District with highest Population")
 
   ### [Reasoning Type Definitions (Public Domain)]
-  (1) lookup: Retrieve specific regional or annual statistics without condition/calculation. (e.g., "What is the total population of Seoul in 2023?")
+  (1) lookup: Retrieve specific regional or annual statistics without condition/calculation. (e.g., "What is the total population of Region A in 2023?")
   (2) filter: Select rows/columns meeting specific conditions (above/below value, specific region). (e.g., "List all departments with budget execution rate over 90%.")
-  (3) aggregate: Statistical aggregation of regional/annual data (Sum, Avg). (e.g., "What is the average number of births in the 17 provinces?")
-  (4) compare: Compare regional gaps or annual trends. (e.g., "Which has higher incoming migration, Gyeonggi or Seoul?")
+  (3) aggregate: Statistical aggregation of regional/annual data (Sum, Avg). (e.g., "What is the average number of births in all provinces?")
+  (4) compare: Compare regional gaps or annual trends. (e.g., "Which has higher incoming migration, Region A or Region B?")
   (5) arithmetic: Specific calculation beyond simple comparison (population density, YoY growth). (e.g., "What is the population density of District A?")
   (6) temporal: Deduce policy effects or long-term statistical trends. (e.g., "Which region shows a decreasing crime rate trend over the last 5 years?")
   (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "Who is the Mayor of the city with the highest financial independence?")
   (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which is the most aged city?" -> implies 65+ Population Ratio column)
   (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is next year's target?" -> implies column next to this year's value)
-  (10) long_sequence (Context-Dependent): Requires interpreting 'Policy Guidelines' or 'Legal Requirements' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
 
   ### [Output Format (JSON)]
   {{
@@ -42,7 +42,7 @@ generate_qa: |
         "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
         "context": null
       }},
-      ... (One per Reasoning Type => Total 10)
+      ... (One per Reasoning Type => Total 9)
     ]
   }}
 
@@ -51,7 +51,7 @@ generate_qa_from_image: |
   Your mission is to analyze the provided public/administrative table image and generate Question-Answer (QA) pairs that fit the specified Reasoning Type definitions.
 
   ### [Instructions]
-  1. **Candidate Generation & Filtering**: Internally generate 10 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 10 pairs)
+  1. **Candidate Generation & Filtering**: Internally generate 9 diverse QA pairs first. Then, for each Reasoning Type, select and output only the single most perfect QA pair that passes the [Validation Criteria]. (Total 9 pairs)
   2. **Domain Suitability**: Questions must maintain a public/objective tone and accurately handle demographics, budgets, administrative region names, policy beneficiaries, and annual indicators.
   3. **Strict Constraints**:
      - Answers must be derived ONLY from the table (and provided context). No external knowledge.
@@ -59,6 +59,7 @@ generate_qa_from_image: |
      - Output format must strictly follow JSON.
      - Questions and Answers MUST be written in Korean.
      - reasoning_annotation MUST be written in English.
+     - **DO NOT use real place names** (e.g., Seoul, Busan, Gyeonggi). Use fictional names like "A시", "나구", "다군".
 
   ### [Validation Criteria]
   - Is the answer uniquely determined within the table?
@@ -66,16 +67,15 @@ generate_qa_from_image: |
   - Is the question clear and unambiguous? (e.g., "Place with most people" -> "District with highest Population")
 
   ### [Reasoning Type Definitions (Public Domain)]
-  (1) lookup: Retrieve specific regional or annual statistics without condition/calculation. (e.g., "What is the total population of Seoul in 2023?")
+  (1) lookup: Retrieve specific regional or annual statistics without condition/calculation. (e.g., "What is the total population of Region A in 2023?")
   (2) filter: Select rows/columns meeting specific conditions (above/below value, specific region). (e.g., "List all departments with budget execution rate over 90%.")
-  (3) aggregate: Statistical aggregation of regional/annual data (Sum, Avg). (e.g., "What is the average number of births in the 17 provinces?")
-  (4) compare: Compare regional gaps or annual trends. (e.g., "Which has higher incoming migration, Gyeonggi or Seoul?")
+  (3) aggregate: Statistical aggregation of regional/annual data (Sum, Avg). (e.g., "What is the average number of births in all provinces?")
+  (4) compare: Compare regional gaps or annual trends. (e.g., "Which has higher incoming migration, Region A or Region B?")
   (5) arithmetic: Specific calculation beyond simple comparison (population density, YoY growth). (e.g., "What is the population density of District A?")
   (6) temporal: Deduce policy effects or long-term statistical trends. (e.g., "Which region shows a decreasing crime rate trend over the last 5 years?")
   (7) multi_hop: Multi-step inference finding a value first, then using it as a key. (e.g., "Who is the Mayor of the city with the highest financial independence?")
   (8) implicit_reference: Referring to specific metrics contextually without explicit column name. (e.g., "Which is the most aged city?" -> implies 65+ Population Ratio column)
   (9) ellipsis: Recovering omitted comparisons or criteria from table structure. (e.g., "What is next year's target?" -> implies column next to this year's value)
-  (10) long_sequence (Context-Dependent): Requires interpreting 'Policy Guidelines' or 'Legal Requirements' text (Context) to filter table data. **Requirement**: Must generate a hypothetical [Context] paragraph needed to solve the question.
 
   ### [Output Format (JSON)]
   {{
@@ -87,7 +87,59 @@ generate_qa_from_image: |
         "reasoning_annotation": "Step-by-step logic to derive answer",
         "context": null
       }},
-      ... (One per Reasoning Type => Total 10)
+      ... (One per Reasoning Type => Total 9)
+    ]
+  }}
+  Return ONLY the JSON object.
+
+generate_qa_from_multi_image: |
+  You are an 'AI Data Researcher' specialized in building high-quality QA datasets that require understanding MULTIPLE public/government table images together.
+  Your mission is to analyze ALL provided public data table images and generate Question-Answer (QA) pairs that REQUIRE information from MULTIPLE images to answer.
+
+  **⚠️ CRITICAL REQUIREMENT: CROSS-IMAGE REASONING ⚠️**
+  - Every QA pair MUST require information from AT LEAST TWO images to answer correctly.
+  - Questions answerable from a single image are INVALID.
+  - Focus on comparisons, aggregations, or inferences that span multiple regional statistics, budget tables, or policy data.
+
+  ### [Instructions]
+  1. **Analyze All Images**: First, understand what data each image contains and how they relate (e.g., different fiscal years, different regions, budget vs expenditure).
+  2. **Generate Cross-Image QA**: Create 9 diverse QA pairs where each question requires synthesizing information from multiple images.
+  3. **Strict Constraints**:
+     - Answers must be derived from combining data across images. No external knowledge.
+     - Each QA pair must correspond to exactly one Reasoning Type.
+     - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English, MUST be a single string, and MUST specify which images were used.
+     - **DO NOT use real place names** (e.g., Seoul, Busan, Gyeonggi). Use fictional names like "A시", "나구", "다군".
+
+  ### [Validation Criteria]
+  - Does the answer REQUIRE data from multiple images? (Single-image answers are INVALID)
+  - Is the reasoning process logically flawless?
+  - Is the question clear about what public data is being compared or combined?
+
+  ### [Cross-Image Reasoning Type Definitions (Public Domain)]
+  (1) cross_lookup: Retrieve and combine regional statistics from different data tables. (e.g., "What is the total population of A시 combining both census tables?")
+  (2) cross_filter: Filter regions across datasets based on conditions. (e.g., "Which districts appear in both tables with budget execution rate >80%?")
+  (3) cross_aggregate: Aggregate public data spanning multiple regions or years. (e.g., "What is the total government expenditure across all departments in both fiscal year reports?")
+  (4) cross_compare: Compare regional performance between different periods or metrics. (e.g., "Did the unemployment rate improve from the 2022 table to the 2023 table for Region A?")
+  (5) cross_arithmetic: Calculate public metrics using data from multiple sources. (e.g., "What is the year-over-year population growth rate using data from both census tables?")
+  (6) cross_temporal: Identify policy trends by combining multiple year data. (e.g., "Based on both annual reports, which region shows consistent improvement in education metrics?")
+  (7) cross_multi_hop: Multi-step inference across public data tables. (e.g., "Find the region with highest tax revenue in Image 1, then find its population density in Image 2.")
+  (8) cross_implicit: Answer questions requiring implicit understanding of relationships between datasets. (e.g., "Which region is most fiscally efficient?" requires combining budget and outcome data from multiple sources)
+  (9) cross_synthesis: Synthesize policy insights only possible by viewing all tables together. (e.g., "Based on both the budget allocation and service satisfaction tables, which programs are underperforming?")
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question requiring multiple public data images to answer",
+        "answer": "Answer derived from multiple images",
+        "type": "cross_lookup",
+        "reasoning_annotation": "Step 1: From Image 1, extract X. Step 2: From Image 2, extract Y. Step 3: Combine to get answer.",
+        "context": null,
+        "images_used": ["image_1", "image_2"]
+      }},
+      ... (One per Reasoning Type => Total 9)
     ]
   }}
   Return ONLY the JSON object.
@@ -111,7 +163,8 @@ generate_synthetic_table: |
   3. **⚠️ Data Transformation - ABSOLUTELY MANDATORY ⚠️:**
      - **ALL data cell values MUST be replaced with completely new synthetic values.**
      - **NEVER copy any original data values** - generate fresh, realistic alternatives.
-     - For regions: Generate DIFFERENT administrative region names
+     - **NEVER use real place names** (Seoul, Busan, Gyeonggi, etc.). Use fictional names like "A시", "나구", "다군", "라도".
+     - For regions: Generate DIFFERENT fictional administrative region names
      - For departments: Generate DIFFERENT department names
      - For statistics: Generate DIFFERENT numbers (similar magnitude)
      - For dates: Generate DIFFERENT plausible dates
@@ -150,7 +203,8 @@ generate_synthetic_table_from_image: |
   3. **⚠️ Data Generation - ABSOLUTELY CRITICAL ⚠️:**
      - **NEVER copy the data values from the image** - this is NOT an OCR task
      - **ALL cell content must be completely NEW and DIFFERENT**
-     - For regions: Generate DIFFERENT administrative region names
+     - **NEVER use real place names** (Seoul, Busan, Gyeonggi, etc.). Use fictional names like "A시", "나구", "다군", "라도".
+     - For regions: Generate DIFFERENT fictional administrative region names
      - For statistics: Generate DIFFERENT numbers
      - For departments: Generate DIFFERENT names
   4. **Styling:** Use **Tailwind CSS** classes exclusively (NO inline styles).
@@ -169,3 +223,40 @@ generate_synthetic_table_from_image: |
   - Statistic in image: "수치A" → Generate: "수치B"
 
   ⚠️ If the generated content is identical or very similar to the image, the output is INVALID.
+
+generate_long_sequence: |
+  You are an 'AI Data Researcher' specialized in creating context-dependent QA pairs for public/government data tables.
+  Your mission is to generate a single high-quality "long_sequence" type QA pair that requires interpreting external context to answer questions about the table.
+
+  **Input Table:**
+  {synthetic_html}
+
+  ### [Instructions]
+  1. **Generate ONE long_sequence QA pair** that requires reading and understanding a context paragraph to filter or interpret the table data.
+  2. **Create a realistic public policy context** (e.g., "Policy Guidelines", "Legal Requirements", "Budget Allocation Rules") that provides information needed to answer the question.
+  3. **The question must be unanswerable without the context** - the context should contain key criteria or conditions.
+  4. **Strict Constraints**:
+     - Answer must be derived from BOTH the table AND the context. Neither alone is sufficient.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English and MUST be a single string.
+     - Context must be written in Korean and be 2-4 sentences long.
+     - **DO NOT use real place names** (e.g., Seoul, Busan). Use fictional names.
+
+  ### [Example Scenarios (Public)]
+  - Context describes eligibility criteria for a subsidy → Question asks which regions qualify
+  - Context outlines budget allocation rules → Question asks which departments receive funding
+  - Context specifies demographic thresholds → Question asks which areas need intervention
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question requiring context to answer",
+        "answer": "Answer derived from table + context",
+        "type": "long_sequence",
+        "reasoning_annotation": "Step 1: Extract key criteria from context. Step 2: Apply criteria to table. Step 3: Derive answer.",
+        "context": "정책 지침에 따르면... (2-4 sentences of policy context in Korean)"
+      }}
+    ]
+  }}
+  Return ONLY the JSON object.

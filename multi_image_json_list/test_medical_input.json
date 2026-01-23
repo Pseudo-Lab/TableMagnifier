@@ -1,0 +1,164 @@
+[
+    {
+        "index": 0,
+        "pair_id": "M_origin_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_0_0_0.png",
+            "data/Medical/Table/M_table_0_1_0.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 1,
+        "pair_id": "M_origin_2",
+        "image_paths": [
+            "data/Medical/Table/M_table_2_0_0.png",
+            "data/Medical/Table/M_table_2_1_0.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 2,
+        "pair_id": "M_origin_3",
+        "image_paths": [
+            "data/Medical/Table/M_table_3_0_1.png",
+            "data/Medical/Table/M_table_3_0_2.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 3,
+        "pair_id": "M_origin_4",
+        "image_paths": [
+            "data/Medical/Table/M_table_4_0_0.png",
+            "data/Medical/Table/M_table_4_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 4,
+        "pair_id": "M_revised_2_2",
+        "image_paths": [
+            "data/Medical/Table/M_table_2_2_0.png",
+            "data/Medical/Table/M_table_2_2_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 5,
+        "pair_id": "M_revised_3_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_3_0_0.png",
+            "data/Medical/Table/M_table_3_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 6,
+        "pair_id": "M_revised_4_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_4_0_0.png",
+            "data/Medical/Table/M_table_4_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 7,
+        "pair_id": "M_revised_6_3",
+        "image_paths": [
+            "data/Medical/Table/M_table_6_3_0.png",
+            "data/Medical/Table/M_table_6_3_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 8,
+        "pair_id": "M_revised_8_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_8_0_0.png",
+            "data/Medical/Table/M_table_8_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 9,
+        "pair_id": "M_revised_9_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_9_0_0.png",
+            "data/Medical/Table/M_table_9_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 10,
+        "pair_id": "M_revised_10_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_10_0_0.png",
+            "data/Medical/Table/M_table_10_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 11,
+        "pair_id": "M_revised_11_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_11_0_0.png",
+            "data/Medical/Table/M_table_11_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 12,
+        "pair_id": "M_revised_13_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_13_0_0.png",
+            "data/Medical/Table/M_table_13_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 13,
+        "pair_id": "M_revised_14_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_14_0_0.png",
+            "data/Medical/Table/M_table_14_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 14,
+        "pair_id": "M_revised_15_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_15_0_0.png",
+            "data/Medical/Table/M_table_15_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 15,
+        "pair_id": "M_revised_16_0",
+        "image_paths": [
+            "data/Medical/Table/M_table_16_0_0.png",
+            "data/Medical/Table/M_table_16_0_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 16,
+        "pair_id": "M_revised_2_3",
+        "image_paths": [
+            "data/Medical/Table/M_table_2_3_0.png",
+            "data/Medical/Table/M_table_2_3_1.png"
+        ],
+        "domain": "medical"
+    },
+    {
+        "index": 17,
+        "pair_id": "M_revised_10_1",
+        "image_paths": [
+            "data/Medical/Table/M_table_10_1_0.png",
+            "data/Medical/Table/M_table_10_1_1.png"
+        ],
+        "domain": "medical"
+    }
+]
