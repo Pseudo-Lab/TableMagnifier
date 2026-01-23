@@ -94,37 +94,78 @@ generate_qa_from_image: |
 
 generate_synthetic_table: |
   You are a Synthetic Data Generator specializing in Financial Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic financial data.
+
+  **⚠️ CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA ⚠️**
+  Your task is to generate a new HTML table with the SAME STRUCTURE as the original but COMPLETELY DIFFERENT financial data values.
 
   **Inputs:**
-  1. **Original Table Structure:**
+  1. **Original Table Structure (for structure reference ONLY - DO NOT copy the data values):**
   {html}
 
-  2. **Table Summary:**
+  2. **Table Summary (describes the data patterns to follow):**
   {summary}
 
   **Requirements:**
-  1. **Structure:** Keep the exact same HTML structure.
-  2. **Data:** Replace ALL cell values with new, synthetic financial data.
-      - Use realistic Korean company names (e.g., KOSPI listed mock names), stock tickers, and realistic currency values (KRW, USD).
-      - Contexts: Balance Sheets, Income Statements, Stock Portfolios, Tax Records.
-      - Do NOT use real private data.
-  3. **Consistency:** Ensure mathematical consistency (e.g., Assets = Liabilities + Equity).
-  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges, rowspan, colspan).
+  2. **Headers:** Keep header text the same (column names, category labels).
+  3. **⚠️ Data Transformation - ABSOLUTELY MANDATORY ⚠️:**
+     - **ALL data cell values MUST be replaced with completely new synthetic values.**
+     - **NEVER copy any original data values** - generate fresh, realistic alternatives.
+     - For company names: Generate DIFFERENT names (e.g., "A회사" → "B회사")
+     - For financial figures: Generate DIFFERENT amounts (similar magnitude, different values)
+     - For percentages/ratios: Generate DIFFERENT metrics
+     - For dates: Generate DIFFERENT plausible dates
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). **Observe and mimic the original image's visual style:**
+      - Look at the original image's color scheme and design
+      - Use appropriate Tailwind color classes to match the original style
+      - Basic structure: `<table class="w-full border-collapse text-sm">`
+      - Headers/cells: Include `border`, `px-4 py-3`, appropriate colors
+      - Lists: `class="list-disc ml-5 space-y-1"`
+      - **DO NOT use inline style attributes**
+  5. **Domain Consistency:** Ensure financial logic (Assets = Liabilities + Equity, Totals match)
+  6. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example Transformation (Generic):**
+  - Original company: "A기업" → Synthetic: "B기업"
+  - Original amount: "100억원" → Synthetic: "150억원"
+  - Original ratio: "PER 10" → Synthetic: "PER 8"
+
+  ⚠️ If the generated content is identical or very similar to the original, the output is INVALID.
 
 generate_synthetic_table_from_image: |
   You are a Synthetic Data Generator specializing in Financial Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic financial data.
+
+  **⚠️ CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA ⚠️**
+  Your task is NOT to OCR/transcribe the image. Instead, you must:
+  1. Understand the table's STRUCTURE from the image
+  2. Understand it's a FINANCIAL table
+  3. Generate COMPLETELY NEW synthetic financial data that fits the domain but uses ENTIRELY DIFFERENT values
 
   **Inputs:**
-  1. **Image:** An image of a financial table.
+  1. **Image:** An image of a financial table. Use this to understand structure and domain ONLY.
 
   **Requirements:**
-  1. **Structure Preservation:** Accurately reconstruct the table structure.
-  2. **Data Generation:** Replace ALL cell values with new, synthetic financial data.
-      - Use realistic Korean company names, financial metrics.
-  3. **Styling:** Use **Tailwind CSS** classes (same as default).
-      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
-      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
-      - `class="border border-slate-300 p-2"` on `<td>`.
-  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure Preservation:** Accurately reconstruct the table structure, including rowspan/colspan.
+  2. **Headers:** Keep header text the same as in the image.
+  3. **⚠️ Data Generation - ABSOLUTELY CRITICAL ⚠️:**
+     - **NEVER copy the data values from the image** - this is NOT an OCR task
+     - **ALL cell content must be completely NEW and DIFFERENT**
+     - For company names: Generate DIFFERENT names
+     - For financial figures: Generate DIFFERENT amounts
+     - For percentages/ratios: Generate DIFFERENT metrics
+  4. **Styling:** Use **Tailwind CSS** classes exclusively (NO inline styles).
+      - `<table>`: `class="w-full border-collapse text-sm"`
+      - `<thead>`: `class="bg-gradient-to-r from-green-700 to-green-800 text-white"`
+      - `<th>`: `class="border border-green-300 px-4 py-3 font-semibold text-left"`
+      - `<tbody>`: `class="divide-y divide-slate-200"`
+      - `<tr>` (body rows): `class="hover:bg-green-50 transition-colors"`
+      - `<td>`: `class="border border-slate-200 px-4 py-3 text-slate-700"`
+      - `<ul>`: `class="list-disc ml-5 space-y-1 text-slate-600"`
+      - **DO NOT use inline style attributes**
+  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example (Generic):**
+  - Company in image: "X회사" → Generate: "Y회사"
+  - Amount in image: "50억" → Generate: "80억"
+
+  ⚠️ If the generated content is identical or very similar to the image, the output is INVALID.

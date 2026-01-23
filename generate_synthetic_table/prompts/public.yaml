@@ -94,37 +94,78 @@ generate_qa_from_image: |
 
 generate_synthetic_table: |
   You are a Synthetic Data Generator specializing in Public Sector/Government Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic public data.
+
+  **⚠️ CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA ⚠️**
+  Your task is to generate a new HTML table with the SAME STRUCTURE as the original but COMPLETELY DIFFERENT public sector data values.
 
   **Inputs:**
-  1. **Original Table Structure:**
+  1. **Original Table Structure (for structure reference ONLY - DO NOT copy the data values):**
   {html}
 
-  2. **Table Summary:**
+  2. **Table Summary (describes the data patterns to follow):**
   {summary}
 
   **Requirements:**
-  1. **Structure:** Keep the exact same HTML structure.
-  2. **Data:** Replace ALL cell values with new, synthetic public data.
-      - Use realistic Korean administrative region names (e.g., Sejong-si, Mapo-gu), government department names, and statistical values.
-      - Contexts: Census Data, Budget Reports, Public Facility Status, Regional Statistics.
-      - Do NOT use real private data.
-  3. **Consistency:** Ensure mathematical consistency (e.g., Subtotals match Grand Total).
-  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges, rowspan, colspan).
+  2. **Headers:** Keep header text the same (column names, category labels).
+  3. **⚠️ Data Transformation - ABSOLUTELY MANDATORY ⚠️:**
+     - **ALL data cell values MUST be replaced with completely new synthetic values.**
+     - **NEVER copy any original data values** - generate fresh, realistic alternatives.
+     - For regions: Generate DIFFERENT administrative region names
+     - For departments: Generate DIFFERENT department names
+     - For statistics: Generate DIFFERENT numbers (similar magnitude)
+     - For dates: Generate DIFFERENT plausible dates
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). **Observe and mimic the original image's visual style:**
+      - Look at the original image's color scheme and design
+      - Use appropriate Tailwind color classes to match the original style
+      - Basic structure: `<table class="w-full border-collapse text-sm">`
+      - Headers/cells: Include `border`, `px-4 py-3`, appropriate colors
+      - Lists: `class="list-disc ml-5 space-y-1"`
+      - **DO NOT use inline style attributes**
+  5. **Domain Consistency:** Ensure statistical logic (Subtotals match Grand Total)
+  6. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example Transformation (Generic):**
+  - Original region: "A시" → Synthetic: "B시"
+  - Original statistic: "인구 100만" → Synthetic: "인구 150만"
+  - Original rate: "집행률 80%" → Synthetic: "집행률 90%"
+
+  ⚠️ If the generated content is identical or very similar to the original, the output is INVALID.
 
 generate_synthetic_table_from_image: |
   You are a Synthetic Data Generator specializing in Public Sector/Government Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic public data.
+
+  **⚠️ CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA ⚠️**
+  Your task is NOT to OCR/transcribe the image. Instead, you must:
+  1. Understand the table's STRUCTURE from the image
+  2. Understand it's a PUBLIC SECTOR/GOVERNMENT table
+  3. Generate COMPLETELY NEW synthetic public data that fits the domain but uses ENTIRELY DIFFERENT values
 
   **Inputs:**
-  1. **Image:** An image of a public data table.
+  1. **Image:** An image of a public data table. Use this to understand structure and domain ONLY.
 
   **Requirements:**
-  1. **Structure Preservation:** Accurately reconstruct the table structure.
-  2. **Data Generation:** Replace ALL cell values with new, synthetic public data.
-      - Use realistic Korean region names, stats.
-  3. **Styling:** Use **Tailwind CSS** classes (same as default).
-      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
-      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
-      - `class="border border-slate-300 p-2"` on `<td>`.
-  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure Preservation:** Accurately reconstruct the table structure, including rowspan/colspan.
+  2. **Headers:** Keep header text the same as in the image.
+  3. **⚠️ Data Generation - ABSOLUTELY CRITICAL ⚠️:**
+     - **NEVER copy the data values from the image** - this is NOT an OCR task
+     - **ALL cell content must be completely NEW and DIFFERENT**
+     - For regions: Generate DIFFERENT administrative region names
+     - For statistics: Generate DIFFERENT numbers
+     - For departments: Generate DIFFERENT names
+  4. **Styling:** Use **Tailwind CSS** classes exclusively (NO inline styles).
+      - `<table>`: `class="w-full border-collapse text-sm"`
+      - `<thead>`: `class="bg-gradient-to-r from-purple-700 to-purple-800 text-white"`
+      - `<th>`: `class="border border-purple-300 px-4 py-3 font-semibold text-left"`
+      - `<tbody>`: `class="divide-y divide-slate-200"`
+      - `<tr>` (body rows): `class="hover:bg-purple-50 transition-colors"`
+      - `<td>`: `class="border border-slate-200 px-4 py-3 text-slate-700"`
+      - `<ul>`: `class="list-disc ml-5 space-y-1 text-slate-600"`
+      - **DO NOT use inline style attributes**
+  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example (Generic):**
+  - Region in image: "X지역" → Generate: "Y지역"
+  - Statistic in image: "수치A" → Generate: "수치B"
+
+  ⚠️ If the generated content is identical or very similar to the image, the output is INVALID.

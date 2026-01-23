@@ -95,37 +95,78 @@ generate_qa_from_image: |
 
 generate_synthetic_table: |
   You are a Synthetic Data Generator specializing in Medical Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided original table but contains entirely new, realistic synthetic medical data.
+
+  **⚠️ CRITICAL INSTRUCTION: DO NOT COPY ORIGINAL DATA ⚠️**
+  Your task is to generate a new HTML table with the SAME STRUCTURE as the original but COMPLETELY DIFFERENT medical data values.
 
   **Inputs:**
-  1. **Original Table Structure:**
+  1. **Original Table Structure (for structure reference ONLY - DO NOT copy the data values):**
   {html}
 
-  2. **Table Summary:**
+  2. **Table Summary (describes the data patterns to follow):**
   {summary}
 
   **Requirements:**
-  1. **Structure:** Keep the exact same HTML structure.
-  2. **Data:** Replace ALL cell values with new, synthetic medical data.
-      - Use realistic Korean patient names (pseudonymized), diagnosis codes (ICD-10 style but synthetic), medication names, and lab values.
-      - Contexts: Patient Charts, Lab Reports, Prescription Lists, Clinical Trials.
-      - Do NOT use real private data.
-  3. **Consistency:** Ensure medical consistency (e.g., proper units for blood pressure, temperature).
-  4. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure:** Keep the exact same HTML structure (rows, columns, headers, merges, rowspan, colspan).
+  2. **Headers:** Keep header text the same (column names, category labels).
+  3. **⚠️ Data Transformation - ABSOLUTELY MANDATORY ⚠️:**
+     - **ALL data cell values MUST be replaced with completely new synthetic values.**
+     - **NEVER copy any original data values** - generate fresh, realistic alternatives.
+     - For patient names/IDs: Generate DIFFERENT pseudonymized identifiers
+     - For lab values: Generate DIFFERENT realistic values
+     - For diagnoses/medications: Generate DIFFERENT names and codes
+     - For dates: Generate DIFFERENT plausible dates
+  4. **Styling:** Use **Tailwind CSS** classes (NO inline styles). **Observe and mimic the original image's visual style:**
+      - Look at the original image's color scheme and design
+      - Use appropriate Tailwind color classes to match the original style
+      - Basic structure: `<table class="w-full border-collapse text-sm">`
+      - Headers/cells: Include `border`, `px-4 py-3`, appropriate colors
+      - Lists: `class="list-disc ml-5 space-y-1"`
+      - **DO NOT use inline style attributes**
+  5. **Domain Consistency:** Ensure medical logic (proper units for BP, temperature, lab values)
+  6. **Output:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example Transformation (Generic):**
+  - Original ID: "환자A" → Synthetic: "환자B"
+  - Original value: "120/80" → Synthetic: "135/85"
+  - Original medication: "약물X" → Synthetic: "약물Y"
+
+  ⚠️ If the generated content is identical or very similar to the original, the output is INVALID.
 
 generate_synthetic_table_from_image: |
   You are a Synthetic Data Generator specializing in Medical Data.
-  Your task is to generate a new HTML table that mirrors the structure of the provided image but contains entirely new, realistic synthetic medical data.
+
+  **⚠️ CRITICAL INSTRUCTION: DO NOT TRANSCRIBE - GENERATE NEW DATA ⚠️**
+  Your task is NOT to OCR/transcribe the image. Instead, you must:
+  1. Understand the table's STRUCTURE from the image
+  2. Understand it's a MEDICAL table
+  3. Generate COMPLETELY NEW synthetic medical data that fits the domain but uses ENTIRELY DIFFERENT values
 
   **Inputs:**
-  1. **Image:** An image of a medical table.
+  1. **Image:** An image of a medical table. Use this to understand structure and domain ONLY.
 
   **Requirements:**
-  1. **Structure Preservation:** Accurately reconstruct the table structure.
-  2. **Data Generation:** Replace ALL cell values with new, synthetic medical data.
-      - Use realistic Korean medical terms, patient info (synthetic).
-  3. **Styling:** Use **Tailwind CSS** classes (same as default).
-      - `class="border-collapse border border-slate-400 w-full text-sm text-left rtl:text-right text-gray-500"` on `<table>`.
-      - `class="border border-slate-300 p-2 bg-gray-50 font-semibold"` on `<th>`.
-      - `class="border border-slate-300 p-2"` on `<td>`.
-  4. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`.
+  1. **Structure Preservation:** Accurately reconstruct the table structure, including rowspan/colspan.
+  2. **Headers:** Keep header text the same as in the image.
+  3. **⚠️ Data Generation - ABSOLUTELY CRITICAL ⚠️:**
+     - **NEVER copy the data values from the image** - this is NOT an OCR task
+     - **ALL cell content must be completely NEW and DIFFERENT**
+     - For patient names/IDs: Generate DIFFERENT pseudonymized identifiers
+     - For lab values: Generate DIFFERENT realistic values
+     - For diagnoses/medications: Generate DIFFERENT names
+  4. **Styling:** Use **Tailwind CSS** classes exclusively (NO inline styles).
+      - `<table>`: `class="w-full border-collapse text-sm"`
+      - `<thead>`: `class="bg-gradient-to-r from-teal-700 to-teal-800 text-white"`
+      - `<th>`: `class="border border-teal-300 px-4 py-3 font-semibold text-left"`
+      - `<tbody>`: `class="divide-y divide-slate-200"`
+      - `<tr>` (body rows): `class="hover:bg-teal-50 transition-colors"`
+      - `<td>`: `class="border border-slate-200 px-4 py-3 text-slate-700"`
+      - `<ul>`: `class="list-disc ml-5 space-y-1 text-slate-600"`
+      - **DO NOT use inline style attributes**
+  5. **Output Format:** Return ONLY the raw HTML string starting with `<table>` and ending with `</table>`. No markdown code blocks.
+
+  **Example (Generic):**
+  - Patient ID in image: "환자X" → Generate: "환자Y"
+  - Value in image: "수치A" → Generate: "수치B"
+
+  ⚠️ If the generated content is identical or very similar to the image, the output is INVALID.

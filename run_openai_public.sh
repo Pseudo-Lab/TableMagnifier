@@ -5,9 +5,9 @@
 # ==============================================================================
 
 # Default Configuration
-INPUT_JSON="test_business_input.json"
+INPUT_JSON="test_business.json"
 OUTPUT_DIR="output_business"
-DEFAULT_ARGS="--provider openai --model gpt-5-mini --domain business"
+DEFAULT_ARGS="--provider claude --model claude-sonnet-4-5 --domain business"
 
 # Check if the first argument is a JSON file path
 if [[ "$1" == *.json ]]; then
@@ -20,8 +20,8 @@ echo "  TableMagnifier - JSON Pipeline (Public)"
 echo "=============================================="
 echo "Input JSON: $INPUT_JSON"
 echo "Output Dir: $OUTPUT_DIR"
-echo "Provider: openai"
-echo "Model: gpt-5-mini"
+echo "Provider: claude"
+echo "Model: claude-sonnet-4-5"
 echo "Domain: business"
 echo ""
 echo "💡 Tip: To upload to Notion during pipeline execution:"
@@ -31,9 +31,9 @@ echo "💡 To upload existing results later:"
 echo "   python upload_to_notion_from_json.py $OUTPUT_DIR"
 echo ""
 
-# Check for OPENAI_API_KEY
-if [[ -z "$OPENAI_API_KEY" ]]; then
-    echo "⚠️  Warning: OPENAI_API_KEY is not set."
+# Check for ANTHROPIC_API_KEY
+if [[ -z "$ANTHROPIC_API_KEY" ]]; then
+    echo "⚠️  Warning: ANTHROPIC_API_KEY is not set."
     echo "   Please set it in your environment or .env file."
     echo ""
 fi

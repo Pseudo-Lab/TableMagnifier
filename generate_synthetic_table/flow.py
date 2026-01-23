@@ -765,6 +765,7 @@ def build_synthetic_table_graph(
     llm: ChatOpenAI,
     provider: str = "openai",
     qa_only: bool = False,
+    skip_qa: bool = False,
 ) -> StateGraph:
     """
     Assemble the LangGraph pipeline.
@@ -773,6 +774,7 @@ def build_synthetic_table_graph(
         llm: LLM instance
         provider: LLM provider name
         qa_only: If True, generate QA directly from image without synthetic data generation
+        skip_qa: If True, skip QA generation after table generation (table only mode)
     """
 
     graph = StateGraph(TableState)
@@ -783,7 +785,7 @@ def build_synthetic_table_graph(
         graph.add_edge(START, "generate_qa_from_image")
         graph.add_edge("generate_qa_from_image", END)
     else:
-        # Full pipeline mode
+        # Full pipeline mode (or table-only mode if skip_qa=True)
         graph.add_node("image_to_html", image_to_html_node(llm))
         graph.add_node("pymupdf_parse", pymupdf_parse_node)
         graph.add_node("validate_parsed_table", validate_parsed_table_node(llm))
@@ -795,7 +797,9 @@ def build_synthetic_table_graph(
         graph.add_node("self_reflection", self_reflection_node(llm))
         graph.add_node("revise_synthetic_table", revise_synthetic_table_node(llm))
         graph.add_node("parse_synthetic_table", parse_synthetic_table_node(llm))
-        graph.add_node("generate_qa", generate_qa_node(llm))
+
+        if not skip_qa:
+            graph.add_node("generate_qa", generate_qa_node(llm))
 
         # Routing based on provider and input type
         def route_start(state: TableState) -> str:
@@ -842,8 +846,13 @@ def build_synthetic_table_graph(
         )
 
         graph.add_edge("revise_synthetic_table", "self_reflection")
-        graph.add_edge("parse_synthetic_table", "generate_qa")
-        graph.add_edge("generate_qa", END)
+
+        # Final edge: skip QA if requested
+        if skip_qa:
+            graph.add_edge("parse_synthetic_table", END)
+        else:
+            graph.add_edge("parse_synthetic_table", "generate_qa")
+            graph.add_edge("generate_qa", END)
 
     return graph
 
@@ -914,6 +923,7 @@ def run_synthetic_table_flow(
     azure_deployment: str | None = None,
     azure_endpoint: str | None = None,
     qa_only: bool = False,
+    skip_qa: bool = False,
     image_paths: List[str] | None = None,
     domain: str | None = None,
     # 체크포인팅 옵션
@@ -935,6 +945,7 @@ def run_synthetic_table_flow(
         azure_deployment: Azure OpenAI deployment name
         azure_endpoint: Azure OpenAI endpoint URL
         qa_only: If True, skip synthetic data generation and only generate QA from image
+        skip_qa: If True, generate table only without QA generation
         image_paths: Optional list of image paths for multi-image processing
         domain: Optional domain for prompt customization (e.g. 'public')
         enable_checkpointing: 체크포인팅 활성화 여부
@@ -955,7 +966,7 @@ def run_synthetic_table_flow(
         config_path=config_path,
     )
 
-    graph = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only)
+    graph = build_synthetic_table_graph(llm, provider=provider, qa_only=qa_only, skip_qa=skip_qa)
 
     # 체크포인팅 설정
     if enable_checkpointing:
