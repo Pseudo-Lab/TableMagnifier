@@ -49,6 +49,7 @@ class TableState(TypedDict, total=False):
     synthetic_json: dict            # 파싱된 합성 데이터 JSON
     qa_results: List[Dict]          # 생성된 QA 쌍
     token_usage: int                # QA 생성에 사용된 총 토큰 수
+    is_multi_image: bool            # 다중 이미지 입력 여부 (cross-image QA 생성됨)
 
 
 def _encode_image(image_path: Path) -> str:
@@ -684,12 +685,65 @@ def generate_qa_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
     return _node
 
 
+def generate_long_sequence_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
+    """Generate long_sequence QA pair separately (context-dependent questions)."""
+
+    def _node(state: TableState) -> TableState:
+        logger.info("Entering node: generate_long_sequence")
+
+        # Try to load long_sequence prompt, skip if not available
+        try:
+            prompt_template = _load_prompt("generate_long_sequence", state.get("domain"))
+        except ValueError:
+            logger.info("No generate_long_sequence prompt found, skipping long_sequence generation")
+            return state
+
+        if state.get("errors"):
+            return state
+
+        synthetic_html = state.get("synthetic_table")
+        if not synthetic_html:
+            logger.warning("No synthetic table for long_sequence generation, skipping")
+            return state
+
+        try:
+            prompt = prompt_template.format(synthetic_html=synthetic_html)
+        except KeyError as e:
+            logger.warning(f"long_sequence prompt missing placeholder: {e}, skipping")
+            return state
+
+        response_text, token_usage = _call_llm(llm, prompt, return_token_usage=True)
+
+        logger.info(f"Long sequence generation token usage: {token_usage}")
+
+        response_json = robust_json_parse(response_text)
+
+        if response_json and "qa_pairs" in response_json:
+            long_seq_qa = response_json["qa_pairs"]
+            # Append to existing qa_results
+            existing_qa = list(state.get("qa_results", []))
+            existing_qa.extend(long_seq_qa)
+            # Update token usage
+            existing_token_usage = state.get("token_usage", 0)
+            total_token_usage = existing_token_usage + token_usage
+            logger.info(f"Added {len(long_seq_qa)} long_sequence QA pairs. Total QA: {len(existing_qa)}")
+            return {**state, "qa_results": existing_qa, "token_usage": total_token_usage}
+        else:
+            logger.warning("long_sequence generation did not return valid JSON or 'qa_pairs' key.")
+            return state
+
+    return _node
+
+
 def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], TableState]:
-    """Generate QA pairs directly from image (QA-only mode)."""
+    """Generate QA pairs directly from image (QA-only mode).
+
+    If multiple images are provided, uses 'generate_qa_from_multi_image' prompt
+    to generate cross-image QA pairs that require understanding multiple tables.
+    """
 
     def _node(state: TableState) -> TableState:
         logger.info("Entering node: generate_qa_from_image")
-        prompt_template = _load_prompt("generate_qa_from_image", state.get("domain"))
 
         if state.get("errors"):
             return state
@@ -711,6 +765,18 @@ def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], Table
              else:
                  logger.warning(f"Skipping missing image in batch: {img_p}")
 
+        # Use multi-image prompt if there are multiple images
+        is_multi_image = len(image_data_urls) > 1
+        if is_multi_image:
+            logger.info(f"Multi-image mode detected: {len(image_data_urls)} images. Using cross-image QA prompt.")
+            try:
+                prompt_template = _load_prompt("generate_qa_from_multi_image", state.get("domain"))
+            except ValueError:
+                logger.warning("Multi-image prompt not found, falling back to single-image prompt")
+                prompt_template = _load_prompt("generate_qa_from_image", state.get("domain"))
+        else:
+            prompt_template = _load_prompt("generate_qa_from_image", state.get("domain"))
+
         prompt = prompt_template
 
         response_text, token_usage = _call_llm(llm, prompt, image_urls=image_data_urls, return_token_usage=True)
@@ -727,7 +793,10 @@ def generate_qa_from_image_node(llm: ChatOpenAI) -> Callable[[TableState], Table
             logger.warning("QA generation from image did not return valid JSON or 'qa_pairs' key.")
 
         logger.info(f"Returning token_usage: {token_usage}")
-        return {**state, "qa_results": qa_results, "token_usage": token_usage}
+        result_state = {**state, "qa_results": qa_results, "token_usage": token_usage}
+        if is_multi_image:
+            result_state["is_multi_image"] = True
+        return result_state
 
     return _node
 
@@ -800,6 +869,7 @@ def build_synthetic_table_graph(
 
         if not skip_qa:
             graph.add_node("generate_qa", generate_qa_node(llm))
+            graph.add_node("generate_long_sequence", generate_long_sequence_node(llm))
 
         # Routing based on provider and input type
         def route_start(state: TableState) -> str:
@@ -852,7 +922,8 @@ def build_synthetic_table_graph(
             graph.add_edge("parse_synthetic_table", END)
         else:
             graph.add_edge("parse_synthetic_table", "generate_qa")
-            graph.add_edge("generate_qa", END)
+            graph.add_edge("generate_qa", "generate_long_sequence")
+            graph.add_edge("generate_long_sequence", END)
 
     return graph
 

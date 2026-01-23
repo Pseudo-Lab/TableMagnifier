@@ -19,12 +19,12 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-data/*
+
 # Virtual Environment
 venv/
 env/
 ENV/
-.venv
+.venv/
 
 # IDE
 .vscode/
@@ -34,51 +34,69 @@ ENV/
 *~
 .DS_Store
 
+# Claude Code
+.claude/
+
 # API Keys - 중요!
 .env
-.env.local
-.env.development
-.env.test
-.env.production
-
+.env.*
 apis/gemini_keys.yaml
-!apis/gemini_keys.yaml.template
+apis/*.yaml
+!apis/*-example.yaml
+!apis/*.template.yaml
 
 # Logs
 *.log
+logs/
 
 # Jupyter Notebook
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
 # pytest
 .pytest_cache/
 .coverage
+htmlcov/
 
 # MyPy
 .mypy_cache/
 .dmypy.json
 dmypy.json
 
-# database 
+# Data - 원본 데이터
+data/
+
+# Output - 생성된 결과물
+output/
+output_*/
+I_origin_*/
+
+# Temp - 임시 파일
+temp/
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Generated JSON (except input templates)
+pipeline_output*.json
+qa_difficulty_analysis_*.json
+qa_for_review_*.json
+eval_results_*.json
+
+# Keep input templates
+!test_*_input.json
+
+# Database/Token
 info/
 token.json
-*.json
-test_input.json
 
-# env
+# Docs (if generated)
 .bemad/
-docs/
-pipeline_ui/backend/checkpoints/*
-pipeline_ui/backend/output/*
-pipeline_ui/backend/uploads/*
 
-# Frontend (Node.js)
-pipeline_ui/frontend/node_modules/*
+# Pipeline UI
+pipeline_ui/backend/checkpoints/
+pipeline_ui/backend/output/
+pipeline_ui/backend/uploads/
+pipeline_ui/frontend/node_modules/
 pipeline_ui/frontend/package-lock.json
-
-
-I_origin_0/*
-I_origin_1/*
-I_origin_2/*
-
-output/*

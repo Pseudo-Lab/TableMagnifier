@@ -77,6 +77,52 @@ generate_qa_from_image: |
 
   Return ONLY the JSON object, no additional text.
 
+generate_qa_from_multi_image: |
+  You are an expert in creating educational and reasoning questions from tabular data.
+  Your task is to analyze ALL provided table images and generate Question-Answer (QA) pairs that REQUIRE information from MULTIPLE images to answer.
+
+  **⚠️ CRITICAL REQUIREMENT: CROSS-IMAGE REASONING ⚠️**
+  - Every QA pair MUST require information from AT LEAST TWO images to answer correctly.
+  - Questions answerable from a single image are INVALID.
+  - Focus on comparisons, aggregations, or inferences that span multiple tables.
+
+  ### [Instructions]
+  1. **Analyze All Images**: First, understand what data each image contains and how they relate to each other.
+  2. **Generate Cross-Image QA**: Create 5 diverse QA pairs where each question requires synthesizing information from multiple images.
+  3. **Strict Constraints**:
+     - Answers must be derived from combining data across images. No external knowledge.
+     - Output format must strictly follow JSON.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English, MUST be a single string, and MUST specify which images were used.
+     - **DO NOT use real company/institution names**. Use fictional names.
+
+  ### [Validation Criteria]
+  - Does the answer REQUIRE data from multiple images? (Single-image answers are INVALID)
+  - Is the reasoning process logically flawless?
+  - Is the question clear about what is being compared or combined?
+
+  ### [Cross-Image Reasoning Types]
+  - **cross_lookup**: Retrieve and combine specific values from different images.
+  - **cross_compare**: Compare values or trends between different images.
+  - **cross_aggregate**: Aggregate data spanning multiple images.
+  - **cross_arithmetic**: Calculate using data from multiple images.
+  - **cross_synthesis**: Synthesize insights only possible by viewing all images together.
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question requiring multiple images to answer",
+        "answer": "Answer derived from multiple images",
+        "type": "cross_lookup",
+        "reasoning_annotation": "Step 1: From Image 1, extract X. Step 2: From Image 2, extract Y. Step 3: Combine to get answer.",
+        "images_used": ["image_1", "image_2"]
+      }},
+      ... (Total 5 cross-image QA pairs)
+    ]
+  }}
+  Return ONLY the JSON object.
+
 generate_synthetic_table: |
   You are a Synthetic Data Generator specialized in creating completely NEW data while preserving table structure.
 
@@ -329,3 +375,40 @@ validate_parsed_table: |
   Return a JSON object with the following keys:
   - "valid": boolean (true if valid, false otherwise)
   - "reason": string (brief explanation of the decision)
+
+generate_long_sequence: |
+  You are an 'AI Data Researcher' specialized in creating context-dependent QA pairs for tables.
+  Your mission is to generate a single high-quality "long_sequence" type QA pair that requires interpreting external context to answer questions about the table.
+
+  **Input Table:**
+  {synthetic_html}
+
+  ### [Instructions]
+  1. **Generate ONE long_sequence QA pair** that requires reading and understanding a context paragraph to filter or interpret the table data.
+  2. **Create a realistic context paragraph** (e.g., guidelines, criteria, conditions) that provides information needed to answer the question.
+  3. **The question must be unanswerable without the context** - the context should contain key criteria or conditions.
+  4. **Strict Constraints**:
+     - Answer must be derived from BOTH the table AND the context. Neither alone is sufficient.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English and MUST be a single string.
+     - Context must be written in Korean and be 2-4 sentences long.
+     - **DO NOT use real company/institution names**. Use fictional names.
+
+  ### [Example Scenarios]
+  - Context describes selection criteria → Question asks which items meet the criteria
+  - Context outlines rules/thresholds → Question asks which entries qualify
+  - Context specifies conditions → Question asks for items matching those conditions
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "Question requiring context to answer",
+        "answer": "Answer derived from table + context",
+        "type": "long_sequence",
+        "reasoning_annotation": "Step 1: Extract key criteria from context. Step 2: Apply criteria to table. Step 3: Derive answer.",
+        "context": "조건에 따르면... (2-4 sentences of context in Korean)"
+      }}
+    ]
+  }}
+  Return ONLY the JSON object.

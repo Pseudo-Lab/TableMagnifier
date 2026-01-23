@@ -1,0 +1,1602 @@
+[
+  {
+    "index": 0,
+    "pair_id": "A_origin_0_A_table_0",
+    "image_paths": [
+      "data/Academic/Table/A_origin_0/A_table_0.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_0",
+    "table_id": "A_table_0"
+  },
+  {
+    "index": 1,
+    "pair_id": "A_origin_0_A_table_1",
+    "image_paths": [
+      "data/Academic/Table/A_origin_0/A_table_1.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_0",
+    "table_id": "A_table_1"
+  },
+  {
+    "index": 2,
+    "pair_id": "A_origin_0_A_table_2",
+    "image_paths": [
+      "data/Academic/Table/A_origin_0/A_table_2.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_0",
+    "table_id": "A_table_2"
+  },
+  {
+    "index": 3,
+    "pair_id": "A_origin_0_A_table_3",
+    "image_paths": [
+      "data/Academic/Table/A_origin_0/A_table_3.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_0",
+    "table_id": "A_table_3"
+  },
+  {
+    "index": 4,
+    "pair_id": "A_origin_0_A_table_4",
+    "image_paths": [
+      "data/Academic/Table/A_origin_0/A_table_4.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_0",
+    "table_id": "A_table_4"
+  },
+  {
+    "index": 5,
+    "pair_id": "A_origin_1_A_table_5_0",
+    "image_paths": [
+      "data/Academic/Table/A_origin_1/A_table_5_0.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_1",
+    "table_id": "A_table_5_0"
+  },
+  {
+    "index": 6,
+    "pair_id": "A_origin_1_A_table_5_1",
+    "image_paths": [
+      "data/Academic/Table/A_origin_1/A_table_5_1.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_1",
+    "table_id": "A_table_5_1"
+  },
+  {
+    "index": 7,
+    "pair_id": "A_origin_1_A_table_6_0",
+    "image_paths": [
+      "data/Academic/Table/A_origin_1/A_table_6_0.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_1",
+    "table_id": "A_table_6_0"
+  },
+  {
+    "index": 8,
+    "pair_id": "A_origin_1_A_table_6_1",
+    "image_paths": [
+      "data/Academic/Table/A_origin_1/A_table_6_1.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_1",
+    "table_id": "A_table_6_1"
+  },
+  {
+    "index": 9,
+    "pair_id": "A_origin_1_A_table_7_0",
+    "image_paths": [
+      "data/Academic/Table/A_origin_1/A_table_7_0.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_1",
+    "table_id": "A_table_7_0"
+  },
+  {
+    "index": 10,
+    "pair_id": "A_origin_1_A_table_7_1",
+    "image_paths": [
+      "data/Academic/Table/A_origin_1/A_table_7_1.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_1",
+    "table_id": "A_table_7_1"
+  },
+  {
+    "index": 11,
+    "pair_id": "A_origin_10_A_table_28",
+    "image_paths": [
+      "data/Academic/Table/A_origin_10/A_table_28.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_10",
+    "table_id": "A_table_28"
+  },
+  {
+    "index": 12,
+    "pair_id": "A_origin_10_A_table_29",
+    "image_paths": [
+      "data/Academic/Table/A_origin_10/A_table_29.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_10",
+    "table_id": "A_table_29"
+  },
+  {
+    "index": 13,
+    "pair_id": "A_origin_11_A_table_30",
+    "image_paths": [
+      "data/Academic/Table/A_origin_11/A_table_30.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_11",
+    "table_id": "A_table_30"
+  },
+  {
+    "index": 14,
+    "pair_id": "A_origin_11_A_table_31",
+    "image_paths": [
+      "data/Academic/Table/A_origin_11/A_table_31.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_11",
+    "table_id": "A_table_31"
+  },
+  {
+    "index": 15,
+    "pair_id": "A_origin_12_A_table_32",
+    "image_paths": [
+      "data/Academic/Table/A_origin_12/A_table_32.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_12",
+    "table_id": "A_table_32"
+  },
+  {
+    "index": 16,
+    "pair_id": "A_origin_12_A_table_33",
+    "image_paths": [
+      "data/Academic/Table/A_origin_12/A_table_33.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_12",
+    "table_id": "A_table_33"
+  },
+  {
+    "index": 17,
+    "pair_id": "A_origin_12_A_table_34",
+    "image_paths": [
+      "data/Academic/Table/A_origin_12/A_table_34.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_12",
+    "table_id": "A_table_34"
+  },
+  {
+    "index": 18,
+    "pair_id": "A_origin_13_A_table_35",
+    "image_paths": [
+      "data/Academic/Table/A_origin_13/A_table_35.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_13",
+    "table_id": "A_table_35"
+  },
+  {
+    "index": 19,
+    "pair_id": "A_origin_13_A_table_36",
+    "image_paths": [
+      "data/Academic/Table/A_origin_13/A_table_36.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_13",
+    "table_id": "A_table_36"
+  },
+  {
+    "index": 20,
+    "pair_id": "A_origin_13_A_table_37",
+    "image_paths": [
+      "data/Academic/Table/A_origin_13/A_table_37.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_13",
+    "table_id": "A_table_37"
+  },
+  {
+    "index": 21,
+    "pair_id": "A_origin_13_A_table_38",
+    "image_paths": [
+      "data/Academic/Table/A_origin_13/A_table_38.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_13",
+    "table_id": "A_table_38"
+  },
+  {
+    "index": 22,
+    "pair_id": "A_origin_14_A_table_39",
+    "image_paths": [
+      "data/Academic/Table/A_origin_14/A_table_39.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_14",
+    "table_id": "A_table_39"
+  },
+  {
+    "index": 23,
+    "pair_id": "A_origin_14_A_table_40",
+    "image_paths": [
+      "data/Academic/Table/A_origin_14/A_table_40.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_14",
+    "table_id": "A_table_40"
+  },
+  {
+    "index": 24,
+    "pair_id": "A_origin_15_A_table_41",
+    "image_paths": [
+      "data/Academic/Table/A_origin_15/A_table_41.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_15",
+    "table_id": "A_table_41"
+  },
+  {
+    "index": 25,
+    "pair_id": "A_origin_16_A_table_42",
+    "image_paths": [
+      "data/Academic/Table/A_origin_16/A_table_42.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_16",
+    "table_id": "A_table_42"
+  },
+  {
+    "index": 26,
+    "pair_id": "A_origin_16_A_table_43",
+    "image_paths": [
+      "data/Academic/Table/A_origin_16/A_table_43.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_16",
+    "table_id": "A_table_43"
+  },
+  {
+    "index": 27,
+    "pair_id": "A_origin_17_A_table_44",
+    "image_paths": [
+      "data/Academic/Table/A_origin_17/A_table_44.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_17",
+    "table_id": "A_table_44"
+  },
+  {
+    "index": 28,
+    "pair_id": "A_origin_17_A_table_45",
+    "image_paths": [
+      "data/Academic/Table/A_origin_17/A_table_45.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_17",
+    "table_id": "A_table_45"
+  },
+  {
+    "index": 29,
+    "pair_id": "A_origin_17_A_table_46",
+    "image_paths": [
+      "data/Academic/Table/A_origin_17/A_table_46.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_17",
+    "table_id": "A_table_46"
+  },
+  {
+    "index": 30,
+    "pair_id": "A_origin_18_A_table_47",
+    "image_paths": [
+      "data/Academic/Table/A_origin_18/A_table_47.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_18",
+    "table_id": "A_table_47"
+  },
+  {
+    "index": 31,
+    "pair_id": "A_origin_18_A_table_48",
+    "image_paths": [
+      "data/Academic/Table/A_origin_18/A_table_48.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_18",
+    "table_id": "A_table_48"
+  },
+  {
+    "index": 32,
+    "pair_id": "A_origin_18_A_table_49",
+    "image_paths": [
+      "data/Academic/Table/A_origin_18/A_table_49.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_18",
+    "table_id": "A_table_49"
+  },
+  {
+    "index": 33,
+    "pair_id": "A_origin_19_A_table_50",
+    "image_paths": [
+      "data/Academic/Table/A_origin_19/A_table_50.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_19",
+    "table_id": "A_table_50"
+  },
+  {
+    "index": 34,
+    "pair_id": "A_origin_2_A_table_8",
+    "image_paths": [
+      "data/Academic/Table/A_origin_2/A_table_8.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_2",
+    "table_id": "A_table_8"
+  },
+  {
+    "index": 35,
+    "pair_id": "A_origin_2_A_table_9",
+    "image_paths": [
+      "data/Academic/Table/A_origin_2/A_table_9.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_2",
+    "table_id": "A_table_9"
+  },
+  {
+    "index": 36,
+    "pair_id": "A_origin_20_A_table_51",
+    "image_paths": [
+      "data/Academic/Table/A_origin_20/A_table_51.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_20",
+    "table_id": "A_table_51"
+  },
+  {
+    "index": 37,
+    "pair_id": "A_origin_20_A_table_52",
+    "image_paths": [
+      "data/Academic/Table/A_origin_20/A_table_52.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_20",
+    "table_id": "A_table_52"
+  },
+  {
+    "index": 38,
+    "pair_id": "A_origin_21_A_table_53",
+    "image_paths": [
+      "data/Academic/Table/A_origin_21/A_table_53.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_21",
+    "table_id": "A_table_53"
+  },
+  {
+    "index": 39,
+    "pair_id": "A_origin_21_A_table_54",
+    "image_paths": [
+      "data/Academic/Table/A_origin_21/A_table_54.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_21",
+    "table_id": "A_table_54"
+  },
+  {
+    "index": 40,
+    "pair_id": "A_origin_22_A_table_55",
+    "image_paths": [
+      "data/Academic/Table/A_origin_22/A_table_55.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_22",
+    "table_id": "A_table_55"
+  },
+  {
+    "index": 41,
+    "pair_id": "A_origin_23_A_table_56",
+    "image_paths": [
+      "data/Academic/Table/A_origin_23/A_table_56.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_23",
+    "table_id": "A_table_56"
+  },
+  {
+    "index": 42,
+    "pair_id": "A_origin_24_A_table_57",
+    "image_paths": [
+      "data/Academic/Table/A_origin_24/A_table_57.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_24",
+    "table_id": "A_table_57"
+  },
+  {
+    "index": 43,
+    "pair_id": "A_origin_25_A_table_58",
+    "image_paths": [
+      "data/Academic/Table/A_origin_25/A_table_58.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_25",
+    "table_id": "A_table_58"
+  },
+  {
+    "index": 44,
+    "pair_id": "A_origin_26_A_table_59_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_26/A_table_59_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_26",
+    "table_id": "A_table_59_01"
+  },
+  {
+    "index": 45,
+    "pair_id": "A_origin_26_A_table_59_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_26/A_table_59_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_26",
+    "table_id": "A_table_59_02"
+  },
+  {
+    "index": 46,
+    "pair_id": "A_origin_26_A_table_60",
+    "image_paths": [
+      "data/Academic/Table/A_origin_26/A_table_60.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_26",
+    "table_id": "A_table_60"
+  },
+  {
+    "index": 47,
+    "pair_id": "A_origin_26_A_table_61",
+    "image_paths": [
+      "data/Academic/Table/A_origin_26/A_table_61.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_26",
+    "table_id": "A_table_61"
+  },
+  {
+    "index": 48,
+    "pair_id": "A_origin_27_A_table_62_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_27/A_table_62_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_27",
+    "table_id": "A_table_62_01"
+  },
+  {
+    "index": 49,
+    "pair_id": "A_origin_27_A_table_62_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_27/A_table_62_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_27",
+    "table_id": "A_table_62_02"
+  },
+  {
+    "index": 50,
+    "pair_id": "A_origin_28_A_table_63_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_28/A_table_63_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_28",
+    "table_id": "A_table_63_01"
+  },
+  {
+    "index": 51,
+    "pair_id": "A_origin_28_A_table_63_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_28/A_table_63_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_28",
+    "table_id": "A_table_63_02"
+  },
+  {
+    "index": 52,
+    "pair_id": "A_origin_28_A_table_64",
+    "image_paths": [
+      "data/Academic/Table/A_origin_28/A_table_64.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_28",
+    "table_id": "A_table_64"
+  },
+  {
+    "index": 53,
+    "pair_id": "A_origin_29_A_table_65",
+    "image_paths": [
+      "data/Academic/Table/A_origin_29/A_table_65.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_29",
+    "table_id": "A_table_65"
+  },
+  {
+    "index": 54,
+    "pair_id": "A_origin_3_A_table_10",
+    "image_paths": [
+      "data/Academic/Table/A_origin_3/A_table_10.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_3",
+    "table_id": "A_table_10"
+  },
+  {
+    "index": 55,
+    "pair_id": "A_origin_3_A_table_11",
+    "image_paths": [
+      "data/Academic/Table/A_origin_3/A_table_11.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_3",
+    "table_id": "A_table_11"
+  },
+  {
+    "index": 56,
+    "pair_id": "A_origin_30_A_table_66_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_30/A_table_66_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_30",
+    "table_id": "A_table_66_01"
+  },
+  {
+    "index": 57,
+    "pair_id": "A_origin_30_A_table_66_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_30/A_table_66_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_30",
+    "table_id": "A_table_66_02"
+  },
+  {
+    "index": 58,
+    "pair_id": "A_origin_31_A_table_67_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_31/A_table_67_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_31",
+    "table_id": "A_table_67_01"
+  },
+  {
+    "index": 59,
+    "pair_id": "A_origin_31_A_table_67_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_31/A_table_67_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_31",
+    "table_id": "A_table_67_02"
+  },
+  {
+    "index": 60,
+    "pair_id": "A_origin_32_A_table_68_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_32/A_table_68_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_32",
+    "table_id": "A_table_68_01"
+  },
+  {
+    "index": 61,
+    "pair_id": "A_origin_32_A_table_68_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_32/A_table_68_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_32",
+    "table_id": "A_table_68_02"
+  },
+  {
+    "index": 62,
+    "pair_id": "A_origin_32_A_table_69_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_32/A_table_69_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_32",
+    "table_id": "A_table_69_01"
+  },
+  {
+    "index": 63,
+    "pair_id": "A_origin_32_A_table_69_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_32/A_table_69_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_32",
+    "table_id": "A_table_69_02"
+  },
+  {
+    "index": 64,
+    "pair_id": "A_origin_33_A_table_70_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_33/A_table_70_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_33",
+    "table_id": "A_table_70_01"
+  },
+  {
+    "index": 65,
+    "pair_id": "A_origin_33_A_table_70_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_33/A_table_70_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_33",
+    "table_id": "A_table_70_02"
+  },
+  {
+    "index": 66,
+    "pair_id": "A_origin_34_A_table_71_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_34/A_table_71_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_34",
+    "table_id": "A_table_71_01"
+  },
+  {
+    "index": 67,
+    "pair_id": "A_origin_34_A_table_71_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_34/A_table_71_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_34",
+    "table_id": "A_table_71_02"
+  },
+  {
+    "index": 68,
+    "pair_id": "A_origin_35_A_table_72",
+    "image_paths": [
+      "data/Academic/Table/A_origin_35/A_table_72.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_35",
+    "table_id": "A_table_72"
+  },
+  {
+    "index": 69,
+    "pair_id": "A_origin_36_A_table_73",
+    "image_paths": [
+      "data/Academic/Table/A_origin_36/A_table_73.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_36",
+    "table_id": "A_table_73"
+  },
+  {
+    "index": 70,
+    "pair_id": "A_origin_36_A_table_74",
+    "image_paths": [
+      "data/Academic/Table/A_origin_36/A_table_74.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_36",
+    "table_id": "A_table_74"
+  },
+  {
+    "index": 71,
+    "pair_id": "A_origin_36_A_table_75",
+    "image_paths": [
+      "data/Academic/Table/A_origin_36/A_table_75.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_36",
+    "table_id": "A_table_75"
+  },
+  {
+    "index": 72,
+    "pair_id": "A_origin_37_A_table_76_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_37/A_table_76_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_37",
+    "table_id": "A_table_76_01"
+  },
+  {
+    "index": 73,
+    "pair_id": "A_origin_37_A_table_76_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_37/A_table_76_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_37",
+    "table_id": "A_table_76_02"
+  },
+  {
+    "index": 74,
+    "pair_id": "A_origin_38_A_table_77",
+    "image_paths": [
+      "data/Academic/Table/A_origin_38/A_table_77.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_38",
+    "table_id": "A_table_77"
+  },
+  {
+    "index": 75,
+    "pair_id": "A_origin_38_A_table_78",
+    "image_paths": [
+      "data/Academic/Table/A_origin_38/A_table_78.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_38",
+    "table_id": "A_table_78"
+  },
+  {
+    "index": 76,
+    "pair_id": "A_origin_39_A_table_79",
+    "image_paths": [
+      "data/Academic/Table/A_origin_39/A_table_79.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_39",
+    "table_id": "A_table_79"
+  },
+  {
+    "index": 77,
+    "pair_id": "A_origin_39_A_table_80_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_39/A_table_80_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_39",
+    "table_id": "A_table_80_01"
+  },
+  {
+    "index": 78,
+    "pair_id": "A_origin_39_A_table_80_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_39/A_table_80_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_39",
+    "table_id": "A_table_80_02"
+  },
+  {
+    "index": 79,
+    "pair_id": "A_origin_4_A_table_12",
+    "image_paths": [
+      "data/Academic/Table/A_origin_4/A_table_12.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_4",
+    "table_id": "A_table_12"
+  },
+  {
+    "index": 80,
+    "pair_id": "A_origin_4_A_table_13",
+    "image_paths": [
+      "data/Academic/Table/A_origin_4/A_table_13.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_4",
+    "table_id": "A_table_13"
+  },
+  {
+    "index": 81,
+    "pair_id": "A_origin_40_A_table_81",
+    "image_paths": [
+      "data/Academic/Table/A_origin_40/A_table_81.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_40",
+    "table_id": "A_table_81"
+  },
+  {
+    "index": 82,
+    "pair_id": "A_origin_40_A_table_82",
+    "image_paths": [
+      "data/Academic/Table/A_origin_40/A_table_82.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_40",
+    "table_id": "A_table_82"
+  },
+  {
+    "index": 83,
+    "pair_id": "A_origin_40_A_table_83",
+    "image_paths": [
+      "data/Academic/Table/A_origin_40/A_table_83.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_40",
+    "table_id": "A_table_83"
+  },
+  {
+    "index": 84,
+    "pair_id": "A_origin_41_A_table_84",
+    "image_paths": [
+      "data/Academic/Table/A_origin_41/A_table_84.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_41",
+    "table_id": "A_table_84"
+  },
+  {
+    "index": 85,
+    "pair_id": "A_origin_41_A_table_85",
+    "image_paths": [
+      "data/Academic/Table/A_origin_41/A_table_85.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_41",
+    "table_id": "A_table_85"
+  },
+  {
+    "index": 86,
+    "pair_id": "A_origin_42_A_table_86",
+    "image_paths": [
+      "data/Academic/Table/A_origin_42/A_table_86.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_42",
+    "table_id": "A_table_86"
+  },
+  {
+    "index": 87,
+    "pair_id": "A_origin_42_A_table_87",
+    "image_paths": [
+      "data/Academic/Table/A_origin_42/A_table_87.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_42",
+    "table_id": "A_table_87"
+  },
+  {
+    "index": 88,
+    "pair_id": "A_origin_43_A_table_88",
+    "image_paths": [
+      "data/Academic/Table/A_origin_43/A_table_88.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_43",
+    "table_id": "A_table_88"
+  },
+  {
+    "index": 89,
+    "pair_id": "A_origin_43_A_table_89",
+    "image_paths": [
+      "data/Academic/Table/A_origin_43/A_table_89.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_43",
+    "table_id": "A_table_89"
+  },
+  {
+    "index": 90,
+    "pair_id": "A_origin_43_A_table_90",
+    "image_paths": [
+      "data/Academic/Table/A_origin_43/A_table_90.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_43",
+    "table_id": "A_table_90"
+  },
+  {
+    "index": 91,
+    "pair_id": "A_origin_44_A_table_91",
+    "image_paths": [
+      "data/Academic/Table/A_origin_44/A_table_91.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_44",
+    "table_id": "A_table_91"
+  },
+  {
+    "index": 92,
+    "pair_id": "A_origin_45_A_table_92",
+    "image_paths": [
+      "data/Academic/Table/A_origin_45/A_table_92.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_45",
+    "table_id": "A_table_92"
+  },
+  {
+    "index": 93,
+    "pair_id": "A_origin_45_A_table_93",
+    "image_paths": [
+      "data/Academic/Table/A_origin_45/A_table_93.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_45",
+    "table_id": "A_table_93"
+  },
+  {
+    "index": 94,
+    "pair_id": "A_origin_45_A_table_94",
+    "image_paths": [
+      "data/Academic/Table/A_origin_45/A_table_94.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_45",
+    "table_id": "A_table_94"
+  },
+  {
+    "index": 95,
+    "pair_id": "A_origin_45_A_table_95",
+    "image_paths": [
+      "data/Academic/Table/A_origin_45/A_table_95.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_45",
+    "table_id": "A_table_95"
+  },
+  {
+    "index": 96,
+    "pair_id": "A_origin_46_A_table_96",
+    "image_paths": [
+      "data/Academic/Table/A_origin_46/A_table_96.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_46",
+    "table_id": "A_table_96"
+  },
+  {
+    "index": 97,
+    "pair_id": "A_origin_47_A_table_97",
+    "image_paths": [
+      "data/Academic/Table/A_origin_47/A_table_97.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_47",
+    "table_id": "A_table_97"
+  },
+  {
+    "index": 98,
+    "pair_id": "A_origin_47_A_table_98",
+    "image_paths": [
+      "data/Academic/Table/A_origin_47/A_table_98.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_47",
+    "table_id": "A_table_98"
+  },
+  {
+    "index": 99,
+    "pair_id": "A_origin_48_A_table_99",
+    "image_paths": [
+      "data/Academic/Table/A_origin_48/A_table_99.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_48",
+    "table_id": "A_table_99"
+  },
+  {
+    "index": 100,
+    "pair_id": "A_origin_49_A_table_100",
+    "image_paths": [
+      "data/Academic/Table/A_origin_49/A_table_100.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_49",
+    "table_id": "A_table_100"
+  },
+  {
+    "index": 101,
+    "pair_id": "A_origin_49_A_table_101",
+    "image_paths": [
+      "data/Academic/Table/A_origin_49/A_table_101.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_49",
+    "table_id": "A_table_101"
+  },
+  {
+    "index": 102,
+    "pair_id": "A_origin_5_A_table_14",
+    "image_paths": [
+      "data/Academic/Table/A_origin_5/A_table_14.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_5",
+    "table_id": "A_table_14"
+  },
+  {
+    "index": 103,
+    "pair_id": "A_origin_5_A_table_15",
+    "image_paths": [
+      "data/Academic/Table/A_origin_5/A_table_15.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_5",
+    "table_id": "A_table_15"
+  },
+  {
+    "index": 104,
+    "pair_id": "A_origin_5_A_table_16",
+    "image_paths": [
+      "data/Academic/Table/A_origin_5/A_table_16.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_5",
+    "table_id": "A_table_16"
+  },
+  {
+    "index": 105,
+    "pair_id": "A_origin_50_A_table_102",
+    "image_paths": [
+      "data/Academic/Table/A_origin_50/A_table_102.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_50",
+    "table_id": "A_table_102"
+  },
+  {
+    "index": 106,
+    "pair_id": "A_origin_51_A_table_103",
+    "image_paths": [
+      "data/Academic/Table/A_origin_51/A_table_103.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_51",
+    "table_id": "A_table_103"
+  },
+  {
+    "index": 107,
+    "pair_id": "A_origin_51_A_table_104",
+    "image_paths": [
+      "data/Academic/Table/A_origin_51/A_table_104.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_51",
+    "table_id": "A_table_104"
+  },
+  {
+    "index": 108,
+    "pair_id": "A_origin_52_A_table_105",
+    "image_paths": [
+      "data/Academic/Table/A_origin_52/A_table_105.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_52",
+    "table_id": "A_table_105"
+  },
+  {
+    "index": 109,
+    "pair_id": "A_origin_53_A_table_106_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_53/A_table_106_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_53",
+    "table_id": "A_table_106_01"
+  },
+  {
+    "index": 110,
+    "pair_id": "A_origin_53_A_table_106_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_53/A_table_106_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_53",
+    "table_id": "A_table_106_02"
+  },
+  {
+    "index": 111,
+    "pair_id": "A_origin_53_A_table_107_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_53/A_table_107_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_53",
+    "table_id": "A_table_107_01"
+  },
+  {
+    "index": 112,
+    "pair_id": "A_origin_53_A_table_107_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_53/A_table_107_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_53",
+    "table_id": "A_table_107_02"
+  },
+  {
+    "index": 113,
+    "pair_id": "A_origin_53_A_table_108",
+    "image_paths": [
+      "data/Academic/Table/A_origin_53/A_table_108.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_53",
+    "table_id": "A_table_108"
+  },
+  {
+    "index": 114,
+    "pair_id": "A_origin_54_A_table_109",
+    "image_paths": [
+      "data/Academic/Table/A_origin_54/A_table_109.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_54",
+    "table_id": "A_table_109"
+  },
+  {
+    "index": 115,
+    "pair_id": "A_origin_54_A_table_110",
+    "image_paths": [
+      "data/Academic/Table/A_origin_54/A_table_110.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_54",
+    "table_id": "A_table_110"
+  },
+  {
+    "index": 116,
+    "pair_id": "A_origin_55_A_table_111",
+    "image_paths": [
+      "data/Academic/Table/A_origin_55/A_table_111.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_55",
+    "table_id": "A_table_111"
+  },
+  {
+    "index": 117,
+    "pair_id": "A_origin_55_A_table_112",
+    "image_paths": [
+      "data/Academic/Table/A_origin_55/A_table_112.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_55",
+    "table_id": "A_table_112"
+  },
+  {
+    "index": 118,
+    "pair_id": "A_origin_56_A_table_113",
+    "image_paths": [
+      "data/Academic/Table/A_origin_56/A_table_113.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_56",
+    "table_id": "A_table_113"
+  },
+  {
+    "index": 119,
+    "pair_id": "A_origin_56_A_table_114",
+    "image_paths": [
+      "data/Academic/Table/A_origin_56/A_table_114.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_56",
+    "table_id": "A_table_114"
+  },
+  {
+    "index": 120,
+    "pair_id": "A_origin_56_A_table_115",
+    "image_paths": [
+      "data/Academic/Table/A_origin_56/A_table_115.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_56",
+    "table_id": "A_table_115"
+  },
+  {
+    "index": 121,
+    "pair_id": "A_origin_57_A_table_116",
+    "image_paths": [
+      "data/Academic/Table/A_origin_57/A_table_116.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_57",
+    "table_id": "A_table_116"
+  },
+  {
+    "index": 122,
+    "pair_id": "A_origin_57_A_table_117",
+    "image_paths": [
+      "data/Academic/Table/A_origin_57/A_table_117.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_57",
+    "table_id": "A_table_117"
+  },
+  {
+    "index": 123,
+    "pair_id": "A_origin_57_A_table_118",
+    "image_paths": [
+      "data/Academic/Table/A_origin_57/A_table_118.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_57",
+    "table_id": "A_table_118"
+  },
+  {
+    "index": 124,
+    "pair_id": "A_origin_57_A_table_119",
+    "image_paths": [
+      "data/Academic/Table/A_origin_57/A_table_119.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_57",
+    "table_id": "A_table_119"
+  },
+  {
+    "index": 125,
+    "pair_id": "A_origin_57_A_table_120",
+    "image_paths": [
+      "data/Academic/Table/A_origin_57/A_table_120.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_57",
+    "table_id": "A_table_120"
+  },
+  {
+    "index": 126,
+    "pair_id": "A_origin_58_A_table_121",
+    "image_paths": [
+      "data/Academic/Table/A_origin_58/A_table_121.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_58",
+    "table_id": "A_table_121"
+  },
+  {
+    "index": 127,
+    "pair_id": "A_origin_58_A_table_122",
+    "image_paths": [
+      "data/Academic/Table/A_origin_58/A_table_122.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_58",
+    "table_id": "A_table_122"
+  },
+  {
+    "index": 128,
+    "pair_id": "A_origin_58_A_table_123_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_58/A_table_123_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_58",
+    "table_id": "A_table_123_01"
+  },
+  {
+    "index": 129,
+    "pair_id": "A_origin_58_A_table_123_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_58/A_table_123_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_58",
+    "table_id": "A_table_123_02"
+  },
+  {
+    "index": 130,
+    "pair_id": "A_origin_59_A_table_124_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_59/A_table_124_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_59",
+    "table_id": "A_table_124_01"
+  },
+  {
+    "index": 131,
+    "pair_id": "A_origin_59_A_table_124_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_59/A_table_124_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_59",
+    "table_id": "A_table_124_02"
+  },
+  {
+    "index": 132,
+    "pair_id": "A_origin_6_A_table_18",
+    "image_paths": [
+      "data/Academic/Table/A_origin_6/A_table_18.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_6",
+    "table_id": "A_table_18"
+  },
+  {
+    "index": 133,
+    "pair_id": "A_origin_6_A_table_19",
+    "image_paths": [
+      "data/Academic/Table/A_origin_6/A_table_19.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_6",
+    "table_id": "A_table_19"
+  },
+  {
+    "index": 134,
+    "pair_id": "A_origin_6_A_table_8",
+    "image_paths": [
+      "data/Academic/Table/A_origin_6/A_table_8.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_6",
+    "table_id": "A_table_8"
+  },
+  {
+    "index": 135,
+    "pair_id": "A_origin_60_A_table_125_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_60/A_table_125_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_60",
+    "table_id": "A_table_125_01"
+  },
+  {
+    "index": 136,
+    "pair_id": "A_origin_60_A_table_125_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_60/A_table_125_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_60",
+    "table_id": "A_table_125_02"
+  },
+  {
+    "index": 137,
+    "pair_id": "A_origin_61_A_table_126",
+    "image_paths": [
+      "data/Academic/Table/A_origin_61/A_table_126.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_61",
+    "table_id": "A_table_126"
+  },
+  {
+    "index": 138,
+    "pair_id": "A_origin_62_A_table_127_01",
+    "image_paths": [
+      "data/Academic/Table/A_origin_62/A_table_127_01.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_62",
+    "table_id": "A_table_127_01"
+  },
+  {
+    "index": 139,
+    "pair_id": "A_origin_62_A_table_127_02",
+    "image_paths": [
+      "data/Academic/Table/A_origin_62/A_table_127_02.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_62",
+    "table_id": "A_table_127_02"
+  },
+  {
+    "index": 140,
+    "pair_id": "A_origin_63_A_table_128",
+    "image_paths": [
+      "data/Academic/Table/A_origin_63/A_table_128.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_63",
+    "table_id": "A_table_128"
+  },
+  {
+    "index": 141,
+    "pair_id": "A_origin_63_A_table_129",
+    "image_paths": [
+      "data/Academic/Table/A_origin_63/A_table_129.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_63",
+    "table_id": "A_table_129"
+  },
+  {
+    "index": 142,
+    "pair_id": "A_origin_64_A_table_130",
+    "image_paths": [
+      "data/Academic/Table/A_origin_64/A_table_130.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_64",
+    "table_id": "A_table_130"
+  },
+  {
+    "index": 143,
+    "pair_id": "A_origin_64_A_table_131",
+    "image_paths": [
+      "data/Academic/Table/A_origin_64/A_table_131.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_64",
+    "table_id": "A_table_131"
+  },
+  {
+    "index": 144,
+    "pair_id": "A_origin_64_A_table_132",
+    "image_paths": [
+      "data/Academic/Table/A_origin_64/A_table_132.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_64",
+    "table_id": "A_table_132"
+  },
+  {
+    "index": 145,
+    "pair_id": "A_origin_65_A_table_133",
+    "image_paths": [
+      "data/Academic/Table/A_origin_65/A_table_133.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_65",
+    "table_id": "A_table_133"
+  },
+  {
+    "index": 146,
+    "pair_id": "A_origin_65_A_table_134",
+    "image_paths": [
+      "data/Academic/Table/A_origin_65/A_table_134.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_65",
+    "table_id": "A_table_134"
+  },
+  {
+    "index": 147,
+    "pair_id": "A_origin_66_A_table_135",
+    "image_paths": [
+      "data/Academic/Table/A_origin_66/A_table_135.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_66",
+    "table_id": "A_table_135"
+  },
+  {
+    "index": 148,
+    "pair_id": "A_origin_66_A_table_136",
+    "image_paths": [
+      "data/Academic/Table/A_origin_66/A_table_136.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_66",
+    "table_id": "A_table_136"
+  },
+  {
+    "index": 149,
+    "pair_id": "A_origin_66_A_table_137",
+    "image_paths": [
+      "data/Academic/Table/A_origin_66/A_table_137.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_66",
+    "table_id": "A_table_137"
+  },
+  {
+    "index": 150,
+    "pair_id": "A_origin_66_A_table_138",
+    "image_paths": [
+      "data/Academic/Table/A_origin_66/A_table_138.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_66",
+    "table_id": "A_table_138"
+  },
+  {
+    "index": 151,
+    "pair_id": "A_origin_67_A_table_139",
+    "image_paths": [
+      "data/Academic/Table/A_origin_67/A_table_139.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_67",
+    "table_id": "A_table_139"
+  },
+  {
+    "index": 152,
+    "pair_id": "A_origin_7_A_table_20",
+    "image_paths": [
+      "data/Academic/Table/A_origin_7/A_table_20.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_7",
+    "table_id": "A_table_20"
+  },
+  {
+    "index": 153,
+    "pair_id": "A_origin_7_A_table_21",
+    "image_paths": [
+      "data/Academic/Table/A_origin_7/A_table_21.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_7",
+    "table_id": "A_table_21"
+  },
+  {
+    "index": 154,
+    "pair_id": "A_origin_8_A_table_22",
+    "image_paths": [
+      "data/Academic/Table/A_origin_8/A_table_22.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_8",
+    "table_id": "A_table_22"
+  },
+  {
+    "index": 155,
+    "pair_id": "A_origin_8_A_table_23",
+    "image_paths": [
+      "data/Academic/Table/A_origin_8/A_table_23.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_8",
+    "table_id": "A_table_23"
+  },
+  {
+    "index": 156,
+    "pair_id": "A_origin_8_A_table_24",
+    "image_paths": [
+      "data/Academic/Table/A_origin_8/A_table_24.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_8",
+    "table_id": "A_table_24"
+  },
+  {
+    "index": 157,
+    "pair_id": "A_origin_9_A_table_25",
+    "image_paths": [
+      "data/Academic/Table/A_origin_9/A_table_25.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_9",
+    "table_id": "A_table_25"
+  },
+  {
+    "index": 158,
+    "pair_id": "A_origin_9_A_table_26",
+    "image_paths": [
+      "data/Academic/Table/A_origin_9/A_table_26.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_9",
+    "table_id": "A_table_26"
+  },
+  {
+    "index": 159,
+    "pair_id": "A_origin_9_A_table_27",
+    "image_paths": [
+      "data/Academic/Table/A_origin_9/A_table_27.png"
+    ],
+    "domain": "Academic",
+    "origin": "A_origin_9",
+    "table_id": "A_table_27"
+  }
+]

@@ -576,6 +576,7 @@ def main():
     parser.add_argument("--max-workers", type=int, default=3, help="Maximum number of parallel workers (default: 3)")
     parser.add_argument("--randomize-style", action="store_true", default=True, help="Randomize HTML table styles (fonts, colors) for diversity (default: True)")
     parser.add_argument("--no-randomize-style", dest="randomize_style", action="store_false", help="Disable style randomization")
+    parser.add_argument("--limit", type=int, help="Limit number of entries to process (for testing)")
 
     args = parser.parse_args()
 
@@ -595,6 +596,11 @@ def main():
     if not isinstance(input_data, list):
         print("Error: Input JSON must be a list of pairs.")
         return
+
+    # Apply limit if specified
+    if args.limit:
+        input_data = input_data[:args.limit]
+        print(f"Limited to {len(input_data)} entries")
 
     data_root = Path(args.data_root)
     output_dir = Path(args.output_dir)
