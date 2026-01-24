@@ -15,14 +15,22 @@ generate_qa: |
   3. **Language:** The questions and answers MUST be in Korean.
   4. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
   5. **Accuracy:** Ensure all answers are factually correct based on the data in the table.
-  7. **Context:** Include the specific table cells or rows that were used to answer the question.
+  6. **Context:** Include the specific table cells or rows that were used to answer the question.
+  7. **⚠️ Answer Format (단답형) - CRITICAL FOR EVALUATION ⚠️:**
+      - Answers MUST be SHORT and CONCISE (max 50 characters)
+      - **Numeric answers**: Just the number with unit (e.g., "1억원", "월 5만원", "80%")
+      - **Yes/No**: "예" or "아니오" only
+      - **Entity answers**: Just the name (e.g., "프리미엄 플랜", "암 특약")
+      - **Comparison**: Just the winner (e.g., "플랜A", "골드형")
+      - ❌ BAD: "플랜A의 자기부담금은 10만원입니다."
+      - ✅ GOOD: "10만원"
 
   **Output Format (JSON):**
   {{
       "qa_pairs": [
           {{
               "question": "...",
-              "answer": "...",
+              "answer": "Short answer only (max 50 chars)",
               "type": "lookup",
               "reasoning_annotation": "Detailed explanation of how the answer was derived (in English, single string)",
               "context": "Specific table cells/rows used (e.g., 'Row 2, Column 3: Premium amount')"
@@ -47,13 +55,20 @@ generate_qa_from_image: |
   5. **Reasoning Language:** reasoning_annotation MUST be written in English and MUST be a single string (not a list).
   6. **Accuracy:** Ensure 100% factual correctness.
   7. **Context:** Include specific cell references or table sections used to derive the answer.
+  8. **⚠️ Answer Format (단답형) - CRITICAL FOR EVALUATION ⚠️:**
+      - Answers MUST be SHORT and CONCISE (max 50 characters)
+      - **Numeric answers**: Just the number with unit (e.g., "1억원", "월 5만원")
+      - **Yes/No**: "예" or "아니오" only
+      - **Entity answers**: Just the name (e.g., "프리미엄 플랜")
+      - ❌ BAD: "플랜A의 보장한도는 1억원입니다."
+      - ✅ GOOD: "1억원"
 
   **Output Format (JSON):**
   {{
       "qa_pairs": [
           {{
               "question": "...",
-              "answer": "...",
+              "answer": "Short answer only (max 50 chars)",
               "type": "lookup",
               "reasoning_annotation": "Step-by-step reasoning process in English (single string)",
               "context": "Table location used (e.g., 'Premium column, Row 3')"
@@ -141,3 +156,51 @@ generate_synthetic_table_from_image: |
   - Amount in image: "금액A" → Generate: "금액B"
 
   ⚠️ If the generated content is identical or very similar to the image, the output is INVALID.
+
+generate_long_sequence: |
+  You are an expert in insurance policies, claims, and coverage analysis.
+  Your mission is to generate a single high-quality "long_sequence" type QA pair that requires interpreting external context to answer questions about the insurance table.
+
+  **Input Table:**
+  {synthetic_html}
+
+  ### [Instructions]
+  1. **Generate ONE long_sequence QA pair** that requires reading and understanding a context paragraph to filter or interpret the insurance data.
+  2. **Create a realistic insurance scenario** (e.g., "Customer Profile", "Claim Situation", "Coverage Needs") that provides information needed to answer the question.
+  3. **The question must be unanswerable without the context** - the context should contain key criteria or conditions.
+  4. **Strict Constraints**:
+     - Answer must be derived from BOTH the table AND the embedded context in the question. Neither alone is sufficient.
+     - Questions and Answers MUST be written in Korean.
+     - reasoning_annotation MUST be written in English and MUST be a single string.
+     - **context field should be null** - all context should be embedded within the question itself.
+  5. **Answer Format (단답형)**:
+     - Answers MUST be SHORT and CONCISE (max 50 characters)
+     - DO NOT include reasoning in the answer - put those in reasoning_annotation
+     - ❌ BAD: "고객의 조건에 맞는 상품은 프리미엄 플랜입니다."
+     - ✅ GOOD: "프리미엄 플랜"
+  6. **⚠️ Question Length - CRITICAL ⚠️**:
+     - **Question MUST be at least 500 characters long (minimum 500자)**
+     - Create a realistic insurance scenario with specific customer situation, needs, and constraints
+     - The question should ask to SELECT ONE specific plan/product that best fits the given scenario
+     - ❌ BAD: Questions asking to count items or list multiple answers
+     - ✅ GOOD: Questions asking "which ONE insurance product best fits this customer?"
+
+  ### [Example Scenarios (Insurance) - SELECT ONE ITEM]
+  - Claim scenario: "특정 사고 상황에서 보장받을 수 있는 담보 항목은?"
+  - Plan selection: "고객의 니즈에 가장 적합한 보험 상품은?"
+  - Coverage gap: "기존 보험으로 보장되지 않는 위험에 대비할 추가 특약은?"
+  - Premium optimization: "보험료 부담을 줄이면서 핵심 보장을 유지할 수 있는 플랜은?"
+
+  ### [Output Format (JSON)]
+  {{
+    "qa_pairs": [
+      {{
+        "question": "(MINIMUM 500자) 예시: 보험설계사는 40대 가장인 고객의 보험 포트폴리오 재설계를 진행하고 있다. 고객은 현재 월 보험료 부담이 크다고 느끼며, 자녀 교육비 증가로 인해 보험료를 월 20만원 이하로 줄이고 싶다고 요청하였다. 그러나 가장으로서 사망보장 1억원 이상과 중대질병 보장은 반드시 유지해야 한다고 강조하였다. 또한 최근 건강검진에서 고혈압 전단계 판정을 받아 향후 심혈관 질환에 대한 보장도 필요하다고 언급하였다. 현재 가입 가능한 보험 상품 중에서 고객의 모든 요구사항을 충족하는 상품을 찾아 답하시오.",
+        "answer": "해당 보험상품명 (max 50 chars)",
+        "type": "long_sequence",
+        "reasoning_annotation": "Step 1: Identify customer requirements from scenario (premium <= 200k, death benefit >= 100M, critical illness coverage, cardiovascular coverage). Step 2: Filter products meeting premium constraint. Step 3: Check coverage items among filtered products. Step 4: Select the ONE product meeting all requirements.",
+        "context": null
+      }}
+    ]
+  }}
+  Return ONLY the JSON object.

@@ -42,7 +42,7 @@ INPUT_JSON=""
 DOMAIN=""
 OUTPUT_DIR=""
 PROVIDER="claude"
-MODEL="claude-sonnet-4-5"
+MODEL="claude-haiku-4-5"
 VLLM_URL="http://localhost:8000/v1"
 
 # Pipeline steps (default: generate + capture)
