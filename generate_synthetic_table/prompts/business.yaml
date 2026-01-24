@@ -21,6 +21,20 @@ generate_qa: |
   - Is the reasoning process (Annotation) logically flawless?
   - Is the question clear and unambiguous? (e.g., "Best performance" -> "Branch with highest Revenue")
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "150억원", "23.5%", "3개")
+  - **Yes/No questions**: "예" or "아니오" only
+  - **Entity answers**: Just the name (e.g., "마케팅팀", "A사", "김철수")
+  - **List answers**: Comma-separated items only (e.g., "A팀, B팀, C팀")
+  - **Comparison answers**: Just the winner/result (e.g., "영업팀", "2023년")
+  - **Maximum answer length: 50 characters**
+  - ❌ BAD: "총 6개입니다. 차별화 요소에 3개, 경쟁 우위에 3개가 있습니다."
+  - ✅ GOOD: "6개"
+  - ❌ BAD: "경쟁 우위가 비용 효율화를 더 구체적으로 다루고 있습니다. 왜냐하면..."
+  - ✅ GOOD: "경쟁 우위"
+
   ### [Reasoning Type Definitions (Business Domain)]
   (1) lookup: Retrieve specific performance values of departments or products without condition/calculation. (e.g., "What is the Q1 Revenue of Branch A?")
   (2) filter: Select rows/columns meeting specific conditions (goals met, budget range). (e.g., "List all products with operating margin over 20%.")
@@ -37,7 +51,7 @@ generate_qa: |
     "qa_pairs": [
       {{
         "question": "Question text",
-        "answer": "Answer text",
+        "answer": "Short answer only (max 50 chars, no explanation)",
         "type": "lookup",
         "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
         "context": null
@@ -66,6 +80,20 @@ generate_qa_from_image: |
   - Is the reasoning process (Annotation) logically flawless?
   - Is the question clear and unambiguous? (e.g., "Best performance" -> "Branch with highest Revenue")
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "150억원", "23.5%", "3개")
+  - **Yes/No questions**: "예" or "아니오" only
+  - **Entity answers**: Just the name (e.g., "마케팅팀", "A사", "김철수")
+  - **List answers**: Comma-separated items only (e.g., "A팀, B팀, C팀")
+  - **Comparison answers**: Just the winner/result (e.g., "영업팀", "2023년")
+  - **Maximum answer length: 50 characters**
+  - ❌ BAD: "총 6개입니다. 차별화 요소에 3개, 경쟁 우위에 3개가 있습니다."
+  - ✅ GOOD: "6개"
+  - ❌ BAD: "경쟁 우위가 비용 효율화를 더 구체적으로 다루고 있습니다. 왜냐하면..."
+  - ✅ GOOD: "경쟁 우위"
+
   ### [Reasoning Type Definitions (Business Domain)]
   (1) lookup: Retrieve specific performance values of departments or products without condition/calculation. (e.g., "What is the Q1 Revenue of Branch A?")
   (2) filter: Select rows/columns meeting specific conditions (goals met, budget range). (e.g., "List all products with operating margin over 20%.")
@@ -82,7 +110,7 @@ generate_qa_from_image: |
     "qa_pairs": [
       {{
         "question": "Question text",
-        "answer": "Answer text",
+        "answer": "Short answer only (max 50 chars, no explanation)",
         "type": "lookup",
         "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
         "context": null
@@ -117,6 +145,16 @@ generate_qa_from_multi_image: |
   - Is the reasoning process logically flawless?
   - Is the question clear about what is being compared or combined?
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "150억원", "23.5%", "3개")
+  - **Yes/No questions**: "예" or "아니오" only
+  - **Entity answers**: Just the name (e.g., "마케팅팀", "A사", "김철수")
+  - **List answers**: Comma-separated items only (e.g., "A팀, B팀, C팀")
+  - **Comparison answers**: Just the winner/result (e.g., "Table 1", "영업팀")
+  - **Maximum answer length: 50 characters**
+
   ### [Cross-Image Reasoning Type Definitions (Business Domain)]
   (1) cross_lookup: Retrieve and combine specific values from different images. (e.g., "What is the total Q1 revenue of Branch A from both Table 1 and Table 2?")
   (2) cross_filter: Filter rows across tables based on conditions spanning multiple images. (e.g., "Which departments appear in both tables and have positive profit margins in both?")
@@ -133,7 +171,7 @@ generate_qa_from_multi_image: |
     "qa_pairs": [
       {{
         "question": "Question requiring multiple images to answer",
-        "answer": "Answer derived from multiple images",
+        "answer": "Short answer only (max 50 chars, no explanation)",
         "type": "cross_lookup",
         "reasoning_annotation": "Step 1: From Image 1, extract X. Step 2: From Image 2, extract Y. Step 3: Combine to get answer.",
         "context": null,
@@ -248,26 +286,38 @@ generate_long_sequence: |
   2. **Create a realistic business context** (e.g., "Management Goals", "Market Conditions", "Strategic Guidelines") that provides information needed to answer the question.
   3. **The question must be unanswerable without the context** - the context should contain key criteria or conditions.
   4. **Strict Constraints**:
-     - Answer must be derived from BOTH the table AND the context. Neither alone is sufficient.
+     - Answer must be derived from BOTH the table AND the embedded context in the question. Neither alone is sufficient.
      - Questions and Answers MUST be written in Korean.
      - reasoning_annotation MUST be written in English and MUST be a single string.
-     - Context must be written in Korean and be 2-4 sentences long.
      - **DO NOT use real company names** (e.g., Samsung, Apple, Google). Use fictional names.
+     - **context field should be null** - all context should be embedded within the question itself.
+  5. **Answer Format (단답형)**:
+     - Answers MUST be SHORT and CONCISE (max 50 characters)
+     - DO NOT include reasoning in the answer - put those in reasoning_annotation
+     - ❌ BAD: "조건을 충족하는 팀은 A팀과 B팀입니다. 왜냐하면..."
+     - ✅ GOOD: "A팀, B팀"
+  6. **⚠️ Question Length - CRITICAL ⚠️**:
+     - **Question MUST be at least 500 characters long (minimum 500자)**
+     - Create a realistic business scenario with specific situation, constraints, and requirements
+     - The question should ask to SELECT ONE specific item/strategy that best fits the given scenario
+     - ❌ BAD: Questions asking to count items or list multiple answers
+     - ✅ GOOD: Questions asking "which ONE item best fits this scenario?"
 
-  ### [Example Scenarios (Business)]
-  - Context describes a target market condition → Question asks which products/departments meet the criteria
-  - Context outlines budget constraints → Question asks which projects are feasible
-  - Context specifies performance thresholds → Question asks which teams qualify
+  ### [Example Scenarios (Business) - SELECT ONE ITEM]
+  - New CEO scenario: "신임 CEO가 취임하며 X 방향을 제시했을 때, 가장 부합하는 전략은?"
+  - Crisis scenario: "경쟁사가 Y 공격을 해왔을 때, 우선적으로 활용해야 할 경쟁력은?"
+  - Resource constraint: "예산과 인력이 제한적일 때, 가장 먼저 추진해야 할 항목은?"
+  - Market change: "시장 트렌드가 Z로 변화했을 때, 가장 적합한 대응 전략은?"
 
   ### [Output Format (JSON)]
   {{
     "qa_pairs": [
       {{
-        "question": "Question requiring context to answer",
-        "answer": "Answer derived from table + context",
+        "question": "(MINIMUM 500자) 예시: A사는 최근 주력 사업 분야에서 경쟁사 B사의 공격적인 가격 인하 정책으로 인해 시장 점유율이 15% 하락하는 위기 상황에 직면하였다. 이에 경영진은 긴급 전략 회의를 소집하여 현재 보유한 경쟁력 요소들을 검토하고 있다. 회의에서 CFO는 현재 가용 예산이 제한적이며 신규 투자보다는 기존 역량을 활용한 즉각적인 대응이 필요하다고 강조하였다. 또한 CMO는 고객 이탈을 방지하기 위해 단기간 내에 가시적인 성과를 낼 수 있는 전략이 우선되어야 한다고 의견을 제시하였다. 이러한 상황에서 A사가 B사의 가격 공세에 대응하면서도 추가 비용 투입 없이 기존 인프라와 역량만으로 즉시 실행 가능한 전략 항목을 표에서 찾아 답하시오.",
+        "answer": "해당 전략 항목명 (max 50 chars)",
         "type": "long_sequence",
-        "reasoning_annotation": "Step 1: Extract key criteria from context. Step 2: Apply criteria to table. Step 3: Derive answer.",
-        "context": "경영 목표에 따르면... (2-4 sentences of business context in Korean)"
+        "reasoning_annotation": "Step 1: Identify key constraints from scenario (budget limited, need immediate results, use existing capabilities). Step 2: Evaluate each table item against these criteria. Step 3: Select the ONE item that best matches all conditions.",
+        "context": null
       }}
     ]
   }}

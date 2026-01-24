@@ -21,6 +21,16 @@ generate_qa: |
   - Is the reasoning process (Annotation) logically flawless?
   - Is the question clear and unambiguous? (e.g., "Best model" -> "Model with highest Accuracy")
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "92.5%", "3.2M params", "15 epochs")
+  - **Yes/No questions**: "예" or "아니오" only
+  - **Entity answers**: Just the name (e.g., "Model-A", "Dataset-X")
+  - **List answers**: Comma-separated items only (e.g., "Model-A, Model-B")
+  - **Comparison answers**: Just the winner/result (e.g., "Proposed Method", "Baseline")
+  - **Maximum answer length: 50 characters**
+
   ### [Reasoning Type Definitions (Academic Domain)]
   (1) lookup: Retrieve specific model performance or value without condition/calculation. (e.g., "What is the Top-1 Accuracy of Model-A?")
   (2) filter: Select rows/columns meeting specific conditions (performance, params, etc.). (e.g., "List all models with parameters under 10M.")
@@ -37,7 +47,7 @@ generate_qa: |
     "qa_pairs": [
       {{
         "question": "Question text",
-        "answer": "Answer text",
+        "answer": "Short answer only (max 50 chars, no explanation)",
         "type": "lookup",
         "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
         "context": null
@@ -66,6 +76,16 @@ generate_qa_from_image: |
   - Is the reasoning process (Annotation) logically flawless?
   - Is the question clear and unambiguous? (e.g., "Best model" -> "Model with highest Accuracy")
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "92.5%", "3.2M params", "15 epochs")
+  - **Yes/No questions**: "예" or "아니오" only
+  - **Entity answers**: Just the name (e.g., "Model-A", "Dataset-X")
+  - **List answers**: Comma-separated items only (e.g., "Model-A, Model-B")
+  - **Comparison answers**: Just the winner/result (e.g., "Proposed Method", "Baseline")
+  - **Maximum answer length: 50 characters**
+
   ### [Reasoning Type Definitions (Academic Domain)]
   (1) lookup: Retrieve specific model performance or value without condition/calculation. (e.g., "What is the Top-1 Accuracy of Model-A?")
   (2) filter: Select rows/columns meeting specific conditions (performance, params, etc.). (e.g., "List all models with parameters under 10M.")
@@ -82,7 +102,7 @@ generate_qa_from_image: |
     "qa_pairs": [
       {{
         "question": "Question text",
-        "answer": "Answer text",
+        "answer": "Short answer only (max 50 chars, no explanation)",
         "type": "lookup",
         "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
         "context": null
@@ -117,6 +137,13 @@ generate_qa_from_multi_image: |
   - Is the reasoning process logically flawless?
   - Is the question clear about what experimental data is being compared or combined?
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "92.5%", "3.2M params")
+  - **Entity answers**: Just the name (e.g., "Model-A", "Table 1")
+  - **Maximum answer length: 50 characters**
+
   ### [Cross-Image Reasoning Type Definitions (Academic Domain)]
   (1) cross_lookup: Retrieve and combine performance values from different result tables. (e.g., "What is Model-A's accuracy on both Dataset-X and Dataset-Y from the two tables?")
   (2) cross_filter: Filter models across benchmark tables based on conditions. (e.g., "Which models achieve >90% accuracy on both datasets shown in the two images?")
@@ -133,7 +160,7 @@ generate_qa_from_multi_image: |
     "qa_pairs": [
       {{
         "question": "Question requiring multiple academic images to answer",
-        "answer": "Answer derived from multiple images",
+        "answer": "Short answer only (max 50 chars)",
         "type": "cross_lookup",
         "reasoning_annotation": "Step 1: From Image 1, extract X. Step 2: From Image 2, extract Y. Step 3: Combine to get answer.",
         "context": null,
@@ -237,26 +264,38 @@ generate_long_sequence: |
   2. **Create a realistic academic context** (e.g., "Experimental Setup", "Research Hypothesis", "Ablation Study Goals") that provides information needed to answer the question.
   3. **The question must be unanswerable without the context** - the context should contain key criteria or conditions.
   4. **Strict Constraints**:
-     - Answer must be derived from BOTH the table AND the context. Neither alone is sufficient.
+     - Answer must be derived from BOTH the table AND the embedded context in the question. Neither alone is sufficient.
      - Questions and Answers MUST be written in Korean.
      - reasoning_annotation MUST be written in English and MUST be a single string.
-     - Context must be written in Korean and be 2-4 sentences long.
      - **DO NOT use real model/dataset names** (e.g., BERT, GPT, ResNet). Use fictional names.
+     - **context field should be null** - all context should be embedded within the question itself.
+  5. **Answer Format (단답형)**:
+     - Answers MUST be SHORT and CONCISE (max 50 characters)
+     - DO NOT include reasoning in the answer - put those in reasoning_annotation
+     - ❌ BAD: "조건을 충족하는 모델은 Model-A와 Model-B입니다."
+     - ✅ GOOD: "Model-A"
+  6. **⚠️ Question Length - CRITICAL ⚠️**:
+     - **Question MUST be at least 500 characters long (minimum 500자)**
+     - Create a realistic research scenario with specific situation, constraints, and requirements
+     - The question should ask to SELECT ONE specific item that best fits the given scenario
+     - ❌ BAD: Questions asking to count items or list multiple answers
+     - ✅ GOOD: Questions asking "which ONE model/method best fits this scenario?"
 
-  ### [Example Scenarios (Academic)]
-  - Context describes experimental conditions (dataset size, hardware) → Question asks which models meet the criteria
-  - Context outlines baseline comparison requirements → Question asks which methods show improvement
-  - Context specifies evaluation metrics of interest → Question asks for rankings based on those metrics
+  ### [Example Scenarios (Academic) - SELECT ONE ITEM]
+  - Research direction scenario: "연구 방향이 X로 변경되었을 때, 가장 적합한 실험 방법론은?"
+  - Resource constraint: "GPU 메모리가 제한적일 때, 가장 효율적인 모델 구성은?"
+  - Benchmark requirement: "새로운 벤치마크 기준을 충족해야 할 때, 우선 적용할 기법은?"
+  - Ablation study: "성능 저하를 최소화하면서 모델을 경량화할 때, 제거해야 할 컴포넌트는?"
 
   ### [Output Format (JSON)]
   {{
     "qa_pairs": [
       {{
-        "question": "Question requiring context to answer",
-        "answer": "Answer derived from table + context",
+        "question": "(MINIMUM 500자) 예시: 연구팀은 최근 학회 제출 마감을 앞두고 모델 성능 개선을 위한 긴급 실험을 계획하고 있다. 지도교수는 현재 가용한 컴퓨팅 자원이 제한적이며, 새로운 대규모 실험보다는 기존 실험 결과를 바탕으로 빠르게 개선점을 찾아야 한다고 강조하였다. 또한 공동 연구자는 ablation study 결과를 참고하여 핵심 컴포넌트를 파악하고, 가장 효과적인 개선 방향을 도출해야 한다고 의견을 제시하였다. 추가로 학회 규정상 파라미터 수가 10M 이하인 경량 모델만 제출 가능하다는 제약 조건이 있다. 현재 실험 결과 테이블에서 파라미터 제약을 충족하면서 베이스라인 대비 성능 향상이 가장 큰 방법론을 찾아 답하시오.",
+        "answer": "해당 방법론명 (max 50 chars)",
         "type": "long_sequence",
-        "reasoning_annotation": "Step 1: Extract key criteria from context. Step 2: Apply criteria to table. Step 3: Derive answer.",
-        "context": "실험 설정에 따르면... (2-4 sentences of academic context in Korean)"
+        "reasoning_annotation": "Step 1: Identify constraints from scenario (parameter limit, best improvement). Step 2: Filter models meeting parameter constraint. Step 3: Compare performance improvements. Step 4: Select the ONE best method.",
+        "context": null
       }}
     ]
   }}

@@ -22,6 +22,16 @@ generate_qa: |
   - Is the reasoning process (Annotation) logically flawless?
   - Is the question clear and unambiguous? (e.g., "Patient in bad condition" -> "Patient with systolic BP under 90mmHg")
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "120/80mmHg", "38.5°C", "150mg/dL")
+  - **Yes/No questions**: "예" or "아니오" only
+  - **Entity answers**: Just the name (e.g., "환자ID-001", "약물-X", "A병원")
+  - **List answers**: Comma-separated items only (e.g., "환자-001, 환자-002")
+  - **Comparison answers**: Just the winner/result (e.g., "치료군", "Day 3")
+  - **Maximum answer length: 50 characters**
+
   ### [Reasoning Type Definitions (Medical Domain)]
   (1) lookup: Retrieve specific patient lab results or medication info without condition/calculation. (e.g., "What is the blood glucose level of Patient ID-001?")
   (2) filter: Select rows/columns meeting specific conditions (abnormal range, specific disease). (e.g., "List all patients with temperature above 38°C.")
@@ -38,7 +48,7 @@ generate_qa: |
     "qa_pairs": [
       {{
         "question": "Question text",
-        "answer": "Answer text",
+        "answer": "Short answer only (max 50 chars, no explanation)",
         "type": "lookup",
         "reasoning_annotation": "Step-by-step logic to derive answer (MUST be a string, not a list)",
         "context": null
@@ -67,6 +77,16 @@ generate_qa_from_image: |
   - Is the reasoning process (Annotation) logically flawless?
   - Is the question clear and unambiguous? (e.g., "Patient in bad condition" -> "Patient with systolic BP under 90mmHg")
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "120/80mmHg", "38.5°C", "150mg/dL")
+  - **Yes/No questions**: "예" or "아니오" only
+  - **Entity answers**: Just the name (e.g., "환자ID-001", "약물-X", "A병원")
+  - **List answers**: Comma-separated items only (e.g., "환자-001, 환자-002")
+  - **Comparison answers**: Just the winner/result (e.g., "치료군", "Day 3")
+  - **Maximum answer length: 50 characters**
+
   ### [Reasoning Type Definitions (Medical Domain)]
   (1) lookup: Retrieve specific patient lab results or medication info without condition/calculation. (e.g., "What is the blood glucose level of Patient ID-001?")
   (2) filter: Select rows/columns meeting specific conditions (abnormal range, specific disease). (e.g., "List all patients with temperature above 38°C.")
@@ -83,7 +103,7 @@ generate_qa_from_image: |
     "qa_pairs": [
       {{
         "question": "Question text",
-        "answer": "Answer text",
+        "answer": "Short answer only (max 50 chars, no explanation)",
         "type": "lookup",
         "reasoning_annotation": "Step-by-step logic to derive answer",
         "context": null
@@ -118,6 +138,13 @@ generate_qa_from_multi_image: |
   - Is the reasoning process logically flawless?
   - Is the question clear about what clinical data is being compared or combined?
 
+  ### [Answer Format Guidelines - CRITICAL FOR EVALUATION]
+  ⚠️ **Answers MUST be SHORT and CONCISE (단답형)** ⚠️
+  - **DO NOT include reasoning or explanation in the answer** - put those in reasoning_annotation only
+  - **Numeric answers**: Just the number with unit (e.g., "120/80mmHg", "38.5°C")
+  - **Entity answers**: Just the name (e.g., "환자ID-001", "Table 1")
+  - **Maximum answer length: 50 characters**
+
   ### [Cross-Image Reasoning Type Definitions (Medical Domain)]
   (1) cross_lookup: Retrieve and combine patient data from different clinical records. (e.g., "What is the patient's blood glucose level before and after treatment from both tables?")
   (2) cross_filter: Filter patients across clinical datasets based on conditions. (e.g., "Which patients appear in both the treatment and follow-up tables with improved vitals?")
@@ -134,7 +161,7 @@ generate_qa_from_multi_image: |
     "qa_pairs": [
       {{
         "question": "Question requiring multiple clinical images to answer",
-        "answer": "Answer derived from multiple images",
+        "answer": "Short answer only (max 50 chars)",
         "type": "cross_lookup",
         "reasoning_annotation": "Step 1: From Image 1, extract X. Step 2: From Image 2, extract Y. Step 3: Combine to get answer.",
         "context": null,
@@ -237,26 +264,38 @@ generate_long_sequence: |
   2. **Create a realistic clinical context** (e.g., "Clinical Protocol", "Exclusion Criteria", "Treatment Guidelines") that provides information needed to answer the question.
   3. **The question must be unanswerable without the context** - the context should contain key criteria or conditions.
   4. **Strict Constraints**:
-     - Answer must be derived from BOTH the table AND the context. Neither alone is sufficient.
+     - Answer must be derived from BOTH the table AND the embedded context in the question. Neither alone is sufficient.
      - Questions and Answers MUST be written in Korean.
      - reasoning_annotation MUST be written in English and MUST be a single string.
-     - Context must be written in Korean and be 2-4 sentences long.
      - **DO NOT use real hospital/drug names**. Use fictional names like "A병원", "약물-X".
+     - **context field should be null** - all context should be embedded within the question itself.
+  5. **Answer Format (단답형)**:
+     - Answers MUST be SHORT and CONCISE (max 50 characters)
+     - DO NOT include reasoning in the answer - put those in reasoning_annotation
+     - ❌ BAD: "조건을 충족하는 환자는 환자-001과 환자-002입니다."
+     - ✅ GOOD: "환자ID-003"
+  6. **⚠️ Question Length - CRITICAL ⚠️**:
+     - **Question MUST be at least 500 characters long (minimum 500자)**
+     - Create a realistic clinical scenario with specific situation, constraints, and requirements
+     - The question should ask to SELECT ONE specific patient/treatment that best fits the given scenario
+     - ❌ BAD: Questions asking to count items or list multiple answers
+     - ✅ GOOD: Questions asking "which ONE patient needs immediate attention?"
 
-  ### [Example Scenarios (Medical)]
-  - Context describes patient exclusion criteria (age, comorbidities) → Question asks which patients are eligible
-  - Context outlines dosage adjustment rules → Question asks which patients need dose modification
-  - Context specifies lab value thresholds for intervention → Question asks which patients require treatment
+  ### [Example Scenarios (Medical) - SELECT ONE ITEM]
+  - Emergency triage: "응급 상황에서 가장 먼저 처치해야 할 환자는?"
+  - Drug interaction: "특정 약물을 복용 중인 환자에게 투여 가능한 대체 약물은?"
+  - Clinical trial: "임상시험 기준을 충족하는 환자 중 가장 적합한 대상자는?"
+  - Resource allocation: "ICU 병상이 부족할 때, 우선 전원해야 할 환자는?"
 
   ### [Output Format (JSON)]
   {{
     "qa_pairs": [
       {{
-        "question": "Question requiring context to answer",
-        "answer": "Answer derived from table + context",
+        "question": "(MINIMUM 500자) 예시: 종합병원 응급실에 다수의 환자가 동시에 내원하여 중증도 분류가 필요한 상황이다. 응급의학과 전문의는 현재 가용한 의료진과 장비가 제한적이며, 환자 상태에 따른 우선순위 결정이 시급하다고 판단하였다. 간호팀장은 활력징후와 의식 수준을 기준으로 즉각적인 처치가 필요한 환자를 선별해야 한다고 보고하였다. 내부 지침에 따르면 수축기 혈압 90mmHg 미만이면서 의식 저하가 동반된 경우 최우선 처치 대상이다. 현재 대기 중인 환자 목록에서 해당 기준을 충족하여 즉시 소생술이 필요한 환자를 찾아 답하시오.",
+        "answer": "해당 환자ID (max 50 chars)",
         "type": "long_sequence",
-        "reasoning_annotation": "Step 1: Extract key criteria from context. Step 2: Apply criteria to table. Step 3: Derive answer.",
-        "context": "임상 프로토콜에 따르면... (2-4 sentences of clinical context in Korean)"
+        "reasoning_annotation": "Step 1: Identify triage criteria from scenario (BP < 90mmHg, altered consciousness). Step 2: Filter patients meeting blood pressure criterion. Step 3: Check consciousness level among filtered patients. Step 4: Select the ONE patient requiring immediate resuscitation.",
+        "context": null
       }}
     ]
   }}

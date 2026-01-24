@@ -121,646 +121,6 @@
   },
   {
     "index": 12,
-    "pair_id": "F_origin_10_F_table_14_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_10/F_table_14_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_10",
-    "table_id": "F_table_14_0"
-  },
-  {
-    "index": 13,
-    "pair_id": "F_origin_10_F_table_14_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_10/F_table_14_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_10",
-    "table_id": "F_table_14_1"
-  },
-  {
-    "index": 14,
-    "pair_id": "F_origin_10_F_table_14_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_10/F_table_14_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_10",
-    "table_id": "F_table_14_2"
-  },
-  {
-    "index": 15,
-    "pair_id": "F_origin_10_F_table_14_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_10/F_table_14_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_10",
-    "table_id": "F_table_14_3"
-  },
-  {
-    "index": 16,
-    "pair_id": "F_origin_10_F_table_14_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_10/F_table_14_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_10",
-    "table_id": "F_table_14_4"
-  },
-  {
-    "index": 17,
-    "pair_id": "F_origin_11_F_table_15_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_11/F_table_15_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_11",
-    "table_id": "F_table_15_0"
-  },
-  {
-    "index": 18,
-    "pair_id": "F_origin_11_F_table_15_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_11/F_table_15_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_11",
-    "table_id": "F_table_15_1"
-  },
-  {
-    "index": 19,
-    "pair_id": "F_origin_11_F_table_15_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_11/F_table_15_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_11",
-    "table_id": "F_table_15_2"
-  },
-  {
-    "index": 20,
-    "pair_id": "F_origin_11_F_table_15_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_11/F_table_15_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_11",
-    "table_id": "F_table_15_3"
-  },
-  {
-    "index": 21,
-    "pair_id": "F_origin_11_F_table_15_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_11/F_table_15_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_11",
-    "table_id": "F_table_15_4"
-  },
-  {
-    "index": 22,
-    "pair_id": "F_origin_11_F_table_15_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_11/F_table_15_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_11",
-    "table_id": "F_table_15_5"
-  },
-  {
-    "index": 23,
-    "pair_id": "F_origin_12_F_table_16_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_12/F_table_16_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_12",
-    "table_id": "F_table_16_0"
-  },
-  {
-    "index": 24,
-    "pair_id": "F_origin_12_F_table_17_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_12/F_table_17_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_12",
-    "table_id": "F_table_17_0"
-  },
-  {
-    "index": 25,
-    "pair_id": "F_origin_12_F_table_18_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_12/F_table_18_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_12",
-    "table_id": "F_table_18_0"
-  },
-  {
-    "index": 26,
-    "pair_id": "F_origin_12_F_table_19_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_12/F_table_19_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_12",
-    "table_id": "F_table_19_0"
-  },
-  {
-    "index": 27,
-    "pair_id": "F_origin_12_F_table_20_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_12/F_table_20_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_12",
-    "table_id": "F_table_20_0"
-  },
-  {
-    "index": 28,
-    "pair_id": "F_origin_12_F_table_21_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_12/F_table_21_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_12",
-    "table_id": "F_table_21_0"
-  },
-  {
-    "index": 29,
-    "pair_id": "F_origin_13_F_table_21_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_13/F_table_21_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_13",
-    "table_id": "F_table_21_0"
-  },
-  {
-    "index": 30,
-    "pair_id": "F_origin_13_F_table_22_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_13/F_table_22_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_13",
-    "table_id": "F_table_22_0"
-  },
-  {
-    "index": 31,
-    "pair_id": "F_origin_13_F_table_23_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_13/F_table_23_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_13",
-    "table_id": "F_table_23_0"
-  },
-  {
-    "index": 32,
-    "pair_id": "F_origin_13_F_table_24_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_13/F_table_24_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_13",
-    "table_id": "F_table_24_0"
-  },
-  {
-    "index": 33,
-    "pair_id": "F_origin_13_F_table_25_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_13/F_table_25_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_13",
-    "table_id": "F_table_25_0"
-  },
-  {
-    "index": 34,
-    "pair_id": "F_origin_14_F_table_26_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_14/F_table_26_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_14",
-    "table_id": "F_table_26_0"
-  },
-  {
-    "index": 35,
-    "pair_id": "F_origin_14_F_table_27_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_14/F_table_27_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_14",
-    "table_id": "F_table_27_0"
-  },
-  {
-    "index": 36,
-    "pair_id": "F_origin_14_F_table_28_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_14/F_table_28_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_14",
-    "table_id": "F_table_28_0"
-  },
-  {
-    "index": 37,
-    "pair_id": "F_origin_14_F_table_29_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_14/F_table_29_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_14",
-    "table_id": "F_table_29_0"
-  },
-  {
-    "index": 38,
-    "pair_id": "F_origin_14_F_table_30_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_14/F_table_30_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_14",
-    "table_id": "F_table_30_0"
-  },
-  {
-    "index": 39,
-    "pair_id": "F_origin_14_F_table_31_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_14/F_table_31_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_14",
-    "table_id": "F_table_31_0"
-  },
-  {
-    "index": 40,
-    "pair_id": "F_origin_15_F_table_32_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_15/F_table_32_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_15",
-    "table_id": "F_table_32_0"
-  },
-  {
-    "index": 41,
-    "pair_id": "F_origin_15_F_table_33_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_15/F_table_33_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_15",
-    "table_id": "F_table_33_0"
-  },
-  {
-    "index": 42,
-    "pair_id": "F_origin_15_F_table_34_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_15/F_table_34_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_15",
-    "table_id": "F_table_34_0"
-  },
-  {
-    "index": 43,
-    "pair_id": "F_origin_15_F_table_35_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_15/F_table_35_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_15",
-    "table_id": "F_table_35_0"
-  },
-  {
-    "index": 44,
-    "pair_id": "F_origin_15_F_table_36_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_15/F_table_36_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_15",
-    "table_id": "F_table_36_0"
-  },
-  {
-    "index": 45,
-    "pair_id": "F_origin_16_F_table_37_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_37_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_37_0"
-  },
-  {
-    "index": 46,
-    "pair_id": "F_origin_16_F_table_38_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_38_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_38_0"
-  },
-  {
-    "index": 47,
-    "pair_id": "F_origin_16_F_table_39_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_39_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_39_0"
-  },
-  {
-    "index": 48,
-    "pair_id": "F_origin_16_F_table_40_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_40_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_40_0"
-  },
-  {
-    "index": 49,
-    "pair_id": "F_origin_16_F_table_41_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_41_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_41_0"
-  },
-  {
-    "index": 50,
-    "pair_id": "F_origin_16_F_table_42_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_42_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_42_0"
-  },
-  {
-    "index": 51,
-    "pair_id": "F_origin_16_F_table_43_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_43_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_43_0"
-  },
-  {
-    "index": 52,
-    "pair_id": "F_origin_16_F_table_44_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_44_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_44_0"
-  },
-  {
-    "index": 53,
-    "pair_id": "F_origin_16_F_table_45_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_16/F_table_45_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_16",
-    "table_id": "F_table_45_0"
-  },
-  {
-    "index": 54,
-    "pair_id": "F_origin_17_F_table_46_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_46_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_46_0"
-  },
-  {
-    "index": 55,
-    "pair_id": "F_origin_17_F_table_47_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_47_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_47_0"
-  },
-  {
-    "index": 56,
-    "pair_id": "F_origin_17_F_table_48_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_48_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_48_0"
-  },
-  {
-    "index": 57,
-    "pair_id": "F_origin_17_F_table_49_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_49_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_49_0"
-  },
-  {
-    "index": 58,
-    "pair_id": "F_origin_17_F_table_50_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_50_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_50_0"
-  },
-  {
-    "index": 59,
-    "pair_id": "F_origin_17_F_table_51_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_51_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_51_0"
-  },
-  {
-    "index": 60,
-    "pair_id": "F_origin_17_F_table_52_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_52_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_52_0"
-  },
-  {
-    "index": 61,
-    "pair_id": "F_origin_17_F_table_53_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_53_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_53_0"
-  },
-  {
-    "index": 62,
-    "pair_id": "F_origin_17_F_table_54_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_17/F_table_54_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_17",
-    "table_id": "F_table_54_0"
-  },
-  {
-    "index": 63,
-    "pair_id": "F_origin_18_F_table_55_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_18/F_table_55_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_18",
-    "table_id": "F_table_55_0"
-  },
-  {
-    "index": 64,
-    "pair_id": "F_origin_18_F_table_56_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_18/F_table_56_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_18",
-    "table_id": "F_table_56_0"
-  },
-  {
-    "index": 65,
-    "pair_id": "F_origin_18_F_table_57_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_18/F_table_57_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_18",
-    "table_id": "F_table_57_0"
-  },
-  {
-    "index": 66,
-    "pair_id": "F_origin_18_F_table_58_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_18/F_table_58_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_18",
-    "table_id": "F_table_58_0"
-  },
-  {
-    "index": 67,
-    "pair_id": "F_origin_19_F_table_59_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_59_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_59_0"
-  },
-  {
-    "index": 68,
-    "pair_id": "F_origin_19_F_table_59_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_59_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_59_1"
-  },
-  {
-    "index": 69,
-    "pair_id": "F_origin_19_F_table_60_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_60_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_60_0"
-  },
-  {
-    "index": 70,
-    "pair_id": "F_origin_19_F_table_61_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_61_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_61_0"
-  },
-  {
-    "index": 71,
-    "pair_id": "F_origin_19_F_table_62_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_62_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_62_0"
-  },
-  {
-    "index": 72,
-    "pair_id": "F_origin_19_F_table_63_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_63_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_63_0"
-  },
-  {
-    "index": 73,
-    "pair_id": "F_origin_19_F_table_64_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_64_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_64_0"
-  },
-  {
-    "index": 74,
-    "pair_id": "F_origin_19_F_table_65_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_65_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_65_0"
-  },
-  {
-    "index": 75,
-    "pair_id": "F_origin_19_F_table_66_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_19/F_table_66_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_19",
-    "table_id": "F_table_66_0"
-  },
-  {
-    "index": 76,
     "pair_id": "F_origin_2_F_table_3_0",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_3_0.png"
@@ -770,7 +130,7 @@
     "table_id": "F_table_3_0"
   },
   {
-    "index": 77,
+    "index": 13,
     "pair_id": "F_origin_2_F_table_3_1",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_3_1.png"
@@ -780,7 +140,7 @@
     "table_id": "F_table_3_1"
   },
   {
-    "index": 78,
+    "index": 14,
     "pair_id": "F_origin_2_F_table_3_2",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_3_2.png"
@@ -790,7 +150,7 @@
     "table_id": "F_table_3_2"
   },
   {
-    "index": 79,
+    "index": 15,
     "pair_id": "F_origin_2_F_table_3_3",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_3_3.png"
@@ -800,7 +160,7 @@
     "table_id": "F_table_3_3"
   },
   {
-    "index": 80,
+    "index": 16,
     "pair_id": "F_origin_2_F_table_3_4",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_3_4.png"
@@ -810,7 +170,7 @@
     "table_id": "F_table_3_4"
   },
   {
-    "index": 81,
+    "index": 17,
     "pair_id": "F_origin_2_F_table_3_5",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_3_5.png"
@@ -820,7 +180,7 @@
     "table_id": "F_table_3_5"
   },
   {
-    "index": 82,
+    "index": 18,
     "pair_id": "F_origin_2_F_table_4_0",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_4_0.png"
@@ -830,7 +190,7 @@
     "table_id": "F_table_4_0"
   },
   {
-    "index": 83,
+    "index": 19,
     "pair_id": "F_origin_2_F_table_4_1",
     "image_paths": [
       "data/Finance/Table/F_origin_2/F_table_4_1.png"
@@ -840,727 +200,7 @@
     "table_id": "F_table_4_1"
   },
   {
-    "index": 84,
-    "pair_id": "F_origin_20_F_table_67_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_67_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_67_0"
-  },
-  {
-    "index": 85,
-    "pair_id": "F_origin_20_F_table_67_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_67_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_67_1"
-  },
-  {
-    "index": 86,
-    "pair_id": "F_origin_20_F_table_68_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_68_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_68_0"
-  },
-  {
-    "index": 87,
-    "pair_id": "F_origin_20_F_table_68_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_68_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_68_1"
-  },
-  {
-    "index": 88,
-    "pair_id": "F_origin_20_F_table_68_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_68_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_68_2"
-  },
-  {
-    "index": 89,
-    "pair_id": "F_origin_20_F_table_68_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_68_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_68_3"
-  },
-  {
-    "index": 90,
-    "pair_id": "F_origin_20_F_table_68_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_68_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_68_4"
-  },
-  {
-    "index": 91,
-    "pair_id": "F_origin_20_F_table_68_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_68_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_68_5"
-  },
-  {
-    "index": 92,
-    "pair_id": "F_origin_20_F_table_68_6",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_68_6.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_68_6"
-  },
-  {
-    "index": 93,
-    "pair_id": "F_origin_20_F_table_69_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_20/F_table_69_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_20",
-    "table_id": "F_table_69_0"
-  },
-  {
-    "index": 94,
-    "pair_id": "F_origin_21_F_table_70_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_21/F_table_70_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_21",
-    "table_id": "F_table_70_0"
-  },
-  {
-    "index": 95,
-    "pair_id": "F_origin_21_F_table_70_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_21/F_table_70_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_21",
-    "table_id": "F_table_70_1"
-  },
-  {
-    "index": 96,
-    "pair_id": "F_origin_21_F_table_70_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_21/F_table_70_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_21",
-    "table_id": "F_table_70_2"
-  },
-  {
-    "index": 97,
-    "pair_id": "F_origin_21_F_table_70_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_21/F_table_70_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_21",
-    "table_id": "F_table_70_3"
-  },
-  {
-    "index": 98,
-    "pair_id": "F_origin_21_F_table_71_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_21/F_table_71_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_21",
-    "table_id": "F_table_71_0"
-  },
-  {
-    "index": 99,
-    "pair_id": "F_origin_22_F_table_72_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_22/F_table_72_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_22",
-    "table_id": "F_table_72_0"
-  },
-  {
-    "index": 100,
-    "pair_id": "F_origin_22_F_table_72_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_22/F_table_72_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_22",
-    "table_id": "F_table_72_1"
-  },
-  {
-    "index": 101,
-    "pair_id": "F_origin_22_F_table_72_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_22/F_table_72_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_22",
-    "table_id": "F_table_72_2"
-  },
-  {
-    "index": 102,
-    "pair_id": "F_origin_22_F_table_72_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_22/F_table_72_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_22",
-    "table_id": "F_table_72_3"
-  },
-  {
-    "index": 103,
-    "pair_id": "F_origin_22_F_table_72_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_22/F_table_72_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_22",
-    "table_id": "F_table_72_4"
-  },
-  {
-    "index": 104,
-    "pair_id": "F_origin_22_F_table_72_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_22/F_table_72_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_22",
-    "table_id": "F_table_72_5"
-  },
-  {
-    "index": 105,
-    "pair_id": "F_origin_22_F_table_73_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_22/F_table_73_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_22",
-    "table_id": "F_table_73_0"
-  },
-  {
-    "index": 106,
-    "pair_id": "F_origin_23_F_table_74_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_23/F_table_74_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_23",
-    "table_id": "F_table_74_0"
-  },
-  {
-    "index": 107,
-    "pair_id": "F_origin_23_F_table_74_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_23/F_table_74_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_23",
-    "table_id": "F_table_74_1"
-  },
-  {
-    "index": 108,
-    "pair_id": "F_origin_23_F_table_74_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_23/F_table_74_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_23",
-    "table_id": "F_table_74_2"
-  },
-  {
-    "index": 109,
-    "pair_id": "F_origin_23_F_table_74_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_23/F_table_74_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_23",
-    "table_id": "F_table_74_3"
-  },
-  {
-    "index": 110,
-    "pair_id": "F_origin_23_F_table_74_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_23/F_table_74_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_23",
-    "table_id": "F_table_74_4"
-  },
-  {
-    "index": 111,
-    "pair_id": "F_origin_23_F_table_74_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_23/F_table_74_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_23",
-    "table_id": "F_table_74_5"
-  },
-  {
-    "index": 112,
-    "pair_id": "F_origin_23_F_table_75_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_23/F_table_75_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_23",
-    "table_id": "F_table_75_0"
-  },
-  {
-    "index": 113,
-    "pair_id": "F_origin_24_F_table_75_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_0"
-  },
-  {
-    "index": 114,
-    "pair_id": "F_origin_24_F_table_75_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_1"
-  },
-  {
-    "index": 115,
-    "pair_id": "F_origin_24_F_table_75_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_2"
-  },
-  {
-    "index": 116,
-    "pair_id": "F_origin_24_F_table_75_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_3"
-  },
-  {
-    "index": 117,
-    "pair_id": "F_origin_24_F_table_75_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_4"
-  },
-  {
-    "index": 118,
-    "pair_id": "F_origin_24_F_table_75_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_5"
-  },
-  {
-    "index": 119,
-    "pair_id": "F_origin_24_F_table_75_6",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_6.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_6"
-  },
-  {
-    "index": 120,
-    "pair_id": "F_origin_24_F_table_75_7",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_75_7.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_75_7"
-  },
-  {
-    "index": 121,
-    "pair_id": "F_origin_24_F_table_76_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_76_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_76_0"
-  },
-  {
-    "index": 122,
-    "pair_id": "F_origin_24_F_table_76_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_76_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_76_1"
-  },
-  {
-    "index": 123,
-    "pair_id": "F_origin_24_F_table_76_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_76_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_76_2"
-  },
-  {
-    "index": 124,
-    "pair_id": "F_origin_24_F_table_76_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_76_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_76_3"
-  },
-  {
-    "index": 125,
-    "pair_id": "F_origin_24_F_table_76_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_76_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_76_4"
-  },
-  {
-    "index": 126,
-    "pair_id": "F_origin_24_F_table_77_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_24/F_table_77_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_24",
-    "table_id": "F_table_77_0"
-  },
-  {
-    "index": 127,
-    "pair_id": "F_origin_25_F_table_79_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_25/F_table_79_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_25",
-    "table_id": "F_table_79_0"
-  },
-  {
-    "index": 128,
-    "pair_id": "F_origin_25_F_table_80_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_25/F_table_80_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_25",
-    "table_id": "F_table_80_0"
-  },
-  {
-    "index": 129,
-    "pair_id": "F_origin_25_F_table_81_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_25/F_table_81_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_25",
-    "table_id": "F_table_81_0"
-  },
-  {
-    "index": 130,
-    "pair_id": "F_origin_25_F_table_82_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_25/F_table_82_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_25",
-    "table_id": "F_table_82_0"
-  },
-  {
-    "index": 131,
-    "pair_id": "F_origin_25_F_table_82_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_25/F_table_82_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_25",
-    "table_id": "F_table_82_1"
-  },
-  {
-    "index": 132,
-    "pair_id": "F_origin_25_F_table_82_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_25/F_table_82_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_25",
-    "table_id": "F_table_82_2"
-  },
-  {
-    "index": 133,
-    "pair_id": "F_origin_25_F_table_83_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_25/F_table_83_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_25",
-    "table_id": "F_table_83_0"
-  },
-  {
-    "index": 134,
-    "pair_id": "F_origin_26_F_table_84_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_26/F_table_84_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_26",
-    "table_id": "F_table_84_0"
-  },
-  {
-    "index": 135,
-    "pair_id": "F_origin_26_F_table_84_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_26/F_table_84_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_26",
-    "table_id": "F_table_84_1"
-  },
-  {
-    "index": 136,
-    "pair_id": "F_origin_26_F_table_85_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_26/F_table_85_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_26",
-    "table_id": "F_table_85_0"
-  },
-  {
-    "index": 137,
-    "pair_id": "F_origin_26_F_table_86_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_26/F_table_86_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_26",
-    "table_id": "F_table_86_0"
-  },
-  {
-    "index": 138,
-    "pair_id": "F_origin_26_F_table_87_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_26/F_table_87_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_26",
-    "table_id": "F_table_87_0"
-  },
-  {
-    "index": 139,
-    "pair_id": "F_origin_27_F_table_88_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_27/F_table_88_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_27",
-    "table_id": "F_table_88_0"
-  },
-  {
-    "index": 140,
-    "pair_id": "F_origin_27_F_table_88_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_27/F_table_88_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_27",
-    "table_id": "F_table_88_1"
-  },
-  {
-    "index": 141,
-    "pair_id": "F_origin_27_F_table_89_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_27/F_table_89_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_27",
-    "table_id": "F_table_89_0"
-  },
-  {
-    "index": 142,
-    "pair_id": "F_origin_27_F_table_89_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_27/F_table_89_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_27",
-    "table_id": "F_table_89_1"
-  },
-  {
-    "index": 143,
-    "pair_id": "F_origin_27_F_table_89_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_27/F_table_89_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_27",
-    "table_id": "F_table_89_2"
-  },
-  {
-    "index": 144,
-    "pair_id": "F_origin_27_F_table_90_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_27/F_table_90_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_27",
-    "table_id": "F_table_90_0"
-  },
-  {
-    "index": 145,
-    "pair_id": "F_origin_28_F_table_91_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_28/F_table_91_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_28",
-    "table_id": "F_table_91_0"
-  },
-  {
-    "index": 146,
-    "pair_id": "F_origin_28_F_table_91_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_28/F_table_91_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_28",
-    "table_id": "F_table_91_1"
-  },
-  {
-    "index": 147,
-    "pair_id": "F_origin_28_F_table_91_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_28/F_table_91_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_28",
-    "table_id": "F_table_91_2"
-  },
-  {
-    "index": 148,
-    "pair_id": "F_origin_28_F_table_91_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_28/F_table_91_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_28",
-    "table_id": "F_table_91_3"
-  },
-  {
-    "index": 149,
-    "pair_id": "F_origin_28_F_table_92_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_28/F_table_92_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_28",
-    "table_id": "F_table_92_0"
-  },
-  {
-    "index": 150,
-    "pair_id": "F_origin_29_F_table_93_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_29/F_table_93_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_29",
-    "table_id": "F_table_93_0"
-  },
-  {
-    "index": 151,
-    "pair_id": "F_origin_29_F_table_93_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_29/F_table_93_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_29",
-    "table_id": "F_table_93_1"
-  },
-  {
-    "index": 152,
-    "pair_id": "F_origin_29_F_table_93_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_29/F_table_93_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_29",
-    "table_id": "F_table_93_2"
-  },
-  {
-    "index": 153,
-    "pair_id": "F_origin_29_F_table_93_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_29/F_table_93_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_29",
-    "table_id": "F_table_93_3"
-  },
-  {
-    "index": 154,
-    "pair_id": "F_origin_29_F_table_93_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_29/F_table_93_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_29",
-    "table_id": "F_table_93_4"
-  },
-  {
-    "index": 155,
-    "pair_id": "F_origin_29_F_table_94_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_29/F_table_94_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_29",
-    "table_id": "F_table_94_0"
-  },
-  {
-    "index": 156,
+    "index": 20,
     "pair_id": "F_origin_3_F_table_5_0",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_0.png"
@@ -1570,7 +210,7 @@
     "table_id": "F_table_5_0"
   },
   {
-    "index": 157,
+    "index": 21,
     "pair_id": "F_origin_3_F_table_5_1",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_1.png"
@@ -1580,27 +220,7 @@
     "table_id": "F_table_5_1"
   },
   {
-    "index": 158,
-    "pair_id": "F_origin_3_F_table_5_10",
-    "image_paths": [
-      "data/Finance/Table/F_origin_3/F_table_5_10.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_3",
-    "table_id": "F_table_5_10"
-  },
-  {
-    "index": 159,
-    "pair_id": "F_origin_3_F_table_5_11",
-    "image_paths": [
-      "data/Finance/Table/F_origin_3/F_table_5_11.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_3",
-    "table_id": "F_table_5_11"
-  },
-  {
-    "index": 160,
+    "index": 22,
     "pair_id": "F_origin_3_F_table_5_2",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_2.png"
@@ -1610,7 +230,7 @@
     "table_id": "F_table_5_2"
   },
   {
-    "index": 161,
+    "index": 23,
     "pair_id": "F_origin_3_F_table_5_3",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_3.png"
@@ -1620,7 +240,7 @@
     "table_id": "F_table_5_3"
   },
   {
-    "index": 162,
+    "index": 24,
     "pair_id": "F_origin_3_F_table_5_4",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_4.png"
@@ -1630,7 +250,7 @@
     "table_id": "F_table_5_4"
   },
   {
-    "index": 163,
+    "index": 25,
     "pair_id": "F_origin_3_F_table_5_5",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_5.png"
@@ -1640,7 +260,7 @@
     "table_id": "F_table_5_5"
   },
   {
-    "index": 164,
+    "index": 26,
     "pair_id": "F_origin_3_F_table_5_6",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_6.png"
@@ -1650,7 +270,7 @@
     "table_id": "F_table_5_6"
   },
   {
-    "index": 165,
+    "index": 27,
     "pair_id": "F_origin_3_F_table_5_7",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_7.png"
@@ -1660,7 +280,7 @@
     "table_id": "F_table_5_7"
   },
   {
-    "index": 166,
+    "index": 28,
     "pair_id": "F_origin_3_F_table_5_8",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_8.png"
@@ -1670,7 +290,7 @@
     "table_id": "F_table_5_8"
   },
   {
-    "index": 167,
+    "index": 29,
     "pair_id": "F_origin_3_F_table_5_9",
     "image_paths": [
       "data/Finance/Table/F_origin_3/F_table_5_9.png"
@@ -1680,537 +300,27 @@
     "table_id": "F_table_5_9"
   },
   {
-    "index": 168,
-    "pair_id": "F_origin_30_F_table_95_0",
+    "index": 30,
+    "pair_id": "F_origin_3_F_table_5_10",
     "image_paths": [
-      "data/Finance/Table/F_origin_30/F_table_95_0.png"
+      "data/Finance/Table/F_origin_3/F_table_5_10.png"
     ],
     "domain": "Finance",
-    "origin": "F_origin_30",
-    "table_id": "F_table_95_0"
+    "origin": "F_origin_3",
+    "table_id": "F_table_5_10"
   },
   {
-    "index": 169,
-    "pair_id": "F_origin_30_F_table_96_0",
+    "index": 31,
+    "pair_id": "F_origin_3_F_table_5_11",
     "image_paths": [
-      "data/Finance/Table/F_origin_30/F_table_96_0.png"
+      "data/Finance/Table/F_origin_3/F_table_5_11.png"
     ],
     "domain": "Finance",
-    "origin": "F_origin_30",
-    "table_id": "F_table_96_0"
+    "origin": "F_origin_3",
+    "table_id": "F_table_5_11"
   },
   {
-    "index": 170,
-    "pair_id": "F_origin_30_F_table_97_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_30/F_table_97_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_30",
-    "table_id": "F_table_97_0"
-  },
-  {
-    "index": 171,
-    "pair_id": "F_origin_30_F_table_97_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_30/F_table_97_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_30",
-    "table_id": "F_table_97_1"
-  },
-  {
-    "index": 172,
-    "pair_id": "F_origin_30_F_table_97_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_30/F_table_97_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_30",
-    "table_id": "F_table_97_2"
-  },
-  {
-    "index": 173,
-    "pair_id": "F_origin_31_F_table_100_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_31/F_table_100_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_31",
-    "table_id": "F_table_100_0"
-  },
-  {
-    "index": 174,
-    "pair_id": "F_origin_31_F_table_100_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_31/F_table_100_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_31",
-    "table_id": "F_table_100_1"
-  },
-  {
-    "index": 175,
-    "pair_id": "F_origin_31_F_table_100_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_31/F_table_100_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_31",
-    "table_id": "F_table_100_2"
-  },
-  {
-    "index": 176,
-    "pair_id": "F_origin_31_F_table_98_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_31/F_table_98_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_31",
-    "table_id": "F_table_98_0"
-  },
-  {
-    "index": 177,
-    "pair_id": "F_origin_31_F_table_99_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_31/F_table_99_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_31",
-    "table_id": "F_table_99_0"
-  },
-  {
-    "index": 178,
-    "pair_id": "F_origin_32_F_table_101_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_32/F_table_101_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_32",
-    "table_id": "F_table_101_0"
-  },
-  {
-    "index": 179,
-    "pair_id": "F_origin_32_F_table_102_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_32/F_table_102_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_32",
-    "table_id": "F_table_102_0"
-  },
-  {
-    "index": 180,
-    "pair_id": "F_origin_32_F_table_103_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_32/F_table_103_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_32",
-    "table_id": "F_table_103_0"
-  },
-  {
-    "index": 181,
-    "pair_id": "F_origin_32_F_table_103_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_32/F_table_103_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_32",
-    "table_id": "F_table_103_1"
-  },
-  {
-    "index": 182,
-    "pair_id": "F_origin_32_F_table_103_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_32/F_table_103_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_32",
-    "table_id": "F_table_103_2"
-  },
-  {
-    "index": 183,
-    "pair_id": "F_origin_33_F_table_104_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_33/F_table_104_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_33",
-    "table_id": "F_table_104_0"
-  },
-  {
-    "index": 184,
-    "pair_id": "F_origin_33_F_table_105_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_33/F_table_105_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_33",
-    "table_id": "F_table_105_0"
-  },
-  {
-    "index": 185,
-    "pair_id": "F_origin_33_F_table_106_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_33/F_table_106_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_33",
-    "table_id": "F_table_106_0"
-  },
-  {
-    "index": 186,
-    "pair_id": "F_origin_33_F_table_106_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_33/F_table_106_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_33",
-    "table_id": "F_table_106_1"
-  },
-  {
-    "index": 187,
-    "pair_id": "F_origin_33_F_table_106_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_33/F_table_106_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_33",
-    "table_id": "F_table_106_2"
-  },
-  {
-    "index": 188,
-    "pair_id": "F_origin_34_F_table_107_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_34/F_table_107_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_34",
-    "table_id": "F_table_107_0"
-  },
-  {
-    "index": 189,
-    "pair_id": "F_origin_34_F_table_108_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_34/F_table_108_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_34",
-    "table_id": "F_table_108_0"
-  },
-  {
-    "index": 190,
-    "pair_id": "F_origin_34_F_table_109_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_34/F_table_109_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_34",
-    "table_id": "F_table_109_0"
-  },
-  {
-    "index": 191,
-    "pair_id": "F_origin_34_F_table_109_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_34/F_table_109_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_34",
-    "table_id": "F_table_109_1"
-  },
-  {
-    "index": 192,
-    "pair_id": "F_origin_34_F_table_109_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_34/F_table_109_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_34",
-    "table_id": "F_table_109_2"
-  },
-  {
-    "index": 193,
-    "pair_id": "F_origin_35_F_table_110_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_35/F_table_110_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_35",
-    "table_id": "F_table_110_0"
-  },
-  {
-    "index": 194,
-    "pair_id": "F_origin_35_F_table_111_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_35/F_table_111_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_35",
-    "table_id": "F_table_111_0"
-  },
-  {
-    "index": 195,
-    "pair_id": "F_origin_35_F_table_112_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_35/F_table_112_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_35",
-    "table_id": "F_table_112_0"
-  },
-  {
-    "index": 196,
-    "pair_id": "F_origin_35_F_table_112_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_35/F_table_112_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_35",
-    "table_id": "F_table_112_1"
-  },
-  {
-    "index": 197,
-    "pair_id": "F_origin_35_F_table_112_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_35/F_table_112_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_35",
-    "table_id": "F_table_112_2"
-  },
-  {
-    "index": 198,
-    "pair_id": "F_origin_36_F_table_113_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_36/F_table_113_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_36",
-    "table_id": "F_table_113_0"
-  },
-  {
-    "index": 199,
-    "pair_id": "F_origin_36_F_table_114_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_36/F_table_114_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_36",
-    "table_id": "F_table_114_0"
-  },
-  {
-    "index": 200,
-    "pair_id": "F_origin_36_F_table_115_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_36/F_table_115_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_36",
-    "table_id": "F_table_115_0"
-  },
-  {
-    "index": 201,
-    "pair_id": "F_origin_36_F_table_115_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_36/F_table_115_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_36",
-    "table_id": "F_table_115_1"
-  },
-  {
-    "index": 202,
-    "pair_id": "F_origin_36_F_table_115_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_36/F_table_115_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_36",
-    "table_id": "F_table_115_2"
-  },
-  {
-    "index": 203,
-    "pair_id": "F_origin_36_F_table_116_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_36/F_table_116_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_36",
-    "table_id": "F_table_116_0"
-  },
-  {
-    "index": 204,
-    "pair_id": "F_origin_37_F_table_117_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_37/F_table_117_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_37",
-    "table_id": "F_table_117_0"
-  },
-  {
-    "index": 205,
-    "pair_id": "F_origin_37_F_table_118_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_37/F_table_118_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_37",
-    "table_id": "F_table_118_0"
-  },
-  {
-    "index": 206,
-    "pair_id": "F_origin_37_F_table_119_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_37/F_table_119_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_37",
-    "table_id": "F_table_119_0"
-  },
-  {
-    "index": 207,
-    "pair_id": "F_origin_37_F_table_119_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_37/F_table_119_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_37",
-    "table_id": "F_table_119_1"
-  },
-  {
-    "index": 208,
-    "pair_id": "F_origin_37_F_table_119_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_37/F_table_119_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_37",
-    "table_id": "F_table_119_2"
-  },
-  {
-    "index": 209,
-    "pair_id": "F_origin_37_F_table_119_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_37/F_table_119_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_37",
-    "table_id": "F_table_119_3"
-  },
-  {
-    "index": 210,
-    "pair_id": "F_origin_37_F_table_119_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_37/F_table_119_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_37",
-    "table_id": "F_table_119_4"
-  },
-  {
-    "index": 211,
-    "pair_id": "F_origin_38_F_table_120_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_38/F_table_120_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_38",
-    "table_id": "F_table_120_0"
-  },
-  {
-    "index": 212,
-    "pair_id": "F_origin_38_F_table_121_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_38/F_table_121_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_38",
-    "table_id": "F_table_121_0"
-  },
-  {
-    "index": 213,
-    "pair_id": "F_origin_38_F_table_122_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_38/F_table_122_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_38",
-    "table_id": "F_table_122_0"
-  },
-  {
-    "index": 214,
-    "pair_id": "F_origin_38_F_table_122_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_38/F_table_122_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_38",
-    "table_id": "F_table_122_1"
-  },
-  {
-    "index": 215,
-    "pair_id": "F_origin_38_F_table_122_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_38/F_table_122_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_38",
-    "table_id": "F_table_122_2"
-  },
-  {
-    "index": 216,
-    "pair_id": "F_origin_39_F_table_123_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_39/F_table_123_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_39",
-    "table_id": "F_table_123_0"
-  },
-  {
-    "index": 217,
-    "pair_id": "F_origin_39_F_table_124_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_39/F_table_124_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_39",
-    "table_id": "F_table_124_0"
-  },
-  {
-    "index": 218,
-    "pair_id": "F_origin_39_F_table_125_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_39/F_table_125_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_39",
-    "table_id": "F_table_125_0"
-  },
-  {
-    "index": 219,
-    "pair_id": "F_origin_39_F_table_125_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_39/F_table_125_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_39",
-    "table_id": "F_table_125_1"
-  },
-  {
-    "index": 220,
-    "pair_id": "F_origin_39_F_table_125_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_39/F_table_125_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_39",
-    "table_id": "F_table_125_2"
-  },
-  {
-    "index": 221,
+    "index": 32,
     "pair_id": "F_origin_4_F_table_6_0",
     "image_paths": [
       "data/Finance/Table/F_origin_4/F_table_6_0.png"
@@ -2220,7 +330,7 @@
     "table_id": "F_table_6_0"
   },
   {
-    "index": 222,
+    "index": 33,
     "pair_id": "F_origin_4_F_table_6_1",
     "image_paths": [
       "data/Finance/Table/F_origin_4/F_table_6_1.png"
@@ -2230,7 +340,7 @@
     "table_id": "F_table_6_1"
   },
   {
-    "index": 223,
+    "index": 34,
     "pair_id": "F_origin_4_F_table_6_2",
     "image_paths": [
       "data/Finance/Table/F_origin_4/F_table_6_2.png"
@@ -2240,7 +350,7 @@
     "table_id": "F_table_6_2"
   },
   {
-    "index": 224,
+    "index": 35,
     "pair_id": "F_origin_4_F_table_6_3",
     "image_paths": [
       "data/Finance/Table/F_origin_4/F_table_6_3.png"
@@ -2250,617 +360,7 @@
     "table_id": "F_table_6_3"
   },
   {
-    "index": 225,
-    "pair_id": "F_origin_40_F_table_126_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_40/F_table_126_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_40",
-    "table_id": "F_table_126_0"
-  },
-  {
-    "index": 226,
-    "pair_id": "F_origin_40_F_table_127_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_40/F_table_127_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_40",
-    "table_id": "F_table_127_0"
-  },
-  {
-    "index": 227,
-    "pair_id": "F_origin_40_F_table_128_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_40/F_table_128_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_40",
-    "table_id": "F_table_128_0"
-  },
-  {
-    "index": 228,
-    "pair_id": "F_origin_40_F_table_128_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_40/F_table_128_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_40",
-    "table_id": "F_table_128_1"
-  },
-  {
-    "index": 229,
-    "pair_id": "F_origin_40_F_table_128_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_40/F_table_128_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_40",
-    "table_id": "F_table_128_2"
-  },
-  {
-    "index": 230,
-    "pair_id": "F_origin_41_F_table_129_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_41/F_table_129_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_41",
-    "table_id": "F_table_129_0"
-  },
-  {
-    "index": 231,
-    "pair_id": "F_origin_41_F_table_129_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_41/F_table_129_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_41",
-    "table_id": "F_table_129_1"
-  },
-  {
-    "index": 232,
-    "pair_id": "F_origin_41_F_table_129_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_41/F_table_129_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_41",
-    "table_id": "F_table_129_2"
-  },
-  {
-    "index": 233,
-    "pair_id": "F_origin_41_F_table_129_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_41/F_table_129_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_41",
-    "table_id": "F_table_129_3"
-  },
-  {
-    "index": 234,
-    "pair_id": "F_origin_41_F_table_129_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_41/F_table_129_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_41",
-    "table_id": "F_table_129_4"
-  },
-  {
-    "index": 235,
-    "pair_id": "F_origin_41_F_table_129_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_41/F_table_129_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_41",
-    "table_id": "F_table_129_5"
-  },
-  {
-    "index": 236,
-    "pair_id": "F_origin_42_F_table_130_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_42/F_table_130_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_42",
-    "table_id": "F_table_130_0"
-  },
-  {
-    "index": 237,
-    "pair_id": "F_origin_42_F_table_130_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_42/F_table_130_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_42",
-    "table_id": "F_table_130_1"
-  },
-  {
-    "index": 238,
-    "pair_id": "F_origin_42_F_table_130_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_42/F_table_130_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_42",
-    "table_id": "F_table_130_2"
-  },
-  {
-    "index": 239,
-    "pair_id": "F_origin_42_F_table_130_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_42/F_table_130_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_42",
-    "table_id": "F_table_130_3"
-  },
-  {
-    "index": 240,
-    "pair_id": "F_origin_42_F_table_130_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_42/F_table_130_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_42",
-    "table_id": "F_table_130_4"
-  },
-  {
-    "index": 241,
-    "pair_id": "F_origin_42_F_table_130_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_42/F_table_130_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_42",
-    "table_id": "F_table_130_5"
-  },
-  {
-    "index": 242,
-    "pair_id": "F_origin_43_F_table_131_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_43/F_table_131_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_43",
-    "table_id": "F_table_131_0"
-  },
-  {
-    "index": 243,
-    "pair_id": "F_origin_43_F_table_131_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_43/F_table_131_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_43",
-    "table_id": "F_table_131_1"
-  },
-  {
-    "index": 244,
-    "pair_id": "F_origin_43_F_table_131_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_43/F_table_131_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_43",
-    "table_id": "F_table_131_2"
-  },
-  {
-    "index": 245,
-    "pair_id": "F_origin_43_F_table_131_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_43/F_table_131_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_43",
-    "table_id": "F_table_131_3"
-  },
-  {
-    "index": 246,
-    "pair_id": "F_origin_43_F_table_131_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_43/F_table_131_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_43",
-    "table_id": "F_table_131_4"
-  },
-  {
-    "index": 247,
-    "pair_id": "F_origin_44_F_table_132_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_132_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_132_0"
-  },
-  {
-    "index": 248,
-    "pair_id": "F_origin_44_F_table_132_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_132_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_132_1"
-  },
-  {
-    "index": 249,
-    "pair_id": "F_origin_44_F_table_133_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_133_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_133_0"
-  },
-  {
-    "index": 250,
-    "pair_id": "F_origin_44_F_table_133_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_133_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_133_1"
-  },
-  {
-    "index": 251,
-    "pair_id": "F_origin_44_F_table_133_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_133_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_133_2"
-  },
-  {
-    "index": 252,
-    "pair_id": "F_origin_44_F_table_134_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_134_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_134_0"
-  },
-  {
-    "index": 253,
-    "pair_id": "F_origin_44_F_table_135_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_135_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_135_0"
-  },
-  {
-    "index": 254,
-    "pair_id": "F_origin_44_F_table_135_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_135_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_135_1"
-  },
-  {
-    "index": 255,
-    "pair_id": "F_origin_44_F_table_135_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_44/F_table_135_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_44",
-    "table_id": "F_table_135_2"
-  },
-  {
-    "index": 256,
-    "pair_id": "F_origin_45_F_table_136_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_45/F_table_136_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_45",
-    "table_id": "F_table_136_0"
-  },
-  {
-    "index": 257,
-    "pair_id": "F_origin_45_F_table_136_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_45/F_table_136_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_45",
-    "table_id": "F_table_136_1"
-  },
-  {
-    "index": 258,
-    "pair_id": "F_origin_45_F_table_136_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_45/F_table_136_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_45",
-    "table_id": "F_table_136_2"
-  },
-  {
-    "index": 259,
-    "pair_id": "F_origin_45_F_table_136_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_45/F_table_136_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_45",
-    "table_id": "F_table_136_3"
-  },
-  {
-    "index": 260,
-    "pair_id": "F_origin_45_F_table_136_4",
-    "image_paths": [
-      "data/Finance/Table/F_origin_45/F_table_136_4.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_45",
-    "table_id": "F_table_136_4"
-  },
-  {
-    "index": 261,
-    "pair_id": "F_origin_45_F_table_136_5",
-    "image_paths": [
-      "data/Finance/Table/F_origin_45/F_table_136_5.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_45",
-    "table_id": "F_table_136_5"
-  },
-  {
-    "index": 262,
-    "pair_id": "F_origin_46_F_table_137_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_46/F_table_137_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_46",
-    "table_id": "F_table_137_0"
-  },
-  {
-    "index": 263,
-    "pair_id": "F_origin_46_F_table_137_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_46/F_table_137_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_46",
-    "table_id": "F_table_137_1"
-  },
-  {
-    "index": 264,
-    "pair_id": "F_origin_46_F_table_138_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_46/F_table_138_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_46",
-    "table_id": "F_table_138_0"
-  },
-  {
-    "index": 265,
-    "pair_id": "F_origin_46_F_table_138_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_46/F_table_138_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_46",
-    "table_id": "F_table_138_1"
-  },
-  {
-    "index": 266,
-    "pair_id": "F_origin_46_F_table_139_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_46/F_table_139_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_46",
-    "table_id": "F_table_139_0"
-  },
-  {
-    "index": 267,
-    "pair_id": "F_origin_46_F_table_139_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_46/F_table_139_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_46",
-    "table_id": "F_table_139_1"
-  },
-  {
-    "index": 268,
-    "pair_id": "F_origin_47_F_table_140_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_47/F_table_140_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_47",
-    "table_id": "F_table_140_0"
-  },
-  {
-    "index": 269,
-    "pair_id": "F_origin_47_F_table_141_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_47/F_table_141_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_47",
-    "table_id": "F_table_141_0"
-  },
-  {
-    "index": 270,
-    "pair_id": "F_origin_47_F_table_141_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_47/F_table_141_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_47",
-    "table_id": "F_table_141_1"
-  },
-  {
-    "index": 271,
-    "pair_id": "F_origin_47_F_table_142_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_47/F_table_142_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_47",
-    "table_id": "F_table_142_0"
-  },
-  {
-    "index": 272,
-    "pair_id": "F_origin_47_F_table_142_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_47/F_table_142_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_47",
-    "table_id": "F_table_142_1"
-  },
-  {
-    "index": 273,
-    "pair_id": "F_origin_47_F_table_142_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_47/F_table_142_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_47",
-    "table_id": "F_table_142_2"
-  },
-  {
-    "index": 274,
-    "pair_id": "F_origin_47_F_table_142_3",
-    "image_paths": [
-      "data/Finance/Table/F_origin_47/F_table_142_3.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_47",
-    "table_id": "F_table_142_3"
-  },
-  {
-    "index": 275,
-    "pair_id": "F_origin_48_F_table_143_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_48/F_table_143_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_48",
-    "table_id": "F_table_143_0"
-  },
-  {
-    "index": 276,
-    "pair_id": "F_origin_48_F_table_144_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_48/F_table_144_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_48",
-    "table_id": "F_table_144_0"
-  },
-  {
-    "index": 277,
-    "pair_id": "F_origin_48_F_table_144_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_48/F_table_144_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_48",
-    "table_id": "F_table_144_1"
-  },
-  {
-    "index": 278,
-    "pair_id": "F_origin_48_F_table_145_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_48/F_table_145_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_48",
-    "table_id": "F_table_145_0"
-  },
-  {
-    "index": 279,
-    "pair_id": "F_origin_48_F_table_145_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_48/F_table_145_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_48",
-    "table_id": "F_table_145_1"
-  },
-  {
-    "index": 280,
-    "pair_id": "F_origin_49_F_table_146_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_49/F_table_146_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_49",
-    "table_id": "F_table_146_0"
-  },
-  {
-    "index": 281,
-    "pair_id": "F_origin_49_F_table_147_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_49/F_table_147_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_49",
-    "table_id": "F_table_147_0"
-  },
-  {
-    "index": 282,
-    "pair_id": "F_origin_49_F_table_147_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_49/F_table_147_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_49",
-    "table_id": "F_table_147_1"
-  },
-  {
-    "index": 283,
-    "pair_id": "F_origin_49_F_table_147_2",
-    "image_paths": [
-      "data/Finance/Table/F_origin_49/F_table_147_2.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_49",
-    "table_id": "F_table_147_2"
-  },
-  {
-    "index": 284,
-    "pair_id": "F_origin_49_F_table_148_0",
-    "image_paths": [
-      "data/Finance/Table/F_origin_49/F_table_148_0.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_49",
-    "table_id": "F_table_148_0"
-  },
-  {
-    "index": 285,
-    "pair_id": "F_origin_49_F_table_148_1",
-    "image_paths": [
-      "data/Finance/Table/F_origin_49/F_table_148_1.png"
-    ],
-    "domain": "Finance",
-    "origin": "F_origin_49",
-    "table_id": "F_table_148_1"
-  },
-  {
-    "index": 286,
+    "index": 36,
     "pair_id": "F_origin_5_F_table_7_0",
     "image_paths": [
       "data/Finance/Table/F_origin_5/F_table_7_0.png"
@@ -2870,7 +370,7 @@
     "table_id": "F_table_7_0"
   },
   {
-    "index": 287,
+    "index": 37,
     "pair_id": "F_origin_5_F_table_7_1",
     "image_paths": [
       "data/Finance/Table/F_origin_5/F_table_7_1.png"
@@ -2880,7 +380,7 @@
     "table_id": "F_table_7_1"
   },
   {
-    "index": 288,
+    "index": 38,
     "pair_id": "F_origin_5_F_table_7_2",
     "image_paths": [
       "data/Finance/Table/F_origin_5/F_table_7_2.png"
@@ -2890,7 +390,7 @@
     "table_id": "F_table_7_2"
   },
   {
-    "index": 289,
+    "index": 39,
     "pair_id": "F_origin_5_F_table_7_3",
     "image_paths": [
       "data/Finance/Table/F_origin_5/F_table_7_3.png"
@@ -2900,7 +400,7 @@
     "table_id": "F_table_7_3"
   },
   {
-    "index": 290,
+    "index": 40,
     "pair_id": "F_origin_5_F_table_7_4",
     "image_paths": [
       "data/Finance/Table/F_origin_5/F_table_7_4.png"
@@ -2910,7 +410,7 @@
     "table_id": "F_table_7_4"
   },
   {
-    "index": 291,
+    "index": 41,
     "pair_id": "F_origin_6_F_table_8_0",
     "image_paths": [
       "data/Finance/Table/F_origin_6/F_table_8_0.png"
@@ -2920,7 +420,7 @@
     "table_id": "F_table_8_0"
   },
   {
-    "index": 292,
+    "index": 42,
     "pair_id": "F_origin_6_F_table_8_1",
     "image_paths": [
       "data/Finance/Table/F_origin_6/F_table_8_1.png"
@@ -2930,7 +430,7 @@
     "table_id": "F_table_8_1"
   },
   {
-    "index": 293,
+    "index": 43,
     "pair_id": "F_origin_6_F_table_8_2",
     "image_paths": [
       "data/Finance/Table/F_origin_6/F_table_8_2.png"
@@ -2940,7 +440,7 @@
     "table_id": "F_table_8_2"
   },
   {
-    "index": 294,
+    "index": 44,
     "pair_id": "F_origin_6_F_table_8_3",
     "image_paths": [
       "data/Finance/Table/F_origin_6/F_table_8_3.png"
@@ -2950,7 +450,7 @@
     "table_id": "F_table_8_3"
   },
   {
-    "index": 295,
+    "index": 45,
     "pair_id": "F_origin_6_F_table_8_4",
     "image_paths": [
       "data/Finance/Table/F_origin_6/F_table_8_4.png"
@@ -2960,7 +460,7 @@
     "table_id": "F_table_8_4"
   },
   {
-    "index": 296,
+    "index": 46,
     "pair_id": "F_origin_6_F_table_9_0",
     "image_paths": [
       "data/Finance/Table/F_origin_6/F_table_9_0.png"
@@ -2970,7 +470,7 @@
     "table_id": "F_table_9_0"
   },
   {
-    "index": 297,
+    "index": 47,
     "pair_id": "F_origin_6_F_table_9_1",
     "image_paths": [
       "data/Finance/Table/F_origin_6/F_table_9_1.png"
@@ -2980,7 +480,7 @@
     "table_id": "F_table_9_1"
   },
   {
-    "index": 298,
+    "index": 48,
     "pair_id": "F_origin_7_F_table_10_0",
     "image_paths": [
       "data/Finance/Table/F_origin_7/F_table_10_0.png"
@@ -2990,7 +490,7 @@
     "table_id": "F_table_10_0"
   },
   {
-    "index": 299,
+    "index": 49,
     "pair_id": "F_origin_7_F_table_10_1",
     "image_paths": [
       "data/Finance/Table/F_origin_7/F_table_10_1.png"
@@ -3000,7 +500,7 @@
     "table_id": "F_table_10_1"
   },
   {
-    "index": 300,
+    "index": 50,
     "pair_id": "F_origin_7_F_table_10_2",
     "image_paths": [
       "data/Finance/Table/F_origin_7/F_table_10_2.png"
@@ -3010,7 +510,7 @@
     "table_id": "F_table_10_2"
   },
   {
-    "index": 301,
+    "index": 51,
     "pair_id": "F_origin_7_F_table_10_3",
     "image_paths": [
       "data/Finance/Table/F_origin_7/F_table_10_3.png"
@@ -3020,7 +520,7 @@
     "table_id": "F_table_10_3"
   },
   {
-    "index": 302,
+    "index": 52,
     "pair_id": "F_origin_7_F_table_10_4",
     "image_paths": [
       "data/Finance/Table/F_origin_7/F_table_10_4.png"
@@ -3030,7 +530,7 @@
     "table_id": "F_table_10_4"
   },
   {
-    "index": 303,
+    "index": 53,
     "pair_id": "F_origin_7_F_table_11_0",
     "image_paths": [
       "data/Finance/Table/F_origin_7/F_table_11_0.png"
@@ -3040,7 +540,7 @@
     "table_id": "F_table_11_0"
   },
   {
-    "index": 304,
+    "index": 54,
     "pair_id": "F_origin_7_F_table_11_1",
     "image_paths": [
       "data/Finance/Table/F_origin_7/F_table_11_1.png"
@@ -3050,7 +550,7 @@
     "table_id": "F_table_11_1"
   },
   {
-    "index": 305,
+    "index": 55,
     "pair_id": "F_origin_8_F_table_12_0",
     "image_paths": [
       "data/Finance/Table/F_origin_8/F_table_12_0.png"
@@ -3060,7 +560,7 @@
     "table_id": "F_table_12_0"
   },
   {
-    "index": 306,
+    "index": 56,
     "pair_id": "F_origin_8_F_table_12_1",
     "image_paths": [
       "data/Finance/Table/F_origin_8/F_table_12_1.png"
@@ -3070,7 +570,7 @@
     "table_id": "F_table_12_1"
   },
   {
-    "index": 307,
+    "index": 57,
     "pair_id": "F_origin_8_F_table_12_2",
     "image_paths": [
       "data/Finance/Table/F_origin_8/F_table_12_2.png"
@@ -3080,7 +580,7 @@
     "table_id": "F_table_12_2"
   },
   {
-    "index": 308,
+    "index": 58,
     "pair_id": "F_origin_8_F_table_12_3",
     "image_paths": [
       "data/Finance/Table/F_origin_8/F_table_12_3.png"
@@ -3090,7 +590,7 @@
     "table_id": "F_table_12_3"
   },
   {
-    "index": 309,
+    "index": 59,
     "pair_id": "F_origin_8_F_table_12_4",
     "image_paths": [
       "data/Finance/Table/F_origin_8/F_table_12_4.png"
@@ -3100,7 +600,7 @@
     "table_id": "F_table_12_4"
   },
   {
-    "index": 310,
+    "index": 60,
     "pair_id": "F_origin_9_F_table_13_0",
     "image_paths": [
       "data/Finance/Table/F_origin_9/F_table_13_0.png"
@@ -3110,7 +610,7 @@
     "table_id": "F_table_13_0"
   },
   {
-    "index": 311,
+    "index": 61,
     "pair_id": "F_origin_9_F_table_13_1",
     "image_paths": [
       "data/Finance/Table/F_origin_9/F_table_13_1.png"
@@ -3120,7 +620,7 @@
     "table_id": "F_table_13_1"
   },
   {
-    "index": 312,
+    "index": 62,
     "pair_id": "F_origin_9_F_table_13_2",
     "image_paths": [
       "data/Finance/Table/F_origin_9/F_table_13_2.png"
@@ -3130,7 +630,7 @@
     "table_id": "F_table_13_2"
   },
   {
-    "index": 313,
+    "index": 63,
     "pair_id": "F_origin_9_F_table_13_3",
     "image_paths": [
       "data/Finance/Table/F_origin_9/F_table_13_3.png"
@@ -3140,7 +640,7 @@
     "table_id": "F_table_13_3"
   },
   {
-    "index": 314,
+    "index": 64,
     "pair_id": "F_origin_9_F_table_13_4",
     "image_paths": [
       "data/Finance/Table/F_origin_9/F_table_13_4.png"
@@ -3148,5 +648,2135 @@
     "domain": "Finance",
     "origin": "F_origin_9",
     "table_id": "F_table_13_4"
+  },
+  {
+    "index": 65,
+    "pair_id": "F_origin_10_F_table_14_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_10/F_table_14_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_10",
+    "table_id": "F_table_14_0"
+  },
+  {
+    "index": 66,
+    "pair_id": "F_origin_10_F_table_14_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_10/F_table_14_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_10",
+    "table_id": "F_table_14_1"
+  },
+  {
+    "index": 67,
+    "pair_id": "F_origin_10_F_table_14_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_10/F_table_14_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_10",
+    "table_id": "F_table_14_2"
+  },
+  {
+    "index": 68,
+    "pair_id": "F_origin_10_F_table_14_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_10/F_table_14_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_10",
+    "table_id": "F_table_14_3"
+  },
+  {
+    "index": 69,
+    "pair_id": "F_origin_10_F_table_14_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_10/F_table_14_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_10",
+    "table_id": "F_table_14_4"
+  },
+  {
+    "index": 70,
+    "pair_id": "F_origin_11_F_table_15_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_11/F_table_15_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_11",
+    "table_id": "F_table_15_0"
+  },
+  {
+    "index": 71,
+    "pair_id": "F_origin_11_F_table_15_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_11/F_table_15_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_11",
+    "table_id": "F_table_15_1"
+  },
+  {
+    "index": 72,
+    "pair_id": "F_origin_11_F_table_15_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_11/F_table_15_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_11",
+    "table_id": "F_table_15_2"
+  },
+  {
+    "index": 73,
+    "pair_id": "F_origin_11_F_table_15_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_11/F_table_15_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_11",
+    "table_id": "F_table_15_3"
+  },
+  {
+    "index": 74,
+    "pair_id": "F_origin_11_F_table_15_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_11/F_table_15_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_11",
+    "table_id": "F_table_15_4"
+  },
+  {
+    "index": 75,
+    "pair_id": "F_origin_11_F_table_15_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_11/F_table_15_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_11",
+    "table_id": "F_table_15_5"
+  },
+  {
+    "index": 76,
+    "pair_id": "F_origin_12_F_table_16_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_12/F_table_16_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_12",
+    "table_id": "F_table_16_0"
+  },
+  {
+    "index": 77,
+    "pair_id": "F_origin_12_F_table_16_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_12/F_table_16_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_12",
+    "table_id": "F_table_16_1"
+  },
+  {
+    "index": 78,
+    "pair_id": "F_origin_12_F_table_16_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_12/F_table_16_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_12",
+    "table_id": "F_table_16_2"
+  },
+  {
+    "index": 79,
+    "pair_id": "F_origin_12_F_table_16_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_12/F_table_16_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_12",
+    "table_id": "F_table_16_3"
+  },
+  {
+    "index": 80,
+    "pair_id": "F_origin_12_F_table_16_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_12/F_table_16_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_12",
+    "table_id": "F_table_16_4"
+  },
+  {
+    "index": 81,
+    "pair_id": "F_origin_13_F_table_17_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_13/F_table_17_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_13",
+    "table_id": "F_table_17_0"
+  },
+  {
+    "index": 82,
+    "pair_id": "F_origin_13_F_table_17_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_13/F_table_17_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_13",
+    "table_id": "F_table_17_1"
+  },
+  {
+    "index": 83,
+    "pair_id": "F_origin_13_F_table_17_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_13/F_table_17_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_13",
+    "table_id": "F_table_17_2"
+  },
+  {
+    "index": 84,
+    "pair_id": "F_origin_13_F_table_17_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_13/F_table_17_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_13",
+    "table_id": "F_table_17_3"
+  },
+  {
+    "index": 85,
+    "pair_id": "F_origin_14_F_table_18_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_14/F_table_18_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_14",
+    "table_id": "F_table_18_0"
+  },
+  {
+    "index": 86,
+    "pair_id": "F_origin_14_F_table_18_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_14/F_table_18_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_14",
+    "table_id": "F_table_18_1"
+  },
+  {
+    "index": 87,
+    "pair_id": "F_origin_14_F_table_18_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_14/F_table_18_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_14",
+    "table_id": "F_table_18_2"
+  },
+  {
+    "index": 88,
+    "pair_id": "F_origin_14_F_table_18_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_14/F_table_18_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_14",
+    "table_id": "F_table_18_3"
+  },
+  {
+    "index": 89,
+    "pair_id": "F_origin_14_F_table_18_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_14/F_table_18_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_14",
+    "table_id": "F_table_18_4"
+  },
+  {
+    "index": 90,
+    "pair_id": "F_origin_15_F_table_19_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_15/F_table_19_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_15",
+    "table_id": "F_table_19_0"
+  },
+  {
+    "index": 91,
+    "pair_id": "F_origin_15_F_table_19_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_15/F_table_19_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_15",
+    "table_id": "F_table_19_1"
+  },
+  {
+    "index": 92,
+    "pair_id": "F_origin_15_F_table_19_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_15/F_table_19_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_15",
+    "table_id": "F_table_19_2"
+  },
+  {
+    "index": 93,
+    "pair_id": "F_origin_15_F_table_19_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_15/F_table_19_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_15",
+    "table_id": "F_table_19_3"
+  },
+  {
+    "index": 94,
+    "pair_id": "F_origin_15_F_table_19_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_15/F_table_19_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_15",
+    "table_id": "F_table_19_4"
+  },
+  {
+    "index": 95,
+    "pair_id": "F_origin_16_F_table_20_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_20_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_20_0"
+  },
+  {
+    "index": 96,
+    "pair_id": "F_origin_16_F_table_20_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_20_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_20_1"
+  },
+  {
+    "index": 97,
+    "pair_id": "F_origin_16_F_table_20_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_20_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_20_2"
+  },
+  {
+    "index": 98,
+    "pair_id": "F_origin_16_F_table_20_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_20_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_20_3"
+  },
+  {
+    "index": 99,
+    "pair_id": "F_origin_16_F_table_20_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_20_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_20_4"
+  },
+  {
+    "index": 100,
+    "pair_id": "F_origin_16_F_table_20_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_20_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_20_5"
+  },
+  {
+    "index": 101,
+    "pair_id": "F_origin_16_F_table_21_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_21_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_21_0"
+  },
+  {
+    "index": 102,
+    "pair_id": "F_origin_16_F_table_21_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_16/F_table_21_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_16",
+    "table_id": "F_table_21_1"
+  },
+  {
+    "index": 103,
+    "pair_id": "F_origin_17_F_table_22_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_17/F_table_22_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_17",
+    "table_id": "F_table_22_0"
+  },
+  {
+    "index": 104,
+    "pair_id": "F_origin_17_F_table_22_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_17/F_table_22_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_17",
+    "table_id": "F_table_22_1"
+  },
+  {
+    "index": 105,
+    "pair_id": "F_origin_17_F_table_22_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_17/F_table_22_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_17",
+    "table_id": "F_table_22_2"
+  },
+  {
+    "index": 106,
+    "pair_id": "F_origin_17_F_table_22_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_17/F_table_22_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_17",
+    "table_id": "F_table_22_3"
+  },
+  {
+    "index": 107,
+    "pair_id": "F_origin_17_F_table_22_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_17/F_table_22_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_17",
+    "table_id": "F_table_22_4"
+  },
+  {
+    "index": 108,
+    "pair_id": "F_origin_18_F_table_23_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_18/F_table_23_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_18",
+    "table_id": "F_table_23_0"
+  },
+  {
+    "index": 109,
+    "pair_id": "F_origin_18_F_table_23_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_18/F_table_23_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_18",
+    "table_id": "F_table_23_1"
+  },
+  {
+    "index": 110,
+    "pair_id": "F_origin_18_F_table_23_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_18/F_table_23_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_18",
+    "table_id": "F_table_23_2"
+  },
+  {
+    "index": 111,
+    "pair_id": "F_origin_18_F_table_23_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_18/F_table_23_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_18",
+    "table_id": "F_table_23_3"
+  },
+  {
+    "index": 112,
+    "pair_id": "F_origin_19_F_table_24_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_0"
+  },
+  {
+    "index": 113,
+    "pair_id": "F_origin_19_F_table_24_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_1"
+  },
+  {
+    "index": 114,
+    "pair_id": "F_origin_19_F_table_24_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_2"
+  },
+  {
+    "index": 115,
+    "pair_id": "F_origin_19_F_table_24_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_3"
+  },
+  {
+    "index": 116,
+    "pair_id": "F_origin_19_F_table_24_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_4"
+  },
+  {
+    "index": 117,
+    "pair_id": "F_origin_19_F_table_24_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_5"
+  },
+  {
+    "index": 118,
+    "pair_id": "F_origin_19_F_table_24_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_6"
+  },
+  {
+    "index": 119,
+    "pair_id": "F_origin_19_F_table_24_7",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_7.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_7"
+  },
+  {
+    "index": 120,
+    "pair_id": "F_origin_19_F_table_24_8",
+    "image_paths": [
+      "data/Finance/Table/F_origin_19/F_table_24_8.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_19",
+    "table_id": "F_table_24_8"
+  },
+  {
+    "index": 121,
+    "pair_id": "F_origin_20_F_table_25_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_0"
+  },
+  {
+    "index": 122,
+    "pair_id": "F_origin_20_F_table_25_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_1"
+  },
+  {
+    "index": 123,
+    "pair_id": "F_origin_20_F_table_25_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_2"
+  },
+  {
+    "index": 124,
+    "pair_id": "F_origin_20_F_table_25_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_3"
+  },
+  {
+    "index": 125,
+    "pair_id": "F_origin_20_F_table_25_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_4"
+  },
+  {
+    "index": 126,
+    "pair_id": "F_origin_20_F_table_25_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_5"
+  },
+  {
+    "index": 127,
+    "pair_id": "F_origin_20_F_table_25_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_6"
+  },
+  {
+    "index": 128,
+    "pair_id": "F_origin_20_F_table_25_7",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_7.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_7"
+  },
+  {
+    "index": 129,
+    "pair_id": "F_origin_20_F_table_25_8",
+    "image_paths": [
+      "data/Finance/Table/F_origin_20/F_table_25_8.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_20",
+    "table_id": "F_table_25_8"
+  },
+  {
+    "index": 130,
+    "pair_id": "F_origin_21_F_table_26_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_21/F_table_26_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_21",
+    "table_id": "F_table_26_0"
+  },
+  {
+    "index": 131,
+    "pair_id": "F_origin_21_F_table_26_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_21/F_table_26_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_21",
+    "table_id": "F_table_26_1"
+  },
+  {
+    "index": 132,
+    "pair_id": "F_origin_21_F_table_26_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_21/F_table_26_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_21",
+    "table_id": "F_table_26_2"
+  },
+  {
+    "index": 133,
+    "pair_id": "F_origin_21_F_table_26_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_21/F_table_26_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_21",
+    "table_id": "F_table_26_3"
+  },
+  {
+    "index": 134,
+    "pair_id": "F_origin_21_F_table_26_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_21/F_table_26_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_21",
+    "table_id": "F_table_26_4"
+  },
+  {
+    "index": 135,
+    "pair_id": "F_origin_22_F_table_27_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_22/F_table_27_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_22",
+    "table_id": "F_table_27_0"
+  },
+  {
+    "index": 136,
+    "pair_id": "F_origin_22_F_table_27_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_22/F_table_27_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_22",
+    "table_id": "F_table_27_1"
+  },
+  {
+    "index": 137,
+    "pair_id": "F_origin_22_F_table_27_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_22/F_table_27_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_22",
+    "table_id": "F_table_27_2"
+  },
+  {
+    "index": 138,
+    "pair_id": "F_origin_22_F_table_27_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_22/F_table_27_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_22",
+    "table_id": "F_table_27_3"
+  },
+  {
+    "index": 139,
+    "pair_id": "F_origin_22_F_table_27_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_22/F_table_27_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_22",
+    "table_id": "F_table_27_4"
+  },
+  {
+    "index": 140,
+    "pair_id": "F_origin_22_F_table_27_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_22/F_table_27_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_22",
+    "table_id": "F_table_27_5"
+  },
+  {
+    "index": 141,
+    "pair_id": "F_origin_22_F_table_27_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_22/F_table_27_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_22",
+    "table_id": "F_table_27_6"
+  },
+  {
+    "index": 142,
+    "pair_id": "F_origin_23_F_table_28_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_23/F_table_28_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_23",
+    "table_id": "F_table_28_0"
+  },
+  {
+    "index": 143,
+    "pair_id": "F_origin_23_F_table_28_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_23/F_table_28_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_23",
+    "table_id": "F_table_28_1"
+  },
+  {
+    "index": 144,
+    "pair_id": "F_origin_23_F_table_28_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_23/F_table_28_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_23",
+    "table_id": "F_table_28_2"
+  },
+  {
+    "index": 145,
+    "pair_id": "F_origin_23_F_table_28_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_23/F_table_28_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_23",
+    "table_id": "F_table_28_3"
+  },
+  {
+    "index": 146,
+    "pair_id": "F_origin_23_F_table_28_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_23/F_table_28_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_23",
+    "table_id": "F_table_28_4"
+  },
+  {
+    "index": 147,
+    "pair_id": "F_origin_23_F_table_28_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_23/F_table_28_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_23",
+    "table_id": "F_table_28_5"
+  },
+  {
+    "index": 148,
+    "pair_id": "F_origin_23_F_table_28_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_23/F_table_28_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_23",
+    "table_id": "F_table_28_6"
+  },
+  {
+    "index": 149,
+    "pair_id": "F_origin_24_F_table_29_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_0"
+  },
+  {
+    "index": 150,
+    "pair_id": "F_origin_24_F_table_29_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_1"
+  },
+  {
+    "index": 151,
+    "pair_id": "F_origin_24_F_table_29_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_2"
+  },
+  {
+    "index": 152,
+    "pair_id": "F_origin_24_F_table_29_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_3"
+  },
+  {
+    "index": 153,
+    "pair_id": "F_origin_24_F_table_29_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_4"
+  },
+  {
+    "index": 154,
+    "pair_id": "F_origin_24_F_table_29_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_5"
+  },
+  {
+    "index": 155,
+    "pair_id": "F_origin_24_F_table_29_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_6"
+  },
+  {
+    "index": 156,
+    "pair_id": "F_origin_24_F_table_29_7",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_7.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_7"
+  },
+  {
+    "index": 157,
+    "pair_id": "F_origin_24_F_table_29_8",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_8.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_8"
+  },
+  {
+    "index": 158,
+    "pair_id": "F_origin_24_F_table_29_9",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_9.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_9"
+  },
+  {
+    "index": 159,
+    "pair_id": "F_origin_24_F_table_29_10",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_10.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_10"
+  },
+  {
+    "index": 160,
+    "pair_id": "F_origin_24_F_table_29_11",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_11.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_11"
+  },
+  {
+    "index": 161,
+    "pair_id": "F_origin_24_F_table_29_12",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_12.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_12"
+  },
+  {
+    "index": 162,
+    "pair_id": "F_origin_24_F_table_29_13",
+    "image_paths": [
+      "data/Finance/Table/F_origin_24/F_table_29_13.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_24",
+    "table_id": "F_table_29_13"
+  },
+  {
+    "index": 163,
+    "pair_id": "F_origin_25_F_table_30_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_25/F_table_30_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_25",
+    "table_id": "F_table_30_0"
+  },
+  {
+    "index": 164,
+    "pair_id": "F_origin_25_F_table_30_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_25/F_table_30_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_25",
+    "table_id": "F_table_30_1"
+  },
+  {
+    "index": 165,
+    "pair_id": "F_origin_25_F_table_30_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_25/F_table_30_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_25",
+    "table_id": "F_table_30_2"
+  },
+  {
+    "index": 166,
+    "pair_id": "F_origin_25_F_table_30_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_25/F_table_30_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_25",
+    "table_id": "F_table_30_3"
+  },
+  {
+    "index": 167,
+    "pair_id": "F_origin_25_F_table_30_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_25/F_table_30_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_25",
+    "table_id": "F_table_30_4"
+  },
+  {
+    "index": 168,
+    "pair_id": "F_origin_25_F_table_30_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_25/F_table_30_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_25",
+    "table_id": "F_table_30_5"
+  },
+  {
+    "index": 169,
+    "pair_id": "F_origin_25_F_table_30_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_25/F_table_30_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_25",
+    "table_id": "F_table_30_6"
+  },
+  {
+    "index": 170,
+    "pair_id": "F_origin_26_F_table_31_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_26/F_table_31_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_26",
+    "table_id": "F_table_31_0"
+  },
+  {
+    "index": 171,
+    "pair_id": "F_origin_26_F_table_31_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_26/F_table_31_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_26",
+    "table_id": "F_table_31_1"
+  },
+  {
+    "index": 172,
+    "pair_id": "F_origin_26_F_table_31_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_26/F_table_31_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_26",
+    "table_id": "F_table_31_2"
+  },
+  {
+    "index": 173,
+    "pair_id": "F_origin_26_F_table_31_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_26/F_table_31_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_26",
+    "table_id": "F_table_31_3"
+  },
+  {
+    "index": 174,
+    "pair_id": "F_origin_26_F_table_31_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_26/F_table_31_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_26",
+    "table_id": "F_table_31_4"
+  },
+  {
+    "index": 175,
+    "pair_id": "F_origin_27_F_table_32_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_27/F_table_32_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_27",
+    "table_id": "F_table_32_0"
+  },
+  {
+    "index": 176,
+    "pair_id": "F_origin_27_F_table_32_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_27/F_table_32_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_27",
+    "table_id": "F_table_32_1"
+  },
+  {
+    "index": 177,
+    "pair_id": "F_origin_27_F_table_32_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_27/F_table_32_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_27",
+    "table_id": "F_table_32_2"
+  },
+  {
+    "index": 178,
+    "pair_id": "F_origin_27_F_table_32_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_27/F_table_32_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_27",
+    "table_id": "F_table_32_3"
+  },
+  {
+    "index": 179,
+    "pair_id": "F_origin_27_F_table_32_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_27/F_table_32_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_27",
+    "table_id": "F_table_32_4"
+  },
+  {
+    "index": 180,
+    "pair_id": "F_origin_27_F_table_32_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_27/F_table_32_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_27",
+    "table_id": "F_table_32_5"
+  },
+  {
+    "index": 181,
+    "pair_id": "F_origin_28_F_table_33_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_28/F_table_33_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_28",
+    "table_id": "F_table_33_0"
+  },
+  {
+    "index": 182,
+    "pair_id": "F_origin_28_F_table_33_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_28/F_table_33_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_28",
+    "table_id": "F_table_33_1"
+  },
+  {
+    "index": 183,
+    "pair_id": "F_origin_28_F_table_33_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_28/F_table_33_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_28",
+    "table_id": "F_table_33_2"
+  },
+  {
+    "index": 184,
+    "pair_id": "F_origin_28_F_table_33_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_28/F_table_33_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_28",
+    "table_id": "F_table_33_3"
+  },
+  {
+    "index": 185,
+    "pair_id": "F_origin_28_F_table_33_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_28/F_table_33_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_28",
+    "table_id": "F_table_33_4"
+  },
+  {
+    "index": 186,
+    "pair_id": "F_origin_29_F_table_34_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_29/F_table_34_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_29",
+    "table_id": "F_table_34_0"
+  },
+  {
+    "index": 187,
+    "pair_id": "F_origin_29_F_table_34_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_29/F_table_34_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_29",
+    "table_id": "F_table_34_1"
+  },
+  {
+    "index": 188,
+    "pair_id": "F_origin_29_F_table_34_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_29/F_table_34_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_29",
+    "table_id": "F_table_34_2"
+  },
+  {
+    "index": 189,
+    "pair_id": "F_origin_29_F_table_34_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_29/F_table_34_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_29",
+    "table_id": "F_table_34_3"
+  },
+  {
+    "index": 190,
+    "pair_id": "F_origin_29_F_table_34_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_29/F_table_34_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_29",
+    "table_id": "F_table_34_4"
+  },
+  {
+    "index": 191,
+    "pair_id": "F_origin_29_F_table_34_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_29/F_table_34_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_29",
+    "table_id": "F_table_34_5"
+  },
+  {
+    "index": 192,
+    "pair_id": "F_origin_30_F_table_34_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_30/F_table_34_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_30",
+    "table_id": "F_table_34_0"
+  },
+  {
+    "index": 193,
+    "pair_id": "F_origin_30_F_table_34_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_30/F_table_34_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_30",
+    "table_id": "F_table_34_1"
+  },
+  {
+    "index": 194,
+    "pair_id": "F_origin_30_F_table_34_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_30/F_table_34_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_30",
+    "table_id": "F_table_34_2"
+  },
+  {
+    "index": 195,
+    "pair_id": "F_origin_31_F_table_35_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_31/F_table_35_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_31",
+    "table_id": "F_table_35_0"
+  },
+  {
+    "index": 196,
+    "pair_id": "F_origin_31_F_table_35_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_31/F_table_35_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_31",
+    "table_id": "F_table_35_1"
+  },
+  {
+    "index": 197,
+    "pair_id": "F_origin_31_F_table_35_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_31/F_table_35_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_31",
+    "table_id": "F_table_35_2"
+  },
+  {
+    "index": 198,
+    "pair_id": "F_origin_32_F_table_36_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_32/F_table_36_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_32",
+    "table_id": "F_table_36_0"
+  },
+  {
+    "index": 199,
+    "pair_id": "F_origin_32_F_table_36_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_32/F_table_36_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_32",
+    "table_id": "F_table_36_1"
+  },
+  {
+    "index": 200,
+    "pair_id": "F_origin_32_F_table_36_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_32/F_table_36_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_32",
+    "table_id": "F_table_36_2"
+  },
+  {
+    "index": 201,
+    "pair_id": "F_origin_33_F_table_37_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_33/F_table_37_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_33",
+    "table_id": "F_table_37_0"
+  },
+  {
+    "index": 202,
+    "pair_id": "F_origin_33_F_table_37_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_33/F_table_37_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_33",
+    "table_id": "F_table_37_1"
+  },
+  {
+    "index": 203,
+    "pair_id": "F_origin_33_F_table_37_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_33/F_table_37_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_33",
+    "table_id": "F_table_37_2"
+  },
+  {
+    "index": 204,
+    "pair_id": "F_origin_34_F_table_38_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_34/F_table_38_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_34",
+    "table_id": "F_table_38_0"
+  },
+  {
+    "index": 205,
+    "pair_id": "F_origin_34_F_table_38_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_34/F_table_38_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_34",
+    "table_id": "F_table_38_1"
+  },
+  {
+    "index": 206,
+    "pair_id": "F_origin_34_F_table_38_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_34/F_table_38_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_34",
+    "table_id": "F_table_38_2"
+  },
+  {
+    "index": 207,
+    "pair_id": "F_origin_35_F_table_39_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_35/F_table_39_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_35",
+    "table_id": "F_table_39_0"
+  },
+  {
+    "index": 208,
+    "pair_id": "F_origin_35_F_table_39_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_35/F_table_39_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_35",
+    "table_id": "F_table_39_1"
+  },
+  {
+    "index": 209,
+    "pair_id": "F_origin_35_F_table_39_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_35/F_table_39_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_35",
+    "table_id": "F_table_39_2"
+  },
+  {
+    "index": 210,
+    "pair_id": "F_origin_36_F_table_40_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_36/F_table_40_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_36",
+    "table_id": "F_table_40_0"
+  },
+  {
+    "index": 211,
+    "pair_id": "F_origin_36_F_table_40_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_36/F_table_40_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_36",
+    "table_id": "F_table_40_1"
+  },
+  {
+    "index": 212,
+    "pair_id": "F_origin_36_F_table_40_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_36/F_table_40_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_36",
+    "table_id": "F_table_40_2"
+  },
+  {
+    "index": 213,
+    "pair_id": "F_origin_36_F_table_40_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_36/F_table_40_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_36",
+    "table_id": "F_table_40_3"
+  },
+  {
+    "index": 214,
+    "pair_id": "F_origin_37_F_table_41_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_37/F_table_41_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_37",
+    "table_id": "F_table_41_0"
+  },
+  {
+    "index": 215,
+    "pair_id": "F_origin_37_F_table_41_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_37/F_table_41_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_37",
+    "table_id": "F_table_41_1"
+  },
+  {
+    "index": 216,
+    "pair_id": "F_origin_37_F_table_41_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_37/F_table_41_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_37",
+    "table_id": "F_table_41_2"
+  },
+  {
+    "index": 217,
+    "pair_id": "F_origin_37_F_table_41_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_37/F_table_41_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_37",
+    "table_id": "F_table_41_3"
+  },
+  {
+    "index": 218,
+    "pair_id": "F_origin_37_F_table_41_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_37/F_table_41_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_37",
+    "table_id": "F_table_41_4"
+  },
+  {
+    "index": 219,
+    "pair_id": "F_origin_38_F_table_42_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_38/F_table_42_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_38",
+    "table_id": "F_table_42_0"
+  },
+  {
+    "index": 220,
+    "pair_id": "F_origin_38_F_table_42_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_38/F_table_42_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_38",
+    "table_id": "F_table_42_1"
+  },
+  {
+    "index": 221,
+    "pair_id": "F_origin_38_F_table_42_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_38/F_table_42_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_38",
+    "table_id": "F_table_42_2"
+  },
+  {
+    "index": 222,
+    "pair_id": "F_origin_39_F_table_43_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_39/F_table_43_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_39",
+    "table_id": "F_table_43_0"
+  },
+  {
+    "index": 223,
+    "pair_id": "F_origin_39_F_table_43_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_39/F_table_43_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_39",
+    "table_id": "F_table_43_1"
+  },
+  {
+    "index": 224,
+    "pair_id": "F_origin_39_F_table_43_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_39/F_table_43_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_39",
+    "table_id": "F_table_43_2"
+  },
+  {
+    "index": 225,
+    "pair_id": "F_origin_40_F_table_44_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_40/F_table_44_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_40",
+    "table_id": "F_table_44_0"
+  },
+  {
+    "index": 226,
+    "pair_id": "F_origin_40_F_table_44_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_40/F_table_44_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_40",
+    "table_id": "F_table_44_1"
+  },
+  {
+    "index": 227,
+    "pair_id": "F_origin_40_F_table_44_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_40/F_table_44_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_40",
+    "table_id": "F_table_44_2"
+  },
+  {
+    "index": 228,
+    "pair_id": "F_origin_41_F_table_45_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_41/F_table_45_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_41",
+    "table_id": "F_table_45_0"
+  },
+  {
+    "index": 229,
+    "pair_id": "F_origin_41_F_table_45_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_41/F_table_45_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_41",
+    "table_id": "F_table_45_1"
+  },
+  {
+    "index": 230,
+    "pair_id": "F_origin_41_F_table_45_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_41/F_table_45_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_41",
+    "table_id": "F_table_45_2"
+  },
+  {
+    "index": 231,
+    "pair_id": "F_origin_41_F_table_45_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_41/F_table_45_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_41",
+    "table_id": "F_table_45_3"
+  },
+  {
+    "index": 232,
+    "pair_id": "F_origin_41_F_table_45_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_41/F_table_45_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_41",
+    "table_id": "F_table_45_4"
+  },
+  {
+    "index": 233,
+    "pair_id": "F_origin_41_F_table_45_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_41/F_table_45_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_41",
+    "table_id": "F_table_45_5"
+  },
+  {
+    "index": 234,
+    "pair_id": "F_origin_42_F_table_46_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_42/F_table_46_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_42",
+    "table_id": "F_table_46_0"
+  },
+  {
+    "index": 235,
+    "pair_id": "F_origin_42_F_table_46_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_42/F_table_46_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_42",
+    "table_id": "F_table_46_1"
+  },
+  {
+    "index": 236,
+    "pair_id": "F_origin_42_F_table_46_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_42/F_table_46_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_42",
+    "table_id": "F_table_46_2"
+  },
+  {
+    "index": 237,
+    "pair_id": "F_origin_42_F_table_46_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_42/F_table_46_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_42",
+    "table_id": "F_table_46_3"
+  },
+  {
+    "index": 238,
+    "pair_id": "F_origin_43_F_table_47_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_43/F_table_47_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_43",
+    "table_id": "F_table_47_0"
+  },
+  {
+    "index": 239,
+    "pair_id": "F_origin_43_F_table_47_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_43/F_table_47_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_43",
+    "table_id": "F_table_47_1"
+  },
+  {
+    "index": 240,
+    "pair_id": "F_origin_43_F_table_47_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_43/F_table_47_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_43",
+    "table_id": "F_table_47_2"
+  },
+  {
+    "index": 241,
+    "pair_id": "F_origin_43_F_table_47_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_43/F_table_47_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_43",
+    "table_id": "F_table_47_3"
+  },
+  {
+    "index": 242,
+    "pair_id": "F_origin_44_F_table_48_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_44/F_table_48_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_44",
+    "table_id": "F_table_48_0"
+  },
+  {
+    "index": 243,
+    "pair_id": "F_origin_44_F_table_48_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_44/F_table_48_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_44",
+    "table_id": "F_table_48_1"
+  },
+  {
+    "index": 244,
+    "pair_id": "F_origin_44_F_table_48_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_44/F_table_48_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_44",
+    "table_id": "F_table_48_2"
+  },
+  {
+    "index": 245,
+    "pair_id": "F_origin_44_F_table_48_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_44/F_table_48_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_44",
+    "table_id": "F_table_48_3"
+  },
+  {
+    "index": 246,
+    "pair_id": "F_origin_44_F_table_48_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_44/F_table_48_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_44",
+    "table_id": "F_table_48_4"
+  },
+  {
+    "index": 247,
+    "pair_id": "F_origin_44_F_table_48_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_44/F_table_48_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_44",
+    "table_id": "F_table_48_5"
+  },
+  {
+    "index": 248,
+    "pair_id": "F_origin_44_F_table_48_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_44/F_table_48_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_44",
+    "table_id": "F_table_48_6"
+  },
+  {
+    "index": 249,
+    "pair_id": "F_origin_45_F_table_49_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_45/F_table_49_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_45",
+    "table_id": "F_table_49_0"
+  },
+  {
+    "index": 250,
+    "pair_id": "F_origin_45_F_table_49_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_45/F_table_49_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_45",
+    "table_id": "F_table_49_1"
+  },
+  {
+    "index": 251,
+    "pair_id": "F_origin_45_F_table_49_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_45/F_table_49_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_45",
+    "table_id": "F_table_49_2"
+  },
+  {
+    "index": 252,
+    "pair_id": "F_origin_45_F_table_49_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_45/F_table_49_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_45",
+    "table_id": "F_table_49_3"
+  },
+  {
+    "index": 253,
+    "pair_id": "F_origin_45_F_table_49_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_45/F_table_49_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_45",
+    "table_id": "F_table_49_4"
+  },
+  {
+    "index": 254,
+    "pair_id": "F_origin_46_F_table_49_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_46/F_table_49_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_46",
+    "table_id": "F_table_49_0"
+  },
+  {
+    "index": 255,
+    "pair_id": "F_origin_46_F_table_49_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_46/F_table_49_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_46",
+    "table_id": "F_table_49_1"
+  },
+  {
+    "index": 256,
+    "pair_id": "F_origin_46_F_table_49_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_46/F_table_49_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_46",
+    "table_id": "F_table_49_2"
+  },
+  {
+    "index": 257,
+    "pair_id": "F_origin_46_F_table_49_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_46/F_table_49_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_46",
+    "table_id": "F_table_49_3"
+  },
+  {
+    "index": 258,
+    "pair_id": "F_origin_46_F_table_49_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_46/F_table_49_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_46",
+    "table_id": "F_table_49_4"
+  },
+  {
+    "index": 259,
+    "pair_id": "F_origin_46_F_table_49_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_46/F_table_49_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_46",
+    "table_id": "F_table_49_5"
+  },
+  {
+    "index": 260,
+    "pair_id": "F_origin_47_F_table_50_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_47/F_table_50_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_47",
+    "table_id": "F_table_50_0"
+  },
+  {
+    "index": 261,
+    "pair_id": "F_origin_47_F_table_50_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_47/F_table_50_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_47",
+    "table_id": "F_table_50_1"
+  },
+  {
+    "index": 262,
+    "pair_id": "F_origin_47_F_table_50_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_47/F_table_50_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_47",
+    "table_id": "F_table_50_2"
+  },
+  {
+    "index": 263,
+    "pair_id": "F_origin_47_F_table_50_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_47/F_table_50_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_47",
+    "table_id": "F_table_50_3"
+  },
+  {
+    "index": 264,
+    "pair_id": "F_origin_47_F_table_50_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_47/F_table_50_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_47",
+    "table_id": "F_table_50_4"
+  },
+  {
+    "index": 265,
+    "pair_id": "F_origin_47_F_table_50_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_47/F_table_50_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_47",
+    "table_id": "F_table_50_5"
+  },
+  {
+    "index": 266,
+    "pair_id": "F_origin_47_F_table_50_6",
+    "image_paths": [
+      "data/Finance/Table/F_origin_47/F_table_50_6.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_47",
+    "table_id": "F_table_50_6"
+  },
+  {
+    "index": 267,
+    "pair_id": "F_origin_48_F_table_51_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_48/F_table_51_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_48",
+    "table_id": "F_table_51_0"
+  },
+  {
+    "index": 268,
+    "pair_id": "F_origin_48_F_table_51_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_48/F_table_51_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_48",
+    "table_id": "F_table_51_1"
+  },
+  {
+    "index": 269,
+    "pair_id": "F_origin_48_F_table_51_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_48/F_table_51_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_48",
+    "table_id": "F_table_51_2"
+  },
+  {
+    "index": 270,
+    "pair_id": "F_origin_48_F_table_51_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_48/F_table_51_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_48",
+    "table_id": "F_table_51_3"
+  },
+  {
+    "index": 271,
+    "pair_id": "F_origin_48_F_table_51_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_48/F_table_51_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_48",
+    "table_id": "F_table_51_4"
+  },
+  {
+    "index": 272,
+    "pair_id": "F_origin_49_F_table_52_0",
+    "image_paths": [
+      "data/Finance/Table/F_origin_49/F_table_52_0.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_49",
+    "table_id": "F_table_52_0"
+  },
+  {
+    "index": 273,
+    "pair_id": "F_origin_49_F_table_52_1",
+    "image_paths": [
+      "data/Finance/Table/F_origin_49/F_table_52_1.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_49",
+    "table_id": "F_table_52_1"
+  },
+  {
+    "index": 274,
+    "pair_id": "F_origin_49_F_table_52_2",
+    "image_paths": [
+      "data/Finance/Table/F_origin_49/F_table_52_2.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_49",
+    "table_id": "F_table_52_2"
+  },
+  {
+    "index": 275,
+    "pair_id": "F_origin_49_F_table_52_3",
+    "image_paths": [
+      "data/Finance/Table/F_origin_49/F_table_52_3.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_49",
+    "table_id": "F_table_52_3"
+  },
+  {
+    "index": 276,
+    "pair_id": "F_origin_49_F_table_52_4",
+    "image_paths": [
+      "data/Finance/Table/F_origin_49/F_table_52_4.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_49",
+    "table_id": "F_table_52_4"
+  },
+  {
+    "index": 277,
+    "pair_id": "F_origin_49_F_table_52_5",
+    "image_paths": [
+      "data/Finance/Table/F_origin_49/F_table_52_5.png"
+    ],
+    "domain": "Finance",
+    "origin": "F_origin_49",
+    "table_id": "F_table_52_5"
   }
 ]

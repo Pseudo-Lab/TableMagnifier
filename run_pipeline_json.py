@@ -298,6 +298,7 @@ def process_single_pair(
     config_path: str,
     arg_domain: str,
     qa_only: bool,
+    skip_qa: bool,
     notion_uploader: Any,
     randomize_style: bool = True
 ) -> Dict:
@@ -423,20 +424,24 @@ def process_single_pair(
             
             pair_tables = temp_tables
 
-            # 2. Generate QA for the Pair
-            print(f"  [Pair {index+1}] Generating QA for pair...")
-            qa_state = run_synthetic_table_flow(
-                image_path=str(paths[0]),
-                image_paths=image_paths_str,
-                provider=provider,
-                model=model,
-                config_path=config_path,
-                qa_only=True,  # Focus on QA from these images
-                domain=domain
-            )
-                
-            if qa_state.get("qa_results"):
-                pair_qa = qa_state["qa_results"]
+            # 2. Generate QA for the Pair (unless skip_qa is set)
+            if skip_qa:
+                print(f"  [Pair {index+1}] Skipping QA generation (--skip-qa)")
+                pair_qa = []
+            else:
+                print(f"  [Pair {index+1}] Generating QA for pair...")
+                qa_state = run_synthetic_table_flow(
+                    image_path=str(paths[0]),
+                    image_paths=image_paths_str,
+                    provider=provider,
+                    model=model,
+                    config_path=config_path,
+                    qa_only=True,  # Focus on QA from these images
+                    domain=domain
+                )
+
+                if qa_state.get("qa_results"):
+                    pair_qa = qa_state["qa_results"]
 
         # Create structured result with keys
         result_item = {
@@ -493,6 +498,7 @@ def run_pipeline(
     config_path: str = "apis/gemini_keys.yaml",
     arg_domain: str = None,
     qa_only: bool = False,
+    skip_qa: bool = False,
     upload_to_notion: bool = False,
     max_workers: int = 3,
     randomize_style: bool = True
@@ -529,6 +535,7 @@ def run_pipeline(
                 config_path,
                 arg_domain,
                 qa_only,
+                skip_qa,
                 notion_uploader,
                 randomize_style
             ): i for i, item in enumerate(json_input)
@@ -572,6 +579,7 @@ def main():
     parser.add_argument("--config-path", default="apis/gemini_keys.yaml", help="Path to gemini_keys.yaml")
     parser.add_argument("--domain", help="Force specific domain")
     parser.add_argument("--qa-only", action="store_true", help="Skip table generation, only generate QA (applies to all domains)")
+    parser.add_argument("--skip-qa", action="store_true", help="Skip QA generation, only generate tables")
     parser.add_argument("--upload-to-notion", action="store_true", help="Upload QA results to Notion database")
     parser.add_argument("--max-workers", type=int, default=3, help="Maximum number of parallel workers (default: 3)")
     parser.add_argument("--randomize-style", action="store_true", default=True, help="Randomize HTML table styles (fonts, colors) for diversity (default: True)")
@@ -614,6 +622,7 @@ def main():
         config_path=args.config_path,
         arg_domain=args.domain,
         qa_only=args.qa_only,
+        skip_qa=args.skip_qa,
         upload_to_notion=args.upload_to_notion,
         max_workers=args.max_workers,
         randomize_style=args.randomize_style
