@@ -36,6 +36,8 @@ ENV/
 
 # Claude Code
 .claude/
+.codex
+.codex/
 
 # API Keys - 중요!
 .env
@@ -66,6 +68,9 @@ dmypy.json
 data/
 
 # Output - 생성된 결과물
+artifacts/
+frontend/artifacts/
+frontend/test-results/
 output/
 output_*/
 I_origin_*/

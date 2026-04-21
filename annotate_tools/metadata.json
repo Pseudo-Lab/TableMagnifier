@@ -1,5 +1,0 @@
-
-{
-  "name": "Korean Table Q&A Generator",
-  "description": "An application that uses Gemini to perform OCR on images of Korean tables and generates question-and-answer sets from the extracted text."
-}

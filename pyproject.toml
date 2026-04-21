@@ -1,36 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.24.0"]
+build-backend = "hatchling.build"
+
 [project]
-name = "tablemagnifier"
+name = "table-env-bench"
 version = "0.1.0"
-description = "Add your description here"
+description = "Workbook-style Korean Visual TableQA benchmark and agent evaluation environment"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11,<3.13"
 dependencies = [
-    "beautifulsoup4>=4.14.3",
-    "dotenv>=0.9.9",
-    "google-generativeai>=0.3.0",
-    "ipykernel>=7.1.0",
-    "langchain>=0.1.0",
-    "langchain-core>=0.1.0",
-    "langchain-google-genai>=4.0.0",
-    "langchain-openai>=1.1.0",
-    "langgraph>=0.0.30",
-    "pymupdf>=1.26.7",
-    "pyyaml>=6.0",
-    "typing-extensions>=4.5.0",
-    "fastapi>=0.115.0",
-    "uvicorn>=0.32.0",
-    "python-multipart>=0.0.12",
-    "langchain-anthropic>=0.3.0",
-    "json-repair>=0.25.3",
-    "pandas>=2.3.3",
-    "pandasql>=0.7.3",
-    "langchain-experimental>=0.4.1",
-    "agentsjson==0.1.13",
-    "dspydantic>=0.0.7",
-    "pydantic>=2.12.4",
-    "dspy-ai>=3.0.4",
-    "pymongo>=4.6.1",
-    "langgraph-checkpoint-sqlite>=3.0.1",
-    "notion-client>=2.0.0",
-    "playwright>=1.57.0",
+  "fastapi>=0.115.0",
+  "httpx>=0.28.0",
+  "pillow>=10.4.0",
+  "pydantic>=2.9.0",
+  "uvicorn>=0.34.0",
 ]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/table_env_bench"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
