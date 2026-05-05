@@ -14,11 +14,11 @@
 
 **사례 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0_examples_examples-p1.png)
 
 **확인 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0_query_query-p1.png)
 
 ### 해설
 
@@ -44,15 +44,15 @@
 
 **사례 시트 1**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0_examples_examples-p1.png)
 
 **보강 사례**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0_examples_examples-p2.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0_examples_examples-p2.png)
 
 **확인 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0_query_query-p1.png)
 
 ### 해설
 
@@ -79,19 +79,19 @@
 
 **사례 시트 1**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_examples_examples-p1.png)
 
 **보강 사례**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_examples_examples-p2.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_examples_examples-p2.png)
 
 **기준 메모**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_appendix_appendix-p1__note_anchor-note.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_appendix_appendix-p1__note_anchor-note.png)
 
 **확인 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l3_s0_query_query-p1.png)
 
 ### 해설
 
@@ -117,15 +117,15 @@
 
 **사례 시트 1**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s1_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s1_examples_examples-p1.png)
 
 **보강 사례**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s1_examples_examples-p2.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s1_examples_examples-p2.png)
 
 **확인 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s1_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s1_query_query-p1.png)
 
 ### 해설
 
@@ -151,15 +151,15 @@
 
 **예시 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0_examples_examples-p1.png)
 
 **반례 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0_exception_exception-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0_exception_exception-p1.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0_query_query-p1.png)
 
 ### 해설
 
@@ -185,19 +185,19 @@
 
 **예시 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_examples_examples-p1.png)
 
 **예외 확인 표**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_exception_exception-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_exception_exception-p1.png)
 
 **적용 범위 메모**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_exception_exception-p2__note_scope-note.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_exception_exception-p2__note_scope-note.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s0_query_query-p1.png)
 
 ### 해설
 
@@ -223,19 +223,19 @@
 
 **예시 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_examples_examples-p1.png)
 
 **예외 확인 표**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_exception_exception-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_exception_exception-p1.png)
 
 **적용 범위 메모**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_exception_exception-p2__note_scope-note.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_exception_exception-p2__note_scope-note.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0_query_query-p1.png)
 
 ### 해설
 
@@ -261,19 +261,19 @@
 
 **예시 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_examples_examples-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_examples_examples-p1.png)
 
 **예외 확인 표**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_exception_exception-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_exception_exception-p1.png)
 
 **적용 범위 메모**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_exception_exception-p2__note_scope-note.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_exception_exception-p2__note_scope-note.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l2_s1_query_query-p1.png)
 
 ### 해설
 
@@ -298,11 +298,11 @@
 
 **보고표 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0_overview_overview-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0_overview_overview-p1.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0_query_query-p1.png)
 
 ### 해설
 
@@ -329,15 +329,15 @@
 
 **보고표 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l2_s0_overview_overview-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l2_s0_overview_overview-p1.png)
 
 **기준 메모**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l2_s0_notes_notes-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l2_s0_notes_notes-p1.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l2_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l2_s0_query_query-p1.png)
 
 ### 해설
 
@@ -364,15 +364,15 @@
 
 **보고표 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_subtotal_row_label_l3_s0_overview_overview-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_subtotal_row_label_l3_s0_overview_overview-p1.png)
 
 **기준 메모**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_subtotal_row_label_l3_s0_notes_notes-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_subtotal_row_label_l3_s0_notes_notes-p1.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_subtotal_row_label_l3_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_subtotal_row_label_l3_s0_query_query-p1.png)
 
 ### 해설
 
@@ -398,11 +398,11 @@
 
 **보고표 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l1_s0_overview_overview-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l1_s0_overview_overview-p1.png)
 
 **선택 시트**
 
-![](assets/public_dev_real_v1_explanations/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l1_s0_query_query-p1.png)
+![](../artifacts/notion_explanations/previews_public_dev_real_v1/public_dev_real_v1__report_scope_reconciliation_grouped_statement_l1_s0_query_query-p1.png)
 
 ### 해설
 
@@ -420,6 +420,12 @@
 
 ## 사용 메모
 
-- 이 문서는 문서용으로 보존한 preview 이미지 자산을 직접 참조합니다.
-- 문서 자산 디렉터리: [docs/assets/public_dev_real_v1_explanations](assets/public_dev_real_v1_explanations)
-- preview 재생성이 필요하면 `artifacts/` 아래로 export한 뒤 필요한 이미지만 이 디렉터리로 갱신합니다.
+- 이 문서는 실제 preview export 결과를 그대로 참조합니다.
+- preview 원본 디렉터리: [artifacts/notion_explanations/previews_public_dev_real_v1](/mnt/c/Users/imssh/Documents/poc_1/artifacts/notion_explanations/previews_public_dev_real_v1)
+- 생성 기준 명령:
+
+```bash
+uv run python -m table_env_bench.scripts.export_preview_gallery \
+  --out artifacts/notion_explanations/previews_public_dev_real_v1 \
+  --pack public_dev_real_v1
+```

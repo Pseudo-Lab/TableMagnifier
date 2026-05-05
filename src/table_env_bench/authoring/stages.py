@@ -82,6 +82,45 @@ def _normalized_evidence(items: Any) -> set[tuple[Any, ...]]:
     return normalized
 
 
+
+
+def _required_navigation(metadata: dict[str, Any]) -> dict[str, Any]:
+    raw = metadata.get("required_navigation")
+    if not isinstance(raw, dict):
+        raw = {}
+    return {
+        "required_sheet_ids": list(raw.get("required_sheet_ids", metadata.get("required_sheet_ids", []))),
+        "required_page_refs": list(raw.get("required_page_refs", metadata.get("required_page_refs", []))),
+        "required_notes": list(raw.get("required_notes", [])),
+        "required_viewport_states": list(raw.get("required_viewport_states", [])),
+        "forbidden_shortcuts": list(raw.get("forbidden_shortcuts", [])),
+    }
+
+
+def _same_items(actual: list[str], expected: list[str]) -> bool:
+    return set(actual) == set(expected) and len(actual) == len(expected)
+
+
+def _missing_required_viewport_state_ids(required_navigation: dict[str, Any], summary: dict[str, Any] | None) -> list[str]:
+    required_ids = [
+        str(state.get("state_id"))
+        for state in required_navigation.get("required_viewport_states", [])
+        if isinstance(state, dict) and state.get("state_id")
+    ]
+    if not required_ids:
+        return []
+    visited = set(str(item) for item in (summary or {}).get("visited_viewport_states", []))
+    return [state_id for state_id in required_ids if state_id not in visited]
+
+
+def _forbidden_shortcuts_for_context(context: PipelineContext, selected_levels: list[int]) -> set[str]:
+    shortcuts: set[str] = set()
+    for level in selected_levels:
+        for template_id in _selected_templates(context, level):
+            manifest = template_manifest(context.target.family, level, template_id)
+            shortcuts.update(str(item) for item in manifest.required_navigation.get("forbidden_shortcuts", []))
+    return shortcuts
+
 def _json_mutation(path: str, payload: dict[str, Any]) -> FileMutation:
     import json
 
@@ -109,6 +148,49 @@ class QueryOnlyAgent:
         last_sheet = info["sheet_tabs"][-1]
         if observation["current_sheet_name"] != last_sheet:
             return WorkbookAction(type="select_sheet", sheet=last_sheet)
+        return WorkbookAction(type="submit_answer", text="A")
+
+
+
+
+@dataclass
+class InitialViewportOnlyAgent:
+    name: str = "initial_viewport_only"
+
+    def reset(self, observation: dict[str, Any], info: dict[str, Any]) -> None:
+        return None
+
+    def act(self, observation: dict[str, Any], info: dict[str, Any]) -> WorkbookAction:
+        return WorkbookAction(type="submit_answer", text="A")
+
+
+@dataclass
+class NoPanZoomAgent:
+    name: str = "no_pan_zoom"
+
+    def reset(self, observation: dict[str, Any], info: dict[str, Any]) -> None:
+        return None
+
+    def act(self, observation: dict[str, Any], info: dict[str, Any]) -> WorkbookAction:
+        current_sheet = observation["current_sheet_name"]
+        sheet_tabs = list(info.get("sheet_tabs", []))
+        if sheet_tabs and current_sheet != sheet_tabs[-1]:
+            return WorkbookAction(type="select_sheet", sheet=sheet_tabs[-1])
+        if observation.get("current_page_index", 0) < observation.get("page_count_in_sheet", 1) - 1:
+            return WorkbookAction(type="next_page")
+        return WorkbookAction(type="submit_answer", text="A")
+
+
+@dataclass
+class SheetSkipAgent:
+    name: str = "sheet_skip"
+
+    def reset(self, observation: dict[str, Any], info: dict[str, Any]) -> None:
+        return None
+
+    def act(self, observation: dict[str, Any], info: dict[str, Any]) -> WorkbookAction:
+        if observation.get("current_page_index", 0) < observation.get("page_count_in_sheet", 1) - 1:
+            return WorkbookAction(type="next_page")
         return WorkbookAction(type="submit_answer", text="A")
 
 
@@ -172,6 +254,80 @@ class NoExceptionNoteAgent:
             return WorkbookAction(type="select_sheet", sheet="exception")
         if current_sheet == "exception" and current_page < page_count - 1:
             return WorkbookAction(type="next_page")
+        if current_sheet != "query":
+            return WorkbookAction(type="select_sheet", sheet="query")
+        return WorkbookAction(type="submit_answer", text="A")
+
+
+@dataclass
+class LegendSkipAgent:
+    name: str = "legend_skip"
+
+    def reset(self, observation: dict[str, Any], info: dict[str, Any]) -> None:
+        return None
+
+    def act(self, observation: dict[str, Any], info: dict[str, Any]) -> WorkbookAction:
+        current_sheet = observation["current_sheet_name"]
+        if current_sheet == "query":
+            return WorkbookAction(type="submit_answer", text="A")
+        if current_sheet == "examples" and observation["current_page_index"] < observation["page_count_in_sheet"] - 1:
+            return WorkbookAction(type="next_page")
+        if current_sheet != "exception":
+            return WorkbookAction(type="select_sheet", sheet="exception")
+        if observation["current_page_index"] < observation["page_count_in_sheet"] - 1:
+            return WorkbookAction(type="next_page")
+        return WorkbookAction(type="select_sheet", sheet="query")
+
+
+@dataclass
+class MarkerExceptionSkipAgent:
+    name: str = "exception_skip"
+
+    def reset(self, observation: dict[str, Any], info: dict[str, Any]) -> None:
+        return None
+
+    def act(self, observation: dict[str, Any], info: dict[str, Any]) -> WorkbookAction:
+        current_sheet = observation["current_sheet_name"]
+        if current_sheet == "query":
+            return WorkbookAction(type="submit_answer", text="A")
+        if current_sheet == "examples" and observation["current_page_index"] < observation["page_count_in_sheet"] - 1:
+            return WorkbookAction(type="next_page")
+        if current_sheet != "legend":
+            return WorkbookAction(type="select_sheet", sheet="legend")
+        return WorkbookAction(type="select_sheet", sheet="query")
+
+
+@dataclass
+class MarkerNoteSkipAgent:
+    name: str = "note_skip"
+
+    def reset(self, observation: dict[str, Any], info: dict[str, Any]) -> None:
+        return None
+
+    def act(self, observation: dict[str, Any], info: dict[str, Any]) -> WorkbookAction:
+        current_sheet = observation["current_sheet_name"]
+        if current_sheet == "examples" and observation["current_page_index"] < observation["page_count_in_sheet"] - 1:
+            return WorkbookAction(type="next_page")
+        if current_sheet == "examples":
+            return WorkbookAction(type="select_sheet", sheet="legend")
+        if current_sheet == "legend":
+            return WorkbookAction(type="select_sheet", sheet="exception")
+        if current_sheet == "exception" and observation["current_page_index"] < observation["page_count_in_sheet"] - 1:
+            return WorkbookAction(type="next_page")
+        if current_sheet != "query":
+            return WorkbookAction(type="select_sheet", sheet="query")
+        return WorkbookAction(type="submit_answer", text="A")
+
+
+@dataclass
+class MarkerPresenceOnlyAgent:
+    name: str = "marker_presence_only"
+
+    def reset(self, observation: dict[str, Any], info: dict[str, Any]) -> None:
+        return None
+
+    def act(self, observation: dict[str, Any], info: dict[str, Any]) -> WorkbookAction:
+        current_sheet = observation["current_sheet_name"]
         if current_sheet != "query":
             return WorkbookAction(type="select_sheet", sheet="query")
         return WorkbookAction(type="submit_answer", text="A")
@@ -291,6 +447,7 @@ class VisualQAAgent:
                     level=level,
                     seed=seed,
                     template_id=context.target.template_id,
+                    mode="dev",
                 )
                 observation, info = env.reset()
                 checked += 1
@@ -339,7 +496,7 @@ class VisualQAAgent:
                         expected_actions = ["must_switch_sheet", "must_visit_exception"]
                         if level >= 2:
                             expected_actions.append("must_open_note")
-                        if metadata_actions != expected_actions:
+                        if not _same_items(metadata_actions, expected_actions):
                             findings.append(
                                 f"Required actions should be {expected_actions}, found {metadata_actions}."
                             )
@@ -392,6 +549,66 @@ class VisualQAAgent:
                                     findings.append("Level 2/3 note_marker region should link to scope-note.")
                         elif "must_open_note" in metadata_actions:
                             findings.append("Level 1 should not advertise must_open_note.")
+                if context.target.family == "marker_position_rule_transfer":
+                    expected_sheet_ids = ["examples", "legend", "exception", "query"]
+                    actual_sheet_ids = _sheet_ids(env.spec.workbook)
+                    if actual_sheet_ids != expected_sheet_ids:
+                        findings.append(
+                            f"Marker position family should expose sheets {expected_sheet_ids}, found {actual_sheet_ids}."
+                        )
+                    metadata_sheet_ids = list(env.spec.metadata.get("required_sheet_ids", []))
+                    if metadata_sheet_ids != expected_sheet_ids:
+                        findings.append(
+                            f"Required sheet ids should be {expected_sheet_ids}, found {metadata_sheet_ids}."
+                        )
+                    expected_page_refs = ["examples:examples-p1", "legend:legend-p1", "exception:exception-p1", "query:query-p1"]
+                    if level >= 2:
+                        expected_page_refs.insert(1, "examples:examples-p2")
+                    if level == 3:
+                        expected_page_refs.insert(-1, "exception:exception-p2")
+                    metadata_page_refs = list(env.spec.metadata.get("required_page_refs", []))
+                    if metadata_page_refs != expected_page_refs:
+                        findings.append(
+                            f"Required page refs should be {expected_page_refs}, found {metadata_page_refs}."
+                        )
+                    metadata_actions = list(env.spec.metadata.get("required_actions", []))
+                    expected_actions = ["must_switch_sheet", "must_visit_legend", "must_visit_exception"]
+                    if level >= 2:
+                        expected_actions.append("must_visit_examples_page2")
+                    if level == 3:
+                        expected_actions.append("must_open_note")
+                    if not _same_items(metadata_actions, expected_actions):
+                        findings.append(f"Required actions should be {expected_actions}, found {metadata_actions}.")
+                    expected_evidence = {
+                        ("page", "examples", "examples-p1", None),
+                        ("page", "legend", "legend-p1", None),
+                        ("page", "exception", "exception-p1", None),
+                        ("page", "query", "query-p1", None),
+                    }
+                    if level >= 2:
+                        expected_evidence.add(("page", "examples", "examples-p2", None))
+                    if level == 3:
+                        expected_evidence.add(("page", "exception", "exception-p2", None))
+                        expected_evidence.add(("note", "exception", "exception-p2", "anchor-scope-note"))
+                    metadata_evidence = _normalized_evidence(env.spec.metadata.get("required_evidence", []))
+                    if metadata_evidence != expected_evidence:
+                        findings.append("Required evidence should match the marker position workbook topology.")
+                    exception_sheet = _find_sheet(env.spec.workbook, "exception")
+                    if exception_sheet is None:
+                        findings.append("Marker position exception sheet is missing.")
+                    elif level == 3:
+                        exception_p2 = _find_page(exception_sheet, "exception-p2")
+                        if exception_p2 is None:
+                            findings.append("Level 3 should expose exception-p2.")
+                        else:
+                            note_ids = [note.id for note in exception_p2.notes]
+                            if "anchor-scope-note" not in note_ids:
+                                findings.append("Level 3 exception-p2 should expose anchor-scope-note.")
+                            note_marker_regions = [region for region in exception_p2.regions if region.role == "note_marker"]
+                            if not note_marker_regions:
+                                findings.append("Level 3 exception-p2 should expose a note_marker region.")
+                            elif all(region.linked_note_id != "anchor-scope-note" for region in note_marker_regions):
+                                findings.append("Level 3 note_marker region should link to anchor-scope-note.")
                 scene_region_counts.append(len(scene_page.get("regions", [])))
         result = StageResult(
             stage=self.stage,
@@ -576,13 +793,29 @@ class ViewportReadabilityAgent:
             if workbench_summary_path.exists():
                 artifact_paths.append(_relpath(context, workbench_summary_path))
                 workbench_summary = json.loads(workbench_summary_path.read_text(encoding="utf-8"))
+                missing_viewport_states = _missing_required_viewport_state_ids(
+                    generate_episode(context.target.family, level, seed, template_id=context.target.template_id).metadata.get("required_navigation", {}),
+                    workbench_summary,
+                )
+                for state_id in missing_viewport_states:
+                    findings.append(
+                        f"Level {level} seed {seed} did not visit required viewport state {state_id} during workbench readability traversal."
+                    )
                 if context.target.family == "inventory_exception_disambiguation" and level >= 2:
                     opened_notes = list(workbench_summary.get("opened_notes", []))
                     if "scope-note" not in opened_notes:
                         findings.append(
                             f"Level {level} seed {seed} did not open scope-note during workbench readability traversal."
                         )
+                if context.target.family == "marker_position_rule_transfer" and level == 3:
+                    opened_notes = list(workbench_summary.get("opened_notes", []))
+                    if "anchor-scope-note" not in opened_notes:
+                        findings.append(
+                            f"Level {level} seed {seed} did not open anchor-scope-note during workbench readability traversal."
+                        )
             elif context.target.family == "inventory_exception_disambiguation" and level >= 2:
+                findings.append(f"Level {level} seed {seed} did not produce a workbench readability summary.")
+            elif context.target.family == "marker_position_rule_transfer" and level == 3:
                 findings.append(f"Level {level} seed {seed} did not produce a workbench readability summary.")
             review_runs.append(
                 {
@@ -625,12 +858,22 @@ class RedTeamSolverAgent:
             findings = ["Template-specific red-team sweep is not yet supported; using requested template only."]
         else:
             findings = []
+        selected_levels = _selected_levels(context)
         agent_builders = {
             "single_page": SinglePageAgent,
             "no_note": NoNoteAgent,
             "text_scrape": TextScrapeHeuristicAgent,
             "greedy_submit": GreedySubmitAgent,
         }
+        forbidden_shortcuts = _forbidden_shortcuts_for_context(context, selected_levels)
+        generic_probe_builders = {
+            "initial_viewport_only": InitialViewportOnlyAgent,
+            "no_pan_zoom": NoPanZoomAgent,
+            "sheet_skip": SheetSkipAgent,
+        }
+        for shortcut in forbidden_shortcuts:
+            if shortcut in generic_probe_builders:
+                agent_builders[shortcut] = generic_probe_builders[shortcut]
         if context.target.family == "channel_policy_transfer":
             agent_builders.update(
                 {
@@ -643,7 +886,17 @@ class RedTeamSolverAgent:
             agent_builders["no_exception"] = NoExceptionAgent
             if any(level >= 2 for level in _selected_levels(context)):
                 agent_builders["no_exception_note"] = NoExceptionNoteAgent
-        selected_levels = _selected_levels(context)
+        if context.target.family == "marker_position_rule_transfer":
+            agent_builders.update(
+                {
+                    "query_only": QueryOnlyAgent,
+                    "marker_presence_only": MarkerPresenceOnlyAgent,
+                    "legend_skip": LegendSkipAgent,
+                    "exception_skip": MarkerExceptionSkipAgent,
+                }
+            )
+            if any(level == 3 for level in _selected_levels(context)):
+                agent_builders["note_skip"] = MarkerNoteSkipAgent
         scores: dict[int, dict[str, list[float]]] = {level: {name: [] for name in agent_builders} for level in selected_levels}
         for level in selected_levels:
             for seed in _selected_seed_samples(context, level):
@@ -666,6 +919,9 @@ class RedTeamSolverAgent:
         }
         if any(level_scores[f"l{level}"].get("text_scrape", 0.0) >= 0.75 for level in selected_levels):
             findings.append("Text scrape baseline remains highly successful on at least one checked level; shortcut risk is still present.")
+        for shortcut in sorted(forbidden_shortcuts):
+            if shortcut in generic_probe_builders and summary_scores.get(shortcut, 0.0) >= 0.25:
+                findings.append(f"{shortcut} probe still solves too many required-navigation episodes.")
         if summary_scores.get("query_only", 0.0) >= 0.5:
             findings.append("Query-only probe still solves too many channel_policy_transfer episodes.")
         if summary_scores.get("no_appendix", 0.0) >= 0.5:
@@ -679,6 +935,26 @@ class RedTeamSolverAgent:
                 if level >= 2
             ):
                 findings.append("No-exception-note probe still solves too many inventory_exception_disambiguation episodes.")
+        if context.target.family == "marker_position_rule_transfer":
+            answer_labels = {
+                generate_episode(context.target.family, level, seed, template_id=context.target.template_id).answer.canonical
+                for level in selected_levels
+                for seed in range(min(3, canonical_seed_capacity(context.target.family, level)))
+            }
+            if len(answer_labels) < 2:
+                findings.append("Marker-position base answer labels are static across checked seeds.")
+            if any(level_scores[f"l{level}"].get("query_only", 0.0) >= 0.25 for level in selected_levels if level >= 2):
+                findings.append("Query-only probe still solves too many marker_position_rule_transfer episodes.")
+            if any(level_scores[f"l{level}"].get("text_scrape", 0.0) >= 0.50 for level in selected_levels):
+                findings.append("Text-scrape probe still solves too many marker_position_rule_transfer episodes.")
+            if any(level_scores[f"l{level}"].get("marker_presence_only", 0.0) >= 0.50 for level in selected_levels):
+                findings.append("Marker-presence-only probe still solves too many marker_position_rule_transfer episodes.")
+            if any(level_scores[f"l{level}"].get("legend_skip", 0.0) >= 0.25 for level in selected_levels):
+                findings.append("Legend-skip probe still solves too many marker_position_rule_transfer episodes.")
+            if any(level_scores[f"l{level}"].get("exception_skip", 0.0) >= 0.25 for level in selected_levels if level >= 2):
+                findings.append("Exception-skip probe still solves too many marker_position_rule_transfer episodes.")
+            if any(level_scores[f"l{level}"].get("note_skip", 0.0) >= 0.25 for level in selected_levels if level == 3):
+                findings.append("Note-skip probe still solves too many marker_position_rule_transfer episodes.")
         result = StageResult(
             stage=self.stage,
             status="failed" if findings else "passed",

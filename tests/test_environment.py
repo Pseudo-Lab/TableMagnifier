@@ -24,6 +24,10 @@ def test_environment_sheet_and_note_click_transitions() -> None:
     assert observation["viewport_image_png_base64"]
     assert info["sheet_tabs"] == ["개요", "메모", "질의"]
     assert info["mode"] == "dev"
+    assert info["active_sheet_id"] == "overview"
+    assert info["current_page_id"] == "overview-p1"
+    assert info["zoom_index"] == 0
+    assert info["viewbox"]["width"] > 0
 
     observation, reward, terminated, truncated, _ = env.step({"type": "select_sheet", "sheet": "메모"})
     assert reward == 0.0
@@ -46,3 +50,39 @@ def test_environment_sheet_and_note_click_transitions() -> None:
     assert info["last_event"]["metadata"]["opened_note"] == "scope-note"
     assert info["last_event"]["metadata"]["resolved_region"]["label"] == "범위 메모"
     assert "들여쓰기된 팀 행" in observation["viewport_svg"]
+
+
+def test_agent_observation_sanitizes_full_scene_arrays() -> None:
+    env = WorkbookEnv(
+        family="report_scope_reconciliation",
+        level=1,
+        seed=0,
+        template_id="merged_scope_cell",
+        mode="agent",
+    )
+    observation, info = env.reset()
+    page = observation["viewport_scene"]["page"]
+    assert "elements" not in page
+    assert "regions" not in page
+    assert "notes" not in page
+    assert observation["viewport_svg"]
+    assert observation["viewport_image_png_base64"]
+    assert info["active_sheet_id"] == "overview"
+    assert info["current_page_id"] == "overview-p1"
+    assert info["zoom_index"] == 0
+    assert info["required_navigation"]["required_sheet_ids"] == ["overview", "query"]
+
+
+def test_human_observation_keeps_full_scene_arrays() -> None:
+    env = WorkbookEnv(
+        family="report_scope_reconciliation",
+        level=1,
+        seed=0,
+        template_id="merged_scope_cell",
+        mode="human",
+    )
+    observation, _ = env.reset()
+    page = observation["viewport_scene"]["page"]
+    assert page["elements"]
+    assert page["regions"]
+    assert "notes" in page

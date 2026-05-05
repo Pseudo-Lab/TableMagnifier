@@ -19,16 +19,16 @@
 
 관련 문서:
 
-- [PLANS.md](../PLANS.md)
-- [docs/primitive_glossary.md](primitive_glossary.md)
-- [docs/episode_rulebook.md](episode_rulebook.md)
-- [docs/visual_cue_inventory.md](visual_cue_inventory.md)
-- [docs/operator_taxonomy.md](operator_taxonomy.md)
-- [docs/answer_form_policy.md](answer_form_policy.md)
-- [docs/level_design_policy.md](level_design_policy.md)
-- [docs/episode_validation_checklist.md](episode_validation_checklist.md)
-- [docs/generator_episode_schema.md](generator_episode_schema.md)
-- [docs/real_data_authoring_policy.md](real_data_authoring_policy.md)
+- [PLANS.md](C:/Users/imssh/Documents/poc_1/PLANS.md)
+- [docs/primitive_glossary.md](C:/Users/imssh/Documents/poc_1/docs/primitive_glossary.md)
+- [docs/episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md)
+- [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md)
+- [docs/operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)
+- [docs/answer_form_policy.md](C:/Users/imssh/Documents/poc_1/docs/answer_form_policy.md)
+- [docs/level_design_policy.md](C:/Users/imssh/Documents/poc_1/docs/level_design_policy.md)
+- [docs/episode_validation_checklist.md](C:/Users/imssh/Documents/poc_1/docs/episode_validation_checklist.md)
+- [docs/generator_episode_schema.md](C:/Users/imssh/Documents/poc_1/docs/generator_episode_schema.md)
+- [docs/real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md)
 
 ## 이 benchmark가 재고 싶은 것
 

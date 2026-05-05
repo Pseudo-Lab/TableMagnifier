@@ -36,10 +36,24 @@ app.add_middleware(
 store = SessionStore()
 authoring_store = AuthoringRunStore()
 
+PREFERRED_GENERATOR_FAMILY = "marker_position_rule_transfer"
+DEPRECATED_GENERATOR_FAMILIES = frozenset(
+    {
+        "channel_policy_transfer",
+        "inventory_exception_disambiguation",
+        "report_scope_reconciliation",
+    }
+)
+ACTIVE_GENERATOR_FAMILIES = frozenset({"excel_viewport_sheet_navigation"})
+
+
+def _catalog_family_order(family: str) -> tuple[int, str]:
+    return (0 if family == PREFERRED_GENERATOR_FAMILY else 1, family)
+
 
 def _catalog() -> list[CatalogFamily]:
     families: list[CatalogFamily] = []
-    for family in list_families():
+    for family in sorted(list_families(), key=_catalog_family_order):
         levels: list[CatalogLevel] = []
         for level in list_levels(family):
             episode = generate_episode(family, level, seed=0)
@@ -58,6 +72,16 @@ def _catalog() -> list[CatalogFamily]:
             CatalogFamily(
                 family=family,
                 family_display_name=FAMILY_LABELS.get(family, family),
+                family_status=(
+                    "preferred"
+                    if family == PREFERRED_GENERATOR_FAMILY
+                    else "deprecated"
+                    if family in DEPRECATED_GENERATOR_FAMILIES
+                    else "active"
+                    if family in ACTIVE_GENERATOR_FAMILIES
+                    else "active"
+                ),
+                is_preferred=family == PREFERRED_GENERATOR_FAMILY,
                 levels=levels,
             )
         )

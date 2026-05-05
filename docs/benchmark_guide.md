@@ -13,7 +13,15 @@
 
 hidden holdout은 `TABLE_BENCH_PRIVATE_DATA_DIR` 아래의 별도 instance pack으로 같은 loader 경로를 통해 읽는다.
 
-## 현재 family
+## 현재 family 우선순위
+
+- `marker_position_rule_transfer`
+  - 현재 우선 generator family다.
+  - 예시/범례/반례에서 셀 모서리 표식 위치 규칙을 유도하고 query table에 전이한다.
+
+## Deprecated generator families
+
+아래 family들은 frozen public pack 호환과 회귀 테스트를 위해 유지하지만, 새 benchmark 방향의 우선 노출 대상은 아니다.
 
 - `channel_policy_transfer`
   - 사례 표의 집행 기준을 현재 채널표에 옮겨 적용한다.
@@ -22,7 +30,7 @@ hidden holdout은 `TABLE_BENCH_PRIVATE_DATA_DIR` 아래의 별도 instance pack�
 - `report_scope_reconciliation`
   - 중첩 헤더, 반복 팀 라벨, 소계 구조를 읽고 올바른 보고 범위를 고른다.
 
-세 family 모두 table/worksheet evidence가 중심이고, note나 보조 시트는 실제 범위를 좁히는 용도로만 쓴다.
+네 family 모두 table/worksheet evidence가 중심이고, note나 보조 시트는 실제 범위를 좁히는 용도로만 쓴다.
 
 ## 무엇을 측정하나
 
@@ -50,52 +58,52 @@ headline metric은 아래 세 가지다.
 ## 빠르게 실행해 보기
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run pytest
 ```
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.freeze_real_instance_packs
 ```
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_real --pack public_dev_real_v1
 ```
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.audit_readability
 ```
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.audit_readability --pack public_smoke_real_v1
 ```
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.audit_readability --pack public_dev_real_v1
 ```
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.audit_readability --pack public_dev_real_v1 --instance-id public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0
 ```
 
 ```bash
-cd /path/to/table-env-bench/frontend
+cd /mnt/c/Users/imssh/Documents/poc_1/frontend
 npm run visual:readability:public-smoke
 ```
 
 ```bash
-cd /path/to/table-env-bench/frontend
+cd /mnt/c/Users/imssh/Documents/poc_1/frontend
 npm run visual:readability:public-dev
 ```
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.eval_baselines --suite public_dev_real_v1
 ```
 

@@ -32,13 +32,19 @@ def test_api_session_flow_for_workbook_env() -> None:
     catalog_response = client.get("/api/catalog")
     assert catalog_response.status_code == 200
     families = catalog_response.json()
-    assert [item["family"] for item in families] == sorted(
-        [
-            "inventory_exception_disambiguation",
-            "channel_policy_transfer",
-            "report_scope_reconciliation",
-        ]
-    )
+    assert [item["family"] for item in families] == [
+        "marker_position_rule_transfer",
+        "channel_policy_transfer",
+        "excel_viewport_sheet_navigation",
+        "inventory_exception_disambiguation",
+        "report_scope_reconciliation",
+    ]
+    assert families[0]["is_preferred"] is True
+    assert families[0]["family_status"] == "preferred"
+    excel_family = next(item for item in families if item["family"] == "excel_viewport_sheet_navigation")
+    assert excel_family["is_preferred"] is False
+    assert excel_family["family_status"] == "active"
+    assert all(item["family_status"] == "deprecated" for item in families[1:] if item["family"] != "excel_viewport_sheet_navigation")
 
     session_response = client.post(
         "/api/sessions",
@@ -48,7 +54,15 @@ def test_api_session_flow_for_workbook_env() -> None:
     session_payload = session_response.json()
     session_id = session_payload["session_id"]
     assert session_payload["info"]["sheet_tabs"] == ["보고표", "선택"]
+    assert session_payload["info"]["active_sheet_id"] == "overview"
+    assert session_payload["info"]["current_page_id"] == "overview-p1"
+    assert session_payload["info"]["zoom_index"] == 0
+    assert session_payload["info"]["viewbox"]["width"] > 0
+    assert session_payload["info"]["required_navigation"]["required_sheet_ids"] == ["overview", "query"]
     assert session_payload["observation"]["viewport_scene"]["page"]["page_id"] == "overview-p1"
+    assert "elements" not in session_payload["observation"]["viewport_scene"]["page"]
+    assert "regions" not in session_payload["observation"]["viewport_scene"]["page"]
+    assert "notes" not in session_payload["observation"]["viewport_scene"]["page"]
     assert session_payload["observation"]["viewport_image_png_base64"]
 
     instances_response = client.get("/api/instances")

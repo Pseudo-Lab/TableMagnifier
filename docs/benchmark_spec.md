@@ -1,15 +1,15 @@
 # Benchmark Spec
 
-Deprecated: 이 문서는 하위 호환용 요약 포인터입니다. 현재 환경/렌더러 source-of-truth는 [docs/workbook_benchmark_spec.md](workbook_benchmark_spec.md)이고, content direction은 family/rule/policy 문서 세트를 따릅니다. 문서 상태는 [docs/document_status.md](document_status.md)를 참고하세요.
+Deprecated: 이 문서는 하위 호환용 요약 포인터입니다. 현재 환경/렌더러 source-of-truth는 [docs/workbook_benchmark_spec.md](C:/Users/imssh/Documents/poc_1/docs/workbook_benchmark_spec.md)이고, content direction은 family/rule/policy 문서 세트를 따릅니다. 문서 상태는 [docs/document_status.md](C:/Users/imssh/Documents/poc_1/docs/document_status.md)를 참고하세요.
 
-현재 구현의 환경/렌더러 source of truth는 [docs/workbook_benchmark_spec.md](workbook_benchmark_spec.md)입니다.
+현재 구현의 환경/렌더러 source of truth는 [docs/workbook_benchmark_spec.md](C:/Users/imssh/Documents/poc_1/docs/workbook_benchmark_spec.md)입니다.
 
 다만 benchmark의 장기 content direction은 별도 문서에서 정의합니다.
 
-- [PLANS.md](../PLANS.md)
-- [docs/family_design_brief.md](family_design_brief.md)
-- [docs/primitive_glossary.md](primitive_glossary.md)
-- [docs/pilot_family_episode_grammar.md](pilot_family_episode_grammar.md)
+- [PLANS.md](C:/Users/imssh/Documents/poc_1/PLANS.md)
+- [docs/family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)
+- [docs/primitive_glossary.md](C:/Users/imssh/Documents/poc_1/docs/primitive_glossary.md)
+- [docs/pilot_family_episode_grammar.md](C:/Users/imssh/Documents/poc_1/docs/pilot_family_episode_grammar.md)
 
 요약하면 현재 benchmark의 기준은 다음과 같습니다.
 

@@ -1,0 +1,1832 @@
+{
+  "episode_id": "public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0",
+  "family": "channel_policy_transfer",
+  "family_display_name": "채널 집행 기준 적용",
+  "level": 2,
+  "seed": 0,
+  "locale": "ko-KR",
+  "question": "두 사례를 함께 보면 현재 채널표에서 집행 대상으로 남는 칸은 어디인가?",
+  "workbook": {
+    "workbook_id": "channel_policy_transfer-2-icon_scope_cell",
+    "title": "채널 집행 확대 적용",
+    "sheets": [
+      {
+        "sheet_id": "examples",
+        "tab_label": "사례",
+        "pages": [
+          {
+            "page_id": "examples-p1",
+            "title": "사례",
+            "width": 1280,
+            "height": 900,
+            "elements": [
+              {
+                "type": "text_block",
+                "element_id": "transfer-l2-band-chip",
+                "rect": {
+                  "x": 84,
+                  "y": 154,
+                  "width": 220,
+                  "height": 52
+                },
+                "title": "집행 밴드",
+                "lines": [
+                  "집행"
+                ],
+                "style": "callout"
+              },
+              {
+                "type": "text_block",
+                "element_id": "transfer-l2-group-chip",
+                "rect": {
+                  "x": 330,
+                  "y": 154,
+                  "width": 220,
+                  "height": 52
+                },
+                "title": "집행 묶음",
+                "lines": [
+                  "분석 묶음"
+                ],
+                "style": "callout"
+              },
+              {
+                "type": "table",
+                "element_id": "transfer-l2-example-1",
+                "rect": {
+                  "x": 84,
+                  "y": 276,
+                  "width": 1074,
+                  "height": 308
+                },
+                "title": "집행 사례 비교",
+                "n_rows": 8,
+                "n_cols": 6,
+                "column_widths": [
+                  193,
+                  193,
+                  172,
+                  172,
+                  172,
+                  172
+                ],
+                "row_heights": [
+                  38,
+                  34,
+                  42,
+                  42,
+                  42,
+                  42,
+                  42,
+                  42
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "묶음",
+                    "row_span": 2,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "행",
+                    "row_span": 2,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "계획",
+                    "row_span": 1,
+                    "col_span": 2,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 4,
+                    "text": "집행",
+                    "row_span": 1,
+                    "col_span": 2,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "상태",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "조치",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 4,
+                    "text": "상태",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 5,
+                    "text": "조치",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "  가람",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "  나래",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "bottom_left",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 5,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 1,
+                    "text": "  다온",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 6,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      },
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 7,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 1,
+                    "text": "  라온",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 7,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "bottom_left",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 7,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "첫 사례에서는 운영 묶음의 집행 셀이 실제 대상으로 확정된다",
+                  "worksheet_name": "TRANSFER_L2_EXAMPLE_1",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              }
+            ],
+            "regions": []
+          },
+          {
+            "page_id": "examples-p2",
+            "title": "보강 사례",
+            "width": 1280,
+            "height": 900,
+            "elements": [
+              {
+                "type": "text_block",
+                "element_id": "transfer-l2-band-chip-2",
+                "rect": {
+                  "x": 84,
+                  "y": 154,
+                  "width": 220,
+                  "height": 52
+                },
+                "title": "집행 밴드",
+                "lines": [
+                  "계획"
+                ],
+                "style": "callout"
+              },
+              {
+                "type": "text_block",
+                "element_id": "transfer-l2-group-chip-2",
+                "rect": {
+                  "x": 330,
+                  "y": 154,
+                  "width": 220,
+                  "height": 52
+                },
+                "title": "집행 묶음",
+                "lines": [
+                  "운영 묶음"
+                ],
+                "style": "callout"
+              },
+              {
+                "type": "table",
+                "element_id": "transfer-l2-example-2",
+                "rect": {
+                  "x": 84,
+                  "y": 286,
+                  "width": 1074,
+                  "height": 308
+                },
+                "title": "보강 사례",
+                "n_rows": 8,
+                "n_cols": 6,
+                "column_widths": [
+                  193,
+                  193,
+                  172,
+                  172,
+                  172,
+                  172
+                ],
+                "row_heights": [
+                  38,
+                  34,
+                  42,
+                  42,
+                  42,
+                  42,
+                  42,
+                  42
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "묶음",
+                    "row_span": 2,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "행",
+                    "row_span": 2,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "계획",
+                    "row_span": 1,
+                    "col_span": 2,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 4,
+                    "text": "집행",
+                    "row_span": 1,
+                    "col_span": 2,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "상태",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "조치",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 4,
+                    "text": "상태",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 5,
+                    "text": "조치",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "  가람",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "bottom_left",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "  나래",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      },
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 5,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 1,
+                    "text": "  다온",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 6,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "bottom_left",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 1,
+                    "text": "  라온",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 7,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "보강 사례는 묶음 경계와 집행 밴드를 함께 고정한다",
+                  "worksheet_name": "TRANSFER_L2_EXAMPLE_2",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              },
+              {
+                "type": "text_block",
+                "element_id": "transfer-l2-note",
+                "rect": {
+                  "x": 84,
+                  "y": 612,
+                  "width": 1074,
+                  "height": 132
+                },
+                "title": "집행 메모",
+                "lines": [
+                  "묶음 머리글 아래 있는 행만 같은 후보군이다.",
+                  "같은 표식이라도 묶음이 다르면 대상이 아니다."
+                ],
+                "style": "note"
+              }
+            ],
+            "regions": []
+          }
+        ]
+      },
+      {
+        "sheet_id": "query",
+        "tab_label": "확인",
+        "pages": [
+          {
+            "page_id": "query-p1",
+            "title": "확인 시트",
+            "width": 1280,
+            "height": 900,
+            "elements": [
+              {
+                "type": "text_block",
+                "element_id": "query-target",
+                "rect": {
+                  "x": 84,
+                  "y": 164,
+                  "width": 532.0,
+                  "height": 78.0
+                },
+                "title": "집행 대상",
+                "lines": [
+                  "집행 band · 분석 묶음"
+                ],
+                "style": "callout"
+              },
+              {
+                "type": "text_block",
+                "element_id": "query-guidance",
+                "rect": {
+                  "x": 644,
+                  "y": 164,
+                  "width": 532.0,
+                  "height": 78.0
+                },
+                "title": "집행 메모",
+                "lines": [
+                  "보강 사례를 반영해 같은 묶음 안의 후보만 남깁니다."
+                ],
+                "style": "note"
+              },
+              {
+                "type": "table",
+                "element_id": "transfer-l2-query",
+                "rect": {
+                  "x": 84,
+                  "y": 286,
+                  "width": 720,
+                  "height": 294
+                },
+                "title": "",
+                "n_rows": 8,
+                "n_cols": 6,
+                "column_widths": [
+                  130,
+                  130,
+                  115,
+                  115,
+                  115,
+                  115
+                ],
+                "row_heights": [
+                  38,
+                  34,
+                  42,
+                  42,
+                  42,
+                  42,
+                  42,
+                  42
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "묶음",
+                    "row_span": 2,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "행",
+                    "row_span": 2,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "계획",
+                    "row_span": 1,
+                    "col_span": 2,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 4,
+                    "text": "집행",
+                    "row_span": 1,
+                    "col_span": 2,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "상태",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "조치",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 4,
+                    "text": "상태",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 5,
+                    "text": "조치",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "  가람",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "  나래",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "bottom_left",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 5,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 1,
+                    "text": "  다온",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 6,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "bottom_left",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 1,
+                    "text": "  라온",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 7,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 7,
+                    "col": 5,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "bottom_left",
+                        "color": "#0f766e"
+                      }
+                    }
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "시각 단서가 포함된 표",
+                  "worksheet_name": "TRANSFER_L2_QUERY",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              },
+              {
+                "type": "text_block",
+                "element_id": "transfer-choice-a",
+                "rect": {
+                  "x": 84,
+                  "y": 592,
+                  "width": 440,
+                  "height": 104
+                },
+                "title": "선택지 A",
+                "lines": [
+                  "가람 / 집행-조치",
+                  "선택 후보"
+                ],
+                "style": "body"
+              },
+              {
+                "type": "text_block",
+                "element_id": "transfer-choice-b",
+                "rect": {
+                  "x": 548,
+                  "y": 592,
+                  "width": 440,
+                  "height": 104
+                },
+                "title": "선택지 B",
+                "lines": [
+                  "다온 / 집행-조치",
+                  "선택 후보"
+                ],
+                "style": "body"
+              },
+              {
+                "type": "text_block",
+                "element_id": "transfer-choice-c",
+                "rect": {
+                  "x": 84,
+                  "y": 710,
+                  "width": 440,
+                  "height": 104
+                },
+                "title": "선택지 C",
+                "lines": [
+                  "가람 / 계획-조치",
+                  "선택 후보"
+                ],
+                "style": "body"
+              },
+              {
+                "type": "text_block",
+                "element_id": "transfer-choice-d",
+                "rect": {
+                  "x": 548,
+                  "y": 710,
+                  "width": 440,
+                  "height": 104
+                },
+                "title": "선택지 D",
+                "lines": [
+                  "다온 / 집행-조치",
+                  "선택 후보"
+                ],
+                "style": "body"
+              }
+            ],
+            "regions": [
+              {
+                "public_id": "transfer-choice-a",
+                "role": "answer_choice",
+                "label": "선택지 A",
+                "rect": {
+                  "x": 84,
+                  "y": 592,
+                  "width": 440,
+                  "height": 104
+                },
+                "metadata": {
+                  "choice_id": "A",
+                  "answer_form": "cell_choice"
+                }
+              },
+              {
+                "public_id": "transfer-choice-b",
+                "role": "answer_choice",
+                "label": "선택지 B",
+                "rect": {
+                  "x": 548,
+                  "y": 592,
+                  "width": 440,
+                  "height": 104
+                },
+                "metadata": {
+                  "choice_id": "B",
+                  "answer_form": "cell_choice"
+                }
+              },
+              {
+                "public_id": "transfer-choice-c",
+                "role": "answer_choice",
+                "label": "선택지 C",
+                "rect": {
+                  "x": 84,
+                  "y": 710,
+                  "width": 440,
+                  "height": 104
+                },
+                "metadata": {
+                  "choice_id": "C",
+                  "answer_form": "cell_choice"
+                }
+              },
+              {
+                "public_id": "transfer-choice-d",
+                "role": "answer_choice",
+                "label": "선택지 D",
+                "rect": {
+                  "x": 548,
+                  "y": 710,
+                  "width": 440,
+                  "height": 104
+                },
+                "metadata": {
+                  "choice_id": "D",
+                  "answer_form": "cell_choice"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "track": "canonical_real_tableqa",
+      "template_id": "icon_scope_cell",
+      "benchmark_track": "canonical_real_tableqa"
+    }
+  },
+  "answer": {
+    "canonical": "A",
+    "normalizer": "ko_answer"
+  },
+  "max_actions": 9,
+  "metadata": {
+    "family": "channel_policy_transfer",
+    "level": 2,
+    "template_id": "icon_scope_cell",
+    "template_label": "아이콘 범위 셀 선택",
+    "latent_rule": "사례 표에서 적용 밴드와 표식 위치를 읽고 현재 집행표에서 실제 반영 셀을 고른다.",
+    "operator_tags": [
+      "select_scope",
+      "transfer"
+    ],
+    "cue_tags": [
+      "band_scope",
+      "icon_anchor",
+      "row_group_band"
+    ],
+    "answer_form": "cell_choice",
+    "primary_operator": "select_scope",
+    "support_operator": "transfer",
+    "required_visual_cues": [
+      "band_scope",
+      "icon_anchor",
+      "row_group_band"
+    ],
+    "required_surfaces": [
+      "example_table_panel",
+      "query_table_panel",
+      "answer_choice_panel"
+    ],
+    "capability_axes": [
+      "visual_grounding",
+      "scope_resolution",
+      "rule_transfer"
+    ],
+    "task_archetype": "review_verification",
+    "scenario_context": "월간 집행 사례를 읽고 현재 채널 표에서 실제 반영 대상을 찾는 과업이다.",
+    "benchmark_track": "canonical_real_tableqa",
+    "reasoning_archetype": "induce_apply",
+    "abstraction_tier": "abstract_worksheet",
+    "support_surface_policy": "optional",
+    "qa_dependency": "tableqa_transfer",
+    "generalization_group": "channel_policy_transfer:icon_scope_cell:l2",
+    "required_navigation": {
+      "required_sheet_ids": [
+        "examples",
+        "query"
+      ],
+      "required_page_refs": [
+        "examples:examples-p1",
+        "query:query-p1",
+        "examples:examples-p2"
+      ]
+    },
+    "allowed_cue_variants": [
+      "band_scope",
+      "icon_anchor",
+      "row_group_band",
+      "note_scope"
+    ],
+    "distractor_policy": "같은 표식이 다른 band나 다른 group에도 반복되게 두고, 잘못된 방향도 함께 배치한다.",
+    "level_rationale": "두 달 사례를 비교해 묶음까지 함께 일반화해야 하는 3-4 step 문제다.",
+    "text_only_failure_modes": [
+      "현재 표만 읽으면 적용 밴드와 채널 묶음을 놓친 채 같은 표식이 있는 다른 셀을 고르게 된다.",
+      "Level 3에서는 기준 메모 없이 어느 방향 표식이 실제 대상인지 고정되지 않는다."
+    ],
+    "distractor_failure_modes": [
+      "같은 채널이지만 다른 집행 구간 셀을 고르는 오답",
+      "같은 집행 구간이지만 다른 채널 묶음이나 다른 방향을 고르는 오답"
+    ],
+    "level_knobs": {
+      "level": 2,
+      "template": "icon_scope_cell"
+    },
+    "seed_slots": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "max_actions": 9,
+    "difficulty_tier": "public_dev_real_v1",
+    "required_capabilities": [
+      "visual_grounding",
+      "scope_resolution",
+      "rule_transfer"
+    ],
+    "required_actions": [
+      "must_switch_sheet"
+    ],
+    "required_evidence": [
+      {
+        "kind": "page",
+        "sheet_id": "examples",
+        "page_id": "examples-p1"
+      },
+      {
+        "kind": "page",
+        "sheet_id": "query",
+        "page_id": "query-p1"
+      },
+      {
+        "kind": "page",
+        "sheet_id": "examples",
+        "page_id": "examples-p2"
+      }
+    ],
+    "expected_min_steps": 3,
+    "expected_reasoning_steps": [
+      3,
+      4
+    ],
+    "shortcut_probes": [
+      "single_sheet_only",
+      "text_scrape_only",
+      "no_examples_page2"
+    ],
+    "holdout_group": null,
+    "pair_group": null,
+    "variant": null,
+    "track": "canonical_real_tableqa",
+    "seed_slot": 0,
+    "relevant_region_ids": [
+      "transfer-choice-a",
+      "transfer-choice-b",
+      "transfer-choice-c",
+      "transfer-choice-d"
+    ],
+    "instance_id": "public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l2_s0",
+    "instance_label": "채널 집행 기준 L2 · 확장 사례",
+    "pack_id": "public_dev_real_v1",
+    "pack_role": "public",
+    "source_track": "canonical_real_tableqa",
+    "source_episode_id": "channel_policy_transfer_icon_scope_cell_l2_s0",
+    "source_template_id": "icon_scope_cell",
+    "source_seed": 0,
+    "task_summary": "두 사례 시트를 함께 읽고 공통 집행 기준을 현재 채널표에 적용한다."
+  }
+}

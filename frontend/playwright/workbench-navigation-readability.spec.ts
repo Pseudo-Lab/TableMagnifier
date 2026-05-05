@@ -3,7 +3,43 @@ import path from 'node:path'
 
 import { expect, test, type Page } from '@playwright/test'
 
-import { createConsoleCollector, dumpFailureArtifacts, readDebugMetrics, rectBottom } from './readability-helpers'
+import {
+  createConsoleCollector,
+  dumpFailureArtifacts,
+  matchedRequiredViewportStateIds,
+  readDebugMetrics,
+  rectBottom,
+  type RequiredViewportState,
+  type ViewportStateSnapshot,
+} from './readability-helpers'
+
+type RequiredNavigation = {
+  required_viewport_states?: RequiredViewportState[]
+}
+
+type SessionStartTarget = {
+  packId: string | null
+  instanceId: string | null
+  family: string | null
+  requiredNavigation: RequiredNavigation
+  initialSnapshot: ViewportStateSnapshot | null
+}
+
+function snapshotFromInfo(info: Record<string, unknown> | undefined, cumulativeActionTypes: string[]): ViewportStateSnapshot | null {
+  if (!info) {
+    return null
+  }
+  if (!info.active_sheet_id || !info.current_page_id || !info.viewbox) {
+    return null
+  }
+  return {
+    sheet_id: info.active_sheet_id as string,
+    page_id: info.current_page_id as string,
+    zoom_index: (info.zoom_index as number | undefined) ?? 0,
+    viewbox: info.viewbox as ViewportStateSnapshot['viewbox'],
+    cumulative_action_types: [...cumulativeActionTypes],
+  }
+}
 
 function filterConsoleMessages(messages: string[]) {
   return messages.filter((message) => !message.toLowerCase().includes('favicon'))
@@ -48,7 +84,9 @@ async function startTargetSession(page: Page) {
     await instanceSelect.selectOption(targetInstanceId)
     await expect.poll(async () => instanceSelect.inputValue()).toBe(targetInstanceId)
     expectedInstanceLabel = (await instanceSelect.locator(`option[value="${targetInstanceId}"]`).textContent())?.trim() ?? null
+    const sessionResponsePromise = page.waitForResponse((response) => response.url().includes('/api/sessions') && response.request().method() === 'POST')
     await page.locator('[data-testid="start-instance-button"]').click()
+    const sessionPayload = await (await sessionResponsePromise).json()
     await expect(page.getByText('세션을 불러오는 중입니다.')).not.toBeVisible()
     if (expectedInstanceLabel) {
       await expect
@@ -59,6 +97,8 @@ async function startTargetSession(page: Page) {
       packId: targetPackId ?? null,
       instanceId: targetInstanceId,
       family: null,
+      requiredNavigation: (sessionPayload.info?.required_navigation ?? {}) as RequiredNavigation,
+      initialSnapshot: snapshotFromInfo(sessionPayload.info, []),
     }
   }
 
@@ -67,6 +107,8 @@ async function startTargetSession(page: Page) {
       packId: null,
       instanceId: null,
       family: null,
+      requiredNavigation: {},
+      initialSnapshot: null,
     }
   }
 
@@ -80,12 +122,72 @@ async function startTargetSession(page: Page) {
     await page.locator('[data-testid="seed-input"]').fill(targetSeed)
   }
 
+  const sessionResponsePromise = page.waitForResponse((response) => response.url().includes('/api/sessions') && response.request().method() === 'POST')
   await page.locator('[data-testid="start-session-button"]').click()
+  const sessionPayload = await (await sessionResponsePromise).json()
   await expect(page.getByText('세션을 불러오는 중입니다.')).not.toBeVisible()
   return {
     packId: null,
     instanceId: null,
     family: targetFamily ?? null,
+    requiredNavigation: (sessionPayload.info?.required_navigation ?? {}) as RequiredNavigation,
+    initialSnapshot: snapshotFromInfo(sessionPayload.info, []),
+  }
+}
+
+function snapshotFromStepPayload(payload: Record<string, unknown>, cumulativeActionTypes: string[]): ViewportStateSnapshot | null {
+  const info = payload.info as { last_event?: { after?: Record<string, unknown> } } | undefined
+  const after = info?.last_event?.after
+  if (!after) {
+    return null
+  }
+  return {
+    sheet_id: (after.sheet_id as string | undefined) ?? null,
+    page_id: (after.page_id as string | undefined) ?? null,
+    zoom_index: (after.zoom_index as number | undefined) ?? null,
+    viewbox: (after.viewbox as ViewportStateSnapshot['viewbox']) ?? null,
+    cumulative_action_types: [...cumulativeActionTypes],
+  }
+}
+
+async function clickActionAndCollect(
+  page: Page,
+  actionType: string,
+  click: () => Promise<unknown>,
+  snapshots: ViewportStateSnapshot[],
+  cumulativeActionTypes: string[],
+) {
+  const responsePromise = page.waitForResponse((response) => response.url().includes('/api/sessions/') && response.url().includes('/actions') && response.request().method() === 'POST')
+  await click()
+  const payload = (await (await responsePromise).json()) as Record<string, unknown>
+  cumulativeActionTypes.push(actionType)
+  const snapshot = snapshotFromStepPayload(payload, cumulativeActionTypes)
+  if (snapshot) {
+    snapshots.push(snapshot)
+  }
+}
+
+async function performRequiredViewportActions(
+  page: Page,
+  requiredState: RequiredViewportState,
+  snapshots: ViewportStateSnapshot[],
+  cumulativeActionTypes: string[],
+) {
+  const actionLocators: Record<string, ReturnType<Page['locator']>> = {
+    zoom_in: page.getByRole('button', { name: /확대/ }),
+    zoom_out: page.getByRole('button', { name: /축소/ }),
+    pan_up: page.getByRole('button', { name: '↑' }),
+    pan_down: page.getByRole('button', { name: '↓' }),
+    pan_left: page.getByRole('button', { name: '←' }),
+    pan_right: page.getByRole('button', { name: '→' }),
+  }
+  for (const actionType of requiredState.required_action_types ?? []) {
+    const locator = actionLocators[actionType]
+    if (!locator) {
+      continue
+    }
+    await clickActionAndCollect(page, actionType, () => locator.click(), snapshots, cumulativeActionTypes)
+    await expect(page.locator('[data-testid="viewer-surface"] canvas')).toBeVisible()
   }
 }
 
@@ -135,13 +237,9 @@ test('workbench navigation readability covers every available page', async ({ pa
   const visitedPages = new Set<string>()
   const multiPageSheets = new Set<string>()
   const openedNotes = new Set<string>()
-  let selectedTarget:
-    | {
-        packId: string | null
-        instanceId: string | null
-        family: string | null
-      }
-    | undefined
+  const viewportSnapshots: ViewportStateSnapshot[] = []
+  const cumulativeActionTypes: string[] = []
+  let selectedTarget: SessionStartTarget | undefined
 
   try {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
@@ -149,6 +247,9 @@ test('workbench navigation readability covers every available page', async ({ pa
     await viewerCanvas.waitFor({ state: 'visible', timeout: 20_000 })
     await expect(page.getByText('세션을 불러오는 중입니다.')).not.toBeVisible()
     selectedTarget = await startTargetSession(page)
+    if (selectedTarget.initialSnapshot) {
+      viewportSnapshots.push(selectedTarget.initialSnapshot)
+    }
     await viewerCanvas.waitFor({ state: 'visible', timeout: 20_000 })
 
     const [questionBox, viewerBox, answerBox] = await Promise.all([
@@ -187,7 +288,7 @@ test('workbench navigation readability covers every available page', async ({ pa
           break
         }
         if (!(await button.isDisabled())) {
-          await button.click()
+          await clickActionAndCollect(page, 'select_sheet', () => button.click(), viewportSnapshots, cumulativeActionTypes)
           await expect(viewerCanvas).toBeVisible()
         }
         try {
@@ -210,7 +311,7 @@ test('workbench navigation readability covers every available page', async ({ pa
       }
 
       while (pageInfo.current > 1) {
-        await prevPageButton.click()
+        await clickActionAndCollect(page, 'prev_page', () => prevPageButton.click(), viewportSnapshots, cumulativeActionTypes)
         await expect
           .poll(async () => parsePageLabel((await pageLabel.textContent()) ?? '')?.current ?? 0)
           .toBe(pageInfo.current - 1)
@@ -240,13 +341,28 @@ test('workbench navigation readability covers every available page', async ({ pa
         const metrics = await readDebugMetrics(page)
         const hasNoteMarker = (metrics?.regions ?? []).some((region) => region.role === 'note_marker')
         if (hasNoteMarker) {
+          const responsePromise = page.waitForResponse((response) => response.url().includes('/api/sessions/') && response.url().includes('/actions') && response.request().method() === 'POST')
           const openedNote = await openScopeNoteIfPresent(page, viewerSurface, viewerCanvas)
+          const payload = (await (await responsePromise).json()) as Record<string, unknown>
+          cumulativeActionTypes.push('click_region')
+          const snapshot = snapshotFromStepPayload(payload, cumulativeActionTypes)
+          if (snapshot) {
+            viewportSnapshots.push(snapshot)
+          }
           expect(openedNote).toBeTruthy()
           openedNotes.add(openedNote as string)
         }
 
+        const currentSnapshot = viewportSnapshots.at(-1)
+        for (const requiredState of selectedTarget?.requiredNavigation.required_viewport_states ?? []) {
+          if (currentSnapshot?.sheet_id !== requiredState.sheet_id || currentSnapshot?.page_id !== requiredState.page_id) {
+            continue
+          }
+          await performRequiredViewportActions(page, requiredState, viewportSnapshots, cumulativeActionTypes)
+        }
+
         if (pageNumber < currentInfo.total) {
-          await nextPageButton.click()
+          await clickActionAndCollect(page, 'next_page', () => nextPageButton.click(), viewportSnapshots, cumulativeActionTypes)
           await expect
             .poll(async () => parsePageLabel((await pageLabel.textContent()) ?? '')?.current ?? 0)
             .toBe(pageNumber + 1)
@@ -257,6 +373,10 @@ test('workbench navigation readability covers every available page', async ({ pa
     const consoleErrors = filterConsoleMessages(consoleMessages)
     expect(consoleErrors).toEqual([])
     expect(visitedPages.size).toBeGreaterThan(0)
+    const visitedViewportStates = matchedRequiredViewportStateIds(
+      selectedTarget?.requiredNavigation.required_viewport_states ?? [],
+      viewportSnapshots,
+    )
 
     const summaryPath = process.env.PLAYWRIGHT_WORKBENCH_SUMMARY_PATH
     if (summaryPath) {
@@ -271,6 +391,7 @@ test('workbench navigation readability covers every available page', async ({ pa
             visited_pages: Array.from(visitedPages.values()),
             multi_page_sheets: Array.from(multiPageSheets.values()),
             opened_notes: Array.from(openedNotes.values()),
+            visited_viewport_states: visitedViewportStates,
             sheet_count: sheetNames.length,
           },
           null,

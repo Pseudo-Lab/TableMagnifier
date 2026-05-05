@@ -5,11 +5,13 @@ from table_env_bench.env.environment import WorkbookEnv
 
 def test_random_baseline_can_run_registered_family_levels_end_to_end() -> None:
     assert list_families() == sorted(
-        [
-            "inventory_exception_disambiguation",
-            "channel_policy_transfer",
-            "report_scope_reconciliation",
-        ]
+            [
+                "excel_viewport_sheet_navigation",
+                "inventory_exception_disambiguation",
+                "channel_policy_transfer",
+                "marker_position_rule_transfer",
+                "report_scope_reconciliation",
+            ]
     )
     for family in list_families():
         for level in list_levels(family):

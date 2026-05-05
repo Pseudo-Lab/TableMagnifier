@@ -50,6 +50,8 @@ class CatalogLevel(BaseModel):
 class CatalogFamily(BaseModel):
     family: str
     family_display_name: str
+    family_status: str = "active"
+    is_preferred: bool = False
     levels: list[CatalogLevel]
 
 

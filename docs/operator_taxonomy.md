@@ -170,6 +170,30 @@
 
 - aggregate를 써도 좋지만, benchmark가 계속 이 operator로만 수렴하면 안 된다
 
+### 2.9 `match_column_offset`
+
+정의:
+
+- 한 sheet에서 학습한 기준 열과 target 열 사이의 위치 관계를 다른 sheet의 같은 구조에 적용한다
+
+좋은 cue:
+
+- wide worksheet grid
+- column offset
+- viewport window
+- repeated row labels
+
+좋은 answer form:
+
+- target cell
+- value choice
+- statement choice
+
+주의:
+
+- 단순 column lookup이 아니라 사례/연산자 surface에서 유도한 열 이동 규칙을 query에 전이해야 한다
+- 초기 viewport 값과 target column 값이 달라야 pan/zoom shortcut을 걸러낼 수 있다
+
 ## 3. Support Operator 목록
 
 support operator는 primary operator를 돕는다.
@@ -182,6 +206,8 @@ support operator는 primary operator를 돕는다.
   - chart / note / legend surface를 table rule로 번역
 - `follow_exception`
   - note나 appendix가 기본 rule을 수정
+- `rule_transfer`
+  - examples, legend, operators sheet에서 유도한 rule을 query sheet에 적용
 
 ## 4. Level별 operator 조합
 
@@ -219,6 +245,12 @@ support operator는 primary operator를 돕는다.
   - primary: `match_mapping`, `classify_state`
 - `report_scope_reconciliation`
   - primary: `select_scope`, `rank_compare`
+- `marker_position_rule_transfer`
+  - primary: `match_mapping`, `verify_statement`
+  - support: `convert_representation`, `disambiguate_by_exception`
+- `excel_viewport_sheet_navigation`
+  - primary: `match_column_offset`
+  - support: `rule_transfer`
 - `order_sensitive_worksheet_pipeline`
   - primary: `order_sequence`
 

@@ -34,6 +34,8 @@ def test_public_dev_real_suite_records_cover_three_families_and_level_ramp() -> 
     assert len(records) == 12
     assert {record["pack_id"] for record in records} == {"public_dev_real_v1"}
     assert len({record["instance_id"] for record in records}) == 12
+    assert all("required_navigation" in record for record in records)
+    assert all(record["required_sheet_ids"] == record["required_navigation"]["required_sheet_ids"] for record in records)
 
     family_counts = Counter((str(record["family"]), int(record["level"])) for record in records)
     assert family_counts == {
@@ -47,6 +49,7 @@ def test_public_dev_real_suite_records_cover_three_families_and_level_ramp() -> 
         ("report_scope_reconciliation", 2): 1,
         ("report_scope_reconciliation", 3): 1,
     }
+    assert "marker_position_rule_transfer" not in {str(record["family"]) for record in records}
 
 
 def test_public_arc_packs_are_registered_and_expose_arc_metadata() -> None:
@@ -63,6 +66,7 @@ def test_public_arc_packs_are_registered_and_expose_arc_metadata() -> None:
     assert spec.metadata["benchmark_track"] == "canonical_real_tableqa"
     assert spec.metadata["reasoning_archetype"] in {"induce_apply", "compose_apply", "disambiguate_apply"}
     assert spec.metadata["generalization_group"]
+    assert all(instance.family != "marker_position_rule_transfer" for instance in pack.instances)
 
 
 def test_list_instance_packs_only_exposes_real_public_packs_from_repo() -> None:

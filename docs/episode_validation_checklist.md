@@ -31,6 +31,7 @@
 - merged header 정보를 무시하면 still solvable 한가?
 - marker 위치/패턴을 무시하면 still solvable 한가?
 - chart/note attachment geometry를 무시하면 still solvable 한가?
+- `marker_position_rule_transfer`에서는 삼각형의 모양만 보고 anchor 위치를 무시해도 풀리는가?
 
 하나라도 "예"가 많으면 설계를 다시 본다.
 
@@ -63,6 +64,8 @@
 
 - hidden cell id, debug label, oracle metadata가 human/agent view로 새지 않는가?
 - answer canonical이 시각적으로 암시되지 않는가?
+- `marker_position_rule_transfer`의 query/note 문구가 decisive anchor label을 직접 정답으로 말하지 않는가?
+- 같은 family/level의 seed들이 하나의 answer choice label만 반복하지 않는가?
 - generator-only metadata가 render payload에 남지 않는가?
 
 ## 9. deterministic generation check
@@ -86,7 +89,18 @@
 
 이 항목은 UX polish가 아니라 benchmark integrity requirement다. 글자가 겹치거나 잘리면 episode는 invalid surface로 본다.
 
-## 12. pass 기준
+## 12. navigation contract check
+
+sheet/page/viewport 이동이 reasoning의 일부라면 아래를 확인한다.
+
+- `required_navigation.required_sheet_ids`와 `required_page_refs`가 decisive surface를 모두 포함하는가?
+- pan/zoom이 필요한 episode는 `required_navigation.required_viewport_states`를 가지는가?
+- viewport state는 `sheet_id`, `page_id`, `min_zoom_index`, `required_action_types`, `match`, `target_rects`를 명시하는가?
+- `target_center_in_viewbox`와 `viewbox_intersects_target` 중 어떤 match mode를 쓰는지 명확한가?
+- `forbidden_shortcuts`가 `initial_viewport_only`, `no_pan_zoom`, `sheet_skip` 같은 generic navigation shortcut을 표현하는가?
+- replay metrics와 Playwright workbench summary가 같은 required viewport state id를 visited로 보고하는가?
+
+## 13. pass 기준
 
 아래 조건을 모두 만족하면 일단 합격으로 본다.
 
@@ -98,8 +112,30 @@
 - leakage check 통과
 - deterministic generation check 통과
 - visual readability / zero-overlap check 통과
+- navigation contract check 통과
 
-## 13. 권장 워크플로
+## 13A. marker-position probe 기준
+
+`marker_position_rule_transfer` episode는 아래 shortcut probe를 우선 확인한다.
+
+- query-only probe는 Level 2/3 평균 correctness가 0.25 미만이어야 한다.
+- text-scrape probe는 모든 level에서 평균 correctness가 0.50 미만이어야 한다.
+- marker-presence-only probe는 모든 level에서 평균 correctness가 0.50 미만이어야 한다.
+- legend-skip probe는 모든 level에서 평균 correctness가 0.25 미만이어야 한다.
+- exception-skip probe는 Level 2/3 평균 correctness가 0.25 미만이어야 한다.
+- note-skip probe는 Level 3 평균 correctness가 0.25 미만이어야 한다.
+- base answer label은 checked seed에서 최소 2개 이상 나타나야 한다.
+
+## 13B. viewport-navigation probe 기준
+
+`excel_viewport_sheet_navigation` episode는 아래 shortcut probe를 우선 확인한다.
+
+- initial-viewport-only probe는 target column을 보지 못해야 한다.
+- no-pan-zoom probe는 required viewport state를 방문하지 못해야 한다.
+- sheet-skip probe는 examples/operators surface를 생략하므로 required evidence를 충족하지 못해야 한다.
+- replay와 workbench traversal은 `query-right-target` 같은 required viewport state id를 동일하게 기록해야 한다.
+
+## 14. 권장 워크플로
 
 1. episode draft 작성
 2. 이 체크리스트로 문서 점검

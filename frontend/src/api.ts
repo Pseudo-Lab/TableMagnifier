@@ -10,6 +10,8 @@ export type CatalogLevel = {
 export type CatalogFamily = {
   family: string
   family_display_name: string
+  family_status: 'preferred' | 'deprecated' | string
+  is_preferred: boolean
   levels: CatalogLevel[]
 }
 
@@ -73,9 +75,20 @@ export type Info = {
   sheet_tabs: string[]
   sheet_page_counts: number[]
   active_sheet: string
+  active_sheet_id: string
   active_sheet_index: number
   page_count_in_sheet: number
   current_page_index: number
+  current_page_id: string
+  zoom_index: number
+  viewbox: { x: number; y: number; width: number; height: number }
+  required_navigation: {
+    required_sheet_ids: string[]
+    required_page_refs: string[]
+    required_notes: Array<Record<string, unknown>>
+    required_viewport_states: Array<Record<string, unknown>>
+    forbidden_shortcuts: string[]
+  }
   max_actions: number
   action_count: number
   unique_sheets_visited: number

@@ -2,7 +2,7 @@
 
 상태: historical design archive
 
-이 문서는 초기 pilot 구현 당시의 순서를 기록한 문서다. 현재 active runtime과 public benchmark는 이미 `canonical_real_tableqa`와 real-data frozen pack 기준으로 운영되므로, 실제 구현과 release 판단은 [benchmark_guide.md](benchmark_guide.md), [real_data_authoring_policy.md](real_data_authoring_policy.md), [human_readability_checklist.md](human_readability_checklist.md)를 우선 본다.
+이 문서는 초기 pilot 구현 당시의 순서를 기록한 문서다. 현재 active runtime과 public benchmark는 이미 `canonical_real_tableqa`와 real-data frozen pack 기준으로 운영되므로, 실제 구현과 release 판단은 [benchmark_guide.md](C:/Users/imssh/Documents/poc_1/docs/benchmark_guide.md), [real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md), [human_readability_checklist.md](C:/Users/imssh/Documents/poc_1/docs/human_readability_checklist.md)를 우선 본다.
 
 이 문서는 새 pilot family를 실제 코드로 구현하는 `현실적인 순서`를 정리한다.
 
@@ -26,7 +26,7 @@
 
 대상 파일:
 
-- [models.py](../src/table_env_bench/data/models.py)
+- [models.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/models.py)
 
 권장 변경:
 
@@ -44,7 +44,7 @@
 
 대상 파일:
 
-- [renderer.py](../src/table_env_bench/render/renderer.py)
+- [renderer.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/render/renderer.py)
 
 권장 범위:
 
@@ -75,7 +75,7 @@
 
 대상 파일:
 
-- [generators.py](../src/table_env_bench/data/generators.py)
+- [generators.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/generators.py)
 
 새 helper 추천:
 
@@ -137,11 +137,11 @@ pilot 구현은 아래처럼 잘게 나누는 것이 좋다.
 
 ## 4. 파일별 예상 수정
 
-- [models.py](../src/table_env_bench/data/models.py)
+- [models.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/models.py)
   - cell metadata, maybe new choice element
-- [renderer.py](../src/table_env_bench/render/renderer.py)
+- [renderer.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/render/renderer.py)
   - icon/pattern/choice rendering
-- [generators.py](../src/table_env_bench/data/generators.py)
+- [generators.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/generators.py)
   - pilot helpers and family registry
 - tests
   - deterministic render
@@ -174,7 +174,7 @@ pilot 구현은 아래처럼 잘게 나누는 것이 좋다.
 
 대응:
 
-- [generator_episode_schema.md](generator_episode_schema.md)를 구현의 중간 계약으로 사용한다
+- [generator_episode_schema.md](C:/Users/imssh/Documents/poc_1/docs/generator_episode_schema.md)를 구현의 중간 계약으로 사용한다
 
 ## 6. 추천 바로 다음 작업
 
@@ -189,6 +189,6 @@ pilot 구현은 아래처럼 잘게 나누는 것이 좋다.
 
 ## 7. 문서 연결
 
-- [docs/generator_episode_schema.md](generator_episode_schema.md)
-- [docs/pilot_episode_drafts.md](pilot_episode_drafts.md)
-- [docs/episode_validation_checklist.md](episode_validation_checklist.md)
+- [docs/generator_episode_schema.md](C:/Users/imssh/Documents/poc_1/docs/generator_episode_schema.md)
+- [docs/pilot_episode_drafts.md](C:/Users/imssh/Documents/poc_1/docs/pilot_episode_drafts.md)
+- [docs/episode_validation_checklist.md](C:/Users/imssh/Documents/poc_1/docs/episode_validation_checklist.md)

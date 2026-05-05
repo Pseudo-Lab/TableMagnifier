@@ -5,7 +5,7 @@ from table_env_bench.env.environment import WorkbookEnv
 
 def test_eval_hard_catalog_and_suite_manifest_match_expected_counts() -> None:
     manifest = benchmark_suite_manifest()
-    assert len(manifest["canonical_dev"]) == 12
+    assert len(manifest["canonical_dev"]) == 18
     assert len(manifest["eval_hard_dev"]) == 4
     assert len(manifest["eval_hard_holdout"]) == 4
 
@@ -23,6 +23,8 @@ def test_eval_hard_paired_variants_have_different_answers_and_required_metadata(
             counterfactual = generate_episode(family, level, seed=0, template_id=f"evalhard_l{level}_counterfactual")
             assert base.metadata["difficulty_tier"] == "eval_hard"
             assert counterfactual.metadata["difficulty_tier"] == "eval_hard"
+            assert base.metadata["required_navigation"]["required_sheet_ids"] == base.metadata["required_sheet_ids"]
+            assert base.metadata["required_navigation"]["required_page_refs"] == base.metadata["required_page_refs"]
             assert len(base.metadata["required_actions"]) >= 1
             assert len(base.metadata["required_evidence"]) >= 2
             assert base.metadata["expected_min_steps"] >= 4

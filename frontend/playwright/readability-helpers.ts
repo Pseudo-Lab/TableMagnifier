@@ -10,6 +10,30 @@ export type Rect = {
   height: number
 }
 
+export type RequiredViewportTarget = {
+  target_id?: string
+  kind?: string
+  rect: Rect
+}
+
+export type RequiredViewportState = {
+  state_id: string
+  sheet_id: string
+  page_id: string
+  min_zoom_index?: number
+  required_action_types?: string[]
+  match?: 'target_center_in_viewbox' | 'viewbox_intersects_target' | string
+  target_rects?: RequiredViewportTarget[]
+}
+
+export type ViewportStateSnapshot = {
+  sheet_id?: string | null
+  page_id?: string | null
+  zoom_index?: number | null
+  viewbox?: Rect | null
+  cumulative_action_types?: string[]
+}
+
 export type DebugElement = {
   id: string
   type: string
@@ -145,6 +169,61 @@ export function rectBottom(rect: Rect) {
 
 export function rectRight(rect: Rect) {
   return rect.x + rect.width
+}
+
+export function viewportTargetMatches(viewbox: Rect, targetRect: Rect, match: string) {
+  if (match === 'viewbox_intersects_target') {
+    return overlapAmount(viewbox, targetRect).overlapX * overlapAmount(viewbox, targetRect).overlapY > 0
+  }
+  if (match === 'target_center_in_viewbox') {
+    const centerX = targetRect.x + targetRect.width / 2
+    const centerY = targetRect.y + targetRect.height / 2
+    return centerX >= viewbox.x && centerX <= rectRight(viewbox) && centerY >= viewbox.y && centerY <= rectBottom(viewbox)
+  }
+  return false
+}
+
+export function viewportStateMatches(requiredState: RequiredViewportState, snapshot: ViewportStateSnapshot) {
+  if (snapshot.sheet_id !== requiredState.sheet_id) {
+    return false
+  }
+  if (snapshot.page_id !== requiredState.page_id) {
+    return false
+  }
+  if ((snapshot.zoom_index ?? 0) < (requiredState.min_zoom_index ?? 0)) {
+    return false
+  }
+  const cumulativeActions = new Set(snapshot.cumulative_action_types ?? [])
+  for (const actionType of requiredState.required_action_types ?? []) {
+    if (!cumulativeActions.has(actionType)) {
+      return false
+    }
+  }
+  if (!snapshot.viewbox) {
+    return false
+  }
+  const matchMode = requiredState.match ?? 'target_center_in_viewbox'
+  return (requiredState.target_rects ?? []).every((target) => viewportTargetMatches(snapshot.viewbox as Rect, target.rect, matchMode))
+}
+
+export function matchedRequiredViewportStateIds(
+  requiredStates: RequiredViewportState[],
+  snapshots: ViewportStateSnapshot[],
+) {
+  const matched: string[] = []
+  const matchedSet = new Set<string>()
+  for (const snapshot of snapshots) {
+    for (const requiredState of requiredStates) {
+      if (matchedSet.has(requiredState.state_id)) {
+        continue
+      }
+      if (viewportStateMatches(requiredState, snapshot)) {
+        matchedSet.add(requiredState.state_id)
+        matched.push(requiredState.state_id)
+      }
+    }
+  }
+  return matched
 }
 
 export function overlapAmount(a: Rect, b: Rect) {

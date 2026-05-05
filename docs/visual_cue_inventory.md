@@ -96,6 +96,7 @@
 주의:
 
 - 아이콘 종류보다 위치 차이가 핵심이면, 라벨 텍스트 없이도 구분 가능해야 한다
+- 현재 v1 renderer에서 canonical하게 쓰는 triangle anchor는 `top_left`, `top_right`, `bottom_left`, `bottom_right` 네 모서리로 제한한다
 
 ### 2.4 border / band semantics
 
@@ -207,6 +208,30 @@
 
 - note text만 읽어서 푸는 문제가 되지 않게, attachment geometry가 필수여야 한다
 
+### 2.9 viewport window / pan-to-target position
+
+정의:
+
+- 넓은 worksheet에서 현재 viewbox가 어느 열/행 범위를 보여주는지가 evidence가 되는 cue
+
+좋은 사용 예:
+
+- 초기 viewport에는 점검 열만 보이고, 오른쪽 target column은 zoom/pan 후에만 보임
+- 사례 시트에서 확인한 column offset을 질의 시트의 같은 행에 적용
+- `required_viewport_states`가 target rect와 match mode를 명시해 replay/workbench가 같은 상태를 검증
+
+잘 맞는 operator:
+
+- match column offset
+- rule transfer
+- select target cell
+
+주의:
+
+- 단순히 표를 크게 만들어 찾기 어렵게 하는 것은 좋은 cue가 아니다
+- target column을 보려면 실제 reasoning상 pan/zoom이 필요해야 한다
+- `viewbox_intersects_target`와 `target_center_in_viewbox` 중 어떤 조건을 쓰는지 manifest에 명시해야 한다
+
 ## 3. cue 조합 가이드
 
 Level별로 cue는 아래 정도가 적당하다.
@@ -255,6 +280,14 @@ Level별로 cue는 아래 정도가 적당하다.
   - indentation hierarchy
   - merged-cell span direction
   - border / band semantics
+- `marker_position_rule_transfer`
+  - icon anchor position
+- `excel_viewport_sheet_navigation`
+  - viewport window / pan-to-target position
+  - border / band semantics
+  - indentation hierarchy when row labels need scope disambiguation
+  - legend item
+  - note anchor
 - `order_sensitive_worksheet_pipeline`
   - band semantics
   - operator strip icon order

@@ -483,14 +483,41 @@ episode rule은 generator code 안에만 숨어 있으면 안 된다. 구현 전
 
 - `channel_policy_transfer`
 - `inventory_exception_disambiguation`
+- `marker_position_rule_transfer`
 
-위 두 family를 먼저 end-to-end로 구현한다.
+위 canonical family를 end-to-end로 구현한다.
+
+현재 상태:
+
+- `marker_position_rule_transfer`는 구현 완료 상태다.
+- family 핵심은 삼각형 표식의 셀 내부 모서리 위치를 예시/범례/반례에서 유도하고 query table에 전이하는 것이다.
+- Level 1/2/3 모두 `examples`, `legend`, `exception`, `query` sheet 구조를 가진다.
+- Level 3은 `exception:exception-p2`의 openable note `anchor-scope-note`로 적용 묶음을 고정한다.
+- query/note 문구와 note support surface는 decisive anchor-to-answer mapping을 직접 누출하지 않는다.
+- 정답 choice label은 seed별로 B/C/D 사이에서 회전해 label shortcut을 방지한다.
+- frozen public instance pack은 수정하지 않았다.
 
 완료 기준:
 
 - seed별 deterministic episode 생성
 - renderer preview 생성
 - replay / scoring / human mode / agent mode 모두 동작
+
+최신 검증 증거:
+
+- `uv run pytest -q` -> `69 passed`
+- `cd frontend && npm run lint` -> pass
+- marker 전용 Playwright surface readability -> `16 passed`
+- authoring `viewport_readability` run `11130efe95ae478e8e6ffa9f4a164a13` -> passed
+  - L1/L2/L3 seed 0 surface review returncode 0
+  - L1/L2/L3 workbench navigation returncode 0
+  - L3 `opened_notes == ["anchor-scope-note"]`
+- 최종 architect verification -> `PASS`
+
+검증 주의:
+
+- 전체 `audit_readability --smoke --seed-samples 0`는 현재 로컬 실행에서 Playwright subprocess hang 이력이 있었다.
+- marker family 자체는 위의 marker 전용 Playwright 및 authoring `viewport_readability` 증거로 통과를 확인했다.
 
 ### Phase 4. baseline / evaluation 정리
 

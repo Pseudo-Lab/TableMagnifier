@@ -61,6 +61,56 @@ function formatInteger(value: number | null | undefined) {
   return numberFormatter.format(value)
 }
 
+function familyStatusSuffix(family: CatalogFamily) {
+  if (family.is_preferred) {
+    return ' · 우선'
+  }
+  if (family.family_status === 'deprecated') {
+    return ' · deprecated'
+  }
+  if (family.family_status === 'active') {
+    return ' · active'
+  }
+  return ''
+}
+
+function familyStatusLabel(family: CatalogFamily | null) {
+  if (!family) {
+    return '-'
+  }
+  if (family.is_preferred) {
+    return 'preferred'
+  }
+  return family.family_status || 'active'
+}
+
+function requestedDevSession(catalog: CatalogFamily[]) {
+  const params = new URLSearchParams(window.location.search)
+  const familyParam = params.get('family')
+  if (!familyParam) {
+    return null
+  }
+
+  const family = catalog.find((item) => item.family === familyParam)
+  if (!family) {
+    return null
+  }
+
+  const levelParam = params.get('level')
+  const level = levelParam === null ? family.levels[0]?.level : Number(levelParam)
+  if (!Number.isInteger(level) || !family.levels.some((item) => item.level === level)) {
+    return null
+  }
+
+  const seedParam = params.get('seed')
+  const seed = seedParam === null ? 0 : Number(seedParam)
+  return {
+    family: family.family,
+    level,
+    seed: Number.isFinite(seed) ? seed : 0,
+  }
+}
+
 function describeAction(event: EventRecord) {
   const action = asRecord(event.action)
   if (!action) {
@@ -153,6 +203,7 @@ function App() {
   const sessionStateLabel = info?.terminated ? '정답 제출 완료' : info?.truncated ? '예산 종료' : '진행 중'
   const budgetLabel = observation ? `${observation.remaining_action_budget}회 남음` : '-'
   const latestActionLabel = latestEvent ? describeAction(latestEvent) : '아직 액션이 없습니다.'
+  const viewboxData = info ? JSON.stringify(info.viewbox) : ''
   const initializeOnMount = useEffectEvent(() => {
     void initialize()
   })
@@ -240,6 +291,15 @@ function App() {
       if (initialFamily) {
         setSelectedFamily(initialFamily.family)
         setSelectedLevel(initialLevel)
+      }
+
+      const requestedSession = requestedDevSession(nextCatalog)
+      if (requestedSession) {
+        setSelectedFamily(requestedSession.family)
+        setSelectedLevel(requestedSession.level)
+        setSeed(requestedSession.seed)
+        await startFamilySession(requestedSession.family, requestedSession.level, requestedSession.seed)
+        return
       }
 
       const initialPack = nextPacks[0]
@@ -462,7 +522,12 @@ function App() {
                 <Separator />
 
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">개발용 패밀리</label>
+                  <div className="flex items-center justify-between gap-3">
+                    <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">개발용 패밀리</label>
+                    <Badge data-testid="family-status-badge" variant={familyRecord?.is_preferred ? 'secondary' : familyRecord?.family_status === 'deprecated' ? 'outline' : 'default'}>
+                      {familyStatusLabel(familyRecord)}
+                    </Badge>
+                  </div>
                   <select
                     data-testid="family-select"
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -473,6 +538,7 @@ function App() {
                     {catalog.map((family) => (
                       <option key={family.family} value={family.family}>
                         {family.family_display_name}
+                        {familyStatusSuffix(family)}
                       </option>
                     ))}
                   </select>
@@ -635,6 +701,10 @@ function App() {
                 <div
                   className="viewer-surface relative min-h-[760px] overflow-hidden rounded-xl border border-border bg-muted/20 p-4 shadow-inner"
                   data-testid="viewer-surface"
+                  data-active-sheet-id={info?.active_sheet_id ?? ''}
+                  data-current-page-id={info?.current_page_id ?? ''}
+                  data-zoom-index={info?.zoom_index ?? 0}
+                  data-viewbox={viewboxData}
                   ref={viewerRef}
                   onClick={handleViewerClick}
                 >

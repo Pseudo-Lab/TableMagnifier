@@ -9,9 +9,9 @@
 
 현재 기준 코드:
 
-- [models.py](../src/table_env_bench/data/models.py)
-- [generators.py](../src/table_env_bench/data/generators.py)
-- [renderer.py](../src/table_env_bench/render/renderer.py)
+- [models.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/models.py)
+- [generators.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/generators.py)
+- [renderer.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/render/renderer.py)
 
 ## 1. 현재 코드 기준 제약
 
@@ -198,7 +198,7 @@ canonical family를 제대로 구현하려면 아래 확장이 필요하다.
 
 ## 5. Draft 1 mapping
 
-[pilot_episode_drafts.md](pilot_episode_drafts.md)의 `channel_policy_transfer_l1_icon_anchor_pick_v1`을 현재 코드에 매핑하면 아래와 같다.
+[pilot_episode_drafts.md](C:/Users/imssh/Documents/poc_1/docs/pilot_episode_drafts.md)의 `channel_policy_transfer_l1_icon_anchor_pick_v1`을 현재 코드에 매핑하면 아래와 같다.
 
 - workbook
   - `examples` sheet
@@ -249,7 +249,7 @@ pilot 구현 전 최소 변경 우선순위:
 
 ## 9. 문서 연결
 
-- [docs/pilot_episode_drafts.md](pilot_episode_drafts.md)
-- [docs/episode_rulebook.md](episode_rulebook.md)
-- [docs/visual_cue_inventory.md](visual_cue_inventory.md)
-- [docs/answer_form_policy.md](answer_form_policy.md)
+- [docs/pilot_episode_drafts.md](C:/Users/imssh/Documents/poc_1/docs/pilot_episode_drafts.md)
+- [docs/episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md)
+- [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md)
+- [docs/answer_form_policy.md](C:/Users/imssh/Documents/poc_1/docs/answer_form_policy.md)

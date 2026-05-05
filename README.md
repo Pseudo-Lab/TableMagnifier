@@ -46,7 +46,7 @@
 - `inventory_exception_disambiguation`
 - `report_scope_reconciliation`
 
-문서별 현재 상태는 [docs/document_status.md](docs/document_status.md)에서 확인할 수 있습니다. 처음 읽는 경우에는 [docs/first_steps.md](docs/first_steps.md), [docs/benchmark_guide.md](docs/benchmark_guide.md), [docs/task_families.md](docs/task_families.md) 순으로 보는 편이 빠릅니다.
+문서별 현재 상태는 [docs/document_status.md](C:/Users/imssh/Documents/poc_1/docs/document_status.md)에서 확인할 수 있습니다. 처음 읽는 경우에는 [docs/first_steps.md](C:/Users/imssh/Documents/poc_1/docs/first_steps.md), [docs/benchmark_guide.md](C:/Users/imssh/Documents/poc_1/docs/benchmark_guide.md), [docs/task_families.md](C:/Users/imssh/Documents/poc_1/docs/task_families.md) 순으로 보는 편이 빠릅니다.
 
 ## 현재 구현
 
@@ -80,7 +80,7 @@
 WSL에서 의존성을 설치합니다.
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv sync
 ```
 
@@ -89,49 +89,49 @@ uv sync
 테스트:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run pytest
 ```
 
 단일 데모 실행:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.run_demo --family channel_policy_transfer --level 1 --agent heuristic
 ```
 
 고정 benchmark instance 실행:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.run_demo --instance-id public_smoke_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0 --agent heuristic
 ```
 
 baseline 평가:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.eval_baselines
 ```
 
 LLM 평가:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 OPENAI_API_KEY=... uv run python -m table_env_bench.scripts.eval_llm --suite public_dev_real_v1 --model gpt-5-nano
 ```
 
 preview gallery export:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_real --pack public_dev_real_v1
 ```
 
 strict public-pack readability audit:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.audit_readability --pack public_smoke_real_v1
 uv run python -m table_env_bench.scripts.audit_readability --pack public_dev_real_v1
 ```
@@ -139,14 +139,14 @@ uv run python -m table_env_bench.scripts.audit_readability --pack public_dev_rea
 FastAPI 서버:
 
 ```bash
-cd /path/to/table-env-bench
+cd /mnt/c/Users/imssh/Documents/poc_1
 uv run python -m table_env_bench.scripts.run_server --reload
 ```
 
 React 웹 UI:
 
 ```bash
-cd /path/to/table-env-bench/frontend
+cd /mnt/c/Users/imssh/Documents/poc_1/frontend
 npm install
 npm run dev
 ```
@@ -226,22 +226,22 @@ replay JSON에는 각 step의 다음 정보가 저장됩니다.
 
 ## 새 family 추가 방법
 
-1. [docs/family_design_brief.md](docs/family_design_brief.md)에서 canonical family 기준을 확인합니다.
-2. [docs/episode_rulebook.md](docs/episode_rulebook.md), [docs/visual_cue_inventory.md](docs/visual_cue_inventory.md), [docs/operator_taxonomy.md](docs/operator_taxonomy.md)를 참고해 evidence topology를 설계합니다.
+1. [docs/family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)에서 canonical family 기준을 확인합니다.
+2. [docs/episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md), [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md), [docs/operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)를 참고해 evidence topology를 설계합니다.
 3. `src/table_env_bench/data/families/` 아래에 family generator를 추가합니다.
-4. [src/table_env_bench/data/models.py](src/table_env_bench/data/models.py)의 workbook/sheet/page/element/region dataclass를 사용합니다.
+4. [src/table_env_bench/data/models.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/models.py)의 workbook/sheet/page/element/region dataclass를 사용합니다.
 5. authoring pipeline과 readability gate를 통과시킵니다.
-6. 필요하면 frozen public pack으로 내리고 [docs/task_families.md](docs/task_families.md)를 갱신합니다.
+6. 필요하면 frozen public pack으로 내리고 [docs/task_families.md](C:/Users/imssh/Documents/poc_1/docs/task_families.md)를 갱신합니다.
 7. pytest와 Playwright gate가 모두 통과하는지 확인합니다.
 
 ## 주요 경로
 
-- [src/table_env_bench/env/environment.py](src/table_env_bench/env/environment.py)
-- [src/table_env_bench/env/actions.py](src/table_env_bench/env/actions.py)
-- [src/table_env_bench/render/renderer.py](src/table_env_bench/render/renderer.py)
-- [src/table_env_bench/data/models.py](src/table_env_bench/data/models.py)
-- [src/table_env_bench/data/families](src/table_env_bench/data/families)
-- [src/table_env_bench/data/instances.py](src/table_env_bench/data/instances.py)
-- [src/table_env_bench/eval/scoring.py](src/table_env_bench/eval/scoring.py)
-- [src/table_env_bench/server/app.py](src/table_env_bench/server/app.py)
-- [frontend/src/App.tsx](frontend/src/App.tsx)
+- [src/table_env_bench/env/environment.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/env/environment.py)
+- [src/table_env_bench/env/actions.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/env/actions.py)
+- [src/table_env_bench/render/renderer.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/render/renderer.py)
+- [src/table_env_bench/data/models.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/models.py)
+- [src/table_env_bench/data/families](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/families)
+- [src/table_env_bench/data/instances.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/instances.py)
+- [src/table_env_bench/eval/scoring.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/eval/scoring.py)
+- [src/table_env_bench/server/app.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/server/app.py)
+- [frontend/src/App.tsx](C:/Users/imssh/Documents/poc_1/frontend/src/App.tsx)

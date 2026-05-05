@@ -28,7 +28,7 @@ def export_preview_gallery(
     output_dir.mkdir(parents=True, exist_ok=True)
     config = RenderConfig()
     image_renderer = SceneImageRenderer()
-    previews: list[dict[str, str]] = []
+    previews: list[dict[str, object]] = []
 
     repo_root = Path(__file__).resolve().parents[3]
     renderer_script = repo_root / "frontend" / "public" / "workbook-canvas-renderer.js"
@@ -82,6 +82,7 @@ def export_preview_gallery(
                     "sheet_id": sheet.sheet_id,
                     "page": page.title,
                     "page_id": page.page_id,
+                    "required_navigation": dict(spec.metadata.get("required_navigation", {})),
                     "png": png_path.name,
                     "scene": scene_path.name,
                 }
@@ -116,6 +117,7 @@ def export_preview_gallery(
                         "sheet_id": sheet.sheet_id,
                         "page": f"{page.title} · 메모 {note.id}",
                         "page_id": page.page_id,
+                        "required_navigation": dict(spec.metadata.get("required_navigation", {})),
                         "png": overlay_png_path.name,
                         "scene": overlay_scene_path.name,
                     }
@@ -145,7 +147,7 @@ def export_preview_gallery(
     }
 
 
-def _gallery_html(previews: list[dict[str, str]]) -> str:
+def _gallery_html(previews: list[dict[str, object]]) -> str:
     cards = []
     for preview in previews:
         cards.append(
@@ -182,7 +184,7 @@ def _gallery_html(previews: list[dict[str, str]]) -> str:
     """
 
 
-def _review_html(previews: list[dict[str, str]]) -> str:
+def _review_html(previews: list[dict[str, object]]) -> str:
     previews_json = json.dumps(previews, ensure_ascii=False)
     options = []
     for index, preview in enumerate(previews):

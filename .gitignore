@@ -10,8 +10,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
 parts/
 sdist/
 var/
@@ -21,10 +21,11 @@ wheels/
 *.egg
 
 # Virtual Environment
-venv/
-env/
-ENV/
-.venv/
+/venv/
+/env/
+/ENV/
+/.venv/
+/node_modules/
 
 # IDE
 .vscode/
@@ -38,10 +39,13 @@ ENV/
 .claude/
 .codex
 .codex/
+.omx/
+.playwright-mcp/
 
 # API Keys - 중요!
 .env
 .env.*
+!.env.example
 apis/gemini_keys.yaml
 apis/*.yaml
 !apis/*-example.yaml
@@ -65,7 +69,7 @@ htmlcov/
 dmypy.json
 
 # Data - 원본 데이터
-data/
+/data/
 
 # Output - 생성된 결과물
 artifacts/

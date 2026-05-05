@@ -23,6 +23,7 @@ from table_env_bench.data.generators import (
     list_pilot_families,
     load_instance_pack,
 )
+from table_env_bench.data.instances import load_instance
 from table_env_bench.scripts.export_preview_gallery import export_preview_gallery
 
 
@@ -243,6 +244,17 @@ def _run_pack_audit(
         workbench_summary = None
         if workbench_summary_path.exists():
             workbench_summary = json.loads(workbench_summary_path.read_text(encoding="utf-8"))
+        instance_spec = load_instance(instance.instance_id)
+        required_navigation = dict(instance_spec.metadata.get("required_navigation", {}))
+        required_viewport_state_ids = {
+            str(item.get("state_id"))
+            for item in required_navigation.get("required_viewport_states", [])
+            if isinstance(item, dict) and item.get("state_id") is not None
+        }
+        visited_viewport_state_ids = {
+            str(item) for item in (workbench_summary or {}).get("visited_viewport_states", [])
+        }
+        missing_viewport_state_ids = sorted(required_viewport_state_ids - visited_viewport_state_ids)
 
         findings: list[str] = []
         if surface_completed.returncode != 0:
@@ -254,6 +266,8 @@ def _run_pack_audit(
             findings.append("Workbench traversal readability gate failed.")
         if expected_note_overlay and not (workbench_summary or {}).get("opened_notes"):
             findings.append("Expected note overlay exists but no note was opened during workbench traversal.")
+        if missing_viewport_state_ids:
+            findings.append(f"Workbench traversal missed required viewport states: {', '.join(missing_viewport_state_ids)}.")
 
         artifact_paths = [
             _relpath(manifest_path, repo_root),
@@ -288,6 +302,7 @@ def _run_pack_audit(
                 "workbench_navigation": {
                     "returncode": workbench_completed.returncode,
                     "summary": workbench_summary,
+                    "missing_required_viewport_states": missing_viewport_state_ids,
                 },
                 "expected_note_overlay": expected_note_overlay,
                 "artifact_paths": artifact_paths,

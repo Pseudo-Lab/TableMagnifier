@@ -72,6 +72,52 @@
 - L2: 3-4 step, exception-p2 note로 group scope를 고정한다
 - L3: 4-5 step, note를 반영한 뒤 query의 다른 surface format으로 전이한다
 
+## 4. `marker_position_rule_transfer`
+
+### family-level audit
+
+- 핵심 topology: `examples -> legend -> exception -> query`, Level 2/3은 `examples-p2`, Level 3은 exception note가 추가됨
+- 핵심 cue: `icon_anchor`, `legend_mapping`, `exception_contrast`, `note_scope`
+- 핵심 risk: triangle shape만 보고 marker position과 legend/exception surface를 건너뛰는 shortcut
+
+### template audit
+
+| template | answer form | primary / support | text-only shortcut to reject | distractor focus |
+| --- | --- | --- | --- | --- |
+| `corner_anchor_statement` | `statement_choice` | `match_mapping` / `convert_representation` | marker shape이나 query text만 읽고 anchor 위치를 무시하는 shortcut | wrong anchor, legend skip, exception skip, note-scope skip |
+
+### level progression
+
+- L1: 3 step, 예시/범례/반례로 두 anchor mapping을 전이
+- L2: 3-4 step, 추가 예시 페이지와 네 모서리 variation을 함께 사용
+- L3: 4-5 step, exception note로 적용 묶음을 고정하고 anchor 의미를 조합 판정
+
+## 5. `excel_viewport_sheet_navigation`
+
+### family-level audit
+
+- 핵심 topology: `examples -> query`, Level 2는 `examples-p2`, Level 3은 `operators` 추가
+- 핵심 cue: `wide_grid`, `column_offset`, `viewport_pan`, `sheet_page_state`
+- 핵심 risk: 초기 viewport에 보이는 점검 열 값을 고르거나, 사례/연산자 시트를 건너뛰고 query만 읽는 shortcut
+
+### template audit
+
+| template | answer form | primary / support | text-only shortcut to reject | distractor focus |
+| --- | --- | --- | --- | --- |
+| `wide_sheet_rule_transfer` | `statement_choice` | `match_column_offset` / `rule_transfer` | zoom/pan 없이 초기 viewport 값이나 row text만 읽는 shortcut | initial check value, wrong row target, skipped operator rule |
+
+### level progression
+
+- L1: 3-4 step, 사례에서 target 열 규칙을 읽고 질의의 오른쪽 target column까지 이동
+- L2: 4-5 step, 두 번째 사례 페이지로 반복 규칙을 확인한 뒤 질의에 적용
+- L3: 5 step, 연산자 시트가 같은 행 라벨과 target 열 이동 규칙을 고정
+
+### navigation integrity checks
+
+- `required_navigation.required_viewport_states`는 최소 `sheet_id`, `page_id`, `min_zoom_index`, `required_action_types`, `match`, `target_rects`를 가져야 한다.
+- `target_center_in_viewbox`는 target center가 현재 viewbox 안에 들어와야 visited로 본다.
+- `initial_viewport_only`, `no_pan_zoom`, `sheet_skip` shortcut probes가 모두 meaningful하게 실패해야 한다.
+
 ## 운영 메모
 
 - 이 문서는 새 canonical family를 추가할 때도 같은 형식으로 확장한다

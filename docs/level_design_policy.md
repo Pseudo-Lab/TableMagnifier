@@ -101,6 +101,27 @@
 - note open 필요 여부
 - 보강 예시 page 필요 여부
 
+## Family 4. `marker_position_rule_transfer`
+
+### Level 1
+
+- 권장: 3 step
+- cue: icon anchor position + compact legend
+- navigation: `예시 -> 범례 -> 반례 -> 질의`
+- note open은 없음
+
+### Level 2
+
+- 권장: 4 step
+- cue: Level 1 cue + row group variation + four-corner legend
+- navigation: `예시 p1 -> 예시 p2 -> 범례 -> 반례 -> 질의`
+
+### Level 3
+
+- 권장: 5 step
+- cue: Level 2 cue + note anchor
+- navigation: `예시 p1 -> 예시 p2 -> 범례 -> 반례 표 -> 반례 note -> 질의`
+
 ## Level별 권장 조합
 
 ### Level 1

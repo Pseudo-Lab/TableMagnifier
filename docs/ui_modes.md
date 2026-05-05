@@ -17,8 +17,8 @@
 현재 구현:
 
 - `WorkbookEnv(mode="dev")`가 debug-friendly observation을 제공합니다.
-- [src/table_env_bench/server/app.py](../src/table_env_bench/server/app.py)가 `mode`와 `debug`를 받아 session을 생성합니다.
-- [frontend/src/App.tsx](../frontend/src/App.tsx)는 이벤트 로그, replay, 상태 메타데이터 같은 inspector 성격의 정보를 표시할 수 있습니다.
+- [src/table_env_bench/server/app.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/server/app.py)가 `mode`와 `debug`를 받아 session을 생성합니다.
+- [frontend/src/App.tsx](C:/Users/imssh/Documents/poc_1/frontend/src/App.tsx)는 이벤트 로그, replay, 상태 메타데이터 같은 inspector 성격의 정보를 표시할 수 있습니다.
 
 보여도 되는 것:
 
@@ -67,8 +67,8 @@
 
 현재 기본 shell:
 
-- [src/table_env_bench/server/app.py](../src/table_env_bench/server/app.py)
-- [frontend/src/App.tsx](../frontend/src/App.tsx)
+- [src/table_env_bench/server/app.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/server/app.py)
+- [frontend/src/App.tsx](C:/Users/imssh/Documents/poc_1/frontend/src/App.tsx)
 
 ## 3. Agent API mode
 

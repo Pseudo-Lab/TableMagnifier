@@ -1,0 +1,485 @@
+{
+  "seed": 0,
+  "previews": [
+    {
+      "family": "chart_to_detail_lookup",
+      "family_label": "차트-상세 조회",
+      "level": "1",
+      "sheet": "요약",
+      "page": "요약 차트",
+      "file": "chart_to_detail_lookup_l1_summary_summary-p1.svg"
+    },
+    {
+      "family": "chart_to_detail_lookup",
+      "family_label": "차트-상세 조회",
+      "level": "1",
+      "sheet": "요약",
+      "page": "상세 표",
+      "file": "chart_to_detail_lookup_l1_summary_summary-p2.svg"
+    },
+    {
+      "family": "chart_to_detail_lookup",
+      "family_label": "차트-상세 조회",
+      "level": "2",
+      "sheet": "요약",
+      "page": "요약 차트",
+      "file": "chart_to_detail_lookup_l2_summary_summary-p1.svg"
+    },
+    {
+      "family": "chart_to_detail_lookup",
+      "family_label": "차트-상세 조회",
+      "level": "2",
+      "sheet": "상세",
+      "page": "상세 표",
+      "file": "chart_to_detail_lookup_l2_detail_detail-p1.svg"
+    },
+    {
+      "family": "chart_to_detail_lookup",
+      "family_label": "차트-상세 조회",
+      "level": "3",
+      "sheet": "요약",
+      "page": "요약 차트",
+      "file": "chart_to_detail_lookup_l3_summary_summary-p1.svg"
+    },
+    {
+      "family": "chart_to_detail_lookup",
+      "family_label": "차트-상세 조회",
+      "level": "3",
+      "sheet": "부록",
+      "page": "상세 표",
+      "file": "chart_to_detail_lookup_l3_appendix_appendix-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "1",
+      "sheet": "예시",
+      "page": "예시 시트",
+      "file": "inventory_exception_disambiguation_l1_examples_examples-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "1",
+      "sheet": "반례",
+      "page": "반례 시트",
+      "file": "inventory_exception_disambiguation_l1_counterexample_counterexample-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "1",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "inventory_exception_disambiguation_l1_query_query-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "2",
+      "sheet": "예시",
+      "page": "예시 시트",
+      "file": "inventory_exception_disambiguation_l2_examples_examples-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "2",
+      "sheet": "반례",
+      "page": "반례 시트",
+      "file": "inventory_exception_disambiguation_l2_counterexample_counterexample-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "2",
+      "sheet": "반례",
+      "page": "반례 메모",
+      "file": "inventory_exception_disambiguation_l2_counterexample_counterexample-p2.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "2",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "inventory_exception_disambiguation_l2_query_query-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "3",
+      "sheet": "예시",
+      "page": "예시 시트",
+      "file": "inventory_exception_disambiguation_l3_examples_examples-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "3",
+      "sheet": "반례",
+      "page": "반례 시트",
+      "file": "inventory_exception_disambiguation_l3_counterexample_counterexample-p1.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "3",
+      "sheet": "반례",
+      "page": "반례 메모",
+      "file": "inventory_exception_disambiguation_l3_counterexample_counterexample-p2.svg"
+    },
+    {
+      "family": "inventory_exception_disambiguation",
+      "family_label": "반례 기반 규칙 구분",
+      "level": "3",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "inventory_exception_disambiguation_l3_query_query-p1.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "1",
+      "sheet": "예시",
+      "page": "예시 시트",
+      "file": "channel_policy_transfer_l1_examples_examples-p1.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "1",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "channel_policy_transfer_l1_query_query-p1.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "2",
+      "sheet": "예시",
+      "page": "예시 시트",
+      "file": "channel_policy_transfer_l2_examples_examples-p1.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "2",
+      "sheet": "예시",
+      "page": "예시 보강",
+      "file": "channel_policy_transfer_l2_examples_examples-p2.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "2",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "channel_policy_transfer_l2_query_query-p1.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "3",
+      "sheet": "예시",
+      "page": "예시 시트",
+      "file": "channel_policy_transfer_l3_examples_examples-p1.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "3",
+      "sheet": "예시",
+      "page": "예시 보강",
+      "file": "channel_policy_transfer_l3_examples_examples-p2.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "3",
+      "sheet": "부록",
+      "page": "부록 메모",
+      "file": "channel_policy_transfer_l3_appendix_appendix-p1.svg"
+    },
+    {
+      "family": "channel_policy_transfer",
+      "family_label": "예시 규칙 전이",
+      "level": "3",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "channel_policy_transfer_l3_query_query-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "1",
+      "sheet": "개요",
+      "page": "개요 시트",
+      "file": "report_scope_reconciliation_l1_overview_overview-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "1",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "report_scope_reconciliation_l1_query_query-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "2",
+      "sheet": "개요",
+      "page": "개요 시트",
+      "file": "report_scope_reconciliation_l2_overview_overview-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "2",
+      "sheet": "메모",
+      "page": "메모 시트",
+      "file": "report_scope_reconciliation_l2_notes_notes-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "2",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "report_scope_reconciliation_l2_query_query-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "3",
+      "sheet": "개요",
+      "page": "개요 시트",
+      "file": "report_scope_reconciliation_l3_overview_overview-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "3",
+      "sheet": "메모",
+      "page": "메모 시트",
+      "file": "report_scope_reconciliation_l3_notes_notes-p1.svg"
+    },
+    {
+      "family": "report_scope_reconciliation",
+      "family_label": "report_scope_reconciliation",
+      "level": "3",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "report_scope_reconciliation_l3_query_query-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "1",
+      "sheet": "범례",
+      "page": "범례 시트",
+      "file": "legend_operator_composition_l1_legend_legend-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "1",
+      "sheet": "예시",
+      "page": "worked example",
+      "file": "legend_operator_composition_l1_examples_examples-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "1",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "legend_operator_composition_l1_query_query-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "2",
+      "sheet": "범례",
+      "page": "범례 시트",
+      "file": "legend_operator_composition_l2_legend_legend-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "2",
+      "sheet": "예시",
+      "page": "worked example",
+      "file": "legend_operator_composition_l2_examples_examples-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "2",
+      "sheet": "예시",
+      "page": "보강 예시",
+      "file": "legend_operator_composition_l2_examples_examples-p2.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "2",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "legend_operator_composition_l2_query_query-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "3",
+      "sheet": "범례",
+      "page": "범례 시트",
+      "file": "legend_operator_composition_l3_legend_legend-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "3",
+      "sheet": "예시",
+      "page": "worked example",
+      "file": "legend_operator_composition_l3_examples_examples-p1.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "3",
+      "sheet": "예시",
+      "page": "보강 예시",
+      "file": "legend_operator_composition_l3_examples_examples-p2.svg"
+    },
+    {
+      "family": "legend_operator_composition",
+      "family_label": "legend_operator_composition",
+      "level": "3",
+      "sheet": "질의",
+      "page": "질의 시트",
+      "file": "legend_operator_composition_l3_query_query-p1.svg"
+    },
+    {
+      "family": "scale_shift_cross_sheet",
+      "family_label": "시트 간 단위 변환",
+      "level": "1",
+      "sheet": "요약",
+      "page": "요약 시트",
+      "file": "scale_shift_cross_sheet_l1_summary_summary-p1.svg"
+    },
+    {
+      "family": "scale_shift_cross_sheet",
+      "family_label": "시트 간 단위 변환",
+      "level": "1",
+      "sheet": "상세",
+      "page": "상세 시트",
+      "file": "scale_shift_cross_sheet_l1_detail_detail-p1.svg"
+    },
+    {
+      "family": "scale_shift_cross_sheet",
+      "family_label": "시트 간 단위 변환",
+      "level": "2",
+      "sheet": "요약",
+      "page": "요약 시트",
+      "file": "scale_shift_cross_sheet_l2_summary_summary-p1.svg"
+    },
+    {
+      "family": "scale_shift_cross_sheet",
+      "family_label": "시트 간 단위 변환",
+      "level": "2",
+      "sheet": "상세",
+      "page": "상세 시트",
+      "file": "scale_shift_cross_sheet_l2_detail_detail-p1.svg"
+    },
+    {
+      "family": "scale_shift_cross_sheet",
+      "family_label": "시트 간 단위 변환",
+      "level": "3",
+      "sheet": "요약",
+      "page": "요약 시트",
+      "file": "scale_shift_cross_sheet_l3_summary_summary-p1.svg"
+    },
+    {
+      "family": "scale_shift_cross_sheet",
+      "family_label": "시트 간 단위 변환",
+      "level": "3",
+      "sheet": "상세",
+      "page": "상세 시트",
+      "file": "scale_shift_cross_sheet_l3_detail_detail-p1.svg"
+    },
+    {
+      "family": "scale_shift_cross_sheet",
+      "family_label": "시트 간 단위 변환",
+      "level": "3",
+      "sheet": "상세",
+      "page": "상세 부록",
+      "file": "scale_shift_cross_sheet_l3_detail_detail-p2.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "1",
+      "sheet": "요약",
+      "page": "요약 시트",
+      "file": "summary_appendix_override_l1_summary_summary-p1.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "1",
+      "sheet": "요약",
+      "page": "요약 시트 · 메모 주1",
+      "file": "summary_appendix_override_l1_summary_summary-p1__note_주1.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "1",
+      "sheet": "요약",
+      "page": "요약 시트 부록",
+      "file": "summary_appendix_override_l1_summary_summary-p2.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "1",
+      "sheet": "요약",
+      "page": "요약 시트 부록 · 메모 주1",
+      "file": "summary_appendix_override_l1_summary_summary-p2__note_주1.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "2",
+      "sheet": "요약",
+      "page": "요약 시트",
+      "file": "summary_appendix_override_l2_summary_summary-p1.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "2",
+      "sheet": "부록",
+      "page": "부록 시트",
+      "file": "summary_appendix_override_l2_appendix_appendix-p1.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "3",
+      "sheet": "요약",
+      "page": "요약 시트",
+      "file": "summary_appendix_override_l3_summary_summary-p1.svg"
+    },
+    {
+      "family": "summary_appendix_override",
+      "family_label": "요약-부록 정정",
+      "level": "3",
+      "sheet": "부록",
+      "page": "부록 시트",
+      "file": "summary_appendix_override_l3_appendix_appendix-p1.svg"
+    }
+  ]
+}

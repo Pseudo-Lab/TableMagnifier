@@ -1,0 +1,2585 @@
+{
+  "episode_id": "public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0",
+  "family": "inventory_exception_disambiguation",
+  "family_display_name": "재고 예외 판정",
+  "level": 3,
+  "seed": 0,
+  "locale": "ko-KR",
+  "question": "사례, 예외, 보조 단서를 함께 반영했을 때 현재 재고표와 맞는 후보 표는 어느 것인가?",
+  "workbook": {
+    "workbook_id": "inventory_exception_disambiguation-3-pattern_vs_icon_statement",
+    "title": "재고 예외 후보 비교",
+    "sheets": [
+      {
+        "sheet_id": "examples",
+        "tab_label": "예시",
+        "pages": [
+          {
+            "page_id": "examples-p1",
+            "title": "예시 시트",
+            "width": 1280,
+            "height": 900,
+            "elements": [
+              {
+                "type": "table",
+                "element_id": "counter-l3-example-1",
+                "rect": {
+                  "x": 84,
+                  "y": 218,
+                  "width": 512,
+                  "height": 338
+                },
+                "title": "초기 판정안 1",
+                "n_rows": 7,
+                "n_cols": 5,
+                "column_widths": [
+                  113,
+                  143,
+                  87,
+                  87,
+                  82
+                ],
+                "row_heights": [
+                  42,
+                  38,
+                  44,
+                  44,
+                  38,
+                  44,
+                  44
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "구분",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "사선 표시",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 3,
+                    "text": "삼각 표식",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 4,
+                    "text": "결과",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "  하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "  둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 1,
+                    "text": "  셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 5,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 5,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 5,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 1,
+                    "text": "  넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 6,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "초기 자료만 보면 사선 표시 행과 삼각 표식 행이 계속 같이 보인다",
+                  "worksheet_name": "COUNTER_L3_EXAMPLE_1",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              },
+              {
+                "type": "table",
+                "element_id": "counter-l3-example-2",
+                "rect": {
+                  "x": 646,
+                  "y": 218,
+                  "width": 512,
+                  "height": 338
+                },
+                "title": "초기 판정안 2",
+                "n_rows": 7,
+                "n_cols": 5,
+                "column_widths": [
+                  113,
+                  143,
+                  87,
+                  87,
+                  82
+                ],
+                "row_heights": [
+                  42,
+                  38,
+                  44,
+                  44,
+                  38,
+                  44,
+                  44
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "구분",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "사선 표시",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 3,
+                    "text": "삼각 표식",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 4,
+                    "text": "결과",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "  셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "  넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 1,
+                    "text": "  하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 5,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 5,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 5,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 1,
+                    "text": "  둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 6,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "잘못된 기준을 버리려면 예외 확인 자료 확인이 필요하다",
+                  "worksheet_name": "COUNTER_L3_EXAMPLE_2",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              }
+            ],
+            "regions": []
+          }
+        ]
+      },
+      {
+        "sheet_id": "exception",
+        "tab_label": "반례",
+        "pages": [
+          {
+            "page_id": "exception-p1",
+            "title": "예외 확인 표",
+            "width": 1280,
+            "height": 900,
+            "elements": [
+              {
+                "type": "table",
+                "element_id": "counter-l3-exception",
+                "rect": {
+                  "x": 84,
+                  "y": 204,
+                  "width": 1074,
+                  "height": 334
+                },
+                "title": "결정적 예외 확인 자료",
+                "n_rows": 7,
+                "n_cols": 5,
+                "column_widths": [
+                  236,
+                  301,
+                  183,
+                  183,
+                  171
+                ],
+                "row_heights": [
+                  42,
+                  38,
+                  44,
+                  44,
+                  38,
+                  44,
+                  44
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "구분",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "사선 표시",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 3,
+                    "text": "삼각 표식",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 4,
+                    "text": "결과",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "  하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "  둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 1,
+                    "text": "  셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 5,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 5,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 1,
+                    "text": "  넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 6,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 4,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "삼각 표식 기준은 유지되지만 적용 묶음은 메모가 고정한다",
+                  "worksheet_name": "COUNTER_L3_EXCEPTION",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              }
+            ],
+            "regions": []
+          },
+          {
+            "page_id": "exception-p2",
+            "title": "적용 메모",
+            "width": 1280,
+            "height": 900,
+            "elements": [
+              {
+                "type": "table",
+                "element_id": "counter-l3-note",
+                "rect": {
+                  "x": 162,
+                  "y": 208,
+                  "width": 964,
+                  "height": 218
+                },
+                "title": "예외 확인 해석 메모",
+                "n_rows": 4,
+                "n_cols": 4,
+                "column_widths": [
+                  328,
+                  212,
+                  212,
+                  212
+                ],
+                "row_heights": [
+                  42,
+                  54,
+                  54,
+                  54
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "사선 표시",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "삼각 표식",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 3,
+                    "text": "결과",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "사선 표시 행",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "예외 확인 자료는 삼각 표식 기준을, 메모는 적용 묶음 범위를 확정한다",
+                  "worksheet_name": "COUNTER_L3_NOTE",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              }
+            ],
+            "regions": [
+              {
+                "public_id": "counter-l3-note-region",
+                "role": "note_marker",
+                "label": "예외 확인 해석 메모",
+                "rect": {
+                  "x": 162,
+                  "y": 208,
+                  "width": 964,
+                  "height": 218
+                },
+                "linked_note_id": "scope-note"
+              }
+            ],
+            "notes": [
+              {
+                "id": "scope-note",
+                "title": "적용 범위",
+                "text": "현재 판정 표에서는 운영 묶음 아래 삼각 표식 행만 실제 선택 대상이다."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sheet_id": "query",
+        "tab_label": "선택",
+        "pages": [
+          {
+            "page_id": "query-p1",
+            "title": "선택 시트",
+            "width": 1280,
+            "height": 900,
+            "elements": [
+              {
+                "type": "text_block",
+                "element_id": "query-target",
+                "rect": {
+                  "x": 84,
+                  "y": 164,
+                  "width": 532.0,
+                  "height": 100.0
+                },
+                "title": "확인 대상",
+                "lines": [
+                  "현재 적용 묶음: 운영 묶음",
+                  "현재 표에는 결과 열이 직접 주어지지 않습니다."
+                ],
+                "style": "callout"
+              },
+              {
+                "type": "text_block",
+                "element_id": "query-guidance",
+                "rect": {
+                  "x": 644,
+                  "y": 164,
+                  "width": 532.0,
+                  "height": 100.0
+                },
+                "title": "판정 메모",
+                "lines": [
+                  "예외 확인 자료가 사선 표시 기준을 버리게 만들고 메모가 적용 묶음을 고정합니다."
+                ],
+                "style": "note"
+              },
+              {
+                "type": "table",
+                "element_id": "counter-l3-query",
+                "rect": {
+                  "x": 84,
+                  "y": 291,
+                  "width": 720,
+                  "height": 278
+                },
+                "title": "",
+                "n_rows": 7,
+                "n_cols": 4,
+                "column_widths": [
+                  173,
+                  259,
+                  144,
+                  144
+                ],
+                "row_heights": [
+                  42,
+                  38,
+                  44,
+                  44,
+                  38,
+                  44,
+                  44
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "구분",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 2,
+                    "text": "사선 표시",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 3,
+                    "text": "삼각 표식",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "분석 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "  하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "  둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "운영 묶음",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "total_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 1,
+                    "text": "  셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 5,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 5,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "icon": {
+                        "kind": "triangle",
+                        "anchor": "top_right",
+                        "color": "#0f766e"
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 0,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "muted",
+                    "align": "center"
+                  },
+                  {
+                    "row": 6,
+                    "col": 1,
+                    "text": "  넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 6,
+                    "col": 2,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "pattern": {
+                        "kind": "diagonal_stripe",
+                        "color": "#f97316",
+                        "opacity": 0.82
+                      }
+                    }
+                  },
+                  {
+                    "row": 6,
+                    "col": 3,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "시각 단서가 포함된 표",
+                  "worksheet_name": "COUNTER_L3_QUERY",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              },
+              {
+                "type": "table",
+                "element_id": "counter-l3-choice-a",
+                "rect": {
+                  "x": 84.0,
+                  "y": 633,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "title": "선택지 A",
+                "n_rows": 5,
+                "n_cols": 2,
+                "column_widths": [
+                  350,
+                  164
+                ],
+                "row_heights": [
+                  20,
+                  14,
+                  14,
+                  14,
+                  14
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "선택",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "미리보기",
+                  "worksheet_name": "COUNTER_L3_CHOICE_A",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              },
+              {
+                "type": "table",
+                "element_id": "counter-l3-choice-b",
+                "rect": {
+                  "x": 624.0,
+                  "y": 633,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "title": "선택지 B",
+                "n_rows": 5,
+                "n_cols": 2,
+                "column_widths": [
+                  350,
+                  164
+                ],
+                "row_heights": [
+                  20,
+                  14,
+                  14,
+                  14,
+                  14
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "선택",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "미리보기",
+                  "worksheet_name": "COUNTER_L3_CHOICE_B",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              },
+              {
+                "type": "table",
+                "element_id": "counter-l3-choice-c",
+                "rect": {
+                  "x": 84.0,
+                  "y": 773,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "title": "선택지 C",
+                "n_rows": 5,
+                "n_cols": 2,
+                "column_widths": [
+                  350,
+                  164
+                ],
+                "row_heights": [
+                  20,
+                  14,
+                  14,
+                  14,
+                  14
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "선택",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "미리보기",
+                  "worksheet_name": "COUNTER_L3_CHOICE_C",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              },
+              {
+                "type": "table",
+                "element_id": "counter-l3-choice-d",
+                "rect": {
+                  "x": 624.0,
+                  "y": 773,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "title": "선택지 D",
+                "n_rows": 5,
+                "n_cols": 2,
+                "column_widths": [
+                  350,
+                  164
+                ],
+                "row_heights": [
+                  20,
+                  14,
+                  14,
+                  14,
+                  14
+                ],
+                "cells": [
+                  {
+                    "row": 0,
+                    "col": 0,
+                    "text": "품목",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 0,
+                    "col": 1,
+                    "text": "선택",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "header",
+                    "align": "center"
+                  },
+                  {
+                    "row": 1,
+                    "col": 0,
+                    "text": "하나",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 1,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 2,
+                    "col": 0,
+                    "text": "둘",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 2,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 3,
+                    "col": 0,
+                    "text": "셋",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 3,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center",
+                    "metadata": {
+                      "frame": {
+                        "kind": "selection",
+                        "color": "#2563eb"
+                      }
+                    }
+                  },
+                  {
+                    "row": 4,
+                    "col": 0,
+                    "text": "넷",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "row_label",
+                    "align": "left"
+                  },
+                  {
+                    "row": 4,
+                    "col": 1,
+                    "text": "",
+                    "row_span": 1,
+                    "col_span": 1,
+                    "style": "body",
+                    "align": "center"
+                  }
+                ],
+                "metadata": {
+                  "subtitle": "미리보기",
+                  "worksheet_name": "COUNTER_L3_CHOICE_D",
+                  "excel_chrome": true,
+                  "freeze_columns": 1
+                }
+              }
+            ],
+            "regions": [
+              {
+                "public_id": "counter-l3-choice-a",
+                "role": "answer_choice",
+                "label": "선택지 A",
+                "rect": {
+                  "x": 84.0,
+                  "y": 633,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "metadata": {
+                  "choice_id": "A",
+                  "answer_form": "statement_choice"
+                }
+              },
+              {
+                "public_id": "counter-l3-choice-b",
+                "role": "answer_choice",
+                "label": "선택지 B",
+                "rect": {
+                  "x": 624.0,
+                  "y": 633,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "metadata": {
+                  "choice_id": "B",
+                  "answer_form": "statement_choice"
+                }
+              },
+              {
+                "public_id": "counter-l3-choice-c",
+                "role": "answer_choice",
+                "label": "선택지 C",
+                "rect": {
+                  "x": 84.0,
+                  "y": 773,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "metadata": {
+                  "choice_id": "C",
+                  "answer_form": "statement_choice"
+                }
+              },
+              {
+                "public_id": "counter-l3-choice-d",
+                "role": "answer_choice",
+                "label": "선택지 D",
+                "rect": {
+                  "x": 624.0,
+                  "y": 773,
+                  "width": 514.0,
+                  "height": 76
+                },
+                "metadata": {
+                  "choice_id": "D",
+                  "answer_form": "statement_choice"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "track": "canonical_real_tableqa",
+      "template_id": "pattern_vs_icon_statement",
+      "benchmark_track": "canonical_real_tableqa"
+    }
+  },
+  "answer": {
+    "canonical": "C",
+    "normalizer": "ko_answer"
+  },
+  "max_actions": 11,
+  "metadata": {
+    "family": "inventory_exception_disambiguation",
+    "level": 3,
+    "template_id": "pattern_vs_icon_statement",
+    "template_label": "사선 표시와 삼각 표식 판정",
+    "latent_rule": "초안만 보면 사선 표시와 삼각 표식이 함께 맞아 보이지만, 예외 확인표가 실제 규칙이 삼각 표식임을 고정한다.",
+    "operator_tags": [
+      "verify_statement",
+      "disambiguate_by_exception",
+      "scope_resolution"
+    ],
+    "cue_tags": [
+      "pattern_marker",
+      "icon_anchor",
+      "row_group_band",
+      "note_scope"
+    ],
+    "answer_form": "statement_choice",
+    "primary_operator": "verify_statement",
+    "support_operator": "disambiguate_by_exception",
+    "required_visual_cues": [
+      "pattern_marker",
+      "icon_anchor",
+      "row_group_band",
+      "note_scope"
+    ],
+    "required_surfaces": [
+      "example_table_panel",
+      "exception_card",
+      "query_table_panel",
+      "answer_choice_panel"
+    ],
+    "capability_axes": [
+      "visual_grounding",
+      "disambiguation",
+      "scope_resolution"
+    ],
+    "task_archetype": "exception_audit",
+    "scenario_context": "초안과 예외 확인표를 비교해 실제 적용 기준과 제외 범위를 확정하는 과업이다.",
+    "benchmark_track": "canonical_real_tableqa",
+    "reasoning_archetype": "disambiguate_apply",
+    "abstraction_tier": "abstract_worksheet",
+    "support_surface_policy": "optional",
+    "qa_dependency": "hybrid_induction_tableqa",
+    "generalization_group": "inventory_exception_disambiguation:pattern_vs_icon_statement:l3",
+    "required_navigation": {
+      "required_sheet_ids": [
+        "examples",
+        "exception",
+        "query"
+      ],
+      "required_page_refs": [
+        "examples:examples-p1",
+        "exception:exception-p1",
+        "query:query-p1",
+        "exception:exception-p2"
+      ]
+    },
+    "allowed_cue_variants": [
+      "pattern_marker",
+      "icon_anchor",
+      "row_group_band",
+      "note_scope"
+    ],
+    "distractor_policy": "초안만 보면 그럴듯한 사선 표시 기준과 예외까지 봐야 맞는 삼각 표식 기준을 함께 남기고, 범위를 넓게 잡는 오답도 함께 둔다.",
+    "level_rationale": "예외 확인표와 메모를 반영한 뒤 선택 결과까지 맞춰야 하는 4-5단계 문제다.",
+    "text_only_failure_modes": [
+      "사선 표시와 삼각 표식이 같은 행에 함께 보이는 예시만 읽으면 잘못된 기준을 버릴 근거가 없다.",
+      "Level 2 이상에서는 메모가 고정하는 적용 묶음을 무시하면 다른 묶음의 행을 정답으로 끌어온다."
+    ],
+    "distractor_failure_modes": [
+      "예외를 무시하고 사선 표시 행을 그대로 정답으로 고르는 오답",
+      "메모가 고정하는 적용 묶음을 무시하고 삼각 표식 행 범위를 너무 넓게 잡는 오답"
+    ],
+    "level_knobs": {
+      "level": 3,
+      "template": "pattern_vs_icon_statement"
+    },
+    "seed_slots": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "max_actions": 11,
+    "difficulty_tier": "public_dev_real_v1",
+    "required_capabilities": [
+      "visual_grounding",
+      "disambiguation",
+      "scope_resolution"
+    ],
+    "required_actions": [
+      "must_switch_sheet",
+      "must_visit_exception",
+      "must_open_note"
+    ],
+    "required_evidence": [
+      {
+        "kind": "page",
+        "sheet_id": "examples",
+        "page_id": "examples-p1"
+      },
+      {
+        "kind": "page",
+        "sheet_id": "exception",
+        "page_id": "exception-p1"
+      },
+      {
+        "kind": "page",
+        "sheet_id": "query",
+        "page_id": "query-p1"
+      },
+      {
+        "kind": "page",
+        "sheet_id": "exception",
+        "page_id": "exception-p2"
+      },
+      {
+        "kind": "note",
+        "sheet_id": "exception",
+        "page_id": "exception-p2",
+        "note_id": "scope-note"
+      }
+    ],
+    "expected_min_steps": 4,
+    "expected_reasoning_steps": [
+      4,
+      5
+    ],
+    "shortcut_probes": [
+      "single_page",
+      "text_scrape_only",
+      "no_exception",
+      "no_exception_note"
+    ],
+    "holdout_group": null,
+    "pair_group": null,
+    "variant": null,
+    "track": "canonical_real_tableqa",
+    "seed_slot": 0,
+    "relevant_region_ids": [
+      "counter-l3-note-region",
+      "counter-l3-choice-a",
+      "counter-l3-choice-b",
+      "counter-l3-choice-c",
+      "counter-l3-choice-d"
+    ],
+    "instance_id": "public_dev_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0",
+    "instance_label": "재고 예외 판정 L3 · 후보 표 선택",
+    "pack_id": "public_dev_real_v1",
+    "pack_role": "public",
+    "source_track": "canonical_real_tableqa",
+    "source_episode_id": "inventory_exception_disambiguation_pattern_vs_icon_statement_l3_s0",
+    "source_template_id": "pattern_vs_icon_statement",
+    "source_seed": 0,
+    "task_summary": "현재 재고표를 읽은 뒤 예외 기준과 맞는 후보 표를 선택한다."
+  }
+}

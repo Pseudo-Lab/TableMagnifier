@@ -120,6 +120,8 @@ def test_registered_canonical_families_match_expected_registry() -> None:
         [
             "inventory_exception_disambiguation",
             "channel_policy_transfer",
+            "excel_viewport_sheet_navigation",
+            "marker_position_rule_transfer",
             "report_scope_reconciliation",
         ]
     )
@@ -135,22 +137,30 @@ def test_registered_canonical_families_match_expected_registry() -> None:
         assert canonical_seed_capacity("channel_policy_transfer", level) == 8
 
     for level in (1, 2, 3):
+        assert len(list_templates("marker_position_rule_transfer", level)) == 1
+        assert canonical_seed_capacity("marker_position_rule_transfer", level) == 8
+
+    for level in (1, 2, 3):
+        assert len(list_templates("excel_viewport_sheet_navigation", level)) == 1
+        assert canonical_seed_capacity("excel_viewport_sheet_navigation", level) == 8
+
+    for level in (1, 2, 3):
         assert len(list_templates("report_scope_reconciliation", level)) == 3
         assert canonical_seed_capacity("report_scope_reconciliation", level) == 24
 
 
 def test_canonical_catalog_and_split_manifest_match_registry_quota() -> None:
     split_manifest = benchmark_split_manifest()
-    assert len(split_manifest["dev_public"]) == 12
+    assert len(split_manifest["dev_public"]) == 18
     assert len(split_manifest["test_holdout"]) == 3
 
     all_records = benchmark_episode_records()
     dev_records = benchmark_episode_records(split="dev_public")
     holdout_records = benchmark_episode_records(split="test_holdout")
-    assert len(all_records) == 120
-    assert len(dev_records) == 96
+    assert len(all_records) == 168
+    assert len(dev_records) == 144
     assert len(holdout_records) == 24
-    assert len({record["episode_id"] for record in all_records}) == 120
+    assert len({record["episode_id"] for record in all_records}) == 168
 
 
 def test_hierarchical_family_generates_renderable_level_three_episode() -> None:
@@ -234,6 +244,75 @@ def test_inventory_exception_disambiguation_family_uses_exception_and_note_progr
     assert l3.answer.canonical == "C"
 
 
+def test_marker_position_rule_transfer_uses_legend_exception_and_note_progression() -> None:
+    l1 = generate_episode("marker_position_rule_transfer", 1, seed=0, template_id="corner_anchor_statement")
+    l2 = generate_episode("marker_position_rule_transfer", 2, seed=0, template_id="corner_anchor_statement")
+    l3 = generate_episode("marker_position_rule_transfer", 3, seed=0, template_id="corner_anchor_statement")
+
+    assert [sheet.sheet_id for sheet in l1.workbook.sheets] == ["examples", "legend", "exception", "query"]
+    assert [page.page_id for page in l1.workbook.sheets[0].pages] == ["examples-p1"]
+    assert [page.page_id for page in l1.workbook.sheets[1].pages] == ["legend-p1"]
+    assert [page.page_id for page in l1.workbook.sheets[2].pages] == ["exception-p1"]
+    assert "must_visit_legend" in l1.metadata["required_actions"]
+    assert "must_visit_exception" in l1.metadata["required_actions"]
+    assert "must_open_note" not in l1.metadata["required_actions"]
+    assert l1.metadata["answer_form"] == "statement_choice"
+    assert l1.answer.canonical == "C"
+    assert [
+        generate_episode("marker_position_rule_transfer", 1, seed=seed, template_id="corner_anchor_statement").answer.canonical
+        for seed in range(3)
+    ] == ["C", "D", "B"]
+
+    assert [page.page_id for page in l2.workbook.sheets[0].pages] == ["examples-p1", "examples-p2"]
+    assert "must_visit_examples_page2" in l2.metadata["required_actions"]
+    assert "exception_skip" in l2.metadata["shortcut_probes"]
+
+    assert [page.page_id for page in l3.workbook.sheets[2].pages] == ["exception-p1", "exception-p2"]
+    assert "must_open_note" in l3.metadata["required_actions"]
+    assert "note_skip" in l3.metadata["shortcut_probes"]
+    assert any(
+        region.role == "note_marker" and region.linked_note_id == "anchor-scope-note"
+        for region in l3.workbook.sheets[2].pages[1].regions
+    )
+    note_support = next(element for element in l3.workbook.sheets[2].pages[1].elements if element.element_id == "marker-l3-note-support")
+    assert all(cell.metadata.get("frame") is None for cell in note_support.cells)
+    assert all("가람" not in cell.text and "나래" not in cell.text for cell in note_support.cells)
+
+
+def test_excel_viewport_sheet_navigation_requires_pan_zoom_and_cross_sheet_reasoning() -> None:
+    l1 = generate_episode("excel_viewport_sheet_navigation", 1, seed=0, template_id="wide_sheet_rule_transfer")
+    l2 = generate_episode("excel_viewport_sheet_navigation", 2, seed=0, template_id="wide_sheet_rule_transfer")
+    l3 = generate_episode("excel_viewport_sheet_navigation", 3, seed=0, template_id="wide_sheet_rule_transfer")
+
+    assert [sheet.sheet_id for sheet in l1.workbook.sheets] == ["examples", "query"]
+    assert [page.page_id for page in l2.workbook.sheets[0].pages] == ["examples-p1", "examples-p2"]
+    assert [sheet.sheet_id for sheet in l3.workbook.sheets] == ["examples", "operators", "query"]
+
+    required_navigation = l1.metadata["required_navigation"]
+    assert required_navigation["required_viewport_states"][0]["required_action_types"] == ["zoom_in", "pan_right"]
+    assert required_navigation["required_viewport_states"][0]["sheet_id"] == "query"
+    assert "must_zoom" in l1.metadata["required_actions"]
+    assert "must_pan" in l1.metadata["required_actions"]
+    assert "initial_viewport_only" in required_navigation["forbidden_shortcuts"]
+    assert l1.metadata["difficulty_tier"] == "canonical"
+    assert l1.workbook.sheets[1].pages[0].width == 1280
+    assert l1.workbook.sheets[1].pages[0].height == 900
+
+
+def test_marker_position_rule_transfer_counterfactual_records_pair_variant() -> None:
+    from table_env_bench.data.families.marker_position_rule_transfer import build_counterfactual_episode
+
+    base = generate_episode("marker_position_rule_transfer", 1, seed=0, template_id="corner_anchor_statement")
+    counterfactual = build_counterfactual_episode(1, 0)
+
+    assert [sheet.sheet_id for sheet in base.workbook.sheets] == [sheet.sheet_id for sheet in counterfactual.workbook.sheets]
+    assert base.answer.canonical == "C"
+    assert counterfactual.answer.canonical == "B"
+    assert base.answer.canonical != counterfactual.answer.canonical
+    assert counterfactual.metadata["pair_group"] == "marker_position_rule_transfer:l1:s0"
+    assert counterfactual.metadata["variant"] == "counterfactual"
+
+
 def test_inventory_exception_disambiguation_reserves_space_for_table_headings() -> None:
     heading_offset = 44
     minimum_gap = 20
@@ -272,7 +351,7 @@ def test_canonical_manifests_include_quality_contract_metadata() -> None:
     expected_ranges = {1: (2, 4), 2: (3, 4), 3: (4, 5)}
 
     for level in (1, 2, 3):
-        for family in ("inventory_exception_disambiguation", "report_scope_reconciliation"):
+        for family in ("inventory_exception_disambiguation", "marker_position_rule_transfer", "report_scope_reconciliation"):
             for manifest in list_manifests(family, level):
                 assert manifest.primary_operator in manifest.operator_tags
                 if manifest.support_operator is not None:
@@ -285,12 +364,12 @@ def test_canonical_manifests_include_quality_contract_metadata() -> None:
                 assert manifest.distractor_failure_modes
                 assert manifest.required_actions
                 assert manifest.required_evidence
-                assert manifest.task_archetype in {"review_verification", "exception_audit", "scope_reconciliation"}
+                assert manifest.task_archetype in {"review_verification", "exception_audit", "marker_position_transfer", "scope_reconciliation"}
                 assert manifest.scenario_context
                 assert manifest.benchmark_track == "canonical_real_tableqa"
                 assert manifest.reasoning_archetype in {"induce_apply", "compose_apply", "disambiguate_apply"}
                 assert manifest.abstraction_tier == "abstract_worksheet"
-                assert manifest.support_surface_policy == "optional"
+                assert manifest.support_surface_policy in {"optional", "required"}
                 assert manifest.qa_dependency == "hybrid_induction_tableqa"
                 assert manifest.generalization_group
 
@@ -302,8 +381,68 @@ def test_canonical_manifests_include_quality_contract_metadata() -> None:
                 assert "query" in manifest.required_sheet_ids
                 assert any(
                     tag in manifest.cue_tags
-                    for tag in ("merged_header_scope", "subtotal_block", "indentation_depth", "pattern_marker", "icon_anchor")
+                    for tag in ("merged_header_scope", "subtotal_block", "indentation_depth", "pattern_marker", "icon_anchor", "icon_anchor_position")
                 )
+
+
+
+def test_template_manifest_normalizes_required_navigation_and_legacy_mirrors() -> None:
+    from table_env_bench.data.families.shared import TemplateManifest
+
+    manifest = TemplateManifest(
+        family="demo_family",
+        level=2,
+        template_id="demo_template",
+        template_label="Demo",
+        latent_rule="demo",
+        operator_tags=("select",),
+        cue_tags=("merged_header_scope",),
+        answer_form="cell_choice",
+        primary_operator="select",
+        support_operator=None,
+        required_visual_cues=("merged_header_scope",),
+        required_surfaces=("examples", "legend", "exception", "query"),
+        capability_axes=("navigation",),
+        required_sheet_ids=("examples",),
+        required_page_refs=("examples:examples-p1",),
+        required_navigation={
+            "required_sheet_ids": ["legend", "exception", "query"],
+            "required_page_refs": ["legend:legend-p1", "exception:exception-p1", "examples:examples-p2", "query:query-p1"],
+            "required_notes": [{"sheet_id": "exception", "page_id": "exception-p1", "note_id": "scope-note"}],
+            "required_viewport_states": [
+                {
+                    "state_id": "query-zoom-pan-evidence",
+                    "sheet_id": "query",
+                    "page_id": "query-p1",
+                    "min_zoom_index": 1,
+                    "required_action_types": ["zoom_in", "pan_right"],
+                    "match": "target_center_in_viewbox",
+                    "target_rects": [],
+                }
+            ],
+            "forbidden_shortcuts": ["initial_viewport_only", "no_pan_zoom", "sheet_skip"],
+        },
+        allowed_cue_variants=("demo",),
+        distractor_policy="demo",
+        level_rationale="demo",
+        text_only_failure_modes=("demo",),
+        distractor_failure_modes=("demo",),
+        required_evidence=({"surface": "query:query-p1"},),
+    )
+
+    serialized = manifest.to_dict()
+    assert serialized["required_navigation"]["required_sheet_ids"] == ["examples", "legend", "exception", "query"]
+    assert serialized["required_sheet_ids"] == serialized["required_navigation"]["required_sheet_ids"]
+    assert serialized["required_page_refs"] == serialized["required_navigation"]["required_page_refs"]
+    assert serialized["required_actions"] == [
+        "must_switch_sheet",
+        "must_open_note",
+        "must_visit_exception",
+        "must_visit_legend",
+        "must_visit_examples_page2",
+        "must_zoom",
+        "must_pan",
+    ]
 
 
 def test_canonical_catalog_records_propagate_quality_metadata() -> None:
@@ -313,6 +452,7 @@ def test_canonical_catalog_records_propagate_quality_metadata() -> None:
     assert sample["family"] in {
         "inventory_exception_disambiguation",
         "channel_policy_transfer",
+        "marker_position_rule_transfer",
         "report_scope_reconciliation",
     }
     assert "primary_operator" in sample
@@ -324,6 +464,9 @@ def test_canonical_catalog_records_propagate_quality_metadata() -> None:
     assert sample["reasoning_archetype"] in {"induce_apply", "compose_apply", "disambiguate_apply"}
     assert sample["abstraction_tier"] == "abstract_worksheet"
     assert sample["generalization_group"]
+    assert "required_navigation" in sample
+    assert sample["required_sheet_ids"] == sample["required_navigation"]["required_sheet_ids"]
+    assert sample["required_page_refs"] == sample["required_navigation"]["required_page_refs"]
     assert "required_actions" in sample
     assert "required_evidence" in sample
     assert "expected_reasoning_steps" in sample
@@ -339,6 +482,7 @@ def test_canonical_catalog_records_propagate_quality_metadata() -> None:
     assert benchmark_sample["benchmark_track"] == "canonical_real_tableqa"
     assert benchmark_sample["generalization_group"]
     assert "level_rationale" in benchmark_sample
+    assert "required_navigation" in benchmark_sample
 
     suite_records = benchmark_suite_records(suite="eval_hard_dev")
     assert suite_records
@@ -349,6 +493,7 @@ def test_canonical_catalog_records_propagate_quality_metadata() -> None:
     assert "task_archetype" in suite_sample
     assert "scenario_context" in suite_sample
     assert suite_sample["benchmark_track"] == "canonical_real_tableqa"
+    assert "required_navigation" in suite_sample
     assert "required_actions" in suite_sample
     assert "expected_reasoning_steps" in suite_sample
 

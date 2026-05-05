@@ -190,6 +190,39 @@
 
 - `order_sensitive_worksheet_pipeline`
 
+### 3.9 `viewport_pan_to_target_column`
+
+설명:
+
+- 초기 viewport에 보이지 않는 target column까지 zoom/pan으로 이동해야 같은 행의 최종 값을 읽을 수 있다
+
+대표 cue:
+
+- wide worksheet grid
+- column offset
+- viewport window / viewbox position
+
+대표 answer form:
+
+- statement choice
+- target cell
+- value choice
+
+추천 family:
+
+- `excel_viewport_sheet_navigation`
+
+disallowed shortcuts:
+
+- `initial_viewport_only`
+- `no_pan_zoom`
+- `sheet_skip`
+
+필수 metadata:
+
+- `required_navigation.required_viewport_states`
+- `required_navigation.forbidden_shortcuts`
+
 ## 4. episode 조합 규칙
 
 하나의 episode는 보통 아래 조합을 권장한다.
@@ -237,11 +270,11 @@
 
 ## 7. 문서 연결
 
-- [docs/visual_cue_inventory.md](visual_cue_inventory.md)
-- [docs/real_data_authoring_policy.md](real_data_authoring_policy.md)
-- [docs/domain_vocab_policy.md](domain_vocab_policy.md)
-- [docs/human_readability_checklist.md](human_readability_checklist.md)
-- [docs/operator_taxonomy.md](operator_taxonomy.md)
-- [docs/answer_form_policy.md](answer_form_policy.md)
-- [docs/level_design_policy.md](level_design_policy.md)
-- [docs/episode_validation_checklist.md](episode_validation_checklist.md)
+- [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md)
+- [docs/real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md)
+- [docs/domain_vocab_policy.md](C:/Users/imssh/Documents/poc_1/docs/domain_vocab_policy.md)
+- [docs/human_readability_checklist.md](C:/Users/imssh/Documents/poc_1/docs/human_readability_checklist.md)
+- [docs/operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)
+- [docs/answer_form_policy.md](C:/Users/imssh/Documents/poc_1/docs/answer_form_policy.md)
+- [docs/level_design_policy.md](C:/Users/imssh/Documents/poc_1/docs/level_design_policy.md)
+- [docs/episode_validation_checklist.md](C:/Users/imssh/Documents/poc_1/docs/episode_validation_checklist.md)

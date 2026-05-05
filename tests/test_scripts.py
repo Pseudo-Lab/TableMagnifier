@@ -51,6 +51,7 @@ def test_export_preview_gallery_writes_index_and_raster_artifacts(tmp_path) -> N
     assert '"kind"' in manifest
     assert '"sheet_id"' in manifest
     assert '"page_id"' in manifest
+    assert '"required_navigation"' in manifest
     assert "window.__TABLE_ENV_DEBUG__" in review_html
     assert 'searchParams.set(\'debug\', \'1\')' in review_html
     assert result["count"] > 0

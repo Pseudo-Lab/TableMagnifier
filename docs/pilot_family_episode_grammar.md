@@ -2,7 +2,7 @@
 
 상태: historical design archive
 
-이 문서는 초기 pilot 설계 문법을 보존한다. 현재 active benchmark는 `canonical_real_tableqa`와 real-data public pack 기준으로 운영되므로, 실제 family 추가와 validation은 [family_design_brief.md](family_design_brief.md), [episode_rulebook.md](episode_rulebook.md), [real_data_authoring_policy.md](real_data_authoring_policy.md)를 우선 본다.
+이 문서는 초기 pilot 설계 문법을 보존한다. 현재 active benchmark는 `canonical_real_tableqa`와 real-data public pack 기준으로 운영되므로, 실제 family 추가와 validation은 [family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md), [episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md), [real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md)를 우선 본다.
 
 ## 목적
 
@@ -49,7 +49,7 @@
 
 실제 구현에서는 현재 데이터 모델에 맞게 번역하되, 의미 구조는 이 문서를 우선한다.
 
-구체적인 sample episode 초안은 [docs/pilot_episode_drafts.md](pilot_episode_drafts.md)를 함께 본다.
+구체적인 sample episode 초안은 [docs/pilot_episode_drafts.md](C:/Users/imssh/Documents/poc_1/docs/pilot_episode_drafts.md)를 함께 본다.
 
 ## Family 1. `channel_policy_transfer`
 

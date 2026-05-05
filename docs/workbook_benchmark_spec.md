@@ -12,7 +12,7 @@
 - 문제는 business lookup-only task로도, pure abstract puzzle로도 흘러가지 않는다
 - 구조적 reasoning은 header, row group, marker, filter, subtotal, chart/table alignment 위에서 일어나야 한다
 
-콘텐츠 방향에 대한 자세한 기준은 [PLANS.md](../PLANS.md)와 [docs/family_design_brief.md](family_design_brief.md)를 따른다.
+콘텐츠 방향에 대한 자세한 기준은 [PLANS.md](C:/Users/imssh/Documents/poc_1/PLANS.md)와 [docs/family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)를 따른다.
 
 ## 현재 코드에서 재사용할 축
 
