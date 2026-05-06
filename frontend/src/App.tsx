@@ -12,12 +12,16 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   createSession,
+  fetchBenchmarkSuites,
   fetchCatalog,
   fetchInstances,
   fetchReplay,
   stepSession,
   type ActionPayload,
   type CatalogFamily,
+  type GeneratedBenchmarkRecord,
+  type GeneratedBenchmarkSuite,
+  type GeneratedBenchmarkTemplate,
   type Info,
   type InstancePack,
   type Observation,
@@ -111,6 +115,31 @@ function requestedDevSession(catalog: CatalogFamily[]) {
   }
 }
 
+function generatedTemplateKey(template: Pick<GeneratedBenchmarkTemplate, 'family' | 'level' | 'template_id'>) {
+  return `${template.family}::${template.level}::${template.template_id}`
+}
+
+function generatedRecordKey(record: Pick<GeneratedBenchmarkRecord, 'family' | 'level' | 'template_id' | 'seed'>) {
+  return `${record.family}::${record.level}::${record.template_id}::${record.seed}`
+}
+
+function firstGeneratedRecord(suites: GeneratedBenchmarkSuite[]) {
+  const suite = suites[0]
+  const template = suite?.templates[0]
+  const record = template?.records[0]
+  if (!suite || !template || !record) {
+    return null
+  }
+  return { suite, template, record }
+}
+
+function generatedSelection(template: GeneratedBenchmarkTemplate | null | undefined, record: GeneratedBenchmarkRecord | null | undefined) {
+  return {
+    templateKey: template ? generatedTemplateKey(template) : '',
+    recordKey: record ? generatedRecordKey(record) : '',
+  }
+}
+
 function describeAction(event: EventRecord) {
   const action = asRecord(event.action)
   if (!action) {
@@ -174,8 +203,12 @@ function describeEventDetail(event: EventRecord) {
 function App() {
   const [catalog, setCatalog] = useState<CatalogFamily[]>([])
   const [instancePacks, setInstancePacks] = useState<InstancePack[]>([])
+  const [generatedSuites, setGeneratedSuites] = useState<GeneratedBenchmarkSuite[]>([])
   const [selectedPackId, setSelectedPackId] = useState('')
   const [selectedInstanceId, setSelectedInstanceId] = useState('')
+  const [selectedSuiteId, setSelectedSuiteId] = useState('')
+  const [selectedTemplateKey, setSelectedTemplateKey] = useState('')
+  const [selectedGeneratedRecordKey, setSelectedGeneratedRecordKey] = useState('')
   const [selectedFamily, setSelectedFamily] = useState('')
   const [selectedLevel, setSelectedLevel] = useState(1)
   const [seed, setSeed] = useState(0)
@@ -196,6 +229,12 @@ function App() {
 
   const packRecord = instancePacks.find((item) => item.pack_id === selectedPackId) ?? null
   const instanceRecord = packRecord?.instances.find((item) => item.instance_id === selectedInstanceId) ?? null
+  const hasInstancePacks = instancePacks.length > 0
+  const selectedSuite = generatedSuites.find((item) => item.suite_id === selectedSuiteId) ?? null
+  const generatedTemplateOptions = selectedSuite?.templates ?? []
+  const selectedGeneratedTemplate = generatedTemplateOptions.find((item) => generatedTemplateKey(item) === selectedTemplateKey) ?? null
+  const selectedGeneratedRecord = selectedGeneratedTemplate?.records.find((item) => generatedRecordKey(item) === selectedGeneratedRecordKey) ?? null
+  const hasGeneratedSuites = generatedSuites.some((suite) => suite.templates.some((template) => template.records.length > 0))
   const familyRecord = catalog.find((item) => item.family === selectedFamily) ?? null
   const levelRecord = familyRecord?.levels.find((item) => item.level === selectedLevel) ?? null
   const latestEvent = events.length > 0 ? events[events.length - 1] : null
@@ -240,6 +279,36 @@ function App() {
       setSelectedLevel(familyRecord.levels[0]?.level ?? 1)
     }
   }, [familyRecord, selectedLevel])
+
+  useEffect(() => {
+    if (!selectedSuite && generatedSuites.length > 0) {
+      setSelectedSuiteId(generatedSuites[0]?.suite_id ?? '')
+    }
+  }, [generatedSuites, selectedSuite])
+
+  useEffect(() => {
+    if (!selectedSuite) {
+      return
+    }
+
+    const hasSelectedTemplate = selectedSuite.templates.some((item) => generatedTemplateKey(item) === selectedTemplateKey)
+    if (!hasSelectedTemplate) {
+      const firstTemplate = selectedSuite.templates[0]
+      setSelectedTemplateKey(firstTemplate ? generatedTemplateKey(firstTemplate) : '')
+    }
+  }, [selectedSuite, selectedTemplateKey])
+
+  useEffect(() => {
+    if (!selectedGeneratedTemplate) {
+      return
+    }
+
+    const hasSelectedRecord = selectedGeneratedTemplate.records.some((item) => generatedRecordKey(item) === selectedGeneratedRecordKey)
+    if (!hasSelectedRecord) {
+      const firstRecord = selectedGeneratedTemplate.records[0]
+      setSelectedGeneratedRecordKey(firstRecord ? generatedRecordKey(firstRecord) : '')
+    }
+  }, [selectedGeneratedTemplate, selectedGeneratedRecordKey])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -299,6 +368,9 @@ function App() {
         setSelectedLevel(requestedSession.level)
         setSeed(requestedSession.seed)
         await startFamilySession(requestedSession.family, requestedSession.level, requestedSession.seed)
+        void loadGeneratedBenchmarkSuites().catch((error: unknown) => {
+          setErrorText(error instanceof Error ? error.message : '생성형 벤치마크 catalog를 불러오지 못했습니다.')
+        })
         return
       }
 
@@ -307,18 +379,29 @@ function App() {
       if (initialPack && initialInstance) {
         setSelectedPackId(initialPack.pack_id)
         setSelectedInstanceId(initialInstance.instance_id)
+        void loadGeneratedBenchmarkSuites().catch((error: unknown) => {
+          setErrorText(error instanceof Error ? error.message : '생성형 벤치마크 catalog를 불러오지 못했습니다.')
+        })
         await startInstanceSession(initialInstance.instance_id)
       } else {
-        if (!initialFamily) {
-          return
+        const nextGeneratedSuites = await loadGeneratedBenchmarkSuites()
+        const generatedDefault = firstGeneratedRecord(nextGeneratedSuites)
+        if (!generatedDefault) {
+          throw new Error('생성형 벤치마크 catalog에 시작 가능한 record가 없습니다.')
         }
-        await startFamilySession(initialFamily.family, initialLevel, 0)
+        await startGeneratedSession(generatedDefault.suite.suite_id, generatedDefault.template, generatedDefault.record)
       }
     } catch (error) {
       setErrorText(error instanceof Error ? error.message : '카탈로그를 불러오지 못했습니다.')
     } finally {
       setIsLoading(false)
     }
+  }
+
+  async function loadGeneratedBenchmarkSuites() {
+    const response = await fetchBenchmarkSuites()
+    setGeneratedSuites(response.suites)
+    return response.suites
   }
 
   async function startFamilySession(family: string, level: number, nextSeed: number) {
@@ -358,6 +441,37 @@ function App() {
       setStatusText(`${response.info.instance_label ?? response.info.family_display_name} 세션이 준비되었습니다.`)
     } catch (error) {
       setErrorText(error instanceof Error ? error.message : '세션 생성에 실패했습니다.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function startGeneratedSession(suiteId: string, template: GeneratedBenchmarkTemplate, record: GeneratedBenchmarkRecord) {
+    const nextSelection = generatedSelection(template, record)
+    setSelectedSuiteId(suiteId)
+    setSelectedTemplateKey(nextSelection.templateKey)
+    setSelectedGeneratedRecordKey(nextSelection.recordKey)
+    setIsLoading(true)
+    setErrorText('')
+    setStatusText('생성형 벤치마크 문제를 준비하는 중입니다.')
+    setEvents([])
+    setReplay([])
+    try {
+      const response = await createSession({
+        family: record.family,
+        level: record.level,
+        seed: record.seed,
+        template_id: record.template_id,
+        mode: 'human',
+      })
+      setSessionId(response.session_id)
+      setObservation(response.observation)
+      setInfo(response.info)
+      setAnswer('')
+      setLastClick(null)
+      setStatusText(`${response.info.family_display_name} · ${response.info.template_id ?? record.template_id} · seed ${response.info.seed} 세션이 준비되었습니다.`)
+    } catch (error) {
+      setErrorText(error instanceof Error ? error.message : '생성형 벤치마크 세션 생성에 실패했습니다.')
     } finally {
       setIsLoading(false)
     }
@@ -433,6 +547,7 @@ function App() {
   const inspectorItems = useMemo(
     () => [
       { label: '에피소드', value: info?.episode_id ?? '-' },
+      { label: '템플릿', value: info?.template_id ?? '-' },
       { label: '문제 세트', value: info?.pack_id ?? '-' },
       { label: '인스턴스', value: info?.instance_label ?? '-' },
       { label: '로케일', value: info?.locale ?? 'ko-KR' },
@@ -443,6 +558,10 @@ function App() {
     ],
     [info, levelRecord, latestEvent],
   )
+
+  const generatedRecordDescription = selectedGeneratedTemplate
+    ? `${selectedGeneratedTemplate.family_display_name} · 레벨 ${selectedGeneratedTemplate.level} · ${selectedGeneratedTemplate.template_label}`
+    : '생성형 벤치마크 record를 선택합니다.'
 
   return (
     <div className="min-h-screen bg-transparent">
@@ -464,62 +583,158 @@ function App() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-5">
-                <div className="space-y-3">
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">벤치마크 세트</label>
-                    <select
-                      data-testid="instance-pack-select"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      value={selectedPackId}
-                      onChange={(event) => setSelectedPackId(event.target.value)}
-                      disabled={isLoading || instancePacks.length === 0}
-                    >
-                      {instancePacks.map((pack) => (
-                        <option key={pack.pack_id} value={pack.pack_id}>
-                          {pack.pack_label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                {hasInstancePacks ? (
+                  <>
+                    <div className="space-y-3">
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">벤치마크 세트</label>
+                        <select
+                          data-testid="instance-pack-select"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          value={selectedPackId}
+                          onChange={(event) => setSelectedPackId(event.target.value)}
+                          disabled={isLoading}
+                        >
+                          {instancePacks.map((pack) => (
+                            <option key={pack.pack_id} value={pack.pack_id}>
+                              {pack.pack_label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">고정 문제</label>
-                    <select
-                      data-testid="instance-select"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      value={selectedInstanceId}
-                      onChange={(event) => setSelectedInstanceId(event.target.value)}
-                      disabled={isLoading || !packRecord}
-                    >
-                      {(packRecord?.instances ?? []).map((instance) => (
-                        <option key={instance.instance_id} value={instance.instance_id}>
-                          {instance.instance_label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">고정 문제</label>
+                        <select
+                          data-testid="instance-select"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          value={selectedInstanceId}
+                          onChange={(event) => setSelectedInstanceId(event.target.value)}
+                          disabled={isLoading || !packRecord}
+                        >
+                          {(packRecord?.instances ?? []).map((instance) => (
+                            <option key={instance.instance_id} value={instance.instance_id}>
+                              {instance.instance_label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-                  {instanceRecord ? (
-                    <div className="rounded-lg border border-border/70 bg-muted/30 px-4 py-3 text-sm leading-6">
-                      <p className="font-medium text-foreground">{instanceRecord.task_summary}</p>
-                      <p className="mt-1 text-muted-foreground">
-                        {instanceRecord.family_display_name} · 레벨 {instanceRecord.level} · {instanceRecord.page_count}페이지
-                      </p>
+                      {instanceRecord ? (
+                        <div className="rounded-lg border border-border/70 bg-muted/30 px-4 py-3 text-sm leading-6">
+                          <p className="font-medium text-foreground">{instanceRecord.task_summary}</p>
+                          <p className="mt-1 text-muted-foreground">
+                            {instanceRecord.family_display_name} · 레벨 {instanceRecord.level} · {instanceRecord.page_count}페이지
+                          </p>
+                        </div>
+                      ) : null}
+
+                      <Button
+                        data-testid="start-instance-button"
+                        className="w-full gap-2"
+                        onClick={() => void startInstanceSession(selectedInstanceId)}
+                        disabled={!selectedInstanceId || isLoading}
+                      >
+                        <RefreshCw className="h-4 w-4" />
+                        벤치마크 문제 시작
+                      </Button>
                     </div>
-                  ) : null}
 
-                  <Button
-                    data-testid="start-instance-button"
-                    className="w-full gap-2"
-                    onClick={() => void startInstanceSession(selectedInstanceId)}
-                    disabled={!selectedInstanceId || isLoading}
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    벤치마크 문제 시작
-                  </Button>
-                </div>
+                    <Separator />
+                  </>
+                ) : null}
 
-                <Separator />
+                {!hasInstancePacks && hasGeneratedSuites ? (
+                  <>
+                    <div className="space-y-3">
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">생성형 벤치마크 세트</label>
+                        <select
+                          data-testid="generated-suite-select"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          value={selectedSuiteId}
+                          onChange={(event) => {
+                            const nextSuite = generatedSuites.find((suite) => suite.suite_id === event.target.value)
+                            const nextTemplate = nextSuite?.templates[0]
+                            const nextRecord = nextTemplate?.records[0]
+                            const nextSelection = generatedSelection(nextTemplate, nextRecord)
+                            setSelectedSuiteId(event.target.value)
+                            setSelectedTemplateKey(nextSelection.templateKey)
+                            setSelectedGeneratedRecordKey(nextSelection.recordKey)
+                          }}
+                          disabled={isLoading}
+                        >
+                          {generatedSuites.map((suite) => (
+                            <option key={suite.suite_id} value={suite.suite_id}>
+                              {suite.suite_label} ({suite.record_count})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">템플릿</label>
+                        <select
+                          data-testid="generated-template-select"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          value={selectedTemplateKey}
+                          onChange={(event) => {
+                            const nextTemplate = generatedTemplateOptions.find((template) => generatedTemplateKey(template) === event.target.value)
+                            const nextRecord = nextTemplate?.records[0]
+                            const nextSelection = generatedSelection(nextTemplate, nextRecord)
+                            setSelectedTemplateKey(event.target.value)
+                            setSelectedGeneratedRecordKey(nextSelection.recordKey)
+                          }}
+                          disabled={isLoading || !selectedSuite}
+                        >
+                          {generatedTemplateOptions.map((template) => (
+                            <option key={generatedTemplateKey(template)} value={generatedTemplateKey(template)}>
+                              {template.family_display_name} · L{template.level} · {template.template_label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">Seed slot</label>
+                        <select
+                          data-testid="generated-seed-slot-select"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          value={selectedGeneratedRecordKey}
+                          onChange={(event) => setSelectedGeneratedRecordKey(event.target.value)}
+                          disabled={isLoading || !selectedGeneratedTemplate}
+                        >
+                          {(selectedGeneratedTemplate?.records ?? []).map((record) => (
+                            <option key={generatedRecordKey(record)} value={generatedRecordKey(record)}>
+                              seed {record.seed} · {record.episode_id}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="rounded-lg border border-border/70 bg-muted/30 px-4 py-3 text-sm leading-6">
+                        <p className="font-medium text-foreground">{generatedRecordDescription}</p>
+                        <p className="mt-1 text-muted-foreground">{selectedGeneratedRecord?.episode_id ?? 'record 미선택'}</p>
+                      </div>
+
+                      <Button
+                        data-testid="start-generated-button"
+                        className="w-full gap-2"
+                        onClick={() => {
+                          if (selectedSuite && selectedGeneratedTemplate && selectedGeneratedRecord) {
+                            void startGeneratedSession(selectedSuite.suite_id, selectedGeneratedTemplate, selectedGeneratedRecord)
+                          }
+                        }}
+                        disabled={!selectedSuite || !selectedGeneratedTemplate || !selectedGeneratedRecord || isLoading}
+                      >
+                        <RefreshCw className="h-4 w-4" />
+                        생성형 벤치마크 시작
+                      </Button>
+                    </div>
+
+                    <Separator />
+                  </>
+                ) : null}
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-3">

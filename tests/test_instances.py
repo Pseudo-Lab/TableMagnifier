@@ -1,77 +1,20 @@
 import json
-from collections import Counter
 from pathlib import Path
 
 import pytest
 
-from table_env_bench.data.generators import benchmark_suite_manifest, benchmark_suite_records, list_instance_packs, load_instance
+from table_env_bench.data.generators import benchmark_suite_manifest, benchmark_suite_records, list_instance_packs
 from table_env_bench.data.instances import PRIVATE_DATA_ENV, load_instance_pack
 
 
-def test_public_dev_real_pack_manifest_and_snapshots_are_loadable() -> None:
-    pack = load_instance_pack("public_dev_real_v1")
-
-    assert pack.pack_id == "public_dev_real_v1"
-    assert pack.benchmark_track == "canonical_real_tableqa"
-    assert pack.instance_count == 12
-    assert len(pack.instances) == 12
-
-    sample = pack.instances[0]
-    spec = load_instance(sample.instance_id)
-    assert spec.episode_id == sample.instance_id
-    assert spec.metadata["pack_id"] == "public_dev_real_v1"
-    assert spec.metadata["instance_id"] == sample.instance_id
-    assert spec.metadata["instance_label"] == sample.instance_label
-    assert spec.metadata["source_episode_id"] == sample.source_episode_id
-    assert spec.metadata["benchmark_track"] == "canonical_real_tableqa"
-
-
-def test_public_dev_real_suite_records_cover_three_families_and_level_ramp() -> None:
-    records = benchmark_suite_records(suite="public_dev_real_v1")
+def test_repo_no_longer_ships_public_instance_packs() -> None:
     manifest = benchmark_suite_manifest()
-
-    assert len(manifest["public_dev_real_v1"]) == 12
-    assert len(records) == 12
-    assert {record["pack_id"] for record in records} == {"public_dev_real_v1"}
-    assert len({record["instance_id"] for record in records}) == 12
-    assert all("required_navigation" in record for record in records)
-    assert all(record["required_sheet_ids"] == record["required_navigation"]["required_sheet_ids"] for record in records)
-
-    family_counts = Counter((str(record["family"]), int(record["level"])) for record in records)
-    assert family_counts == {
-        ("channel_policy_transfer", 1): 1,
-        ("channel_policy_transfer", 2): 2,
-        ("channel_policy_transfer", 3): 1,
-        ("inventory_exception_disambiguation", 1): 1,
-        ("inventory_exception_disambiguation", 2): 2,
-        ("inventory_exception_disambiguation", 3): 1,
-        ("report_scope_reconciliation", 1): 2,
-        ("report_scope_reconciliation", 2): 1,
-        ("report_scope_reconciliation", 3): 1,
-    }
-    assert "marker_position_rule_transfer" not in {str(record["family"]) for record in records}
-
-
-def test_public_arc_packs_are_registered_and_expose_arc_metadata() -> None:
-    manifest = benchmark_suite_manifest()
-    assert len(manifest["public_dev_real_v1"]) == 12
-    assert len(manifest["public_smoke_real_v1"]) == 3
-
-    pack = load_instance_pack("public_dev_real_v1")
-    assert pack.benchmark_track == "canonical_real_tableqa"
-    assert pack.pack_role == "public"
-
-    sample = pack.instances[0]
-    spec = load_instance(sample.instance_id)
-    assert spec.metadata["benchmark_track"] == "canonical_real_tableqa"
-    assert spec.metadata["reasoning_archetype"] in {"induce_apply", "compose_apply", "disambiguate_apply"}
-    assert spec.metadata["generalization_group"]
-    assert all(instance.family != "marker_position_rule_transfer" for instance in pack.instances)
-
-
-def test_list_instance_packs_only_exposes_real_public_packs_from_repo() -> None:
     pack_ids = [pack.pack_id for pack in list_instance_packs()]
-    assert pack_ids[:2] == ["public_dev_real_v1", "public_smoke_real_v1"]
+
+    assert "public_dev_real_v1" not in manifest
+    assert "public_smoke_real_v1" not in manifest
+    assert benchmark_suite_records(suite="canonical_dev")
+    assert all(not pack_id.startswith("public_") for pack_id in pack_ids)
     assert "benchmark_v1" not in pack_ids
     assert "public_dev_arc_v1" not in pack_ids
     assert "public_smoke_arc_v1" not in pack_ids

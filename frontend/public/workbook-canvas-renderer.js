@@ -273,6 +273,98 @@
     }
   }
 
+  function drawCellPattern(ctx, rect, pattern) {
+    if (!pattern || pattern.kind !== 'diagonal_stripe') return false
+    const inset = Number(pattern.inset ?? 6)
+    const spacing = Math.max(Number(pattern.spacing ?? 12), 8)
+    const strokeWidth = Number(pattern.stroke_width ?? 2.2)
+    const opacity = Number(pattern.opacity ?? 0.55)
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(rect.x + inset, rect.y + inset, Math.max(0, rect.width - inset * 2), Math.max(0, rect.height - inset * 2))
+    ctx.clip()
+    ctx.strokeStyle = String(pattern.color ?? '#2563eb')
+    ctx.globalAlpha = opacity
+    ctx.lineWidth = strokeWidth
+    for (let offset = -rect.height; offset < rect.width + rect.height; offset += spacing) {
+      ctx.beginPath()
+      ctx.moveTo(rect.x + offset, rect.y + rect.height - inset)
+      ctx.lineTo(rect.x + offset + rect.height, rect.y + inset)
+      ctx.stroke()
+    }
+    ctx.restore()
+    return true
+  }
+
+  function drawCellIcon(ctx, rect, icon) {
+    if (!icon || icon.kind !== 'triangle') return false
+    const anchor = String(icon.anchor ?? 'top_right')
+    const size = Number(icon.size ?? 12)
+    const inset = Number(icon.inset ?? 7)
+    let points
+
+    if (anchor === 'top_left') {
+      points = [
+        [rect.x + inset, rect.y + inset],
+        [rect.x + inset + size, rect.y + inset],
+        [rect.x + inset, rect.y + inset + size],
+      ]
+    } else if (anchor === 'bottom_left') {
+      points = [
+        [rect.x + inset, rect.y + rect.height - inset],
+        [rect.x + inset + size, rect.y + rect.height - inset],
+        [rect.x + inset, rect.y + rect.height - inset - size],
+      ]
+    } else if (anchor === 'bottom_right') {
+      points = [
+        [rect.x + rect.width - inset, rect.y + rect.height - inset],
+        [rect.x + rect.width - inset - size, rect.y + rect.height - inset],
+        [rect.x + rect.width - inset, rect.y + rect.height - inset - size],
+      ]
+    } else {
+      points = [
+        [rect.x + rect.width - inset, rect.y + inset],
+        [rect.x + rect.width - inset - size, rect.y + inset],
+        [rect.x + rect.width - inset, rect.y + inset + size],
+      ]
+    }
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.moveTo(points[0][0], points[0][1])
+    ctx.lineTo(points[1][0], points[1][1])
+    ctx.lineTo(points[2][0], points[2][1])
+    ctx.closePath()
+    ctx.fillStyle = String(icon.color ?? '#2563eb')
+    ctx.globalAlpha = Number(icon.opacity ?? 0.92)
+    ctx.fill()
+    ctx.restore()
+    return true
+  }
+
+  function drawCellFrame(ctx, rect, frame) {
+    if (!frame) return false
+    const inset = Number(frame.inset ?? 4)
+    const strokeWidth = Number(frame.stroke_width ?? 2.2)
+
+    ctx.save()
+    ctx.strokeStyle = String(frame.color ?? '#2563eb')
+    ctx.lineWidth = strokeWidth
+    ctx.strokeRect(rect.x + inset, rect.y + inset, Math.max(0, rect.width - inset * 2), Math.max(0, rect.height - inset * 2))
+    ctx.restore()
+    return true
+  }
+
+  function drawCellMetadata(ctx, rect, cell) {
+    const metadata = cell.metadata || {}
+    let markerCount = 0
+    if (drawCellPattern(ctx, rect, metadata.pattern)) markerCount += 1
+    if (drawCellIcon(ctx, rect, metadata.icon)) markerCount += 1
+    if (drawCellFrame(ctx, rect, metadata.frame)) markerCount += 1
+    return markerCount
+  }
+
   function drawTable(ctx, scene, table) {
     const rect = mapRect(scene, table.rect)
     const titleOptions = { weight: 700, size: 16, fill: '#0f172a', lineHeight: 18 }
@@ -290,6 +382,7 @@
     table.row_heights.forEach((height) => rowOffsets.push(rowOffsets[rowOffsets.length - 1] + height))
 
     const cellTextMetrics = []
+    let markerCount = 0
     for (const cell of table.cells) {
       const cellX = table.rect.x + colOffsets[cell.col]
       const cellY = table.rect.y + rowOffsets[cell.row]
@@ -301,6 +394,7 @@
       ctx.fillRect(mappedCellRect.x, mappedCellRect.y, mappedCellRect.width, mappedCellRect.height)
       ctx.strokeStyle = '#dbe4ee'
       ctx.strokeRect(mappedCellRect.x, mappedCellRect.y, mappedCellRect.width, mappedCellRect.height)
+      markerCount += drawCellMetadata(ctx, mappedCellRect, cell)
       const textMetrics = drawCellText(ctx, mappedCellRect, cell, style)
       if (textMetrics) {
         cellTextMetrics.push({
@@ -326,6 +420,7 @@
       overflowY: rectBottom(rect) > 740,
       cellTextMetrics,
       cellOverflowCount: cellTextMetrics.filter((metric) => metric.overflowX || metric.overflowY).length,
+      markerCount,
     }
   }
 
@@ -388,7 +483,8 @@
     canvas.width = Math.round(scene.surface.width * dpr)
     canvas.height = Math.round(scene.surface.height * dpr)
     canvas.style.width = `${scene.surface.width}px`
-    canvas.style.height = `${scene.surface.height}px`
+    canvas.style.maxWidth = '100%'
+    canvas.style.height = 'auto'
     const ctx = canvas.getContext('2d')
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 

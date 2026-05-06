@@ -1,4 +1,4 @@
-from table_env_bench.data.families import list_manifests
+from table_env_bench.data.families import CANONICAL_FAMILY_ADAPTERS, CANONICAL_FAMILY_LABELS, list_manifests
 from table_env_bench.data.generators import (
     benchmark_episode_records,
     benchmark_split_manifest,
@@ -147,6 +147,24 @@ def test_registered_canonical_families_match_expected_registry() -> None:
     for level in (1, 2, 3):
         assert len(list_templates("report_scope_reconciliation", level)) == 3
         assert canonical_seed_capacity("report_scope_reconciliation", level) == 24
+
+
+def test_canonical_family_adapters_are_the_registry_source() -> None:
+    adapter_ids = sorted(adapter.family for adapter in CANONICAL_FAMILY_ADAPTERS)
+
+    assert adapter_ids == list_canonical_families()
+    assert len(adapter_ids) == len(set(adapter_ids))
+
+    for adapter in CANONICAL_FAMILY_ADAPTERS:
+        assert CANONICAL_FAMILY_LABELS[adapter.family] == adapter.label
+        for level in adapter.levels:
+            manifests = adapter.list_manifests(level)
+            assert manifests == list_manifests(adapter.family, level)
+            assert all(manifest.family == adapter.family for manifest in manifests)
+            assert all(manifest.level == level for manifest in manifests)
+            spec = adapter.build_episode(level, 0, template_id=manifests[0].template_id)
+            assert spec.family == adapter.family
+            assert spec.metadata["template_id"] == manifests[0].template_id
 
 
 def test_canonical_catalog_and_split_manifest_match_registry_quota() -> None:

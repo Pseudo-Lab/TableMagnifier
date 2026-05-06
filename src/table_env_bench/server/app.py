@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from table_env_bench.authoring import PipelineTarget
+from table_env_bench.data.canonical_catalog import benchmark_suite_manifest
 from table_env_bench.data.generators import FAMILY_LABELS, generate_episode, list_families, list_instance_packs, list_levels
 from table_env_bench.server.schemas import (
     ActionRequest,
@@ -13,6 +14,10 @@ from table_env_bench.server.schemas import (
     AuthoringRunEnvelope,
     CatalogFamily,
     CatalogLevel,
+    GeneratedBenchmarkRecord,
+    GeneratedBenchmarkSuite,
+    GeneratedBenchmarkSuiteEnvelope,
+    GeneratedBenchmarkTemplate,
     HealthResponse,
     InstancePackEnvelope,
     InstanceSummary,
@@ -45,6 +50,17 @@ DEPRECATED_GENERATOR_FAMILIES = frozenset(
     }
 )
 ACTIVE_GENERATOR_FAMILIES = frozenset({"excel_viewport_sheet_navigation"})
+GENERATED_BENCHMARK_SUITE_ORDER = ("canonical_dev", "eval_hard_dev", "eval_hard_holdout")
+GENERATED_BENCHMARK_SUITE_LABELS = {
+    "canonical_dev": "Canonical 개발 세트",
+    "eval_hard_dev": "Eval Hard 개발 세트",
+    "eval_hard_holdout": "Eval Hard Holdout",
+}
+GENERATED_BENCHMARK_SUITE_DESCRIPTIONS = {
+    "canonical_dev": "공개 frozen pack 없이 canonical generator에서 즉시 생성하는 개발용 benchmark record입니다.",
+    "eval_hard_dev": "난이도 높은 level 2 generated benchmark record입니다.",
+    "eval_hard_holdout": "난이도 높은 level 3 holdout generated benchmark record입니다.",
+}
 
 
 def _catalog_family_order(family: str) -> tuple[int, str]:
@@ -86,6 +102,70 @@ def _catalog() -> list[CatalogFamily]:
             )
         )
     return families
+
+
+def _generated_template_order(ref: dict[str, object]) -> tuple[int, int, str, str, int]:
+    family = str(ref["family"])
+    return (
+        0 if family == PREFERRED_GENERATOR_FAMILY else 1,
+        1 if family in DEPRECATED_GENERATOR_FAMILIES else 0,
+        family,
+        str(ref["template_id"]),
+        int(ref["level"]),
+    )
+
+
+def _generated_benchmark_suites() -> GeneratedBenchmarkSuiteEnvelope:
+    suite_manifest = benchmark_suite_manifest()
+    suites: list[GeneratedBenchmarkSuite] = []
+    for suite_id in GENERATED_BENCHMARK_SUITE_ORDER:
+        refs = sorted(suite_manifest[suite_id], key=_generated_template_order)
+        templates: list[GeneratedBenchmarkTemplate] = []
+        for ref in refs:
+            family = str(ref["family"])
+            level = int(ref["level"])
+            template_id = str(ref["template_id"])
+            seed_slots = [int(seed) for seed in ref["seed_slots"]]  # type: ignore[index]
+            records = [
+                GeneratedBenchmarkRecord(
+                    family=family,
+                    level=level,
+                    template_id=template_id,
+                    seed=seed,
+                    episode_id=f"{family}_{template_id}_l{level}_s{seed}",
+                    record_label=f"seed {seed}",
+                    required_navigation=dict(ref.get("required_navigation") or {}),
+                )
+                for seed in sorted(seed_slots)
+            ]
+            templates.append(
+                GeneratedBenchmarkTemplate(
+                    family=family,
+                    family_display_name=FAMILY_LABELS.get(family, family),
+                    level=level,
+                    template_id=template_id,
+                    template_label=str(ref["template_label"]),
+                    seed_slots=sorted(seed_slots),
+                    benchmark_track=str(ref["benchmark_track"]) if ref.get("benchmark_track") is not None else None,
+                    difficulty_tier=str(ref["difficulty_tier"]) if ref.get("difficulty_tier") is not None else None,
+                    is_active=family not in DEPRECATED_GENERATOR_FAMILIES,
+                    is_deprecated=family in DEPRECATED_GENERATOR_FAMILIES,
+                    answer_form=str(ref["answer_form"]) if ref.get("answer_form") is not None else None,
+                    primary_operator=str(ref["primary_operator"]) if ref.get("primary_operator") is not None else None,
+                    support_operator=str(ref["support_operator"]) if ref.get("support_operator") is not None else None,
+                    records=records,
+                )
+            )
+        suites.append(
+            GeneratedBenchmarkSuite(
+                suite_id=suite_id,
+                suite_label=GENERATED_BENCHMARK_SUITE_LABELS[suite_id],
+                suite_description=GENERATED_BENCHMARK_SUITE_DESCRIPTIONS[suite_id],
+                record_count=sum(len(template.records) for template in templates),
+                templates=templates,
+            )
+        )
+    return GeneratedBenchmarkSuiteEnvelope(suites=suites)
 
 
 def _instance_catalog() -> list[InstancePackEnvelope]:
@@ -141,6 +221,11 @@ def health() -> HealthResponse:
 @app.get("/api/catalog", response_model=list[CatalogFamily])
 def catalog() -> list[CatalogFamily]:
     return _catalog()
+
+
+@app.get("/api/benchmark-suites", response_model=GeneratedBenchmarkSuiteEnvelope)
+def benchmark_suites() -> GeneratedBenchmarkSuiteEnvelope:
+    return _generated_benchmark_suites()
 
 
 @app.get("/api/instances", response_model=list[InstancePackEnvelope])

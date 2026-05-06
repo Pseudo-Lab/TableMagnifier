@@ -27,8 +27,8 @@ def test_run_demo_parser_rejects_unknown_families() -> None:
 
 def test_run_demo_parser_accepts_instance_id_without_family() -> None:
     parser = build_parser()
-    args = parser.parse_args(["--instance-id", "public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0"])
-    assert args.instance_id == "public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0"
+    args = parser.parse_args(["--instance-id", "example_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0"])
+    assert args.instance_id == "example_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0"
     assert args.family is None
     assert args.level is None
 
@@ -78,20 +78,9 @@ def test_export_preview_gallery_includes_exception_note_overlay(tmp_path) -> Non
     assert any(preview["kind"] == "note_overlay" and preview["page_id"] == "exception-p2" for preview in previews)
 
 
-def test_export_preview_gallery_supports_frozen_instance_pack(tmp_path) -> None:
-    export_preview_gallery(
-        tmp_path,
-        pack="public_dev_real_v1",
-        instance_ids=["public_dev_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0"],
-    )
-    manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
-
-    assert manifest["pack_id"] == "public_dev_real_v1"
-    assert manifest["instance_ids"] == ["public_dev_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0"]
-    assert any(
-        preview["instance_id"] == "public_dev_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0"
-        for preview in manifest["previews"]
-    )
+def test_export_preview_gallery_rejects_removed_public_instance_pack(tmp_path) -> None:
+    with pytest.raises(KeyError, match="Unknown instance pack"):
+        export_preview_gallery(tmp_path, pack="example_pack_v1")
 
 
 def test_eval_llm_parser_accepts_suite_and_model() -> None:
@@ -125,20 +114,20 @@ def test_audit_readability_parser_accepts_pack_and_instance_ids() -> None:
     args = parser.parse_args(
         [
             "--out",
-            "artifacts/tmp_public_pack_audit",
+            "artifacts/tmp_fixture_pack_audit",
             "--pack",
-            "public_smoke_real_v1",
+            "fixture_pack_v1",
             "--instance-id",
-            "public_smoke_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
+            "fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
             "--instance-id",
-            "public_smoke_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0",
+            "fixture_pack_v1__report_scope_reconciliation_merged_scope_cell_l1_s0",
         ]
     )
-    assert args.out == "artifacts/tmp_public_pack_audit"
-    assert args.pack == "public_smoke_real_v1"
+    assert args.out == "artifacts/tmp_fixture_pack_audit"
+    assert args.pack == "fixture_pack_v1"
     assert args.instance_ids == [
-        "public_smoke_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
-        "public_smoke_real_v1__report_scope_reconciliation_merged_scope_cell_l1_s0",
+        "fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
+        "fixture_pack_v1__report_scope_reconciliation_merged_scope_cell_l1_s0",
     ]
 
 
@@ -189,20 +178,20 @@ def test_run_audit_writes_summary_and_counts_failures(monkeypatch, tmp_path) -> 
     assert (tmp_path / "summary.md").exists()
 
 
-def test_run_audit_supports_public_pack_mode(monkeypatch, tmp_path) -> None:
+def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
     pack = SimpleNamespace(
-        pack_id="public_smoke_real_v1",
-        pack_label="Public Smoke Real v1",
+        pack_id="fixture_pack_v1",
+        pack_label="Fixture Pack v1",
         instances=(
             SimpleNamespace(
-                instance_id="public_smoke_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
+                instance_id="fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
                 instance_label="채널 집행 기준 L1",
                 family="channel_policy_transfer",
                 level=1,
                 benchmark_track="canonical_real_tableqa",
             ),
             SimpleNamespace(
-                instance_id="public_smoke_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0",
+                instance_id="fixture_pack_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0",
                 instance_label="재고 예외 판정 L1",
                 family="inventory_exception_disambiguation",
                 level=1,
@@ -213,6 +202,7 @@ def test_run_audit_supports_public_pack_mode(monkeypatch, tmp_path) -> None:
 
     monkeypatch.setattr("table_env_bench.scripts.audit_readability.load_instance_pack", lambda pack_id: pack)
     monkeypatch.setattr("table_env_bench.scripts.audit_readability.list_instances", lambda pack_id: list(pack.instances))
+    monkeypatch.setattr("table_env_bench.scripts.audit_readability.load_instance", lambda instance_id: SimpleNamespace(metadata={}))
 
     def _fake_export_preview_gallery(out_dir, *, pack=None, instance_ids=None, **_kwargs):
         out_path = tmp_path / Path(out_dir).name if not isinstance(out_dir, Path) else out_dir
@@ -278,16 +268,16 @@ def test_run_audit_supports_public_pack_mode(monkeypatch, tmp_path) -> None:
     monkeypatch.setattr("table_env_bench.scripts.audit_readability.subprocess.run", _fake_run)
     monkeypatch.setattr("table_env_bench.scripts.audit_readability.shutil.which", lambda name: "/usr/bin/npm")
 
-    summary = run_audit(out=tmp_path, pack="public_smoke_real_v1")
+    summary = run_audit(out=tmp_path, pack="fixture_pack_v1")
 
-    assert summary["mode"] == "public_pack"
-    assert summary["pack_id"] == "public_smoke_real_v1"
+    assert summary["mode"] == "instance_pack"
+    assert summary["pack_id"] == "fixture_pack_v1"
     assert summary["total_runs"] == 2
     assert summary["surface_failures"] == 0
     assert summary["workbench_failures"] == 1
     assert summary["blocking_failures"] == 1
-    assert summary["runs"][0]["instance_id"] == "public_smoke_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0"
-    assert summary["runs"][1]["instance_id"] == "public_smoke_real_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0"
+    assert summary["runs"][0]["instance_id"] == "fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0"
+    assert summary["runs"][1]["instance_id"] == "fixture_pack_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0"
     assert summary["runs"][1]["workbench_navigation"]["summary"]["opened_notes"] == ["scope-note"]
     assert (tmp_path / "summary.json").exists()
     assert (tmp_path / "summary.md").exists()

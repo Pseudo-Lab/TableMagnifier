@@ -55,6 +55,45 @@ class CatalogFamily(BaseModel):
     levels: list[CatalogLevel]
 
 
+class GeneratedBenchmarkRecord(BaseModel):
+    family: str
+    level: int
+    template_id: str
+    seed: int
+    episode_id: str
+    record_label: str | None = None
+    required_navigation: dict[str, Any] | None = None
+
+
+class GeneratedBenchmarkTemplate(BaseModel):
+    family: str
+    family_display_name: str
+    level: int
+    template_id: str
+    template_label: str
+    seed_slots: list[int]
+    benchmark_track: str | None = None
+    difficulty_tier: str | None = None
+    is_active: bool = True
+    is_deprecated: bool = False
+    answer_form: str | None = None
+    primary_operator: str | None = None
+    support_operator: str | None = None
+    records: list[GeneratedBenchmarkRecord]
+
+
+class GeneratedBenchmarkSuite(BaseModel):
+    suite_id: str
+    suite_label: str
+    suite_description: str | None = None
+    record_count: int
+    templates: list[GeneratedBenchmarkTemplate]
+
+
+class GeneratedBenchmarkSuiteEnvelope(BaseModel):
+    suites: list[GeneratedBenchmarkSuite]
+
+
 class InstanceSummary(BaseModel):
     instance_id: str
     instance_label: str

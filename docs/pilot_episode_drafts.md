@@ -2,7 +2,7 @@
 
 상태: historical design archive
 
-이 문서는 초기 pilot draft를 보존한다. 현재 active benchmark-facing source-of-truth는 frozen public pack과 active family generator이며, 이 문서는 설계 배경을 참고할 때만 사용한다.
+이 문서는 초기 pilot draft를 보존한다. 현재 active benchmark-facing source-of-truth는 canonical family generator이며, 이 문서는 설계 배경을 참고할 때만 사용한다.
 
 이 문서는 새 canonical family를 실제 구현으로 옮기기 전에 사용할 `pilot episode 초안`을 정리한다.
 
@@ -305,16 +305,16 @@ output panel에서는 `B행, C행이 선택 대상`인 mini summary가 보인다
 
 ## 문서 연결
 
-- [docs/family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)
-- [docs/pilot_family_episode_grammar.md](C:/Users/imssh/Documents/poc_1/docs/pilot_family_episode_grammar.md)
-- [docs/primitive_glossary.md](C:/Users/imssh/Documents/poc_1/docs/primitive_glossary.md)
-- [docs/episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md)
-- [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md)
-- [docs/operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)
-- [docs/answer_form_policy.md](C:/Users/imssh/Documents/poc_1/docs/answer_form_policy.md)
-- [docs/level_design_policy.md](C:/Users/imssh/Documents/poc_1/docs/level_design_policy.md)
-- [docs/episode_validation_checklist.md](C:/Users/imssh/Documents/poc_1/docs/episode_validation_checklist.md)
-- [docs/generator_episode_schema.md](C:/Users/imssh/Documents/poc_1/docs/generator_episode_schema.md)
-- [docs/pilot_implementation_strategy.md](C:/Users/imssh/Documents/poc_1/docs/pilot_implementation_strategy.md)
-- [docs/document_status.md](C:/Users/imssh/Documents/poc_1/docs/document_status.md)
-- [PLANS.md](C:/Users/imssh/Documents/poc_1/PLANS.md)
+- [docs/family_design_brief.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/family_design_brief.md)
+- [docs/pilot_family_episode_grammar.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/pilot_family_episode_grammar.md)
+- [docs/primitive_glossary.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/primitive_glossary.md)
+- [docs/episode_rulebook.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_rulebook.md)
+- [docs/visual_cue_inventory.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/visual_cue_inventory.md)
+- [docs/operator_taxonomy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/operator_taxonomy.md)
+- [docs/answer_form_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/answer_form_policy.md)
+- [docs/level_design_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/level_design_policy.md)
+- [docs/episode_validation_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_validation_checklist.md)
+- [docs/generator_episode_schema.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/generator_episode_schema.md)
+- [docs/pilot_implementation_strategy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/pilot_implementation_strategy.md)
+- [docs/document_status.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/document_status.md)
+- [PLANS.md](/mnt/c/Users/imssh/Documents/TableMagnifier/PLANS.md)

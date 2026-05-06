@@ -67,9 +67,7 @@ def test_api_session_flow_for_workbook_env() -> None:
 
     instances_response = client.get("/api/instances")
     assert instances_response.status_code == 200
-    packs = instances_response.json()
-    assert packs[0]["pack_id"] == "public_dev_real_v1"
-    assert len(packs[0]["instances"]) == 12
+    assert instances_response.json() == []
 
     step_response = client.post(
         f"/api/sessions/{session_id}/actions",
@@ -82,16 +80,51 @@ def test_api_session_flow_for_workbook_env() -> None:
     assert replay_response.status_code == 200
     assert replay_response.json()["replay"]["action_count"] == 1
 
-    instance_session_response = client.post(
-        "/api/sessions",
-        json={"instance_id": "public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0", "mode": "agent"},
+    instance_session_response = client.post("/api/sessions", json={"instance_id": "removed_instance", "mode": "agent"})
+    assert instance_session_response.status_code == 404
+
+
+def test_generated_benchmark_suite_catalog_is_compact_and_launchable() -> None:
+    client = TestClient(app)
+
+    response = client.get("/api/benchmark-suites")
+    assert response.status_code == 200
+    payload = response.json()
+    assert list(payload) == ["suites"]
+    suites = payload["suites"]
+    assert [suite["suite_id"] for suite in suites] == ["canonical_dev", "eval_hard_dev", "eval_hard_holdout"]
+    assert {suite["suite_id"] for suite in suites} <= {"canonical_dev", "eval_hard_dev", "eval_hard_holdout"}
+
+    first_suite = suites[0]
+    first_template = first_suite["templates"][0]
+    first_record = first_template["records"][0]
+    assert first_template["family"] == "marker_position_rule_transfer"
+    assert first_template["template_id"]
+    assert first_template["seed_slots"] == sorted(first_template["seed_slots"])
+    assert first_record["seed"] == first_template["seed_slots"][0]
+    assert first_record["episode_id"] == (
+        f"{first_record['family']}_{first_record['template_id']}_l{first_record['level']}_s{first_record['seed']}"
     )
-    assert instance_session_response.status_code == 200
-    instance_payload = instance_session_response.json()
-    assert instance_payload["info"]["pack_id"] == "public_dev_real_v1"
-    assert instance_payload["info"]["instance_id"] == "public_dev_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0"
-    assert instance_payload["info"]["instance_label"]
-    assert "query" not in instance_payload["observation"]["question"]
+    assert "records" in first_template
+    assert "required_navigation" in first_record
+    assert "required_evidence" not in first_record
+    assert "free_seed" not in first_template
+    assert "seed" not in first_template
+
+    session_response = client.post(
+        "/api/sessions",
+        json={
+            "family": first_record["family"],
+            "level": first_record["level"],
+            "seed": first_record["seed"],
+            "template_id": first_record["template_id"],
+            "mode": "agent",
+        },
+    )
+    assert session_response.status_code == 200
+    info = session_response.json()["info"]
+    assert info["episode_id"] == first_record["episode_id"]
+    assert info["template_id"] == first_record["template_id"]
 
 
 def test_api_authoring_run_flow(monkeypatch, tmp_path) -> None:

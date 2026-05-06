@@ -37,7 +37,7 @@ def _build_agent(name: str):
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate included baselines on benchmark suites.")
     parser.add_argument("--output", default="artifacts/baseline_results.json")
-    parser.add_argument("--suite", choices=sorted(benchmark_suite_manifest()), default="public_dev_real_v1")
+    parser.add_argument("--suite", choices=sorted(benchmark_suite_manifest()), default="canonical_dev")
     args = parser.parse_args()
 
     output_path = Path(args.output)

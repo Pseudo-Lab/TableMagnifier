@@ -311,7 +311,7 @@ def _run_pack_audit(
         )
 
     summary = {
-        "mode": "public_pack",
+        "mode": "instance_pack",
         "canonical_only": False,
         "pack_id": pack_manifest.pack_id,
         "pack_label": pack_manifest.pack_label,

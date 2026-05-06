@@ -43,6 +43,45 @@ export type InstancePack = {
   instances: BenchmarkInstance[]
 }
 
+export type GeneratedBenchmarkRecord = {
+  family: string
+  level: number
+  template_id: string
+  seed: number
+  episode_id: string
+  record_label?: string | null
+  required_navigation?: Record<string, unknown> | null
+}
+
+export type GeneratedBenchmarkTemplate = {
+  family: string
+  family_display_name: string
+  level: number
+  template_id: string
+  template_label: string
+  seed_slots: number[]
+  benchmark_track?: string | null
+  difficulty_tier?: string | null
+  is_active: boolean
+  is_deprecated: boolean
+  answer_form?: string | null
+  primary_operator?: string | null
+  support_operator?: string | null
+  records: GeneratedBenchmarkRecord[]
+}
+
+export type GeneratedBenchmarkSuite = {
+  suite_id: string
+  suite_label: string
+  suite_description?: string | null
+  record_count: number
+  templates: GeneratedBenchmarkTemplate[]
+}
+
+export type GeneratedBenchmarkSuiteEnvelope = {
+  suites: GeneratedBenchmarkSuite[]
+}
+
 export type Observation = {
   viewport_svg: string
   viewport_scene: Record<string, unknown>
@@ -65,6 +104,7 @@ export type Info = {
   family_display_name: string
   level: number
   seed: number
+  template_id?: string | null
   instance_id?: string | null
   instance_label?: string | null
   pack_id?: string | null
@@ -159,11 +199,16 @@ export function fetchInstances() {
   return fetchJson<InstancePack[]>('/api/instances')
 }
 
+export function fetchBenchmarkSuites() {
+  return fetchJson<GeneratedBenchmarkSuiteEnvelope>('/api/benchmark-suites')
+}
+
 export function createSession(payload: {
   family?: string
   level?: number
   seed: number
   instance_id?: string
+  template_id?: string
   mode?: string
   debug?: boolean
 }) {

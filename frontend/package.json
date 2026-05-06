@@ -11,8 +11,6 @@
     "playwright:install": "playwright install chromium",
     "visual:readability": "uv run python -m table_env_bench.scripts.audit_readability",
     "visual:readability:smoke": "uv run python -m table_env_bench.scripts.audit_readability --smoke --seed-samples 0",
-    "visual:readability:public-smoke": "uv run python -m table_env_bench.scripts.audit_readability --pack public_smoke_real_v1",
-    "visual:readability:public-dev": "uv run python -m table_env_bench.scripts.audit_readability --pack public_dev_real_v1",
     "visual:readability:update": "uv run python -m table_env_bench.scripts.export_preview_gallery --out ../artifacts/previews_readability_gate && PLAYWRIGHT_ENABLE_WORKBENCH=0 PLAYWRIGHT_REVIEW_DIR=../artifacts/previews_readability_gate PLAYWRIGHT_BASE_URL=http://127.0.0.1:8781 playwright test playwright/surface-readability.spec.ts --project=chromium-fullhd --update-snapshots",
     "visual:workbench": "playwright test playwright/workbench-navigation-readability.spec.ts",
     "visual:workbench:update": "playwright test playwright/workbench-navigation-readability.spec.ts --update-snapshots",

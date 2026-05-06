@@ -22,8 +22,8 @@ def test_task_family_docs_match_current_release_posture() -> None:
     assert "- `excel_viewport_sheet_navigation`" in doc
     assert "`family_status == active`" in doc
     assert "`is_preferred == false`" in doc
-    assert "frozen public pack" in doc
-    assert "public pack 승격은 별도 release PRD" in doc
+    assert "frozen `public_*` instance pack을 포함하지 않는다" in doc
+    assert "새 frozen pack 승격은 별도 release PRD" in doc
 
 
 def test_quality_audit_covers_preferred_and_viewport_families() -> None:

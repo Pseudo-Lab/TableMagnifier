@@ -19,16 +19,16 @@
 
 관련 문서:
 
-- [PLANS.md](C:/Users/imssh/Documents/poc_1/PLANS.md)
-- [docs/primitive_glossary.md](C:/Users/imssh/Documents/poc_1/docs/primitive_glossary.md)
-- [docs/episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md)
-- [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md)
-- [docs/operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)
-- [docs/answer_form_policy.md](C:/Users/imssh/Documents/poc_1/docs/answer_form_policy.md)
-- [docs/level_design_policy.md](C:/Users/imssh/Documents/poc_1/docs/level_design_policy.md)
-- [docs/episode_validation_checklist.md](C:/Users/imssh/Documents/poc_1/docs/episode_validation_checklist.md)
-- [docs/generator_episode_schema.md](C:/Users/imssh/Documents/poc_1/docs/generator_episode_schema.md)
-- [docs/real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md)
+- [PLANS.md](/mnt/c/Users/imssh/Documents/TableMagnifier/PLANS.md)
+- [docs/primitive_glossary.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/primitive_glossary.md)
+- [docs/episode_rulebook.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_rulebook.md)
+- [docs/visual_cue_inventory.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/visual_cue_inventory.md)
+- [docs/operator_taxonomy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/operator_taxonomy.md)
+- [docs/answer_form_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/answer_form_policy.md)
+- [docs/level_design_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/level_design_policy.md)
+- [docs/episode_validation_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_validation_checklist.md)
+- [docs/generator_episode_schema.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/generator_episode_schema.md)
+- [docs/real_data_authoring_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/real_data_authoring_policy.md)
 
 ## 이 benchmark가 재고 싶은 것
 

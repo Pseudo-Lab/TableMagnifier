@@ -12,7 +12,7 @@
 - 문제는 business lookup-only task로도, pure abstract puzzle로도 흘러가지 않는다
 - 구조적 reasoning은 header, row group, marker, filter, subtotal, chart/table alignment 위에서 일어나야 한다
 
-콘텐츠 방향에 대한 자세한 기준은 [PLANS.md](C:/Users/imssh/Documents/poc_1/PLANS.md)와 [docs/family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)를 따른다.
+콘텐츠 방향에 대한 자세한 기준은 [PLANS.md](/mnt/c/Users/imssh/Documents/TableMagnifier/PLANS.md)와 [docs/family_design_brief.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/family_design_brief.md)를 따른다.
 
 ## 현재 코드에서 재사용할 축
 
@@ -114,7 +114,7 @@ agent mode observation은 workbook을 직접 dump하지 않고, 현재 보이는
 
 ```json
 {
-  "episode_id": "public_smoke_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
+  "episode_id": "channel_policy_transfer_icon_scope_cell_l1_s0",
   "family": "channel_policy_transfer",
   "level": 1,
   "seed": 0,

@@ -12,38 +12,39 @@
 
 아래 문서는 현재 canonical 방향을 설명하는 핵심 문서다.
 
-- [PLANS.md](C:/Users/imssh/Documents/poc_1/PLANS.md)
-- [family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)
-- [primitive_glossary.md](C:/Users/imssh/Documents/poc_1/docs/primitive_glossary.md)
-- [generator_episode_schema.md](C:/Users/imssh/Documents/poc_1/docs/generator_episode_schema.md)
-- [episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md)
-- [canonical_quality_audit.md](C:/Users/imssh/Documents/poc_1/docs/canonical_quality_audit.md)
-- [visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md)
-- [operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)
-- [answer_form_policy.md](C:/Users/imssh/Documents/poc_1/docs/answer_form_policy.md)
-- [level_design_policy.md](C:/Users/imssh/Documents/poc_1/docs/level_design_policy.md)
-- [episode_validation_checklist.md](C:/Users/imssh/Documents/poc_1/docs/episode_validation_checklist.md)
-- [real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md)
-- [domain_vocab_policy.md](C:/Users/imssh/Documents/poc_1/docs/domain_vocab_policy.md)
-- [human_readability_checklist.md](C:/Users/imssh/Documents/poc_1/docs/human_readability_checklist.md)
+- [PLANS.md](/mnt/c/Users/imssh/Documents/TableMagnifier/PLANS.md)
+- [family_design_brief.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/family_design_brief.md)
+- [primitive_glossary.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/primitive_glossary.md)
+- [generator_episode_schema.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/generator_episode_schema.md)
+- [episode_rulebook.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_rulebook.md)
+- [canonical_quality_audit.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/canonical_quality_audit.md)
+- [visual_cue_inventory.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/visual_cue_inventory.md)
+- [operator_taxonomy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/operator_taxonomy.md)
+- [answer_form_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/answer_form_policy.md)
+- [level_design_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/level_design_policy.md)
+- [episode_validation_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_validation_checklist.md)
+- [real_data_authoring_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/real_data_authoring_policy.md)
+- [domain_vocab_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/domain_vocab_policy.md)
+- [human_readability_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/human_readability_checklist.md)
 
 ## 2. Active runtime / interface docs
 
 아래 문서는 현재 구현과 사용법을 설명한다.
 
-- [benchmark_guide.md](C:/Users/imssh/Documents/poc_1/docs/benchmark_guide.md)
-- [workbook_benchmark_spec.md](C:/Users/imssh/Documents/poc_1/docs/workbook_benchmark_spec.md)
-- [action_schema.md](C:/Users/imssh/Documents/poc_1/docs/action_schema.md)
-- [ui_modes.md](C:/Users/imssh/Documents/poc_1/docs/ui_modes.md)
-- [assumptions.md](C:/Users/imssh/Documents/poc_1/docs/assumptions.md)
-- [eval_protocol.md](C:/Users/imssh/Documents/poc_1/docs/eval_protocol.md)
+- [benchmark_guide.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/benchmark_guide.md)
+- [workbook_benchmark_spec.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/workbook_benchmark_spec.md)
+- [action_schema.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/action_schema.md)
+- [ui_modes.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/ui_modes.md)
+- [assumptions.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/assumptions.md)
+- [eval_protocol.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/eval_protocol.md)
+- [skills/tableqa-family-author/SKILL.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/skills/tableqa-family-author/SKILL.md)
 
 ## 3. Active overview docs
 
 아래 문서는 요약/인덱스 역할을 한다.
 
-- [first_steps.md](C:/Users/imssh/Documents/poc_1/docs/first_steps.md)
-- [task_families.md](C:/Users/imssh/Documents/poc_1/docs/task_families.md)
+- [first_steps.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/first_steps.md)
+- [task_families.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/task_families.md)
 
 주의:
 
@@ -52,7 +53,7 @@
 
 ## 4. Historical / deprecated docs
 
-### [benchmark_spec.md](C:/Users/imssh/Documents/poc_1/docs/benchmark_spec.md)
+### [benchmark_spec.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/benchmark_spec.md)
 
 상태:
 
@@ -61,20 +62,20 @@
 이유:
 
 - 현재 내용이 매우 얇은 compatibility pointer 역할에 가깝다
-- 실질적인 환경/렌더러 source-of-truth는 [workbook_benchmark_spec.md](C:/Users/imssh/Documents/poc_1/docs/workbook_benchmark_spec.md)다
+- 실질적인 환경/렌더러 source-of-truth는 [workbook_benchmark_spec.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/workbook_benchmark_spec.md)다
 - content direction은 family/rule/policy 문서 세트가 더 정확하게 설명한다
 
 대신 볼 문서:
 
-- [workbook_benchmark_spec.md](C:/Users/imssh/Documents/poc_1/docs/workbook_benchmark_spec.md)
-- [family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)
-- [episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md)
+- [workbook_benchmark_spec.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/workbook_benchmark_spec.md)
+- [family_design_brief.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/family_design_brief.md)
+- [episode_rulebook.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_rulebook.md)
 
 ### pilot 문서 세트
 
-- [pilot_family_episode_grammar.md](C:/Users/imssh/Documents/poc_1/docs/pilot_family_episode_grammar.md)
-- [pilot_episode_drafts.md](C:/Users/imssh/Documents/poc_1/docs/pilot_episode_drafts.md)
-- [pilot_implementation_strategy.md](C:/Users/imssh/Documents/poc_1/docs/pilot_implementation_strategy.md)
+- [pilot_family_episode_grammar.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/pilot_family_episode_grammar.md)
+- [pilot_episode_drafts.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/pilot_episode_drafts.md)
+- [pilot_implementation_strategy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/pilot_implementation_strategy.md)
 
 상태:
 
@@ -82,14 +83,14 @@
 
 이유:
 
-- 현재 active benchmark는 `canonical_real_tableqa`와 real-data public pack을 기준으로 운영한다
-- pilot 문서 세트는 초창기 설계 reasoning을 보존하지만, 현재 runtime / public pack / release gate의 source-of-truth는 아니다
+- 현재 active benchmark는 `canonical_real_tableqa`와 generated benchmark suite catalog를 기준으로 운영한다
+- pilot 문서 세트는 초창기 설계 reasoning을 보존하지만, 현재 runtime / generated suite / release gate의 source-of-truth는 아니다
 
 대신 볼 문서:
 
-- [benchmark_guide.md](C:/Users/imssh/Documents/poc_1/docs/benchmark_guide.md)
-- [task_families.md](C:/Users/imssh/Documents/poc_1/docs/task_families.md)
-- [real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md)
+- [benchmark_guide.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/benchmark_guide.md)
+- [task_families.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/task_families.md)
+- [real_data_authoring_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/real_data_authoring_policy.md)
 
 ## 5. 문서 추가 규칙
 

@@ -270,11 +270,11 @@ disallowed shortcuts:
 
 ## 7. 문서 연결
 
-- [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md)
-- [docs/real_data_authoring_policy.md](C:/Users/imssh/Documents/poc_1/docs/real_data_authoring_policy.md)
-- [docs/domain_vocab_policy.md](C:/Users/imssh/Documents/poc_1/docs/domain_vocab_policy.md)
-- [docs/human_readability_checklist.md](C:/Users/imssh/Documents/poc_1/docs/human_readability_checklist.md)
-- [docs/operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)
-- [docs/answer_form_policy.md](C:/Users/imssh/Documents/poc_1/docs/answer_form_policy.md)
-- [docs/level_design_policy.md](C:/Users/imssh/Documents/poc_1/docs/level_design_policy.md)
-- [docs/episode_validation_checklist.md](C:/Users/imssh/Documents/poc_1/docs/episode_validation_checklist.md)
+- [docs/visual_cue_inventory.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/visual_cue_inventory.md)
+- [docs/real_data_authoring_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/real_data_authoring_policy.md)
+- [docs/domain_vocab_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/domain_vocab_policy.md)
+- [docs/human_readability_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/human_readability_checklist.md)
+- [docs/operator_taxonomy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/operator_taxonomy.md)
+- [docs/answer_form_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/answer_form_policy.md)
+- [docs/level_design_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/level_design_policy.md)
+- [docs/episode_validation_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_validation_checklist.md)

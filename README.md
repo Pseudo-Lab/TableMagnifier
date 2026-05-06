@@ -1,154 +1,140 @@
 # table-env-bench
 
-`table-env-bench`는 workbook-style 인터페이스에서 시트와 페이지를 탐색하며 푸는 한국어 Visual TableQA 벤치마크입니다. 에이전트는 숨겨진 구조화 workbook 데이터를 직접 받지 않고, 현재 보이는 viewport와 질문, 남은 예산, 현재 sheet/page 정보만 보고 행동합니다.
+`table-env-bench`는 workbook-style 인터페이스에서 시트와 페이지를 탐색하며 푸는 한국어 Visual TableQA 벤치마크입니다. 에이전트는 숨겨진 구조화 workbook 데이터를 직접 받지 않고, 현재 viewport, 질문, 남은 예산, sheet/page 상태만 보고 행동합니다.
 
-이 저장소는 PseudoLab `TableMagnifier` 프로젝트에서 파생된 benchmark POC입니다. 상위 프로젝트가 한국어 TableQA용 데이터 구축과 검증 전반을 다룬다면, 이 저장소는 그중에서도 `interactive Visual TableQA benchmark`와 `agent evaluation`에 초점을 맞춘 실험용 구현입니다.
+현재 canonical 방향은 `canonical_real_tableqa`입니다. 사람이 읽을 수 있는 실제 업무형 합성 표를 바탕으로, 표 구조와 시각 단서를 읽고 규칙을 유도하거나 범위를 좁힌 뒤 정답을 선택하는 문제를 다룹니다.
 
-현재 canonical 방향은 `canonical_real_tableqa` 하나입니다. 사람에게도 바로 읽히는 실제 업무형 합성 표를 바탕으로, 표의 구조와 시각 단서를 읽고 규칙을 유도하거나 범위를 좁힌 뒤 정답을 선택하는 문제를 다룹니다.
+## 현재 운영 모델
 
-상위 프로젝트와의 관계는 다음처럼 보는 편이 가장 정확합니다.
+이 저장소는 더 이상 repo 안에 frozen `public_*` instance pack을 포함하지 않습니다. 기본 실행과 UI 노출은 generated benchmark suite catalog를 사용합니다.
 
-- `TableMagnifier`: 한국어 TableQA 데이터 구축, 합성, 검증, 도구화까지 포함하는 더 큰 프로젝트
-- `table-env-bench`: workbook UI 위에서 agent와 사람이 실제로 탐색하며 푸는 Visual TableQA reasoning benchmark POC
-- 현재 이 저장소의 관심사: 문제 설계, 렌더링, environment, replay, evaluation, public benchmark pack 운영
+- `/api/catalog`: 개발용 family/level 브라우저
+- `/api/benchmark-suites`: generated benchmark suite/template/seed-slot launch catalog
+- `/api/instances`: 별도 instance pack이 있을 때만 노출되며, 현재 repo 기본값은 `[]`
 
-## 프로젝트 배경
+현재 generated suite는 다음 순서로 노출됩니다.
 
-이 POC는 “한국어 표를 얼마나 잘 읽는가”를 단일 정답 추출 문제가 아니라, `화면을 탐색하며 근거를 모으는 문제`로 다뤄보려는 목적에서 출발했습니다.
+- `canonical_dev`
+- `eval_hard_dev`
+- `eval_hard_holdout`
 
-핵심 질문은 다음과 같습니다.
+Workbench는 instance pack이 없으면 generated benchmark selector를 보여주고, 선택한 record의 `family`, `level`, `seed`, `template_id`로 정확히 세션을 시작합니다. Generated benchmark에는 free-form seed 입력이 없고, catalog에 선언된 seed slot만 선택합니다.
 
-- agent가 visually rendered table을 실제로 읽는가
-- 예시, 반례, 메모, 소계, grouped row 같은 workbook evidence를 사용할 수 있는가
-- 단순 lookup이 아니라 transfer, disambiguation, scope resolution을 할 수 있는가
-- 사람에게도 읽히는 문제를 agent benchmark로 안정적으로 운영할 수 있는가
+## 현재 Family
 
-즉, 이 저장소는 단순 데이터셋이 아니라 `interactive benchmark environment`와 `frozen evaluation pack`을 함께 제공하는 연구용 POC입니다.
+우선 노출 family:
 
-## 프로젝트 목표
+- `marker_position_rule_transfer`
+  - 예시/범례/반례에서 셀 모서리 표식 위치 규칙을 유도하고 query table에 전이합니다.
 
-현재 이 저장소의 목표는 다음과 같습니다.
+Active/dev family:
 
-- 한국어 Visual TableQA를 workbook-style interactive benchmark로 정의하기
-- 표, 헤더, 소계, 노트, 선택지 같은 시각 근거를 중심으로 reasoning 문제를 설계하기
-- 사람과 agent가 같은 화면을 보되, agent는 제한된 action space 안에서 문제를 풀게 만들기
-- frozen public pack, replay, readability audit, baseline evaluation까지 한 경로로 묶기
-- 이후 hidden holdout, human baseline, model failure analysis로 확장 가능한 기반을 만들기
+- `excel_viewport_sheet_navigation`
+  - pan/zoom/sheet navigation과 viewport traversal 안정성을 검증합니다.
 
-현재 public benchmark pack은 두 개입니다.
-
-- `public_dev_real_v1`
-- `public_smoke_real_v1`
-
-현재 active family는 세 가지입니다.
+Deprecated comparison families:
 
 - `channel_policy_transfer`
 - `inventory_exception_disambiguation`
 - `report_scope_reconciliation`
 
-문서별 현재 상태는 [docs/document_status.md](C:/Users/imssh/Documents/poc_1/docs/document_status.md)에서 확인할 수 있습니다. 처음 읽는 경우에는 [docs/first_steps.md](C:/Users/imssh/Documents/poc_1/docs/first_steps.md), [docs/benchmark_guide.md](C:/Users/imssh/Documents/poc_1/docs/benchmark_guide.md), [docs/task_families.md](C:/Users/imssh/Documents/poc_1/docs/task_families.md) 순으로 보는 편이 빠릅니다.
-
-## 현재 구현
-
-현재 구현은 다음을 포함합니다.
-
-- Gym 유사 환경 API: `reset(seed)` / `step(action)`
-- workbook abstraction: `workbook -> sheet -> page -> region`
-- 결정론적 SVG renderer
-- table region, note marker, answer choice region hit testing
-- frozen benchmark instance pack loader
-- correctness / efficiency / generalization 집계 / replay export
-- random / heuristic baseline
-- tool-call 기반 LLM baseline runner
-- FastAPI session API
-- React web UI
-- Playwright surface readability / workbench traversal gate
-
-## 장기 방향
-
-앞으로의 canonical benchmark는 다음 원칙을 따른다.
-
-- Visual TableQA를 바탕으로 한다
-- 표와 worksheet fragment가 항상 핵심 evidence surface다
-- chart, note, legend는 표를 보조하는 근거다
-- 정답은 lookup보다 scope resolution, disambiguation, transfer 같은 reasoning을 통해 도달해야 한다
-- pure abstract puzzle처럼 표 의미가 사라지는 방향은 피한다
-- readability failure는 UI polish가 아니라 benchmark failure로 취급한다
+Deprecated family는 삭제하지 않고 regression, baseline 비교, hard suite 일부 구성을 위해 유지합니다.
 
 ## 빠른 시작
 
-WSL에서 의존성을 설치합니다.
+WSL에서 실행하는 것을 기준으로 합니다.
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
+cd /mnt/c/Users/imssh/Documents/TableMagnifier
 uv sync
 ```
 
-## 실행 방법
-
-테스트:
+Python test:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
 uv run pytest
 ```
 
-단일 데모 실행:
+Frontend 의존성:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
-uv run python -m table_env_bench.scripts.run_demo --family channel_policy_transfer --level 1 --agent heuristic
+cd frontend
+npm install
 ```
 
-고정 benchmark instance 실행:
+## UI 실행
+
+터미널 1:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
-uv run python -m table_env_bench.scripts.run_demo --instance-id public_smoke_real_v1__channel_policy_transfer_icon_scope_cell_l1_s0 --agent heuristic
+cd /mnt/c/Users/imssh/Documents/TableMagnifier
+uv run python -m table_env_bench.scripts.run_server --host 127.0.0.1 --port 8000
 ```
 
-baseline 평가:
+터미널 2:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
-uv run python -m table_env_bench.scripts.eval_baselines
+cd /mnt/c/Users/imssh/Documents/TableMagnifier/frontend
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+브라우저에서 `http://127.0.0.1:5173/`를 엽니다.
+
+개발용 family deep link는 계속 지원합니다.
+
+```text
+http://127.0.0.1:5173/?family=excel_viewport_sheet_navigation&level=1&seed=0
+```
+
+유효한 `?family=...` dev URL은 generated default보다 우선합니다. 유효하지 않은 `?family` URL이나 URL 파라미터가 없는 경우에는 `/api/benchmark-suites`의 첫 generated record로 시작합니다.
+
+## 실행 예시
+
+Generated family demo:
+
+```bash
+cd /mnt/c/Users/imssh/Documents/TableMagnifier
+uv run python -m table_env_bench.scripts.run_demo --family marker_position_rule_transfer --level 1 --template-id corner_anchor_statement --seed 0 --agent heuristic
+```
+
+Baseline 평가:
+
+```bash
+uv run python -m table_env_bench.scripts.eval_baselines --suite canonical_dev
 ```
 
 LLM 평가:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
-OPENAI_API_KEY=... uv run python -m table_env_bench.scripts.eval_llm --suite public_dev_real_v1 --model gpt-5-nano
+OPENAI_API_KEY=... uv run python -m table_env_bench.scripts.eval_llm --suite canonical_dev --model gpt-5-nano
 ```
 
-preview gallery export:
+Preview gallery:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
-uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_real --pack public_dev_real_v1
+uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active
 ```
 
-strict public-pack readability audit:
+Readability audit:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
-uv run python -m table_env_bench.scripts.audit_readability --pack public_smoke_real_v1
-uv run python -m table_env_bench.scripts.audit_readability --pack public_dev_real_v1
+uv run python -m table_env_bench.scripts.audit_readability
 ```
 
-FastAPI 서버:
+빠른 smoke audit:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1
-uv run python -m table_env_bench.scripts.run_server --reload
+uv run python -m table_env_bench.scripts.audit_readability --smoke --seed-samples 0
 ```
 
-React 웹 UI:
+Frontend gates:
 
 ```bash
-cd /mnt/c/Users/imssh/Documents/poc_1/frontend
-npm install
-npm run dev
+cd frontend
+npm run build
+npm run lint
+npx playwright test playwright/dev-family-visibility.spec.ts --project=chromium-fullhd
+npx playwright test playwright/workbench-navigation-readability.spec.ts --project=chromium-fullhd
 ```
 
 ## 벤치마크 개념
@@ -158,13 +144,11 @@ npm run dev
 - workbook: 여러 sheet를 가진 문서
 - sheet: 탭 단위
 - page: 한 sheet 안의 view 또는 pagination 단위
-- region: table / chart / legend / note block 같은 groundable 영역
+- region: table, note marker, answer choice 같은 hit-test 가능한 영역
 
-핵심은 정답 하나를 읽어내는 것이 아니라, 현재 보이는 시각 정보 위에서 어느 표, 어느 header scope, 어느 row group, 어느 note가 relevant한지 판단하는 것입니다.
+핵심은 정답 하나를 읽어내는 것이 아니라, 현재 보이는 시각 정보 위에서 어느 표, 어느 header scope, 어느 row group, 어느 note, 어느 표식이 relevant한지 판단하는 것입니다.
 
 ## 액션 공간
-
-benchmark action schema는 다음으로 제한됩니다.
 
 - `select_sheet(name_or_index)`
 - `next_page`
@@ -180,68 +164,71 @@ benchmark action schema는 다음으로 제한됩니다.
 
 `click_region(x, y)`는 hidden cell id가 아니라 현재 렌더링된 scene의 region hit test로 처리됩니다.
 
-## 모드
+## 새 Family 추가 방법
 
-- agent mode
-  - headless API와 최소 observation만 사용
-- human mode
-  - 질문, sheet tabs, page navigation, answer 입력이 보이는 로컬 UI
-- dev mode
-  - debug overlay, click 좌표 입력, last_event, replay를 확인할 수 있는 inspector UI
+새 canonical family는 adapter 방식으로 등록합니다.
 
-## 현재 canonical family 방향
+1. `src/table_env_bench/data/families/<family_id>.py`에 generator module을 만듭니다.
+2. module은 최소한 아래 surface를 제공합니다.
+   - `FAMILY`
+   - `FAMILY_LABEL`
+   - `list_manifests(level)`
+   - `build_episode(level, seed, *, template_id=None)`
+3. `src/table_env_bench/data/families/__init__.py`의 `CANONICAL_FAMILY_ADAPTERS`에 `FamilyAdapter` 하나를 추가합니다.
+4. `CANONICAL_FAMILY_LABELS`, `CANONICAL_MANIFEST_LISTERS`, `CANONICAL_BUILDERS`는 adapter 목록에서 파생되므로 직접 수정하지 않습니다.
+5. authoring pipeline, readability audit, pytest, frontend Playwright gate를 통과시킵니다.
 
-- `channel_policy_transfer`
-  - 예시 표와 보조 메모를 읽고 현재 표의 집행 대상을 고른다
-- `inventory_exception_disambiguation`
-  - 예외 확인 표와 메모를 반영해 잘못된 기준을 제거한다
-- `report_scope_reconciliation`
-  - merged header, grouped row, subtotal block이 실제 집계 범위를 결정한다
+관련 문서:
 
-## 채점과 replay
+- [docs/first_steps.md](docs/first_steps.md)
+- [docs/benchmark_guide.md](docs/benchmark_guide.md)
+- [docs/task_families.md](docs/task_families.md)
+- [docs/family_design_brief.md](docs/family_design_brief.md)
+- [docs/episode_rulebook.md](docs/episode_rulebook.md)
+- [docs/visual_cue_inventory.md](docs/visual_cue_inventory.md)
+- [docs/operator_taxonomy.md](docs/operator_taxonomy.md)
 
-episode 결과에는 다음이 포함됩니다.
+## Codex Skill 설치와 사용
 
-- correctness
-- efficiency
-- overall
-- raw_accuracy
-- generalization_score
-- action_count
-- unique_sheets_visited
-- unique_pages_visited
-- replay trace
+이 repo에는 TableQA family authoring을 돕는 Codex skill이 준비되어 있습니다.
 
-기본 correctness는 normalized exact match입니다. 한국어 답안 normalizer는 쉼표, 공백, `원` / `만원` / `개` / `건` 같은 접미어를 허용합니다.
+Repo에 포함된 skill source:
 
-기본 efficiency scorer는 action count 기반입니다. scorer 인터페이스는 분리되어 있어 나중에 다른 scoring policy로 교체할 수 있습니다.
+```text
+docs/skills/tableqa-family-author/SKILL.md
+```
 
-replay JSON에는 각 step의 다음 정보가 저장됩니다.
+Codex가 해당 skill을 인식하지 못하는 환경에서는 repo의 skill directory를 `~/.codex/skills` 아래로 복사해서 추가합니다.
 
-- action payload
-- before / after navigation state
-- click 좌표와 resolved region
-- reward
-- terminated / truncated
+```bash
+mkdir -p ~/.codex/skills/tableqa-family-author
+cp -R /mnt/c/Users/imssh/Documents/TableMagnifier/docs/skills/tableqa-family-author/. ~/.codex/skills/tableqa-family-author/
+```
 
-## 새 family 추가 방법
+이미 `/home/ssh/.codex/skills/tableqa-family-author/SKILL.md`가 있다면 전역 skill이 설치된 상태입니다.
 
-1. [docs/family_design_brief.md](C:/Users/imssh/Documents/poc_1/docs/family_design_brief.md)에서 canonical family 기준을 확인합니다.
-2. [docs/episode_rulebook.md](C:/Users/imssh/Documents/poc_1/docs/episode_rulebook.md), [docs/visual_cue_inventory.md](C:/Users/imssh/Documents/poc_1/docs/visual_cue_inventory.md), [docs/operator_taxonomy.md](C:/Users/imssh/Documents/poc_1/docs/operator_taxonomy.md)를 참고해 evidence topology를 설계합니다.
-3. `src/table_env_bench/data/families/` 아래에 family generator를 추가합니다.
-4. [src/table_env_bench/data/models.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/models.py)의 workbook/sheet/page/element/region dataclass를 사용합니다.
-5. authoring pipeline과 readability gate를 통과시킵니다.
-6. 필요하면 frozen public pack으로 내리고 [docs/task_families.md](C:/Users/imssh/Documents/poc_1/docs/task_families.md)를 갱신합니다.
-7. pytest와 Playwright gate가 모두 통과하는지 확인합니다.
+Codex에서 새 문제 family를 만들 때는 프롬프트 첫머리에 skill을 명시합니다.
+
+```text
+$tableqa-family-author marker_position_rule_transfer와 다른 새 Visual TableQA family를 adapter 방식으로 추가해줘
+```
+
+이 skill은 다음 순서를 강제합니다.
+
+- rule docs와 validation checklist 확인
+- family adapter surface 설계
+- episode generator 구현
+- manifest/seed/template contract 검증
+- readability와 Playwright gate 확인
 
 ## 주요 경로
 
-- [src/table_env_bench/env/environment.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/env/environment.py)
-- [src/table_env_bench/env/actions.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/env/actions.py)
-- [src/table_env_bench/render/renderer.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/render/renderer.py)
-- [src/table_env_bench/data/models.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/models.py)
-- [src/table_env_bench/data/families](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/families)
-- [src/table_env_bench/data/instances.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/data/instances.py)
-- [src/table_env_bench/eval/scoring.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/eval/scoring.py)
-- [src/table_env_bench/server/app.py](C:/Users/imssh/Documents/poc_1/src/table_env_bench/server/app.py)
-- [frontend/src/App.tsx](C:/Users/imssh/Documents/poc_1/frontend/src/App.tsx)
+- [src/table_env_bench/env/environment.py](src/table_env_bench/env/environment.py)
+- [src/table_env_bench/render/renderer.py](src/table_env_bench/render/renderer.py)
+- [src/table_env_bench/data/families](src/table_env_bench/data/families)
+- [src/table_env_bench/data/families/adapters.py](src/table_env_bench/data/families/adapters.py)
+- [src/table_env_bench/data/canonical_catalog.py](src/table_env_bench/data/canonical_catalog.py)
+- [src/table_env_bench/data/instances.py](src/table_env_bench/data/instances.py)
+- [src/table_env_bench/server/app.py](src/table_env_bench/server/app.py)
+- [frontend/src/App.tsx](frontend/src/App.tsx)
+- [frontend/public/workbook-canvas-renderer.js](frontend/public/workbook-canvas-renderer.js)

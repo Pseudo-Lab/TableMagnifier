@@ -1,5 +1,6 @@
 """Canonical family registry."""
 
+from table_env_bench.data.families.adapters import FamilyAdapter
 from table_env_bench.data.families.inventory_exception_disambiguation import (
     FAMILY as INVENTORY_EXCEPTION_FAMILY,
     FAMILY_LABEL as INVENTORY_EXCEPTION_LABEL,
@@ -32,29 +33,48 @@ from table_env_bench.data.families.excel_viewport_sheet_navigation import (
 )
 from table_env_bench.data.families.shared import CANONICAL_SEEDS_PER_TEMPLATE, TemplateManifest
 
-CANONICAL_FAMILY_LABELS = {
-    INVENTORY_EXCEPTION_FAMILY: INVENTORY_EXCEPTION_LABEL,
-    CHANNEL_POLICY_FAMILY: CHANNEL_POLICY_LABEL,
-    EXCEL_VIEWPORT_FAMILY: EXCEL_VIEWPORT_LABEL,
-    MARKER_POSITION_FAMILY: MARKER_POSITION_LABEL,
-    REPORT_SCOPE_FAMILY: REPORT_SCOPE_LABEL,
-}
+CANONICAL_FAMILY_ADAPTERS = (
+    FamilyAdapter(
+        family=INVENTORY_EXCEPTION_FAMILY,
+        label=INVENTORY_EXCEPTION_LABEL,
+        build_episode=build_inventory_exception_episode,
+        list_manifests=list_inventory_exception_manifests,
+    ),
+    FamilyAdapter(
+        family=CHANNEL_POLICY_FAMILY,
+        label=CHANNEL_POLICY_LABEL,
+        build_episode=build_channel_policy_transfer_episode,
+        list_manifests=list_channel_policy_transfer_manifests,
+    ),
+    FamilyAdapter(
+        family=EXCEL_VIEWPORT_FAMILY,
+        label=EXCEL_VIEWPORT_LABEL,
+        build_episode=build_excel_viewport_episode,
+        list_manifests=list_excel_viewport_manifests,
+    ),
+    FamilyAdapter(
+        family=MARKER_POSITION_FAMILY,
+        label=MARKER_POSITION_LABEL,
+        build_episode=build_marker_position_episode,
+        list_manifests=list_marker_position_manifests,
+    ),
+    FamilyAdapter(
+        family=REPORT_SCOPE_FAMILY,
+        label=REPORT_SCOPE_LABEL,
+        build_episode=build_report_scope_episode,
+        list_manifests=list_report_scope_manifests,
+    ),
+)
 
-CANONICAL_MANIFEST_LISTERS = {
-    INVENTORY_EXCEPTION_FAMILY: list_inventory_exception_manifests,
-    CHANNEL_POLICY_FAMILY: list_channel_policy_transfer_manifests,
-    EXCEL_VIEWPORT_FAMILY: list_excel_viewport_manifests,
-    MARKER_POSITION_FAMILY: list_marker_position_manifests,
-    REPORT_SCOPE_FAMILY: list_report_scope_manifests,
-}
+for _adapter in CANONICAL_FAMILY_ADAPTERS:
+    _adapter.validate()
 
-CANONICAL_BUILDERS = {
-    INVENTORY_EXCEPTION_FAMILY: build_inventory_exception_episode,
-    CHANNEL_POLICY_FAMILY: build_channel_policy_transfer_episode,
-    EXCEL_VIEWPORT_FAMILY: build_excel_viewport_episode,
-    MARKER_POSITION_FAMILY: build_marker_position_episode,
-    REPORT_SCOPE_FAMILY: build_report_scope_episode,
-}
+if len({adapter.family for adapter in CANONICAL_FAMILY_ADAPTERS}) != len(CANONICAL_FAMILY_ADAPTERS):
+    raise ValueError("Canonical family adapters must have unique family ids")
+
+CANONICAL_FAMILY_LABELS = {adapter.family: adapter.label for adapter in CANONICAL_FAMILY_ADAPTERS}
+CANONICAL_MANIFEST_LISTERS = {adapter.family: adapter.list_manifests for adapter in CANONICAL_FAMILY_ADAPTERS}
+CANONICAL_BUILDERS = {adapter.family: adapter.build_episode for adapter in CANONICAL_FAMILY_ADAPTERS}
 
 
 def list_canonical_families() -> list[str]:
@@ -68,6 +88,7 @@ def list_manifests(family: str, level: int) -> tuple[TemplateManifest, ...]:
 
 
 __all__ = [
+    "CANONICAL_FAMILY_ADAPTERS",
     "CANONICAL_BUILDERS",
     "CANONICAL_FAMILY_LABELS",
     "CANONICAL_MANIFEST_LISTERS",

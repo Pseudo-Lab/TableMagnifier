@@ -6,6 +6,7 @@ import random
 from typing import Callable, Iterable
 
 from table_env_bench.data.canonical_catalog import (
+    CANONICAL_FAMILY_LABELS as _canonical_family_labels,
     benchmark_episode_records as _canonical_benchmark_episode_records,
     benchmark_suite_manifest as _benchmark_suite_manifest,
     benchmark_suite_records as _benchmark_suite_records,
@@ -45,13 +46,7 @@ from table_env_bench.data.models import (
 PAGE_WIDTH = 1280
 PAGE_HEIGHT = 900
 
-FAMILY_LABELS = {
-    "inventory_exception_disambiguation": "재고 예외 판정",
-    "channel_policy_transfer": "채널 집행 기준 적용",
-    "excel_viewport_sheet_navigation": "스프레드시트 뷰포트 탐색",
-    "marker_position_rule_transfer": "표식 위치 규칙 전이",
-    "report_scope_reconciliation": "보고 범위 판정",
-}
+FAMILY_LABELS = dict(_canonical_family_labels)
 
 PALETTE = {
     "blue": "#2563eb",

@@ -1,8 +1,8 @@
 # Task Families
 
 현재 benchmark는 `canonical_real_tableqa` track 아래 `marker_position_rule_transfer`를 우선 generator family로 운영한다.
-`excel_viewport_sheet_navigation`은 pan/zoom/sheet navigation admission gate를 검증하는 active canonical/dev family로 유지하되, v1에서는 preferred family나 frozen public pack 후보로 승격하지 않는다.
-기존 세 generator family는 회귀/비교용 deprecated family로 유지하며, frozen public pack은 아직 기존 frozen instance 기반으로 유지한다.
+`excel_viewport_sheet_navigation`은 pan/zoom/sheet navigation admission gate를 검증하는 active canonical/dev family로 유지하되, v1에서는 preferred family로 승격하지 않는다.
+기존 세 generator family는 회귀/비교용 deprecated family로 유지한다.
 
 ## Active Families
 
@@ -12,7 +12,7 @@
 
 ### Deprecated generator families
 
-아래 family들은 삭제하지 않고 회귀 테스트, 비교 baseline, frozen public pack 호환을 위해 유지한다.
+아래 family들은 삭제하지 않고 회귀 테스트와 비교 baseline을 위해 유지한다.
 
 - `channel_policy_transfer`
 - `inventory_exception_disambiguation`
@@ -20,7 +20,7 @@
 
 ### Active canonical/dev families
 
-아래 family는 canonical registry에 등록되어 테스트와 authoring gate에서 검증하지만, 아직 preferred나 public-pack release family로 보지 않는다.
+아래 family는 canonical registry에 등록되어 테스트와 authoring gate에서 검증하지만, 아직 preferred나 release family로 보지 않는다.
 
 - `excel_viewport_sheet_navigation`
 
@@ -92,7 +92,7 @@
 - template id: `corner_anchor_statement`
 - levels: 1, 2, 3
 - canonical seed capacity: level별 8
-- frozen public packs에는 포함하지 않음
+- repo-local frozen instance pack에는 포함하지 않음
 - base answer label은 seed별 B/C/D로 회전
 - counterfactual helper는 decisive marker-position rule을 뒤집고 answer label을 바꿈
 - authoring gate는 topology, L3 note opening, shortcut probes, static answer-label guard를 확인함
@@ -214,7 +214,7 @@
 - canonical seed capacity: level별 8
 - `family_status == active`
 - `is_preferred == false`
-- frozen public packs에는 포함하지 않음
+- repo-local frozen instance pack에는 포함하지 않음
 - `eval_hard`에는 아직 포함하지 않음
 
 ## Level Progression
@@ -273,8 +273,8 @@
 - 한 줄 텍스트만 긁어서는 못 푼다
 - sheet/page 이동은 실제 reasoning 필요를 반영한다
 
-## Public Pack Note
+## Instance Pack Note
 
-현재 기본 노출 경로는 `public_smoke_real_v1`, `public_dev_real_v1` frozen pack이다. family generator는 authoring/dev source-of-truth이고, 실제 benchmark-facing 실행과 release gate는 frozen instance pack 기준으로 본다.
+현재 repo는 frozen `public_*` instance pack을 포함하지 않는다. family generator가 authoring/dev source-of-truth이고, workbench의 기본 노출 경로도 generator catalog다.
 
-`excel_viewport_sheet_navigation`은 frozen public pack에 포함하지 않는다. public pack 승격은 별도 release PRD에서 full-seed readability, shortcut red-team, replay navigation compliance, public instance freeze diff를 함께 검토한 뒤 결정한다.
+새 frozen pack 승격은 별도 release PRD에서 full-seed readability, shortcut red-team, replay navigation compliance, instance freeze diff를 함께 검토한 뒤 결정한다.

@@ -1,4 +1,4 @@
-"""Freeze public real-data benchmark instance packs from canonical generators."""
+"""Freeze candidate real-data benchmark instance packs from canonical generators."""
 
 from __future__ import annotations
 
@@ -11,11 +11,11 @@ from table_env_bench.data.generators import FAMILY_LABELS, generate_episode
 from table_env_bench.data.loader import save_episode_spec
 
 PACK_SPECS = {
-    "public_dev_real_v1": {
-        "pack_label": "Public Dev Real V1",
+    "candidate_dev_real_v1": {
+        "pack_label": "Candidate Dev Real V1",
         "version": "1.0",
         "locale": "ko-KR",
-        "pack_role": "public",
+        "pack_role": "candidate",
         "benchmark_track": "canonical_real_tableqa",
         "instances": (
             {
@@ -152,11 +152,11 @@ PACK_SPECS = {
             },
         ),
     },
-    "public_smoke_real_v1": {
-        "pack_label": "Public Smoke Real V1",
+    "candidate_smoke_real_v1": {
+        "pack_label": "Candidate Smoke Real V1",
         "version": "1.0",
         "locale": "ko-KR",
-        "pack_role": "public",
+        "pack_role": "candidate",
         "benchmark_track": "canonical_real_tableqa",
         "instances": (
             {
@@ -282,7 +282,7 @@ def _freeze_pack(repo_root: Path, pack_id: str, config: dict[str, object]) -> di
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Freeze public real-data benchmark instance packs.")
+    parser = argparse.ArgumentParser(description="Freeze candidate real-data benchmark instance packs.")
     parser.add_argument("--repo-root", default=Path(__file__).resolve().parents[3], type=Path)
     args = parser.parse_args()
     for pack_id, config in PACK_SPECS.items():

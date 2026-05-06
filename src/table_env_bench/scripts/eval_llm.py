@@ -16,7 +16,7 @@ from table_env_bench.eval.benchmark_metrics import generalization_score, raw_acc
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Evaluate a tool-calling LLM on benchmark episodes.")
     parser.add_argument("--output", default="artifacts/llm_results.json")
-    parser.add_argument("--suite", choices=sorted(benchmark_suite_manifest()), default="public_dev_real_v1")
+    parser.add_argument("--suite", choices=sorted(benchmark_suite_manifest()), default="canonical_dev")
     parser.add_argument("--family")
     parser.add_argument("--level", type=int)
     parser.add_argument("--template-id")
