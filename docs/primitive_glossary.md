@@ -121,8 +121,6 @@ primitive는 크게 다섯 부류로 나눈다.
 
 권장 용도:
 
-- `channel_policy_transfer`
-- `inventory_exception_disambiguation`
 
 ### 1.3 `query_table_panel`
 
@@ -452,8 +450,6 @@ choice 권장 필드:
 
 권장 용도:
 
-- `channel_policy_transfer`
-- `inventory_exception_disambiguation`
 
 ---
 

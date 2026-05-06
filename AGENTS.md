@@ -71,9 +71,8 @@ The current canonical track is `canonical_real_tableqa`: realistic synthetic Kor
 
 The current active canonical families are:
 
-- `report_scope_reconciliation`
-- `channel_policy_transfer`
-- `inventory_exception_disambiguation`
+- `marker_position_rule_transfer`
+- `excel_viewport_sheet_navigation`
 
 The preferred episode structure is now closer to:
 
@@ -93,9 +92,8 @@ Recommended future family themes:
 
 Current family intent:
 
-- `report_scope_reconciliation`: merged headers, row groups, scope narrowing, and note-assisted disambiguation
-- `channel_policy_transfer`: example-to-query transfer using band structure, icon anchoring, grouped rows, and appendix notes
-- `inventory_exception_disambiguation`: rule narrowing through exception sheets and openable notes that remove a tempting but wrong interpretation
+- `marker_position_rule_transfer`: marker anchor position, legend mapping, exception sheets, and note-assisted scope transfer
+- `excel_viewport_sheet_navigation`: wide worksheet pan/zoom navigation plus cross-sheet rule transfer
 
 ## Episode Rule Docs
 
@@ -145,13 +143,11 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 Use WSL + `uv` when available.
 
 - `uv run pytest`
-- `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_real --pack public_dev_real_v1`
-- `uv run python -m table_env_bench.scripts.run_demo --family channel_policy_transfer --level 2 --agent random`
+- `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active`
+- `uv run python -m table_env_bench.scripts.run_demo --family marker_position_rule_transfer --level 2 --agent random`
 - `uv run python -m table_env_bench.scripts.eval_baselines`
-- `uv run python -m table_env_bench.scripts.run_authoring_pipeline --family channel_policy_transfer`
+- `uv run python -m table_env_bench.scripts.run_authoring_pipeline --family marker_position_rule_transfer`
 - `uv run python -m table_env_bench.scripts.audit_readability`
-- `uv run python -m table_env_bench.scripts.audit_readability --pack public_smoke_real_v1`
-- `uv run python -m table_env_bench.scripts.audit_readability --pack public_dev_real_v1`
 - `uv run python -m table_env_bench.scripts.run_server --reload`
 - `cd frontend && npm install && npm run dev`
 - `cd frontend && npm run visual:readability`

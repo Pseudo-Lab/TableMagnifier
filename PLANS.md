@@ -117,7 +117,6 @@
 
 ## 7. 우선 도입할 canonical family
 
-### 7.1 `channel_policy_transfer`
 
 핵심:
 
@@ -159,7 +158,6 @@
 - Sheet B: worked table example
 - Sheet C: query pipeline
 
-### 7.3 `inventory_exception_disambiguation`
 
 핵심:
 
@@ -188,7 +186,6 @@
 - chart/table alignment
 - note/table mapping
 
-### 7.5 `report_scope_reconciliation`
 
 핵심:
 
@@ -481,8 +478,6 @@ episode rule은 generator code 안에만 숨어 있으면 안 된다. 구현 전
 
 목표:
 
-- `channel_policy_transfer`
-- `inventory_exception_disambiguation`
 - `marker_position_rule_transfer`
 
 위 canonical family를 end-to-end로 구현한다.

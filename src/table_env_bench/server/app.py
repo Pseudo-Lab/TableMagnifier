@@ -42,24 +42,12 @@ store = SessionStore()
 authoring_store = AuthoringRunStore()
 
 PREFERRED_GENERATOR_FAMILY = "marker_position_rule_transfer"
-DEPRECATED_GENERATOR_FAMILIES = frozenset(
-    {
-        "channel_policy_transfer",
-        "inventory_exception_disambiguation",
-        "report_scope_reconciliation",
-    }
-)
-ACTIVE_GENERATOR_FAMILIES = frozenset({"excel_viewport_sheet_navigation"})
-GENERATED_BENCHMARK_SUITE_ORDER = ("canonical_dev", "eval_hard_dev", "eval_hard_holdout")
+GENERATED_BENCHMARK_SUITE_ORDER = ("canonical_dev",)
 GENERATED_BENCHMARK_SUITE_LABELS = {
     "canonical_dev": "Canonical 개발 세트",
-    "eval_hard_dev": "Eval Hard 개발 세트",
-    "eval_hard_holdout": "Eval Hard Holdout",
 }
 GENERATED_BENCHMARK_SUITE_DESCRIPTIONS = {
     "canonical_dev": "공개 frozen pack 없이 canonical generator에서 즉시 생성하는 개발용 benchmark record입니다.",
-    "eval_hard_dev": "난이도 높은 level 2 generated benchmark record입니다.",
-    "eval_hard_holdout": "난이도 높은 level 3 holdout generated benchmark record입니다.",
 }
 
 
@@ -91,10 +79,6 @@ def _catalog() -> list[CatalogFamily]:
                 family_status=(
                     "preferred"
                     if family == PREFERRED_GENERATOR_FAMILY
-                    else "deprecated"
-                    if family in DEPRECATED_GENERATOR_FAMILIES
-                    else "active"
-                    if family in ACTIVE_GENERATOR_FAMILIES
                     else "active"
                 ),
                 is_preferred=family == PREFERRED_GENERATOR_FAMILY,
@@ -108,7 +92,6 @@ def _generated_template_order(ref: dict[str, object]) -> tuple[int, int, str, st
     family = str(ref["family"])
     return (
         0 if family == PREFERRED_GENERATOR_FAMILY else 1,
-        1 if family in DEPRECATED_GENERATOR_FAMILIES else 0,
         family,
         str(ref["template_id"]),
         int(ref["level"]),
@@ -148,8 +131,7 @@ def _generated_benchmark_suites() -> GeneratedBenchmarkSuiteEnvelope:
                     seed_slots=sorted(seed_slots),
                     benchmark_track=str(ref["benchmark_track"]) if ref.get("benchmark_track") is not None else None,
                     difficulty_tier=str(ref["difficulty_tier"]) if ref.get("difficulty_tier") is not None else None,
-                    is_active=family not in DEPRECATED_GENERATOR_FAMILIES,
-                    is_deprecated=family in DEPRECATED_GENERATOR_FAMILIES,
+                    is_active=True,
                     answer_form=str(ref["answer_form"]) if ref.get("answer_form") is not None else None,
                     primary_operator=str(ref["primary_operator"]) if ref.get("primary_operator") is not None else None,
                     support_operator=str(ref["support_operator"]) if ref.get("support_operator") is not None else None,

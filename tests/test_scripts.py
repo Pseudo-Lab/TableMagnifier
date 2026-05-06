@@ -27,8 +27,8 @@ def test_run_demo_parser_rejects_unknown_families() -> None:
 
 def test_run_demo_parser_accepts_instance_id_without_family() -> None:
     parser = build_parser()
-    args = parser.parse_args(["--instance-id", "example_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0"])
-    assert args.instance_id == "example_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0"
+    args = parser.parse_args(["--instance-id", "example_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0"])
+    assert args.instance_id == "example_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0"
     assert args.family is None
     assert args.level is None
 
@@ -39,12 +39,10 @@ def test_export_preview_gallery_writes_index_and_raster_artifacts(tmp_path) -> N
     assert (tmp_path / "review.html").exists()
     assert (tmp_path / "manifest.json").exists()
     assert (tmp_path / "workbook-canvas-renderer.js").exists()
-    assert any(path.name.startswith("report_scope_reconciliation") for path in tmp_path.glob("*.png"))
-    assert any(path.name.startswith("channel_policy_transfer") for path in tmp_path.glob("*.png"))
-    assert any(path.name.startswith("inventory_exception_disambiguation") for path in tmp_path.glob("*.png"))
-    assert any(path.name.startswith("report_scope_reconciliation") for path in tmp_path.glob("*.scene.json"))
-    assert any(path.name.startswith("channel_policy_transfer") for path in tmp_path.glob("*.scene.json"))
-    assert any(path.name.startswith("inventory_exception_disambiguation") for path in tmp_path.glob("*.scene.json"))
+    assert any(path.name.startswith("marker_position_rule_transfer") for path in tmp_path.glob("*.png"))
+    assert any(path.name.startswith("excel_viewport_sheet_navigation") for path in tmp_path.glob("*.png"))
+    assert any(path.name.startswith("marker_position_rule_transfer") for path in tmp_path.glob("*.scene.json"))
+    assert any(path.name.startswith("excel_viewport_sheet_navigation") for path in tmp_path.glob("*.scene.json"))
     manifest = (tmp_path / "manifest.json").read_text(encoding="utf-8")
     review_html = (tmp_path / "review.html").read_text(encoding="utf-8")
     assert '"surface_id"' in manifest
@@ -58,23 +56,23 @@ def test_export_preview_gallery_writes_index_and_raster_artifacts(tmp_path) -> N
 
 
 def test_export_preview_gallery_can_filter_family_and_level(tmp_path) -> None:
-    result = export_preview_gallery(tmp_path, seed=0, families=["channel_policy_transfer"], levels=[3])
+    result = export_preview_gallery(tmp_path, seed=0, families=["marker_position_rule_transfer"], levels=[3])
     manifest = (tmp_path / "manifest.json").read_text(encoding="utf-8")
 
     assert result["count"] > 0
-    assert "channel_policy_transfer" in manifest
-    assert "report_scope_reconciliation" not in manifest
+    assert "marker_position_rule_transfer" in manifest
+    assert "excel_viewport_sheet_navigation" not in manifest
     assert '"level": "3"' in manifest
     assert '"level": "1"' not in manifest
 
 
-def test_export_preview_gallery_includes_exception_note_overlay(tmp_path) -> None:
-    export_preview_gallery(tmp_path, seed=0, families=["inventory_exception_disambiguation"], levels=[2, 3])
+def test_export_preview_gallery_includes_marker_note_overlay(tmp_path) -> None:
+    export_preview_gallery(tmp_path, seed=0, families=["marker_position_rule_transfer"], levels=[3])
     manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     previews = manifest["previews"]
 
     assert previews
-    assert all(preview["family"] == "inventory_exception_disambiguation" for preview in previews)
+    assert all(preview["family"] == "marker_position_rule_transfer" for preview in previews)
     assert any(preview["kind"] == "note_overlay" and preview["page_id"] == "exception-p2" for preview in previews)
 
 
@@ -118,16 +116,16 @@ def test_audit_readability_parser_accepts_pack_and_instance_ids() -> None:
             "--pack",
             "fixture_pack_v1",
             "--instance-id",
-            "fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
+            "fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0",
             "--instance-id",
-            "fixture_pack_v1__report_scope_reconciliation_merged_scope_cell_l1_s0",
+            "fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0",
         ]
     )
     assert args.out == "artifacts/tmp_fixture_pack_audit"
     assert args.pack == "fixture_pack_v1"
     assert args.instance_ids == [
-        "fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
-        "fixture_pack_v1__report_scope_reconciliation_merged_scope_cell_l1_s0",
+        "fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0",
+        "fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0",
     ]
 
 
@@ -184,16 +182,16 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
         pack_label="Fixture Pack v1",
         instances=(
             SimpleNamespace(
-                instance_id="fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0",
+                instance_id="fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0",
                 instance_label="채널 집행 기준 L1",
-                family="channel_policy_transfer",
+                family="marker_position_rule_transfer",
                 level=1,
                 benchmark_track="canonical_real_tableqa",
             ),
             SimpleNamespace(
-                instance_id="fixture_pack_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0",
+                instance_id="fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0",
                 instance_label="재고 예외 판정 L1",
-                family="inventory_exception_disambiguation",
+                family="excel_viewport_sheet_navigation",
                 level=1,
                 benchmark_track="canonical_real_tableqa",
             ),
@@ -210,7 +208,7 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
         previews = [
             {
                 "surface_id": f"{instance_ids[0]}-query-query-p1",
-                "family": "inventory_exception_disambiguation" if "inventory" in instance_ids[0] else "channel_policy_transfer",
+                "family": "excel_viewport_sheet_navigation" if "excel" in instance_ids[0] else "marker_position_rule_transfer",
                 "family_label": "demo",
                 "level": "1",
                 "kind": "query",
@@ -224,11 +222,11 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
                 "pack_id": pack,
             }
         ]
-        if "inventory" in instance_ids[0]:
+        if "excel" in instance_ids[0]:
             previews.append(
                 {
                     "surface_id": f"{instance_ids[0]}-exception-exception-p2-note-scope-note",
-                    "family": "inventory_exception_disambiguation",
+                    "family": "excel_viewport_sheet_navigation",
                     "family_label": "demo",
                     "level": "1",
                     "kind": "note_overlay",
@@ -253,13 +251,13 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
                     {
                         "pack_id": env.get("PLAYWRIGHT_TARGET_PACK_ID"),
                         "instance_id": env.get("PLAYWRIGHT_TARGET_INSTANCE_ID"),
-                        "opened_notes": ["scope-note"] if "inventory" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", "") else [],
+                            "opened_notes": ["scope-note"] if "excel" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", "") else [],
                     },
                     ensure_ascii=False,
                 ),
                 encoding="utf-8",
             )
-            if "inventory" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", ""):
+            if "excel" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", ""):
                 return SimpleNamespace(returncode=1, stdout="workbench failed", stderr="")
             return SimpleNamespace(returncode=0, stdout="workbench ok", stderr="")
         return SimpleNamespace(returncode=0, stdout="surface ok", stderr="")
@@ -276,8 +274,8 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
     assert summary["surface_failures"] == 0
     assert summary["workbench_failures"] == 1
     assert summary["blocking_failures"] == 1
-    assert summary["runs"][0]["instance_id"] == "fixture_pack_v1__channel_policy_transfer_icon_scope_cell_l1_s0"
-    assert summary["runs"][1]["instance_id"] == "fixture_pack_v1__inventory_exception_disambiguation_pattern_vs_icon_statement_l1_s0"
+    assert summary["runs"][0]["instance_id"] == "fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0"
+    assert summary["runs"][1]["instance_id"] == "fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0"
     assert summary["runs"][1]["workbench_navigation"]["summary"]["opened_notes"] == ["scope-note"]
     assert (tmp_path / "summary.json").exists()
     assert (tmp_path / "summary.md").exists()

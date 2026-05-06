@@ -75,7 +75,6 @@ class GeneratedBenchmarkTemplate(BaseModel):
     benchmark_track: str | None = None
     difficulty_tier: str | None = None
     is_active: bool = True
-    is_deprecated: bool = False
     answer_form: str | None = None
     primary_operator: str | None = None
     support_operator: str | None = None

@@ -78,6 +78,9 @@ frontend/test-results/
 output/
 output_*/
 I_origin_*/
+fault*.png
+review-overview-debug*.png
+generated-default-*.png
 
 # Temp - 임시 파일
 temp/

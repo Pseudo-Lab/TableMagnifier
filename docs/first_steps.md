@@ -1,12 +1,12 @@
 # table-env-bench 첫걸음
 
 가장 짧게 말하면, 지금 이 저장소는 `canonical_real_tableqa` track 위에서 `marker_position_rule_transfer`를 우선 generator family로 운영하는 Visual TableQA reasoning benchmark다.
-`report_scope_reconciliation`, `channel_policy_transfer`, `inventory_exception_disambiguation`은 회귀 테스트와 비교용 deprecated generator family로 남아 있다.
+`excel_viewport_sheet_navigation`은 viewport pan/zoom admission gate를 검증하는 active canonical/dev family다. deprecated generator family는 canonical registry에서 제거했다.
 
 ## 먼저 이해할 것
 
 - 표가 중심 evidence다
-- merged header, row group, subtotal, example, note가 실제 규칙을 결정한다
+- marker anchor, legend, exception sheet, viewport movement가 실제 규칙을 결정한다
 - 기본 observation은 `viewport_svg` 중심이다
 - workbench와 API는 기본적으로 generator family catalog를 노출한다
 
@@ -39,9 +39,7 @@ uv run python -m table_env_bench.scripts.run_server --reload
 3. [docs/real_data_authoring_policy.md](./real_data_authoring_policy.md)
 4. [docs/level_design_policy.md](./level_design_policy.md)
 5. [src/table_env_bench/data/families/marker_position_rule_transfer.py](../src/table_env_bench/data/families/marker_position_rule_transfer.py)
-6. [src/table_env_bench/data/families/channel_policy_transfer.py](../src/table_env_bench/data/families/channel_policy_transfer.py)
-7. [src/table_env_bench/data/families/report_scope_reconciliation.py](../src/table_env_bench/data/families/report_scope_reconciliation.py)
-8. [src/table_env_bench/data/families/inventory_exception_disambiguation.py](../src/table_env_bench/data/families/inventory_exception_disambiguation.py)
+6. [src/table_env_bench/data/families/excel_viewport_sheet_navigation.py](../src/table_env_bench/data/families/excel_viewport_sheet_navigation.py)
 
 ## 새 family 추가 방식
 
@@ -63,9 +61,8 @@ Codex로 문제 family를 만들 때는 `$tableqa-family-author` skill을 먼저
 - 이 표에서 어느 header scope가 질문 대상인가
 - 표식이 셀 안 어느 모서리에 있는지가 어떤 규칙을 뜻하는가
 - 예시에서 배운 rule을 query에 그대로 전이할 수 있는가
-- 반복되는 팀 라벨 중 어느 지역 블록이 맞는가
-- 반례를 보지 않으면 왜 잘못된 규칙이 남는가
-- note를 읽지 않으면 왜 정답이 고정되지 않는가
+- 반례를 보지 않으면 왜 잘못된 표식 규칙이 남는가
+- viewport를 옮기지 않으면 왜 target column evidence를 확인할 수 없는가
 
 ## 참고
 

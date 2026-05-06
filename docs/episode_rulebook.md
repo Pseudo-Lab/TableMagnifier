@@ -47,8 +47,6 @@
 
 추천 family:
 
-- `channel_policy_transfer`
-- `report_scope_reconciliation`
 
 ### 3.2 `membership_by_marker`
 
@@ -69,7 +67,6 @@
 
 추천 family:
 
-- `channel_policy_transfer`
 - `legend_operator_composition`
 
 ### 3.3 `membership_by_pattern_not_color`
@@ -89,7 +86,6 @@
 
 추천 family:
 
-- `inventory_exception_disambiguation`
 
 ### 3.4 `hierarchy_by_indentation`
 
@@ -109,7 +105,6 @@
 
 추천 family:
 
-- `report_scope_reconciliation`
 
 ### 3.5 `section_boundary_by_band`
 
@@ -129,7 +124,6 @@
 추천 family:
 
 - `order_sensitive_worksheet_pipeline`
-- `report_scope_reconciliation`
 
 ### 3.6 `table_chart_anchor_match`
 
@@ -167,7 +161,6 @@
 
 추천 family:
 
-- `inventory_exception_disambiguation`
 - `cross_format_table_reasoning`
 
 ### 3.8 `stage_order_matters`

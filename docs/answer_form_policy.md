@@ -62,7 +62,6 @@
 잘 맞는 operator:
 
 - `verify_statement`
-- `inventory_exception_disambiguation`
 
 장점:
 
@@ -82,7 +81,6 @@
 잘 맞는 operator:
 
 - `order_sequence`
-- `channel_policy_transfer`
 - `classify_state`
 
 장점:
@@ -144,10 +142,8 @@
 
 ## 5. family별 추천
 
-- `channel_policy_transfer`
   - target cell choice
   - mini-table choice
-- `inventory_exception_disambiguation`
   - statement choice
   - target cell choice
 - `legend_operator_composition`
@@ -156,7 +152,6 @@
 - `cross_format_table_reasoning`
   - row label
   - statement choice
-- `report_scope_reconciliation`
   - target cell choice
   - row / column label
 - `order_sensitive_worksheet_pipeline`

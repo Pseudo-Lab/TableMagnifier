@@ -260,11 +260,9 @@ Level별로 cue는 아래 정도가 적당하다.
 
 ## 4. family별 추천 cue
 
-- `channel_policy_transfer`
   - merged-cell span direction
   - marker morphology
   - indentation hierarchy
-- `inventory_exception_disambiguation`
   - conditional formatting pattern
   - icon anchor position
   - note anchor
@@ -276,7 +274,6 @@ Level별로 cue는 아래 정도가 적당하다.
   - chart-to-table alignment
   - note anchor
   - merged header scope
-- `report_scope_reconciliation`
   - indentation hierarchy
   - merged-cell span direction
   - border / band semantics

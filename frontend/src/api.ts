@@ -10,7 +10,7 @@ export type CatalogLevel = {
 export type CatalogFamily = {
   family: string
   family_display_name: string
-  family_status: 'preferred' | 'deprecated' | string
+  family_status: 'preferred' | 'active' | string
   is_preferred: boolean
   levels: CatalogLevel[]
 }
@@ -63,7 +63,6 @@ export type GeneratedBenchmarkTemplate = {
   benchmark_track?: string | null
   difficulty_tier?: string | null
   is_active: boolean
-  is_deprecated: boolean
   answer_form?: string | null
   primary_operator?: string | null
   support_operator?: string | null

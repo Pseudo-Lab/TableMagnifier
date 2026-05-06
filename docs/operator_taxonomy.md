@@ -234,16 +234,13 @@ support operator는 primary operator를 돕는다.
 
 ## 5. family별 operator 추천
 
-- `channel_policy_transfer`
   - primary: `select_scope`, `filter_members`, `match_mapping`
-- `inventory_exception_disambiguation`
   - primary: `verify_statement`, `select_scope`
   - support: `disambiguate_by_exception`
 - `legend_operator_composition`
   - primary: `order_sequence`, `match_mapping`
 - `cross_format_table_reasoning`
   - primary: `match_mapping`, `classify_state`
-- `report_scope_reconciliation`
   - primary: `select_scope`, `rank_compare`
 - `marker_position_rule_transfer`
   - primary: `match_mapping`, `verify_statement`

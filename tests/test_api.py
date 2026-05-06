@@ -34,32 +34,29 @@ def test_api_session_flow_for_workbook_env() -> None:
     families = catalog_response.json()
     assert [item["family"] for item in families] == [
         "marker_position_rule_transfer",
-        "channel_policy_transfer",
         "excel_viewport_sheet_navigation",
-        "inventory_exception_disambiguation",
-        "report_scope_reconciliation",
     ]
     assert families[0]["is_preferred"] is True
     assert families[0]["family_status"] == "preferred"
     excel_family = next(item for item in families if item["family"] == "excel_viewport_sheet_navigation")
     assert excel_family["is_preferred"] is False
     assert excel_family["family_status"] == "active"
-    assert all(item["family_status"] == "deprecated" for item in families[1:] if item["family"] != "excel_viewport_sheet_navigation")
+    assert all(item["family_status"] != "deprecated" for item in families)
 
     session_response = client.post(
         "/api/sessions",
-        json={"family": "report_scope_reconciliation", "level": 1, "seed": 0, "mode": "agent"},
+        json={"family": "marker_position_rule_transfer", "level": 1, "seed": 0, "mode": "agent"},
     )
     assert session_response.status_code == 200
     session_payload = session_response.json()
     session_id = session_payload["session_id"]
-    assert session_payload["info"]["sheet_tabs"] == ["보고표", "선택"]
-    assert session_payload["info"]["active_sheet_id"] == "overview"
-    assert session_payload["info"]["current_page_id"] == "overview-p1"
+    assert session_payload["info"]["sheet_tabs"] == ["예시", "범례", "반례", "질의"]
+    assert session_payload["info"]["active_sheet_id"] == "examples"
+    assert session_payload["info"]["current_page_id"] == "examples-p1"
     assert session_payload["info"]["zoom_index"] == 0
     assert session_payload["info"]["viewbox"]["width"] > 0
-    assert session_payload["info"]["required_navigation"]["required_sheet_ids"] == ["overview", "query"]
-    assert session_payload["observation"]["viewport_scene"]["page"]["page_id"] == "overview-p1"
+    assert session_payload["info"]["required_navigation"]["required_sheet_ids"] == ["examples", "legend", "exception", "query"]
+    assert session_payload["observation"]["viewport_scene"]["page"]["page_id"] == "examples-p1"
     assert "elements" not in session_payload["observation"]["viewport_scene"]["page"]
     assert "regions" not in session_payload["observation"]["viewport_scene"]["page"]
     assert "notes" not in session_payload["observation"]["viewport_scene"]["page"]
@@ -71,10 +68,10 @@ def test_api_session_flow_for_workbook_env() -> None:
 
     step_response = client.post(
         f"/api/sessions/{session_id}/actions",
-        json={"type": "select_sheet", "sheet": "선택"},
+        json={"type": "select_sheet", "sheet": "질의"},
     )
     assert step_response.status_code == 200
-    assert step_response.json()["observation"]["current_sheet_name"] == "선택"
+    assert step_response.json()["observation"]["current_sheet_name"] == "질의"
 
     replay_response = client.get(f"/api/sessions/{session_id}/replay")
     assert replay_response.status_code == 200
@@ -92,8 +89,7 @@ def test_generated_benchmark_suite_catalog_is_compact_and_launchable() -> None:
     payload = response.json()
     assert list(payload) == ["suites"]
     suites = payload["suites"]
-    assert [suite["suite_id"] for suite in suites] == ["canonical_dev", "eval_hard_dev", "eval_hard_holdout"]
-    assert {suite["suite_id"] for suite in suites} <= {"canonical_dev", "eval_hard_dev", "eval_hard_holdout"}
+    assert [suite["suite_id"] for suite in suites] == ["canonical_dev"]
 
     first_suite = suites[0]
     first_template = first_suite["templates"][0]

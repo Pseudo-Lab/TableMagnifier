@@ -15,18 +15,12 @@ workbench와 API의 기본 노출 경로는 generator family catalog이며, hidd
   - 현재 우선 generator family다.
   - 예시/범례/반례에서 셀 모서리 표식 위치 규칙을 유도하고 query table에 전이한다.
 
-## Deprecated generator families
+Active canonical/dev family:
 
-아래 family들은 회귀 테스트와 비교 baseline을 위해 유지하지만, 새 benchmark 방향의 우선 노출 대상은 아니다.
+- `excel_viewport_sheet_navigation`
+  - 넓은 worksheet에서 target column까지 pan/zoom으로 이동해야 하는 viewport navigation 과업이다.
 
-- `channel_policy_transfer`
-  - 사례 표의 집행 기준을 현재 채널표에 옮겨 적용한다.
-- `inventory_exception_disambiguation`
-  - 재고 표시 사례와 예외 사례를 비교해 현재 재고표의 해석을 확정한다.
-- `report_scope_reconciliation`
-  - 중첩 헤더, 반복 팀 라벨, 소계 구조를 읽고 올바른 보고 범위를 고른다.
-
-네 family 모두 table/worksheet evidence가 중심이고, note나 보조 시트는 실제 범위를 좁히는 용도로만 쓴다.
+이전 comparison generator family는 canonical registry와 UI/API 노출 경로에서 제거했다.
 
 ## 무엇을 측정하나
 

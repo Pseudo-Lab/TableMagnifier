@@ -20,7 +20,7 @@ def test_scorers_and_episode_metrics_behave_as_expected() -> None:
         unique_sheets_visited=2,
         unique_pages_visited=3,
         metadata={
-            "family": "report_scope_reconciliation",
+            "family": "marker_position_rule_transfer",
             "navigation": {"sheet_switch_count": 1, "wrong_sheet_visit_count": 0, "revisit_count": 0},
             "coverage": {"answer_form": "count", "operator_tags": ["count"], "cue_tags": ["note_scope"]},
         },
@@ -45,7 +45,7 @@ def test_episode_evaluator_rewards_decisive_evidence_before_submit() -> None:
         unique_sheets_visited=3,
         unique_pages_visited=3,
         metadata={
-            "family": "inventory_exception_disambiguation",
+            "family": "marker_position_rule_transfer",
             "navigation": {
                 "sheet_switch_count": 2,
                 "wrong_sheet_visit_count": 0,

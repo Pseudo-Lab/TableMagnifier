@@ -118,23 +118,12 @@ def test_renderer_supports_cell_icon_pattern_and_frame() -> None:
 def test_registered_canonical_families_match_expected_registry() -> None:
     expected = sorted(
         [
-            "inventory_exception_disambiguation",
-            "channel_policy_transfer",
             "excel_viewport_sheet_navigation",
             "marker_position_rule_transfer",
-            "report_scope_reconciliation",
         ]
     )
     assert list_families() == expected
     assert list_canonical_families() == expected
-
-    for level in (1, 2, 3):
-        assert len(list_templates("inventory_exception_disambiguation", level)) == 1
-        assert canonical_seed_capacity("inventory_exception_disambiguation", level) == 8
-
-    for level in (1, 2, 3):
-        assert len(list_templates("channel_policy_transfer", level)) == 1
-        assert canonical_seed_capacity("channel_policy_transfer", level) == 8
 
     for level in (1, 2, 3):
         assert len(list_templates("marker_position_rule_transfer", level)) == 1
@@ -143,10 +132,6 @@ def test_registered_canonical_families_match_expected_registry() -> None:
     for level in (1, 2, 3):
         assert len(list_templates("excel_viewport_sheet_navigation", level)) == 1
         assert canonical_seed_capacity("excel_viewport_sheet_navigation", level) == 8
-
-    for level in (1, 2, 3):
-        assert len(list_templates("report_scope_reconciliation", level)) == 3
-        assert canonical_seed_capacity("report_scope_reconciliation", level) == 24
 
 
 def test_canonical_family_adapters_are_the_registry_source() -> None:
@@ -169,97 +154,16 @@ def test_canonical_family_adapters_are_the_registry_source() -> None:
 
 def test_canonical_catalog_and_split_manifest_match_registry_quota() -> None:
     split_manifest = benchmark_split_manifest()
-    assert len(split_manifest["dev_public"]) == 18
-    assert len(split_manifest["test_holdout"]) == 3
+    assert len(split_manifest["dev_public"]) == 6
+    assert len(split_manifest["test_holdout"]) == 0
 
     all_records = benchmark_episode_records()
     dev_records = benchmark_episode_records(split="dev_public")
     holdout_records = benchmark_episode_records(split="test_holdout")
-    assert len(all_records) == 168
-    assert len(dev_records) == 144
-    assert len(holdout_records) == 24
-    assert len({record["episode_id"] for record in all_records}) == 168
-
-
-def test_hierarchical_family_generates_renderable_level_three_episode() -> None:
-    spec = generate_episode("report_scope_reconciliation", 3, seed=23)
-    assert spec.metadata["track"] == "canonical_real_tableqa"
-    assert spec.metadata["benchmark_track"] == "canonical_real_tableqa"
-    assert spec.metadata["template_id"] in set(list_templates("report_scope_reconciliation", 3))
-    assert spec.metadata["answer_form"] in {"cell_choice", "statement_choice", "row_label_choice"}
-    svg = SvgWorkbookRenderer().render_page(spec.workbook, sheet_index=0, page_index=0)
-    assert "<svg " in svg
-
-
-def test_hierarchical_family_uses_dense_grouped_tables_and_level_progression() -> None:
-    l1 = generate_episode("report_scope_reconciliation", 1, seed=0, template_id="merged_scope_cell")
-    l2 = generate_episode("report_scope_reconciliation", 2, seed=0, template_id="subtotal_row_label")
-
-    l1_overview = next(element for element in l1.workbook.sheets[0].pages[0].elements if isinstance(element, TableElementSpec))
-    l2_overview = next(element for element in l2.workbook.sheets[0].pages[0].elements if isinstance(element, TableElementSpec))
-
-    assert l1_overview.n_cols == 7
-    assert l1_overview.n_rows == 18
-    assert l2_overview.n_cols == 7
-    assert l2_overview.n_rows == 18
-
-    l1_team_labels = [cell.text.strip() for cell in l1_overview.cells if cell.text.strip() in {"1팀", "2팀", "3팀"}]
-    assert l1_team_labels.count("1팀") == 3
-    assert l1_team_labels.count("2팀") == 3
-    assert l1_team_labels.count("3팀") == 3
-
-    assert [sheet.sheet_id for sheet in l1.workbook.sheets] == ["overview", "query"]
-    assert [sheet.sheet_id for sheet in l2.workbook.sheets] == ["overview", "notes", "query"]
-    assert any(cell.text == "합계 전체" for cell in l2_overview.cells)
-
-
-def test_channel_policy_transfer_family_uses_examples_and_support_surface_progression() -> None:
-    l1 = generate_episode("channel_policy_transfer", 1, seed=0, template_id="icon_scope_cell")
-    l2 = generate_episode("channel_policy_transfer", 2, seed=0, template_id="icon_scope_cell")
-    l3 = generate_episode("channel_policy_transfer", 3, seed=0, template_id="icon_scope_cell")
-
-    assert [sheet.sheet_id for sheet in l1.workbook.sheets] == ["examples", "query"]
-    assert [page.page_id for page in l1.workbook.sheets[0].pages] == ["examples-p1"]
-
-    assert [sheet.sheet_id for sheet in l2.workbook.sheets] == ["examples", "query"]
-    assert [page.page_id for page in l2.workbook.sheets[0].pages] == ["examples-p1", "examples-p2"]
-
-    assert [sheet.sheet_id for sheet in l3.workbook.sheets] == ["examples", "appendix", "query"]
-    assert [page.page_id for page in l3.workbook.sheets[0].pages] == ["examples-p1", "examples-p2"]
-    assert l3.workbook.sheets[1].pages[0].notes
-    assert "must_open_note" in l3.metadata["required_actions"]
-
-
-def test_inventory_exception_disambiguation_family_uses_exception_and_note_progression() -> None:
-    l1 = generate_episode("inventory_exception_disambiguation", 1, seed=0, template_id="pattern_vs_icon_statement")
-    l2 = generate_episode("inventory_exception_disambiguation", 2, seed=0, template_id="pattern_vs_icon_statement")
-    l3 = generate_episode("inventory_exception_disambiguation", 3, seed=0, template_id="pattern_vs_icon_statement")
-
-    assert [sheet.sheet_id for sheet in l1.workbook.sheets] == ["examples", "exception", "query"]
-    assert [page.page_id for page in l1.workbook.sheets[1].pages] == ["exception-p1"]
-    assert "must_visit_exception" in l1.metadata["required_actions"]
-    assert "must_open_note" not in l1.metadata["required_actions"]
-    assert "no_exception" in l1.metadata["shortcut_probes"]
-    assert "no_exception_note" not in l1.metadata["shortcut_probes"]
-
-    assert [page.page_id for page in l2.workbook.sheets[1].pages] == ["exception-p1", "exception-p2"]
-    assert l2.workbook.sheets[1].pages[1].notes
-    assert "must_open_note" in l2.metadata["required_actions"]
-    assert "no_exception" in l2.metadata["shortcut_probes"]
-    assert "no_exception_note" in l2.metadata["shortcut_probes"]
-    assert any(
-        region.role == "note_marker" and region.linked_note_id == "scope-note"
-        for region in l2.workbook.sheets[1].pages[1].regions
-    )
-
-    assert [page.page_id for page in l3.workbook.sheets[1].pages] == ["exception-p1", "exception-p2"]
-    assert "no_exception_note" in l3.metadata["shortcut_probes"]
-    assert any(
-        region.role == "note_marker" and region.linked_note_id == "scope-note"
-        for region in l3.workbook.sheets[1].pages[1].regions
-    )
-    assert any(page.title == "선택 시트" for page in l3.workbook.sheets[2].pages)
-    assert l3.answer.canonical == "C"
+    assert len(all_records) == 48
+    assert len(dev_records) == 48
+    assert len(holdout_records) == 0
+    assert len({record["episode_id"] for record in all_records}) == 48
 
 
 def test_marker_position_rule_transfer_uses_legend_exception_and_note_progression() -> None:
@@ -331,45 +235,11 @@ def test_marker_position_rule_transfer_counterfactual_records_pair_variant() -> 
     assert counterfactual.metadata["variant"] == "counterfactual"
 
 
-def test_inventory_exception_disambiguation_reserves_space_for_table_headings() -> None:
-    heading_offset = 44
-    minimum_gap = 20
-
-    l1 = generate_episode("inventory_exception_disambiguation", 1, seed=0, template_id="pattern_vs_icon_statement")
-    example_page = l1.workbook.sheets[0].pages[0]
-    example_tables = {element.element_id: element for element in example_page.elements if isinstance(element, TableElementSpec)}
-    hint_table = example_tables["counter-l1-example-hint"]
-    upper_examples_bottom = max(
-        example_tables["counter-l1-example-1"].rect.y + example_tables["counter-l1-example-1"].rect.height,
-        example_tables["counter-l1-example-2"].rect.y + example_tables["counter-l1-example-2"].rect.height,
-    )
-    assert hint_table.rect.y - heading_offset >= upper_examples_bottom + minimum_gap
-
-    for level in (1, 2, 3):
-        episode = generate_episode("inventory_exception_disambiguation", level, seed=0, template_id="pattern_vs_icon_statement")
-        query_page = episode.workbook.sheets[2].pages[0]
-        query_tables = [element for element in query_page.elements if isinstance(element, TableElementSpec)]
-        main_query_table = next(element for element in query_tables if element.element_id.endswith("-query"))
-        choice_tables = [element for element in query_tables if element.element_id.startswith(f"counter-l{level}-choice-")]
-
-        assert len(choice_tables) == 4
-        for choice_table in choice_tables:
-            assert choice_table.rect.y - heading_offset >= main_query_table.rect.y + main_query_table.rect.height + minimum_gap
-        sorted_choice_tables = sorted(choice_tables, key=lambda element: (element.rect.y, element.rect.x))
-        first_row = sorted_choice_tables[:2]
-        second_row = sorted_choice_tables[2:]
-        assert len(first_row) == 2
-        assert len(second_row) == 2
-        first_row_bottom = max(element.rect.y + element.rect.height for element in first_row)
-        for lower_table in second_row:
-            assert lower_table.rect.y - heading_offset >= first_row_bottom + minimum_gap
-
-
 def test_canonical_manifests_include_quality_contract_metadata() -> None:
-    expected_ranges = {1: (2, 4), 2: (3, 4), 3: (4, 5)}
+    expected_ranges = {1: (2, 4), 2: (3, 5), 3: (4, 6)}
 
     for level in (1, 2, 3):
-        for family in ("inventory_exception_disambiguation", "marker_position_rule_transfer", "report_scope_reconciliation"):
+        for family in list_canonical_families():
             for manifest in list_manifests(family, level):
                 assert manifest.primary_operator in manifest.operator_tags
                 if manifest.support_operator is not None:
@@ -382,7 +252,7 @@ def test_canonical_manifests_include_quality_contract_metadata() -> None:
                 assert manifest.distractor_failure_modes
                 assert manifest.required_actions
                 assert manifest.required_evidence
-                assert manifest.task_archetype in {"review_verification", "exception_audit", "marker_position_transfer", "scope_reconciliation"}
+                assert manifest.task_archetype in {"marker_position_transfer", "excel_viewport_transfer"}
                 assert manifest.scenario_context
                 assert manifest.benchmark_track == "canonical_real_tableqa"
                 assert manifest.reasoning_archetype in {"induce_apply", "compose_apply", "disambiguate_apply"}
@@ -399,7 +269,7 @@ def test_canonical_manifests_include_quality_contract_metadata() -> None:
                 assert "query" in manifest.required_sheet_ids
                 assert any(
                     tag in manifest.cue_tags
-                    for tag in ("merged_header_scope", "subtotal_block", "indentation_depth", "pattern_marker", "icon_anchor", "icon_anchor_position")
+                    for tag in ("pattern_marker", "icon_anchor_position", "viewport_window", "column_offset")
                 )
 
 
@@ -467,12 +337,7 @@ def test_canonical_catalog_records_propagate_quality_metadata() -> None:
     catalog = canonical_episode_catalog()
     assert catalog
     sample = catalog[0]
-    assert sample["family"] in {
-        "inventory_exception_disambiguation",
-        "channel_policy_transfer",
-        "marker_position_rule_transfer",
-        "report_scope_reconciliation",
-    }
+    assert sample["family"] in {"excel_viewport_sheet_navigation", "marker_position_rule_transfer"}
     assert "primary_operator" in sample
     assert "required_visual_cues" in sample
     assert "task_archetype" in sample
@@ -502,10 +367,10 @@ def test_canonical_catalog_records_propagate_quality_metadata() -> None:
     assert "level_rationale" in benchmark_sample
     assert "required_navigation" in benchmark_sample
 
-    suite_records = benchmark_suite_records(suite="eval_hard_dev")
+    suite_records = benchmark_suite_records(suite="canonical_dev")
     assert suite_records
     suite_sample = suite_records[0]
-    assert suite_sample["family"] in {"channel_policy_transfer", "report_scope_reconciliation"}
+    assert suite_sample["family"] in {"excel_viewport_sheet_navigation", "marker_position_rule_transfer"}
     assert "primary_operator" in suite_sample
     assert "required_visual_cues" in suite_sample
     assert "task_archetype" in suite_sample

@@ -15,8 +15,6 @@
 현재 generated suite는 다음 순서로 노출됩니다.
 
 - `canonical_dev`
-- `eval_hard_dev`
-- `eval_hard_holdout`
 
 Workbench는 instance pack이 없으면 generated benchmark selector를 보여주고, 선택한 record의 `family`, `level`, `seed`, `template_id`로 정확히 세션을 시작합니다. Generated benchmark에는 free-form seed 입력이 없고, catalog에 선언된 seed slot만 선택합니다.
 
@@ -32,13 +30,7 @@ Active/dev family:
 - `excel_viewport_sheet_navigation`
   - pan/zoom/sheet navigation과 viewport traversal 안정성을 검증합니다.
 
-Deprecated comparison families:
-
-- `channel_policy_transfer`
-- `inventory_exception_disambiguation`
-- `report_scope_reconciliation`
-
-Deprecated family는 삭제하지 않고 regression, baseline 비교, hard suite 일부 구성을 위해 유지합니다.
+이전 comparison family와 해당 hard suite는 canonical registry에서 제거했습니다. 현재 UI/API 기본 catalog에는 위 두 family만 노출됩니다.
 
 ## 빠른 시작
 

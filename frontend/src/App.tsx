@@ -69,9 +69,6 @@ function familyStatusSuffix(family: CatalogFamily) {
   if (family.is_preferred) {
     return ' · 우선'
   }
-  if (family.family_status === 'deprecated') {
-    return ' · deprecated'
-  }
   if (family.family_status === 'active') {
     return ' · active'
   }
@@ -739,7 +736,7 @@ function App() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
                     <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">개발용 패밀리</label>
-                    <Badge data-testid="family-status-badge" variant={familyRecord?.is_preferred ? 'secondary' : familyRecord?.family_status === 'deprecated' ? 'outline' : 'default'}>
+                    <Badge data-testid="family-status-badge" variant={familyRecord?.is_preferred ? 'secondary' : 'default'}>
                       {familyStatusLabel(familyRecord)}
                     </Badge>
                   </div>

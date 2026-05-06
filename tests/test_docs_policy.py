@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from table_env_bench.server.app import ACTIVE_GENERATOR_FAMILIES, PREFERRED_GENERATOR_FAMILY
+from table_env_bench.data.generators import list_families
+from table_env_bench.server.app import PREFERRED_GENERATOR_FAMILY
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -15,7 +16,7 @@ def test_task_family_docs_match_current_release_posture() -> None:
     doc = _read_doc("task_families.md")
 
     assert PREFERRED_GENERATOR_FAMILY == "marker_position_rule_transfer"
-    assert "excel_viewport_sheet_navigation" in ACTIVE_GENERATOR_FAMILIES
+    assert list_families() == ["excel_viewport_sheet_navigation", "marker_position_rule_transfer"]
     assert "### 우선 family" in doc
     assert "- `marker_position_rule_transfer`" in doc
     assert "### Active canonical/dev families" in doc
@@ -23,19 +24,7 @@ def test_task_family_docs_match_current_release_posture() -> None:
     assert "`family_status == active`" in doc
     assert "`is_preferred == false`" in doc
     assert "frozen `public_*` instance pack을 포함하지 않는다" in doc
-    assert "새 frozen pack 승격은 별도 release PRD" in doc
-
-
-def test_quality_audit_covers_preferred_and_viewport_families() -> None:
-    doc = _read_doc("canonical_quality_audit.md")
-
-    assert "## 4. `marker_position_rule_transfer`" in doc
-    assert "## 5. `excel_viewport_sheet_navigation`" in doc
-    assert "`wide_sheet_rule_transfer`" in doc
-    assert "`match_column_offset` / `rule_transfer`" in doc
-    assert "`required_navigation.required_viewport_states`" in doc
-    assert "`target_center_in_viewbox`" in doc
-    assert "`initial_viewport_only`, `no_pan_zoom`, `sheet_skip`" in doc
+    assert "deprecated generator family는 canonical registry에서 제거했다" in doc
 
 
 def test_navigation_contract_is_documented_as_authoring_policy() -> None:

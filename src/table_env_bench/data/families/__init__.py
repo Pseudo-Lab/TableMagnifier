@@ -1,24 +1,6 @@
 """Canonical family registry."""
 
 from table_env_bench.data.families.adapters import FamilyAdapter
-from table_env_bench.data.families.inventory_exception_disambiguation import (
-    FAMILY as INVENTORY_EXCEPTION_FAMILY,
-    FAMILY_LABEL as INVENTORY_EXCEPTION_LABEL,
-    build_episode as build_inventory_exception_episode,
-    list_manifests as list_inventory_exception_manifests,
-)
-from table_env_bench.data.families.channel_policy_transfer import (
-    FAMILY as CHANNEL_POLICY_FAMILY,
-    FAMILY_LABEL as CHANNEL_POLICY_LABEL,
-    build_episode as build_channel_policy_transfer_episode,
-    list_manifests as list_channel_policy_transfer_manifests,
-)
-from table_env_bench.data.families.report_scope_reconciliation import (
-    FAMILY as REPORT_SCOPE_FAMILY,
-    FAMILY_LABEL as REPORT_SCOPE_LABEL,
-    build_episode as build_report_scope_episode,
-    list_manifests as list_report_scope_manifests,
-)
 from table_env_bench.data.families.marker_position_rule_transfer import (
     FAMILY as MARKER_POSITION_FAMILY,
     FAMILY_LABEL as MARKER_POSITION_LABEL,
@@ -35,18 +17,6 @@ from table_env_bench.data.families.shared import CANONICAL_SEEDS_PER_TEMPLATE, T
 
 CANONICAL_FAMILY_ADAPTERS = (
     FamilyAdapter(
-        family=INVENTORY_EXCEPTION_FAMILY,
-        label=INVENTORY_EXCEPTION_LABEL,
-        build_episode=build_inventory_exception_episode,
-        list_manifests=list_inventory_exception_manifests,
-    ),
-    FamilyAdapter(
-        family=CHANNEL_POLICY_FAMILY,
-        label=CHANNEL_POLICY_LABEL,
-        build_episode=build_channel_policy_transfer_episode,
-        list_manifests=list_channel_policy_transfer_manifests,
-    ),
-    FamilyAdapter(
         family=EXCEL_VIEWPORT_FAMILY,
         label=EXCEL_VIEWPORT_LABEL,
         build_episode=build_excel_viewport_episode,
@@ -57,12 +27,6 @@ CANONICAL_FAMILY_ADAPTERS = (
         label=MARKER_POSITION_LABEL,
         build_episode=build_marker_position_episode,
         list_manifests=list_marker_position_manifests,
-    ),
-    FamilyAdapter(
-        family=REPORT_SCOPE_FAMILY,
-        label=REPORT_SCOPE_LABEL,
-        build_episode=build_report_scope_episode,
-        list_manifests=list_report_scope_manifests,
     ),
 )
 

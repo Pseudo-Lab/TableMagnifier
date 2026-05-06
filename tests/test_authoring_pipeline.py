@@ -122,7 +122,7 @@ def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path
     frontend_root.mkdir()
     context = PipelineContext(
         run_id="demo-run",
-        target=build_target(family="channel_policy_transfer", level=3, seed_samples=(0,)),
+        target=build_target(family="marker_position_rule_transfer", level=3, seed_samples=(0,)),
         repo_root=tmp_path,
         artifact_root=tmp_path / "artifacts/agent_runs/demo-run",
         backend="local",
@@ -134,7 +134,7 @@ def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path
         review_dir.mkdir(parents=True, exist_ok=True)
         manifest_path = review_dir / "manifest.json"
         manifest_path.write_text(
-            '{"seed": 0, "previews": [{"family": "inventory_exception_disambiguation", "level": "3", "surface_id": "surface-1", "kind": "note_overlay", "page_id": "exception-p2"}]}',
+            '{"seed": 0, "previews": [{"family": "marker_position_rule_transfer", "level": "3", "surface_id": "surface-1", "kind": "note_overlay", "page_id": "exception-p2"}]}',
             encoding="utf-8",
         )
         return {"count": 1}
@@ -146,7 +146,7 @@ def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path
             summary_path = Path(env["PLAYWRIGHT_WORKBENCH_SUMMARY_PATH"])
             summary_path.parent.mkdir(parents=True, exist_ok=True)
             summary_path.write_text(
-                '{"visited_pages": ["exception:1/2", "exception:2/2"], "opened_notes": ["scope-note"]}',
+                '{"visited_pages": ["exception:1/2", "exception:2/2"], "opened_notes": ["anchor-scope-note"]}',
                 encoding="utf-8",
             )
         return CompletedProcess(args=command, returncode=0, stdout="ok", stderr="")
@@ -158,7 +158,7 @@ def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path
 
     context = PipelineContext(
         run_id="demo-run",
-        target=build_target(family="inventory_exception_disambiguation", level=3, seed_samples=(0,)),
+        target=build_target(family="marker_position_rule_transfer", level=3, seed_samples=(0,)),
         repo_root=tmp_path,
         artifact_root=tmp_path / "artifacts/agent_runs/demo-run",
         backend="local",
@@ -173,7 +173,7 @@ def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path
     assert any(path.endswith(".stdout.log") for path in result.artifact_paths)
     assert any(path.endswith(".stderr.log") for path in result.artifact_paths)
     assert any(path.endswith(".summary.json") for path in result.artifact_paths)
-    assert result.metrics["review_runs"][-1]["summary"]["opened_notes"] == ["scope-note"]
+    assert result.metrics["review_runs"][-1]["summary"]["opened_notes"] == ["anchor-scope-note"]
     assert result.metrics["full_seed_mode"] is False
 
 
@@ -184,7 +184,7 @@ def test_viewport_readability_agent_expands_default_seed_samples_to_full_capacit
         review_dir = Path(out_dir)
         review_dir.mkdir(parents=True, exist_ok=True)
         (review_dir / "manifest.json").write_text(
-            '{"seed": 0, "previews": [{"family": "channel_policy_transfer", "level": "1", "surface_id": "surface-1", "kind": "overview", "page_id": "examples-p1"}]}',
+            '{"seed": 0, "previews": [{"family": "marker_position_rule_transfer", "level": "1", "surface_id": "surface-1", "kind": "overview", "page_id": "examples-p1"}]}',
             encoding="utf-8",
         )
         return {"count": 1}
@@ -205,7 +205,7 @@ def test_viewport_readability_agent_expands_default_seed_samples_to_full_capacit
 
     context = PipelineContext(
         run_id="demo-run",
-        target=build_target(family="channel_policy_transfer", level=1, seed_samples=DEFAULT_SEED_SAMPLES),
+        target=build_target(family="marker_position_rule_transfer", level=1, seed_samples=DEFAULT_SEED_SAMPLES),
         repo_root=tmp_path,
         artifact_root=tmp_path / "artifacts/agent_runs/demo-run",
         backend="local",
@@ -347,7 +347,7 @@ def test_viewport_readability_agent_fails_missing_required_viewport_state(monkey
         review_dir = Path(out_dir)
         review_dir.mkdir(parents=True, exist_ok=True)
         (review_dir / "manifest.json").write_text(
-            '{"seed": 0, "previews": [{"family": "channel_policy_transfer", "level": "1", "surface_id": "surface-1", "kind": "query", "page_id": "query-p1"}]}',
+            '{"seed": 0, "previews": [{"family": "marker_position_rule_transfer", "level": "1", "surface_id": "surface-1", "kind": "query", "page_id": "query-p1"}]}',
             encoding="utf-8",
         )
         return {"count": 1}
@@ -378,7 +378,7 @@ def test_viewport_readability_agent_fails_missing_required_viewport_state(monkey
     result, _ = ViewportReadabilityAgent().run(
         PipelineContext(
             run_id="viewport-state-run",
-            target=build_target(family="channel_policy_transfer", level=1, seed_samples=(0,)),
+            target=build_target(family="marker_position_rule_transfer", level=1, seed_samples=(0,)),
             repo_root=tmp_path,
             artifact_root=tmp_path / "artifacts/agent_runs/viewport-state-run",
             backend="local",
@@ -413,7 +413,7 @@ def test_red_team_solver_derives_generic_navigation_probes(monkeypatch, tmp_path
     result, _ = RedTeamSolverAgent().run(
         PipelineContext(
             run_id="red-team-navigation-run",
-            target=build_target(family="channel_policy_transfer", level=1, seed_samples=(0,)),
+            target=build_target(family="marker_position_rule_transfer", level=1, seed_samples=(0,)),
             repo_root=tmp_path,
             artifact_root=tmp_path / "artifacts/agent_runs/red-team-navigation-run",
             backend="local",

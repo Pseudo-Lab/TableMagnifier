@@ -114,8 +114,6 @@ agent mode observation은 workbook을 직접 dump하지 않고, 현재 보이는
 
 ```json
 {
-  "episode_id": "channel_policy_transfer_icon_scope_cell_l1_s0",
-  "family": "channel_policy_transfer",
   "level": 1,
   "seed": 0,
   "locale": "ko-KR",

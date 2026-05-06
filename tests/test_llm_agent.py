@@ -46,7 +46,7 @@ def test_estimate_usage_cost_supports_known_models() -> None:
 
 
 def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
-    env = WorkbookEnv(family="report_scope_reconciliation", level=1, seed=0, template_id="merged_scope_cell", mode="human")
+    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
     agent = LLMAgent(
         client=FakeLLMClient(
             [
@@ -59,7 +59,7 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
                     "response_status": "stop",
                 },
                 {
-                    "tool_calls": [{"id": "call-1", "name": "select_sheet", "arguments": {"sheet": "선택"}}],
+                    "tool_calls": [{"id": "call-1", "name": "select_sheet", "arguments": {"sheet": "질의"}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 10, "output_tokens": 4, "total_tokens": 14},
                     "finish_reason": "stop",
@@ -67,7 +67,7 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
                     "response_status": "stop",
                 },
                 {
-                    "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": "B"}}],
+                    "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": "C"}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 9, "output_tokens": 4, "total_tokens": 13},
                     "finish_reason": "stop",
@@ -80,7 +80,7 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
     result = run_episode(env, agent)
     metadata = result.run_metadata
 
-    assert result.prediction == "B"
+    assert result.prediction == "C"
     assert result.evaluation.correctness.value == 1.0
     assert metadata["model_config"]["model"] == "gpt-5-nano"
     assert metadata["response_mode"] == "tool_calls"
@@ -94,7 +94,7 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
 
 
 def test_serialize_observation_includes_svg_and_state() -> None:
-    env = WorkbookEnv(family="report_scope_reconciliation", level=1, seed=0, template_id="merged_scope_cell", mode="human")
+    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
     observation, info = env.reset()
     prompt = serialize_observation(observation, info)
     assert "Viewport image is attached as PNG." in prompt
@@ -104,16 +104,16 @@ def test_serialize_observation_includes_svg_and_state() -> None:
 
 
 def test_extract_visible_choice_ids_from_query_page() -> None:
-    env = WorkbookEnv(family="report_scope_reconciliation", level=1, seed=0, template_id="merged_scope_cell", mode="human")
+    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
     env.reset()
-    observation, _, _, _, _ = env.step(WorkbookAction(type="select_sheet", sheet="선택"))
+    observation, _, _, _, _ = env.step(WorkbookAction(type="select_sheet", sheet="질의"))
     assert extract_visible_choice_ids(observation) == ["A", "B", "C", "D"]
 
 
 def test_extract_visible_choice_ids_falls_back_for_sanitized_agent_scene() -> None:
-    env = WorkbookEnv(family="report_scope_reconciliation", level=1, seed=0, template_id="merged_scope_cell")
+    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement")
     env.reset()
-    observation, _, _, _, _ = env.step(WorkbookAction(type="select_sheet", sheet="선택"))
+    observation, _, _, _, _ = env.step(WorkbookAction(type="select_sheet", sheet="질의"))
     assert extract_visible_choice_ids(observation) == []
 
 
@@ -130,12 +130,12 @@ def test_workbook_action_tools_omits_submit_enum_without_visible_choices() -> No
 
 
 def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
-    env = WorkbookEnv(family="report_scope_reconciliation", level=1, seed=0, template_id="merged_scope_cell", mode="human")
+    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
     agent = LLMAgent(
         client=FakeLLMClient(
             [
                 {
-                    "tool_calls": [{"id": "call-1", "name": "select_sheet", "arguments": {"sheet": "선택"}}],
+                    "tool_calls": [{"id": "call-1", "name": "select_sheet", "arguments": {"sheet": "질의"}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 10, "output_tokens": 4, "total_tokens": 14},
                     "finish_reason": "stop",
@@ -143,7 +143,7 @@ def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
                     "response_status": "stop",
                 },
                 {
-                    "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": "선택지 B"}}],
+                    "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": "선택지 C"}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 9, "output_tokens": 4, "total_tokens": 13},
                     "finish_reason": "stop",
@@ -154,17 +154,17 @@ def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
         )
     )
     result = run_episode(env, agent)
-    assert result.prediction == "B"
+    assert result.prediction == "C"
     assert result.evaluation.correctness.value == 1.0
 
 
 def test_llm_agent_retries_invalid_submit_answer_when_choices_are_visible() -> None:
-    env = WorkbookEnv(family="report_scope_reconciliation", level=1, seed=0, template_id="merged_scope_cell", mode="human")
+    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
     agent = LLMAgent(
         client=FakeLLMClient(
             [
                 {
-                    "tool_calls": [{"id": "call-1", "name": "select_sheet", "arguments": {"sheet": "선택"}}],
+                    "tool_calls": [{"id": "call-1", "name": "select_sheet", "arguments": {"sheet": "질의"}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 10, "output_tokens": 4, "total_tokens": 14},
                     "finish_reason": "stop",
@@ -180,7 +180,7 @@ def test_llm_agent_retries_invalid_submit_answer_when_choices_are_visible() -> N
                     "response_status": "stop",
                 },
                 {
-                    "tool_calls": [{"id": "call-3", "name": "submit_answer", "arguments": {"text": "B"}}],
+                    "tool_calls": [{"id": "call-3", "name": "submit_answer", "arguments": {"text": "C"}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 9, "output_tokens": 4, "total_tokens": 13},
                     "finish_reason": "stop",
@@ -192,6 +192,6 @@ def test_llm_agent_retries_invalid_submit_answer_when_choices_are_visible() -> N
     )
     result = run_episode(env, agent)
     metadata = result.run_metadata
-    assert result.prediction == "B"
+    assert result.prediction == "C"
     assert metadata["parse_retry_count"] == 1
     assert metadata["tool_retry_count"] == 1

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from table_env_bench.data.eval_hard import build_hard_episode, list_hard_manifests
 from table_env_bench.data.families import (
     CANONICAL_BUILDERS,
     CANONICAL_FAMILY_LABELS,
@@ -18,10 +17,6 @@ from table_env_bench.data.families import (
 def generate_canonical_episode(family: str, level: int, seed: int = 0, *, template_id: str | None = None):
     if family not in CANONICAL_BUILDERS:
         raise KeyError(f"Unknown canonical family: {family}")
-    if template_id is not None:
-        hard_templates = {manifest.template_id for manifest in list_hard_manifests(family, level)}
-        if template_id in hard_templates:
-            return build_hard_episode(family, level, seed, template_id)
     return CANONICAL_BUILDERS[family](level, seed, template_id=template_id)
 
 
@@ -84,51 +79,7 @@ def canonical_episode_catalog() -> list[dict[str, Any]]:
 
 
 def eval_hard_episode_catalog() -> list[dict[str, Any]]:
-    records: list[dict[str, Any]] = []
-    for family in list_canonical_families():
-        for level in (2, 3):
-            for manifest in list_hard_manifests(family, level):
-                for seed_slot in range(CANONICAL_SEEDS_PER_TEMPLATE):
-                    records.append(
-                        {
-                            "family": family,
-                            "family_display_name": CANONICAL_FAMILY_LABELS[family],
-                            "level": level,
-                            "template_id": manifest.template_id,
-                            "template_label": manifest.template_label,
-                            "seed": seed_slot,
-                            "episode_id": f"{family}_{manifest.template_id}_l{level}_s{seed_slot}",
-                            "track": manifest.benchmark_track,
-                            "benchmark_track": manifest.benchmark_track,
-                            "difficulty_tier": "eval_hard",
-                            "answer_form": manifest.answer_form,
-                            "primary_operator": manifest.primary_operator,
-                            "support_operator": manifest.support_operator,
-                            "operator_tags": list(manifest.operator_tags),
-                            "cue_tags": list(manifest.cue_tags),
-                            "required_visual_cues": list(manifest.required_visual_cues),
-                            "task_archetype": manifest.task_archetype,
-                            "scenario_context": manifest.scenario_context,
-                            "reasoning_archetype": manifest.reasoning_archetype,
-                            "abstraction_tier": manifest.abstraction_tier,
-                            "support_surface_policy": manifest.support_surface_policy,
-                            "qa_dependency": manifest.qa_dependency,
-                            "generalization_group": manifest.generalization_group or f"{manifest.family}:{manifest.template_id}:l{level}",
-                            "required_navigation": dict(manifest.required_navigation),
-                            "required_sheet_ids": list(manifest.required_sheet_ids),
-                            "required_page_refs": list(manifest.required_page_refs),
-                            "required_actions": list(manifest.required_actions),
-                            "required_evidence": [dict(item) for item in manifest.required_evidence],
-                            "required_capabilities": list(manifest.required_capabilities or manifest.capability_axes),
-                            "level_rationale": manifest.level_rationale,
-                            "expected_reasoning_steps": list(manifest.expected_reasoning_steps),
-                            "shortcut_probes": list(manifest.shortcut_probes),
-                            "holdout_group": manifest.holdout_group,
-                            "pair_group": manifest.pair_group,
-                            "variant": manifest.variant,
-                        }
-                    )
-    return records
+    return []
 
 
 def benchmark_split_manifest() -> dict[str, list[dict[str, Any]]]:
@@ -173,50 +124,7 @@ def benchmark_split_manifest() -> dict[str, list[dict[str, Any]]]:
 
 
 def benchmark_suite_manifest() -> dict[str, list[dict[str, Any]]]:
-    suites = {
-        "canonical_dev": benchmark_split_manifest()["dev_public"],
-        "eval_hard_dev": [],
-        "eval_hard_holdout": [],
-    }
-    for family in list_canonical_families():
-        for level in (2, 3):
-            target_suite = "eval_hard_dev" if level == 2 else "eval_hard_holdout"
-            for manifest in list_hard_manifests(family, level):
-                suites[target_suite].append(
-                    {
-                        "family": family,
-                        "level": level,
-                        "template_id": manifest.template_id,
-                        "template_label": manifest.template_label,
-                        "seed_slots": list(range(CANONICAL_SEEDS_PER_TEMPLATE)),
-                        "difficulty_tier": manifest.difficulty_tier,
-                        "answer_form": manifest.answer_form,
-                        "primary_operator": manifest.primary_operator,
-                        "support_operator": manifest.support_operator,
-                        "operator_tags": list(manifest.operator_tags),
-                        "cue_tags": list(manifest.cue_tags),
-                        "required_visual_cues": list(manifest.required_visual_cues),
-                        "task_archetype": manifest.task_archetype,
-                        "scenario_context": manifest.scenario_context,
-                        "benchmark_track": manifest.benchmark_track,
-                        "reasoning_archetype": manifest.reasoning_archetype,
-                        "abstraction_tier": manifest.abstraction_tier,
-                        "support_surface_policy": manifest.support_surface_policy,
-                        "qa_dependency": manifest.qa_dependency,
-                        "generalization_group": manifest.generalization_group or f"{manifest.family}:{manifest.template_id}:l{level}",
-                        "required_navigation": dict(manifest.required_navigation),
-                        "required_sheet_ids": list(manifest.required_sheet_ids),
-                        "required_page_refs": list(manifest.required_page_refs),
-                        "required_actions": list(manifest.required_actions),
-                        "required_evidence": [dict(item) for item in manifest.required_evidence],
-                        "level_rationale": manifest.level_rationale,
-                        "expected_reasoning_steps": list(manifest.expected_reasoning_steps),
-                        "holdout_group": manifest.holdout_group,
-                        "pair_group": manifest.pair_group,
-                        "variant": manifest.variant,
-                    }
-                )
-    return suites
+    return {"canonical_dev": benchmark_split_manifest()["dev_public"]}
 
 
 def benchmark_episode_records(*, split: str | None = None) -> list[dict[str, Any]]:
@@ -269,19 +177,14 @@ def benchmark_episode_records(*, split: str | None = None) -> list[dict[str, Any
 def benchmark_suite_records(*, suite: str | None = None) -> list[dict[str, Any]]:
     suite_manifest = benchmark_suite_manifest()
     if suite is None:
-        selected_refs = [*suite_manifest["canonical_dev"], *suite_manifest["eval_hard_dev"], *suite_manifest["eval_hard_holdout"]]
+        selected_refs = list(suite_manifest["canonical_dev"])
     else:
         if suite not in suite_manifest:
             raise KeyError(f"Unknown suite: {suite}")
         selected_refs = suite_manifest[suite]
     records: list[dict[str, Any]] = []
     for ref in selected_refs:
-        manifest = None
-        hard_manifest_map = {item.template_id: item for item in list_hard_manifests(ref["family"], ref["level"])}
-        if ref["template_id"] in hard_manifest_map:
-            manifest = hard_manifest_map[ref["template_id"]]
-        else:
-            manifest = template_manifest(ref["family"], ref["level"], ref["template_id"])
+        manifest = template_manifest(ref["family"], ref["level"], ref["template_id"])
         for seed_slot in ref["seed_slots"]:
             records.append(
                 {
