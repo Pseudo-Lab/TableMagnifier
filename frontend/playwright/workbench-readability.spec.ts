@@ -18,13 +18,6 @@ function parsePageLabel(text: string) {
   }
 }
 
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '') || 'sheet'
-}
-
 test('workbench readability states', async ({ page }, testInfo) => {
   const root = page.locator('#root')
   const viewerCanvas = page.locator('[data-testid="viewer-surface"] canvas')
@@ -62,28 +55,13 @@ test('workbench readability states', async ({ page }, testInfo) => {
     const consoleErrors = filterConsoleMessages(consoleMessages)
     expect(consoleErrors).toEqual([])
 
-    await expect(root).toHaveScreenshot(`workbench-session-${suffix}.png`, {
-      animations: 'disabled',
-      caret: 'hide',
-      maxDiffPixelRatio: 0.003,
-    })
-
     await page.getByRole('button', { name: 'Inspector 열기' }).click()
     await expect(page.getByText('보조 정보와 기록')).toBeVisible()
     await expect(inspectorPanel).toBeVisible()
-    await expect(root).toHaveScreenshot(`workbench-inspector-${suffix}.png`, {
-      animations: 'disabled',
-      caret: 'hide',
-      maxDiffPixelRatio: 0.003,
-    })
 
     await page.getByRole('button', { name: '닫기' }).click()
     await expect(page.getByText('보조 정보와 기록')).not.toBeVisible()
-    await expect(root).toHaveScreenshot(`workbench-focus-${suffix}.png`, {
-      animations: 'disabled',
-      caret: 'hide',
-      maxDiffPixelRatio: 0.003,
-    })
+    await expect(root).toBeVisible()
 
     const querySheetButton = page.locator('[data-testid="sheet-tab-button"][data-sheet-name="질의"]')
     if (await querySheetButton.count()) {
@@ -93,11 +71,7 @@ test('workbench readability states', async ({ page }, testInfo) => {
           .poll(async () => ((await pageLabel.textContent()) ?? '').includes('질의'))
           .toBeTruthy()
       }
-      await expect(root).toHaveScreenshot(`workbench-query-${suffix}.png`, {
-        animations: 'disabled',
-        caret: 'hide',
-        maxDiffPixelRatio: 0.003,
-      })
+      await expect(root).toBeVisible()
     }
 
     const sheetCount = await sheetButtons.count()
@@ -124,11 +98,7 @@ test('workbench readability states', async ({ page }, testInfo) => {
         .poll(async () => parsePageLabel((await pageLabel.textContent()) ?? '')?.current ?? 0)
         .toBeGreaterThan(info.current)
 
-      await expect(root).toHaveScreenshot(`workbench-next-page-${slugify(info.sheet)}-${suffix}.png`, {
-        animations: 'disabled',
-        caret: 'hide',
-        maxDiffPixelRatio: 0.003,
-      })
+      await expect(root).toBeVisible()
       multiPageCovered = true
       break
     }

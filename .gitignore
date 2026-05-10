@@ -74,7 +74,9 @@ dmypy.json
 # Output - 생성된 결과물
 artifacts/
 frontend/artifacts/
+frontend/playwright/*-snapshots/
 frontend/test-results/
+notion/
 output/
 output_*/
 I_origin_*/
