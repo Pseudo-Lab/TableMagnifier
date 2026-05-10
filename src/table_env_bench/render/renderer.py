@@ -64,6 +64,7 @@ TEXT_BLOCK_STYLES = {
 
 
 def _wrap_text(text: str, max_chars: int) -> list[str]:
+    text = str(text)
     if len(text) <= max_chars:
         return [text]
     words = text.split()

@@ -13,6 +13,8 @@
     "visual:readability:smoke": "uv run python -m table_env_bench.scripts.audit_readability --smoke --seed-samples 0",
     "visual:workbench": "playwright test playwright/workbench-navigation-readability.spec.ts",
     "visual:capture": "npm run visual:workbench",
+    "visual:capture:previews": "PLAYWRIGHT_ENABLE_WORKBENCH=0 PLAYWRIGHT_BASE_URL=http://127.0.0.1:8781 PLAYWRIGHT_REVIEW_DIR=../artifacts/previews_active PLAYWRIGHT_CAPTURE_DIR=../artifacts/playwright/previews_active playwright test playwright/capture-preview-gallery.spec.ts --project=chromium-fullhd",
+    "visual:capture:agent-observations": "PLAYWRIGHT_ENABLE_WORKBENCH=0 PLAYWRIGHT_BASE_URL=http://127.0.0.1:8781 PLAYWRIGHT_REVIEW_DIR=../artifacts/agent_observations_active PLAYWRIGHT_CAPTURE_DIR=../artifacts/playwright/agent_observations_active playwright test playwright/capture-agent-observation-gallery.spec.ts --project=chromium-fullhd",
     "visual:capture:fullhd": "playwright test playwright/workbench-navigation-readability.spec.ts --project=chromium-fullhd",
     "visual:capture:qhd": "playwright test playwright/workbench-navigation-readability.spec.ts --project=chromium-qhd",
     "visual:capture:headed": "playwright test playwright/workbench-navigation-readability.spec.ts --project=chromium-fullhd --headed"

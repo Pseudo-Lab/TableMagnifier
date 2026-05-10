@@ -358,11 +358,22 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Export scene/PNG previews for workbook benchmark pages.")
     parser.add_argument("--out", default="artifacts/previews")
     parser.add_argument("--seed", default=0, type=int)
+    parser.add_argument("--family", action="append", dest="families")
+    parser.add_argument("--level", action="append", type=int, dest="levels")
+    parser.add_argument("--template-id")
     parser.add_argument("--pack")
     parser.add_argument("--instance-id", action="append", dest="instance_ids")
     args = parser.parse_args()
 
-    result = export_preview_gallery(args.out, seed=args.seed, pack=args.pack, instance_ids=args.instance_ids)
+    result = export_preview_gallery(
+        args.out,
+        seed=args.seed,
+        families=args.families,
+        levels=args.levels,
+        template_id=args.template_id,
+        pack=args.pack,
+        instance_ids=args.instance_ids,
+    )
     print(f"Wrote {result['count']} previews to {result['output_dir']}")
     print(f"index={result['index']}")
     print(f"review={result['review']}")

@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from typing import Any
 
-from table_env_bench.data.models import AnswerSpec
+from table_env_bench.data.models import AnswerSpec, PageSpec
 from table_env_bench.data.families.shared import (
     ChoiceCardSpec,
     TemplateManifest,
@@ -383,43 +383,81 @@ def _merged_episode(manifest: TemplateManifest, seed_slot: int):
 def _abbrev_episode(manifest: TemplateManifest, seed_slot: int):
     rng = random.Random(seed_slot + 3300 + manifest.level)
     tca = 1200 + rng.randint(0, 9) * 50
-    kadj = 108 + rng.randint(0, 3)
-    answer = int(round(tca * 1000 * (kadj / 100)))
+    kadj = 108 + rng.randint(0, 5)
+    r2n = 6.5 + rng.randint(0, 9) / 10
+    margin_delta = -4 + rng.randint(0, 6)
+    hold_flag = "Y" if manifest.level >= 3 else "N"
+    effective_kadj = min(kadj, 106) if hold_flag == "Y" else kadj
+    base_amount = tca * 1000
+    if manifest.level >= 2:
+        base_amount += margin_delta * 10000
+    answer = int(round(base_amount * (effective_kadj / 100)))
     main = table_from_cells(
         "abbrev-main",
-        "지점별 조정 지표",
-        rect(84, 190, 940, 238),
-        n_rows=4,
-        n_cols=5,
+        "지점별 조정 지표와 상태 코드",
+        rect(64, 206, 1110, 318),
+        n_rows=7,
+        n_cols=7,
         cells=[
             cell(0, 0, "지점", style="header"),
             cell(0, 1, "TCA", style="header"),
             cell(0, 2, "R2N", style="header"),
-            cell(0, 3, "M∆", style="header"),
+            cell(0, 3, "M-Adj", style="header"),
             cell(0, 4, "K-Adj", style="header"),
+            cell(0, 5, "HLD", style="header"),
+            cell(0, 6, "군집", style="header"),
             cell(1, 0, "서울A", style="row_label", align="left"),
             cell(1, 1, str(tca), style="accent"),
-            cell(1, 2, "8.1"),
-            cell(1, 3, "-3.2"),
+            cell(1, 2, f"{r2n:.1f}", style="accent" if manifest.level >= 3 else "body"),
+            cell(1, 3, str(margin_delta), style="accent" if manifest.level >= 2 else "body"),
             cell(1, 4, f"{kadj}", style="accent"),
+            cell(1, 5, hold_flag, style="negative" if hold_flag == "Y" else "body"),
+            cell(1, 6, "북부"),
             cell(2, 0, "부산B", style="row_label", align="left"),
             cell(2, 1, str(tca - 160)),
             cell(2, 2, "7.6"),
             cell(2, 3, "-2.1"),
             cell(2, 4, "104"),
+            cell(2, 5, "N"),
+            cell(2, 6, "남부"),
             cell(3, 0, "대전C", style="row_label", align="left"),
             cell(3, 1, str(tca + 90)),
             cell(3, 2, "6.8"),
             cell(3, 3, "1.5"),
             cell(3, 4, "101"),
+            cell(3, 5, "N"),
+            cell(3, 6, "중부"),
+            cell(4, 0, "서울D", style="row_label", align="left"),
+            cell(4, 1, str(tca + 20)),
+            cell(4, 2, f"{r2n + 0.3:.1f}"),
+            cell(4, 3, str(margin_delta - 1)),
+            cell(4, 4, str(kadj - 2)),
+            cell(4, 5, "Y"),
+            cell(4, 6, "북부"),
+            cell(5, 0, "광주E", style="row_label", align="left"),
+            cell(5, 1, str(tca - 240)),
+            cell(5, 2, "8.4"),
+            cell(5, 3, "2"),
+            cell(5, 4, "103"),
+            cell(5, 5, "N"),
+            cell(5, 6, "서남"),
+            cell(6, 0, "원주F", style="row_label", align="left"),
+            cell(6, 1, str(tca + 140)),
+            cell(6, 2, "6.9"),
+            cell(6, 3, "-3"),
+            cell(6, 4, str(kadj)),
+            cell(6, 5, "N"),
+            cell(6, 6, "중부"),
         ],
-        subtitle="약어 의미와 단위는 별도 문서를 확인해야 합니다.",
+        column_weights=(1.2, 0.95, 0.8, 0.8, 0.9, 0.75, 0.9),
+        row_heights=(42, 42, 42, 42, 42, 42, 42),
+        subtitle="약어 의미, 단위, 상태 코드 예외는 별도 문서를 확인해야 합니다.",
     )
     glossary = table_from_cells(
         "glossary",
-        "합성 약어 문서",
-        rect(84, 190, 970, 284),
-        n_rows=5,
+        "합성 약어·상태 규칙 문서",
+        rect(64, 206, 1110, 390),
+        n_rows=7,
         n_cols=3,
         cells=[
             cell(0, 0, "약어", style="header"),
@@ -431,17 +469,29 @@ def _abbrev_episode(manifest: TemplateManifest, seed_slot: int):
             cell(2, 0, "R2N", style="row_label"),
             cell(2, 1, "재방문 순전환율"),
             cell(2, 2, "백분율"),
-            cell(3, 0, "M∆", style="row_label"),
+            cell(3, 0, "M-Adj", style="row_label"),
             cell(3, 1, "전월 대비 마진 변화"),
-            cell(3, 2, "음수 가능"),
+            cell(3, 2, "Level 2 이상: 만 원 단위로 TCA 원화값에 더한 뒤 보정"),
             cell(4, 0, "K-Adj", style="row_label"),
             cell(4, 1, "권역 보정계수"),
             cell(4, 2, "표시값을 100으로 나누어 최종 금액에 곱함"),
+            cell(5, 0, "HLD", style="row_label"),
+            cell(5, 1, "검수 보류 상태"),
+            cell(5, 2, "Level 3: HLD=Y이면 K-Adj는 106을 상한으로 사용"),
+            cell(6, 0, "군집", style="row_label"),
+            cell(6, 1, "동명이 지점 구분용 묶음"),
+            cell(6, 2, "같은 도시명이라도 군집이 다르면 다른 행"),
         ],
-        column_weights=(0.8, 1.7, 2.4),
+        column_weights=(0.75, 1.45, 2.7),
+        row_heights=(42, 48, 48, 58, 58, 58, 48),
         subtitle="실제 세계 약어가 아니라 에피소드별 합성 약어입니다.",
     )
-    question = "서울A 지점의 총계약조정액에 권역 보정계수를 반영한 금액은 원 단위로 얼마인가?"
+    if manifest.level == 1:
+        question = "서울A 지점의 총계약조정액에 권역 보정계수를 반영한 금액은 원 단위로 얼마인가?"
+    elif manifest.level == 2:
+        question = "서울A 지점의 TCA 원화값에 M-Adj 조정을 더한 뒤 K-Adj를 반영한 금액은 원 단위로 얼마인가?"
+    else:
+        question = "서울A 지점은 HLD=Y이다. 약어 문서의 Level 3 예외까지 적용해 최종 조정 금액을 원 단위로 구하라."
     return episode(
         manifest=manifest,
         family_display_name=FAMILY_LABEL,
@@ -450,11 +500,23 @@ def _abbrev_episode(manifest: TemplateManifest, seed_slot: int):
         sheets=[
             sheet("main", "메인", [page("main-p1", "메인 표", elements=[main])]),
             sheet("glossary", "약어집", [page("glossary-p1", "약어 문서", elements=[glossary])]),
-            sheet("query", "질의", _query_page(question, answer, (tca, tca * 1000, answer + 80000), level=manifest.level)),
+            sheet(
+                "query",
+                "질의",
+                _query_page(
+                    question,
+                    answer,
+                    (tca * 1000, int(round((tca * 1000) * (kadj / 100))), answer + 80000),
+                    level=manifest.level,
+                ),
+            ),
         ],
         answer=_money_answer(answer),
         seed_slot=seed_slot,
-        metadata_extra={"hidden_program": "TCA * 1000 * (KAdj / 100)"},
+        metadata_extra={
+            "hidden_program": "(TCA * 1000 + MDelta * 10000) * (min(KAdj, 106) / 100 when HLD=Y else KAdj / 100)",
+            "shortcut_traps": ["ignore_mdelta", "ignore_hld_cap", "use_same_city_distractor"],
+        },
     )
 
 
@@ -462,51 +524,154 @@ def _wide_episode(manifest: TemplateManifest, seed_slot: int):
     rng = random.Random(seed_slot + 4300 + manifest.level)
     new_contract = 4200 + rng.randint(0, 8) * 100
     refund = 650 + rng.randint(0, 5) * 50
-    answer = (new_contract - refund) * 1000
-    directory = text_block(
+    review_hold = 120 if manifest.level >= 3 else 0
+    target_c44 = new_contract + (90 if manifest.level >= 2 else 0)
+    target_c52 = refund + review_hold
+    answer = (target_c44 - target_c52) * 1000
+    directory_table = table_from_cells(
         "wide-directory",
-        "열 묶음 안내",
-        rect(84, 190, 980, 160),
-        ("C01-C20: 2024년 분기별 신규/해지/순증", "C21-C48: 2025년 분기별 계약/환급/잔액", "금액 열은 모두 천 원 단위입니다."),
-        style="note",
+        "50+ 열 묶음 안내",
+        rect(74, 204, 1040, 316),
+        n_rows=6,
+        n_cols=4,
+        cells=[
+            cell(0, 0, "열 범위", style="header"),
+            cell(0, 1, "묶음", style="header"),
+            cell(0, 2, "단위", style="header"),
+            cell(0, 3, "주의", style="header"),
+            cell(1, 0, "C01-C16", style="row_label"),
+            cell(1, 1, "2024 가입/해지 기본값"),
+            cell(1, 2, "건/천원 혼합"),
+            cell(1, 3, "금액과 건수를 구분"),
+            cell(2, 0, "C17-C32", style="row_label"),
+            cell(2, 1, "2024 분기별 신규 계약"),
+            cell(2, 2, "천원"),
+            cell(2, 3, "C21은 건수, C22는 금액"),
+            cell(3, 0, "C33-C44", style="row_label"),
+            cell(3, 1, "2025 확정 계약 조정"),
+            cell(3, 2, "천원"),
+            cell(3, 3, "질의는 C44 신규계약조정액 사용"),
+            cell(4, 0, "C45-C52", style="row_label"),
+            cell(4, 1, "2025 환급/보류 조정"),
+            cell(4, 2, "천원"),
+            cell(4, 3, "Level 3: 보류분은 C52에 합산"),
+            cell(5, 0, "C53-C60", style="row_label"),
+            cell(5, 1, "잔액/검산 열"),
+            cell(5, 2, "천원"),
+            cell(5, 3, "정답 열이 아님"),
+        ],
+        column_weights=(0.9, 1.6, 0.9, 2.2),
+        row_heights=(42, 46, 46, 46, 46, 46),
+        subtitle="같은 분기라도 금액 열과 건수 열이 섞여 있습니다.",
     )
-    headers = ["행", "권역", "채널", "C12 2024 3Q 신규 계약액", "C13 2024 3Q 신규 계약건수", "C39 2025 1Q 해지 환급액", "C40 2025 1Q 해지 건수", "C48 2025 1Q 잔액"]
+    headers = [
+        "행",
+        "권역",
+        "채널",
+        "상태",
+        "C12 신규액",
+        "C13 신규건",
+        "C21 신규건",
+        "C22 신규액",
+        "C33 계약건",
+        "C39 환급액",
+        "C40 환급건",
+        "C41 보류건",
+        "C44 조정신규",
+        "C48 잔액",
+        "C52 보정환급",
+        "C53 보정잔액",
+    ]
     cells = [cell(0, col, header, style="header") for col, header in enumerate(headers)]
     rows = [
-        ("01", "수도권", "B2C", new_contract - 500, "21", refund + 100, "4", "9100"),
-        ("02", "부산권", "B2B", new_contract, "18", refund, "3", "8700"),
-        ("03", "부산권", "B2C", new_contract + 250, "25", refund + 80, "5", "8820"),
-        ("04", "충청권", "B2B", new_contract - 300, "16", refund - 50, "2", "7900"),
+        ("01", "수도권", "B2C", "확정", new_contract - 500, "21", "18", new_contract - 420, "20", refund + 100, "4", "0", new_contract - 260, "9100", refund + 140, "8840"),
+        ("02", "부산권", "B2B", "확정", new_contract, "18", "17", new_contract + 70, "19", refund, "3", "1", target_c44, "8700", target_c52, str(target_c44 - target_c52)),
+        ("03", "부산권", "B2C", "확정", new_contract + 250, "25", "24", new_contract + 180, "26", refund + 80, "5", "0", target_c44 + 210, "8820", target_c52 + 70, "8960"),
+        ("04", "충청권", "B2B", "확정", new_contract - 300, "16", "15", new_contract - 220, "17", refund - 50, "2", "0", target_c44 - 330, "7900", target_c52 - 40, "8010"),
+        ("05", "부산권", "B2B", "검토", new_contract + 40, "20", "21", new_contract + 110, "22", refund + 20, "3", "2", target_c44 + 50, "8660", target_c52 + 140, "8570"),
+        ("06", "수도권", "B2B", "확정", new_contract - 180, "14", "16", new_contract - 120, "15", refund + 40, "3", "0", target_c44 - 190, "8150", target_c52 + 20, "8080"),
+        ("07", "부산권", "B2B", "확정", new_contract - 90, "18", "18", new_contract + 30, "18", refund + 60, "4", "0", target_c44 - 120, "8610", target_c52 + 60, "8430"),
     ]
     for row_index, row in enumerate(rows, start=1):
         for col_index, value in enumerate(row):
-            style = "accent" if row_index == 2 and col_index in {3, 5} else "row_label" if col_index in {1, 2} else "body"
-            cells.append(cell(row_index, col_index, value, style=style, align="left" if col_index in {1, 2} else "center"))
+            style = "accent" if row_index == 2 and col_index in {12, 14} else "row_label" if col_index in {1, 2, 3} else "body"
+            if row_index == 5 and col_index in {1, 2, 3}:
+                style = "negative"
+            cells.append(cell(row_index, col_index, str(value), style=style, align="left" if col_index in {1, 2, 3} else "center"))
     wide = table_from_cells(
         "wide-table",
-        "50+ 열 업무표 발췌",
-        rect(50, 180, 1160, 300),
-        n_rows=5,
+        "60열 계약 조정 원장",
+        rect(56, 176, 2100, 430),
+        n_rows=8,
         n_cols=len(headers),
         cells=cells,
-        column_weights=(0.55, 0.9, 0.8, 1.75, 1.75, 1.75, 1.5, 1.4),
-        row_heights=(52, 48, 48, 48, 48),
-        subtitle="전체 원본은 60열이며, 현재 화면은 정답 후보 열 주변 발췌입니다.",
+        column_weights=(0.5, 0.8, 0.75, 0.75, 1.25, 1.0, 1.0, 1.25, 1.0, 1.15, 1.0, 1.0, 1.55, 1.15, 1.45, 1.2),
+        row_heights=(56, 46, 46, 46, 46, 46, 46, 46),
+        subtitle="오른쪽 C44/C52 열은 초기 화면에서 작게 보이거나 이동 후 확인해야 합니다.",
     )
-    question = "부산권 B2B 채널에서 2024년 3분기 신규 계약액과 2025년 1분기 해지 환급액의 차이를 원 단위로 구하라."
+    question = "상태가 확정인 부산권 B2B 행 중 첫 번째 대상 행에서 C44 신규계약조정액과 C52 보정환급액의 차이를 원 단위로 구하라."
+    wide_page = PageSpec(
+        page_id="wide-p1",
+        title="넓은 표",
+        width=2260,
+        height=900,
+        elements=(wide,),
+        regions=(),
+        notes=(),
+        metadata={
+            "wide_table": True,
+            "declared_column_count": 60,
+            "initial_view": {"zoom_index": 2, "center_x": 565.0, "center_y": 506.0},
+        },
+    )
+    required_navigation = dict(manifest.required_navigation)
+    if manifest.level >= 2:
+        required_navigation["required_viewport_states"] = [
+            {
+                "state_id": "wide-right-target-columns",
+                "sheet_id": "wide",
+                "page_id": "wide-p1",
+                "min_zoom_index": 2,
+                "required_action_types": ["pan_right", "pan_right", "pan_right", "pan_right"],
+                "match": "viewbox_intersects_target",
+                "target_rects": [
+                    {"target_id": "c44-target", "kind": "column", "rect": {"x": 1640, "y": 176, "width": 190, "height": 430}},
+                    {"target_id": "c52-target", "kind": "column", "rect": {"x": 1940, "y": 176, "width": 180, "height": 430}},
+                ],
+            }
+        ]
+        required_navigation["forbidden_shortcuts"] = [
+            *required_navigation.get("forbidden_shortcuts", []),
+            "initial_viewport_only",
+            "no_pan_zoom",
+            "wrong_similar_column",
+        ]
     return episode(
         manifest=manifest,
         family_display_name=FAMILY_LABEL,
         question=question,
         workbook_title="넓은 테이블 탐색 계산 에피소드",
         sheets=[
-            sheet("directory", "열안내", [page("directory-p1", "열 안내", elements=[directory])]),
-            sheet("wide", "넓은표", [page("wide-p1", "넓은 표", elements=[wide])]),
-            sheet("query", "질의", _query_page(question, answer, ((new_contract + refund) * 1000, new_contract - refund, answer + 200000), level=manifest.level)),
+            sheet("directory", "열안내", [page("directory-p1", "열 안내", elements=[directory_table])]),
+            sheet("wide", "넓은표", [wide_page]),
+            sheet(
+                "query",
+                "질의",
+                _query_page(
+                    question,
+                    answer,
+                    ((target_c44 + target_c52) * 1000, target_c44 - target_c52, answer + 200000),
+                    level=manifest.level,
+                ),
+            ),
         ],
         answer=_money_answer(answer),
         seed_slot=seed_slot,
-        metadata_extra={"hidden_program": "(C12_new_contract - C39_refund) * 1000", "declared_column_count": 60},
+        metadata_extra={
+            "hidden_program": "(C44_new_contract_adjusted - C52_adjusted_refund) * 1000 for first confirmed Busan B2B row",
+            "declared_column_count": 60,
+            "required_navigation": required_navigation,
+        },
     )
 
 

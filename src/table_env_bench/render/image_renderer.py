@@ -9,9 +9,28 @@ from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont
 
-FONT_REGULAR = Path("/mnt/c/Windows/Fonts/malgun.ttf")
-FONT_BOLD = Path("/mnt/c/Windows/Fonts/malgunbd.ttf")
-FONT_MONO = Path("/mnt/c/Windows/Fonts/gulim.ttc")
+REPO_ROOT = Path(__file__).resolve().parents[3]
+
+FONT_REGULAR = (
+    REPO_ROOT / "assets/fonts/BMJUA.ttf",
+    Path("/mnt/c/Windows/Fonts/malgun.ttf"),
+    Path("/System/Library/Fonts/AppleSDGothicNeo.ttc"),
+    Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
+    Path("/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc"),
+)
+FONT_BOLD = (
+    REPO_ROOT / "assets/fonts/BMJUA.ttf",
+    Path("/mnt/c/Windows/Fonts/malgunbd.ttf"),
+    Path("/System/Library/Fonts/AppleSDGothicNeo.ttc"),
+    Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"),
+    Path("/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc"),
+)
+FONT_MONO = (
+    Path("/mnt/c/Windows/Fonts/gulim.ttc"),
+    Path("/System/Library/Fonts/AppleSDGothicNeo.ttc"),
+    Path("/usr/share/fonts/opentype/noto/NotoSansMonoCJK-Regular.ttc"),
+    Path("/usr/share/fonts/truetype/noto/NotoSansMonoCJK-Regular.ttc"),
+)
 
 TABLE_STYLE = {
     "header": {"fill": "#dbe4ee", "text": "#0f172a", "size": 13, "font": "bold", "align": "center"},
@@ -53,12 +72,26 @@ class SceneImageRenderer:
         image = Image.new("RGB", (int(surface["width"]), int(surface["height"])), "#f8fafc")
         draw = ImageDraw.Draw(image)
         self._draw_background(draw, image.size)
-        self._draw_tabs(draw, scene)
+        draw_chrome = self._should_draw_workbook_chrome(scene)
+        if draw_chrome:
+            self._draw_tabs(draw, scene)
         self._draw_page_scene(draw, scene)
         overlay_note = scene.get("overlay_note")
         if overlay_note is not None:
             self._draw_note_overlay(draw, scene, overlay_note)
         return image
+
+    def _should_draw_workbook_chrome(self, scene: dict[str, Any]) -> bool:
+        page = scene["page"]
+        viewport = scene["viewport"]
+        page_width = float(page.get("width", 0.0) or 0.0)
+        page_height = float(page.get("height", 0.0) or 0.0)
+        if page_width <= 0.0 or page_height <= 0.0:
+            return True
+        covers_page_width = float(viewport["width"]) >= page_width * 0.98
+        covers_page_height = float(viewport["height"]) >= page_height * 0.98
+        near_origin = abs(float(viewport["x"])) <= 8.0 and abs(float(viewport["y"])) <= 8.0
+        return covers_page_width and covers_page_height and near_origin
 
     def _draw_background(self, draw: ImageDraw.ImageDraw, size: tuple[int, int]) -> None:
         width, height = size
@@ -80,9 +113,10 @@ class SceneImageRenderer:
 
     def _draw_page_scene(self, draw: ImageDraw.ImageDraw, scene: dict[str, Any]) -> None:
         page = scene["page"]
-        self._draw_text(draw, (76, 92), page["title"], font=self._font("bold", 18), fill="#0f172a")
-        subtitle = f'{page["sheet_tab_label"]} · 페이지 {page["page_index"] + 1}/1'
-        self._draw_text(draw, (76, 120), subtitle, font=self._font("regular", 11), fill="#64748b")
+        if self._should_draw_workbook_chrome(scene):
+            self._draw_text(draw, (76, 92), page["title"], font=self._font("bold", 18), fill="#0f172a")
+            subtitle = f'{page["sheet_tab_label"]} · 페이지 {page["page_index"] + 1}/1'
+            self._draw_text(draw, (76, 120), subtitle, font=self._font("regular", 11), fill="#64748b")
         for element in page["elements"]:
             if element["type"] == "table":
                 self._draw_table(draw, scene, element)
@@ -159,6 +193,7 @@ class SceneImageRenderer:
             y += 18
 
     def _draw_cell_text(self, draw: ImageDraw.ImageDraw, rect: tuple[float, float, float, float], text: str, style: dict[str, Any], align: str) -> None:
+        text = str(text)
         if not text:
             return
         font = self._font(style["font"], int(style["size"]))
@@ -187,15 +222,17 @@ class SceneImageRenderer:
         cached = self._font_cache.get(key)
         if cached is not None:
             return cached
-        if family == "bold":
-            path = FONT_BOLD
-        elif family == "mono":
-            path = FONT_MONO
-        else:
-            path = FONT_REGULAR
-        try:
-            font = ImageFont.truetype(str(path), size=size)
-        except OSError:
+        paths = FONT_BOLD if family == "bold" else FONT_MONO if family == "mono" else FONT_REGULAR
+        font: ImageFont.FreeTypeFont | ImageFont.ImageFont | None = None
+        for path in paths:
+            if not path.exists():
+                continue
+            try:
+                font = ImageFont.truetype(str(path), size=size)
+                break
+            except OSError:
+                continue
+        if font is None:
             font = ImageFont.load_default()
         self._font_cache[key] = font
         return font

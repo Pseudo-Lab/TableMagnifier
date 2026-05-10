@@ -6,6 +6,7 @@ import pytest
 
 from table_env_bench.data.generators import list_families
 from table_env_bench.scripts.audit_readability import build_parser as build_readability_audit_parser, run_audit
+from table_env_bench.scripts.export_agent_observation_gallery import export_agent_observation_gallery
 from table_env_bench.scripts.export_preview_gallery import export_preview_gallery
 from table_env_bench.scripts.eval_llm import build_parser as build_llm_parser
 from table_env_bench.scripts.run_authoring_pipeline import build_parser as build_authoring_parser
@@ -78,6 +79,26 @@ def test_export_preview_gallery_includes_level3_exception_page(tmp_path) -> None
 def test_export_preview_gallery_rejects_removed_public_instance_pack(tmp_path) -> None:
     with pytest.raises(KeyError, match="Unknown instance pack"):
         export_preview_gallery(tmp_path, pack="example_pack_v1")
+
+
+def test_export_agent_observation_gallery_writes_agent_view_artifacts(tmp_path) -> None:
+    result = export_agent_observation_gallery(
+        tmp_path,
+        family="k_vis_table_arc",
+        levels=[1],
+        seeds=[0],
+        template_id="symbol_rule_induction",
+    )
+    manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
+    review_html = (tmp_path / "review.html").read_text(encoding="utf-8")
+
+    assert result["count"] == 2
+    assert manifest["mode"] == "agent_observation"
+    assert all(surface["family"] == "k_vis_table_arc" for surface in manifest["surfaces"])
+    assert all((tmp_path / surface["png"]).exists() for surface in manifest["surfaces"])
+    assert all((tmp_path / surface["observation"]).exists() for surface in manifest["surfaces"])
+    assert "agent API observation.viewport_image_png_base64" in (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "agent-observation" in review_html
 
 
 def test_eval_llm_parser_accepts_suite_and_model() -> None:

@@ -72,7 +72,7 @@ dmypy.json
 /data/
 
 # Output - 생성된 결과물
-artifacts/
+/artifacts/
 frontend/artifacts/
 frontend/playwright/*-snapshots/
 frontend/test-results/

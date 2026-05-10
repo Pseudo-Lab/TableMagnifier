@@ -127,6 +127,18 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 - Multi-page families must be checked both statically and by actual workbench traversal.
 - If a screenshot looks wrong, add or tighten the gate so the problem fails automatically next time. Do not rely on manual spot checks as the only defense.
 
+## Data Preview Artifacts
+
+- After generating or revising benchmark data, create image artifacts for every rendered problem surface so reviewers can inspect what the agent actually receives.
+- The default handoff artifact must be based on `TableEnv(..., mode="agent")` observations, specifically `observation.viewport_image_png_base64`, not a hidden scene dump, oracle metadata, or human-only workbench chrome.
+- First export the agent observation gallery from the repo root, for example `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --suite canonical_dev`.
+- Then capture every agent observation through Playwright: `cd frontend && npm run visual:capture:agent-observations`.
+- The Playwright capture reads `artifacts/agent_observations_active/manifest.json` and writes PNG screenshots under `artifacts/playwright/agent_observations_active/`.
+- When the handoff needs every canonical benchmark record rather than a single suite, use `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --all-benchmark-records`.
+- Static renderer previews are still useful for renderer debugging: `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active` followed by `cd frontend && npm run visual:capture:previews`.
+- For targeted datasets, pass the matching `--suite`, `--family`, `--level`, `--template-id`, or `--seed` options to `export_agent_observation_gallery`, and keep `PLAYWRIGHT_REVIEW_DIR` / `PLAYWRIGHT_CAPTURE_DIR` pointed at the corresponding artifact directories.
+- Treat these images as the default handoff artifact for new data. Do not rely only on JSON specs, generated metadata, or a local UI session when asking another agent or reviewer to evaluate generated problems.
+
 ## Human and Agent Integrity
 
 - Human mode should feel like a clean reasoning console, not a debug harness.
@@ -140,7 +152,11 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 Use WSL + `uv` when available.
 
 - `uv run pytest`
+- `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --suite canonical_dev`
+- `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --all-benchmark-records`
+- `cd frontend && npm run visual:capture:agent-observations`
 - `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active`
+- `cd frontend && npm run visual:capture:previews`
 - `uv run python -m table_env_bench.scripts.run_demo --family k_vis_table_arc --level 1 --template-id symbol_rule_induction --agent random`
 - `uv run python -m table_env_bench.scripts.eval_baselines`
 - `uv run python -m table_env_bench.scripts.run_authoring_pipeline --family k_vis_table_arc`

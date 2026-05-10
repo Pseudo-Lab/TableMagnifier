@@ -186,7 +186,7 @@ class WorkbookEnv:
     def _initial_state(self) -> _State:
         page = self.spec.sheets[0].pages[0]
         outer = make_outer_viewbox(page, self._aspect_ratio())
-        return _State(
+        state = _State(
             sheet_index=0,
             page_index=0,
             zoom_index=0,
@@ -197,6 +197,9 @@ class WorkbookEnv:
             action_count=0,
             submitted_answer=None,
         )
+        self._state = state
+        self._apply_initial_view_for_current_page()
+        return state
 
     def _aspect_ratio(self) -> float:
         return self.renderer.config.viewport_width / self.renderer.config.viewport_height
@@ -231,6 +234,18 @@ class WorkbookEnv:
     def _clamp_state_to_viewbox(self) -> None:
         _ = self._current_viewbox()
 
+    def _apply_initial_view_for_current_page(self) -> None:
+        page = self._current_page()
+        initial_view = page.metadata.get("initial_view") if isinstance(page.metadata, dict) else None
+        if not isinstance(initial_view, dict):
+            return
+        outer = self._current_outer_box()
+        zoom_index = int(initial_view.get("zoom_index", 0))
+        self._state.zoom_index = min(max(zoom_index, 0), len(ZOOM_FACTORS) - 1)
+        self._state.center_x = float(initial_view.get("center_x", outer.center_x))
+        self._state.center_y = float(initial_view.get("center_y", outer.center_y))
+        self._clamp_state_to_viewbox()
+
     def _record_visit(self) -> None:
         sheet = self._current_sheet()
         page = self._current_page()
@@ -251,6 +266,7 @@ class WorkbookEnv:
         outer = self._current_outer_box()
         self._state.center_x = outer.center_x
         self._state.center_y = outer.center_y
+        self._apply_initial_view_for_current_page()
 
     def _resolve_sheet_index(self, sheet: str | int) -> int:
         if isinstance(sheet, int):
@@ -278,6 +294,7 @@ class WorkbookEnv:
         outer = self._current_outer_box()
         self._state.center_x = outer.center_x
         self._state.center_y = outer.center_y
+        self._apply_initial_view_for_current_page()
 
     def _apply_pan(self, action_type: str) -> None:
         viewbox = self._current_viewbox()

@@ -61,3 +61,22 @@ def test_human_observation_keeps_full_scene_arrays() -> None:
     assert page["elements"]
     assert "regions" in page
     assert "notes" in page
+
+
+def test_page_initial_view_metadata_sets_agent_viewport_on_sheet_switch() -> None:
+    env = WorkbookEnv(
+        family="k_vis_table_arc",
+        level=3,
+        seed=0,
+        template_id="wide_table_navigation",
+        mode="agent",
+    )
+    _observation, _info = env.reset()
+    observation, _reward, _terminated, _truncated, info = env.step({"type": "select_sheet", "sheet": "wide"})
+
+    viewbox = info["viewbox"]
+    assert info["zoom_index"] == 2
+    assert info["current_page_id"] == "wide-p1"
+    assert viewbox["x"] == 0.0
+    assert viewbox["width"] < 1200.0
+    assert observation["viewport_scene"]["viewport"]["x"] == 0.0

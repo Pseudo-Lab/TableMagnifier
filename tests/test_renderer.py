@@ -1,4 +1,5 @@
 from table_env_bench.data.generators import generate_episode
+from table_env_bench.env.environment import TableEnv
 from table_env_bench.render.renderer import SvgWorkbookRenderer
 
 
@@ -22,3 +23,11 @@ def test_renderer_emphasizes_dense_hierarchy_tables() -> None:
     assert "권역·채널 병합 헤더" in page_svg
     assert "2025 상반기" in page_svg
     assert "반품률" in page_svg
+
+
+def test_agent_observation_renders_numeric_cells_as_text() -> None:
+    spec = generate_episode("k_vis_table_arc", 1, seed=0, template_id="abbrev_doc_reference")
+    env = TableEnv(episode_spec=spec, mode="agent")
+    observation, _info = env.reset()
+    assert observation["viewport_image_png_base64"]
+    assert observation["viewport_svg"]
