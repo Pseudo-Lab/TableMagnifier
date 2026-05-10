@@ -72,12 +72,14 @@ def export_preview_gallery(
                 scene_path.write_text(json.dumps(scene, ensure_ascii=False, indent=2), encoding="utf-8")
                 png_path = output_dir / f"{stem}.png"
                 png_path.write_bytes(image_renderer.render_png_bytes(scene))
+                answer_region_count = sum(1 for region in page.regions if region.role == "answer_choice")
+                surface_kind = "exception" if sheet.sheet_id == "query" and answer_region_count == 0 else sheet.sheet_id
                 preview_record = {
                     "surface_id": f"{surface_prefix}-{sheet.sheet_id}-{page.page_id}",
                     "family": family,
                     "family_label": FAMILY_LABELS.get(family, family),
                     "level": str(level),
-                    "kind": sheet.sheet_id,
+                    "kind": surface_kind,
                     "sheet": sheet.tab_label,
                     "sheet_id": sheet.sheet_id,
                     "page": page.title,

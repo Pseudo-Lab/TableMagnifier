@@ -46,7 +46,7 @@ def test_estimate_usage_cost_supports_known_models() -> None:
 
 
 def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
-    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="agent")
     agent = LLMAgent(
         client=FakeLLMClient(
             [
@@ -66,8 +66,8 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
                     "provider_mode": "chat_completions",
                     "response_status": "stop",
                 },
-                {
-                    "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": "C"}}],
+                    {
+                        "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": env.spec.answer.canonical}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 9, "output_tokens": 4, "total_tokens": 13},
                     "finish_reason": "stop",
@@ -80,7 +80,7 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
     result = run_episode(env, agent)
     metadata = result.run_metadata
 
-    assert result.prediction == "C"
+    assert result.prediction == env.spec.answer.canonical
     assert result.evaluation.correctness.value == 1.0
     assert metadata["model_config"]["model"] == "gpt-5-nano"
     assert metadata["response_mode"] == "tool_calls"
@@ -94,7 +94,7 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
 
 
 def test_serialize_observation_includes_svg_and_state() -> None:
-    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="agent")
     observation, info = env.reset()
     prompt = serialize_observation(observation, info)
     assert "Viewport image is attached as PNG." in prompt
@@ -129,8 +129,8 @@ def test_workbook_action_tools_omits_submit_enum_without_visible_choices() -> No
     assert "enum" not in submit_tool["function"]["parameters"]["properties"]["text"]
 
 
-def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
-    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
+def test_llm_agent_normalizes_submit_answer_unit_suffix() -> None:
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="agent")
     agent = LLMAgent(
         client=FakeLLMClient(
             [
@@ -143,7 +143,7 @@ def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
                     "response_status": "stop",
                 },
                 {
-                    "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": "선택지 C"}}],
+                    "tool_calls": [{"id": "call-2", "name": "submit_answer", "arguments": {"text": f"{env.spec.answer.canonical}원"}}],
                     "assistant_text": "",
                     "usage": {"input_tokens": 9, "output_tokens": 4, "total_tokens": 13},
                     "finish_reason": "stop",
@@ -154,7 +154,7 @@ def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
         )
     )
     result = run_episode(env, agent)
-    assert result.prediction == "C"
+    assert result.prediction == f"{env.spec.answer.canonical}원"
     assert result.evaluation.correctness.value == 1.0
 
 

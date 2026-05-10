@@ -223,9 +223,11 @@ function assertQueryHeaderMetrics(metrics: NonNullable<Awaited<ReturnType<typeof
       element.id !== 'query-guidance' &&
       element.rect.y >= headerBottom - 1,
   )
+  const visualTop = (element: (typeof followingElements)[number]) =>
+    Math.min(element.rect.y, element.titleBox?.y ?? element.rect.y, element.subtitleBox?.y ?? element.rect.y)
   const firstContentTop =
     followingElements.length > 0
-      ? Math.min(firstAnswerTop, ...followingElements.map((element) => element.rect.y))
+      ? Math.min(firstAnswerTop, ...followingElements.map((element) => visualTop(element)))
       : firstAnswerTop
   const contentGap = firstContentTop - headerBottom
 

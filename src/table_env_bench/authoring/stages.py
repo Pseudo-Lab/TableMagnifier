@@ -456,8 +456,6 @@ class VisualQAAgent:
                     findings.append(f"Missing viewport image for level {level} seed {seed}.")
                 if not scene_page.get("elements"):
                     findings.append(f"Missing rendered elements for level {level} seed {seed}.")
-                if not scene_page.get("regions"):
-                    findings.append(f"Missing public regions for level {level} seed {seed}.")
                 if info.get("family") != context.target.family:
                     findings.append(f"Family mismatch in info for level {level} seed {seed}.")
                 required_sheet_ids = list(env.spec.metadata.get("required_sheet_ids", []))

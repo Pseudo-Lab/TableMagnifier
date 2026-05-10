@@ -9,6 +9,7 @@ Use this skill when the user asks Codex to make benchmark problems, add a family
 
 ## Core Contract
 
+- Start from a rubric. Do not implement a new family or data template before the target capability, evidence path, scoring axes, and shortcut probes are written in `rubrics/`.
 - Preserve offline-first deterministic generation.
 - Keep evidence visual-first; do not expose hidden grid dumps or oracle metadata in observations.
 - Keep human-visible benchmark chrome and helper text in Korean.
@@ -19,13 +20,40 @@ Use this skill when the user asks Codex to make benchmark problems, add a family
 ## Workflow
 
 1. Read `AGENTS.md`, then inspect current family patterns in `src/table_env_bench/data/families/`.
-2. Read the rule docs that match the task: start with `docs/episode_rulebook.md`, `docs/visual_cue_inventory.md`, `docs/operator_taxonomy.md`, `docs/answer_form_policy.md`, `docs/level_design_policy.md`, and `docs/episode_validation_checklist.md`.
-3. Draft the family shape before coding: latent rule, sheets/pages, required visual cues, answer form, distractors, level progression, and shortcut probes.
-4. Implement one family module with `FAMILY`, `FAMILY_LABEL`, `list_manifests(level)`, and `build_episode(level, seed, *, template_id=None)`.
-5. Register the module with `FamilyAdapter` in `src/table_env_bench/data/families/__init__.py`; do not add separate registry dict entries by hand.
-6. Add or update docs in the same change when mechanics introduce new cues, operators, answer forms, or validation policy.
-7. Add focused tests for registry, metadata, deterministic generation, level progression, and renderability.
-8. Run relevant verification. At minimum: `uv run pytest tests/test_pilot_families.py`; for substantial family work also run readability audits.
+2. Read or create the rubric in `rubrics/`. For the current canonical work, start with `rubrics/k_vis_table_arc_v0.md`.
+3. Read the rule docs that match the rubric: start with `docs/episode_rulebook.md`, `docs/visual_cue_inventory.md`, `docs/operator_taxonomy.md`, `docs/answer_form_policy.md`, and `docs/episode_validation_checklist.md`.
+4. Draft exactly one family or one template at a time from the rubric:
+   - target capability
+   - required sheets/pages
+   - gold evidence path
+   - answer form
+   - distractor/shortcut probes
+   - level progression
+5. Implement one bounded generator change with `FAMILY`, `FAMILY_LABEL`, `list_manifests(level)`, and `build_episode(level, seed, *, template_id=None)`.
+6. Register the module with `FamilyAdapter` in `src/table_env_bench/data/families/__init__.py`; do not add separate registry dict entries by hand.
+7. Add or update docs/rubrics in the same change when mechanics introduce new cues, operators, answer forms, evidence requirements, or validation policy.
+8. Add focused tests for registry, metadata, deterministic generation, level progression, evidence/navigation metadata, and renderability.
+9. Run relevant verification. At minimum: `uv run pytest tests/test_pilot_families.py`; for substantial family work also run readability audits.
+
+## Rubric-First Authoring
+
+Every family/template must have a matching rubric section before implementation.
+
+Rubric sections should answer:
+
+- What agent capability is this data intended to measure?
+- What visible table/workbook evidence is required?
+- Which support sheets/pages are decisive rather than decorative?
+- What shortcut should fail?
+- What counts as correct answer, correct evidence, efficient behavior, robust solving, and calibrated uncertainty?
+- Which level axis changes from L1 to L2 to L3?
+
+When adding data, keep the patch narrow:
+
+- Add one template or one capability slice.
+- Update the rubric acceptance checklist if the data introduces a new cue or answer form.
+- Encode the same evidence path in `TemplateManifest.required_sheet_ids`, `required_page_refs`, `required_navigation`, and `required_evidence`.
+- Add tests that fail if the metadata drifts away from the rubric.
 
 ## Adapter Pattern
 

@@ -61,19 +61,18 @@ def test_export_preview_gallery_can_filter_family_and_level(tmp_path) -> None:
 
     assert result["count"] > 0
     assert "k_vis_table_arc" in manifest
-    assert "k_vis_table_arc" not in manifest
     assert '"level": "3"' in manifest
     assert '"level": "1"' not in manifest
 
 
-def test_export_preview_gallery_includes_marker_note_overlay(tmp_path) -> None:
+def test_export_preview_gallery_includes_level3_exception_page(tmp_path) -> None:
     export_preview_gallery(tmp_path, seed=0, families=["k_vis_table_arc"], levels=[3])
     manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     previews = manifest["previews"]
 
     assert previews
     assert all(preview["family"] == "k_vis_table_arc" for preview in previews)
-    assert any(preview["kind"] == "note_overlay" and preview["page_id"] == "exception-p2" for preview in previews)
+    assert any(preview["kind"] == "exception" and preview["page_id"] == "query-p2" for preview in previews)
 
 
 def test_export_preview_gallery_rejects_removed_public_instance_pack(tmp_path) -> None:
@@ -208,7 +207,7 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
         previews = [
             {
                 "surface_id": f"{instance_ids[0]}-query-query-p1",
-                "family": "k_vis_table_arc" if "excel" in instance_ids[0] else "k_vis_table_arc",
+                "family": "k_vis_table_arc",
                 "family_label": "demo",
                 "level": "1",
                 "kind": "query",
@@ -222,7 +221,7 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
                 "pack_id": pack,
             }
         ]
-        if "excel" in instance_ids[0]:
+        if "wide_table_navigation" in instance_ids[0]:
             previews.append(
                 {
                     "surface_id": f"{instance_ids[0]}-exception-exception-p2-note-scope-note",
@@ -251,13 +250,13 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
                     {
                         "pack_id": env.get("PLAYWRIGHT_TARGET_PACK_ID"),
                         "instance_id": env.get("PLAYWRIGHT_TARGET_INSTANCE_ID"),
-                            "opened_notes": ["scope-note"] if "excel" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", "") else [],
+                            "opened_notes": ["scope-note"] if "wide_table_navigation" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", "") else [],
                     },
                     ensure_ascii=False,
                 ),
                 encoding="utf-8",
             )
-            if "excel" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", ""):
+            if "wide_table_navigation" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", ""):
                 return SimpleNamespace(returncode=1, stdout="workbench failed", stderr="")
             return SimpleNamespace(returncode=0, stdout="workbench ok", stderr="")
         return SimpleNamespace(returncode=0, stdout="surface ok", stderr="")

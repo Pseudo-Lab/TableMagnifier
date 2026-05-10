@@ -220,7 +220,7 @@ def test_viewport_readability_agent_expands_default_seed_samples_to_full_capacit
     assert result.metrics["review_target_count"] == 4
 
 
-def test_visual_qa_agent_checks_marker_position_topology_and_note(monkeypatch) -> None:
+def test_visual_qa_agent_checks_required_evidence_metadata(monkeypatch) -> None:
     result, _ = VisualQAAgent().run(
         PipelineContext(
             run_id="marker-run",
@@ -236,24 +236,18 @@ def test_visual_qa_agent_checks_marker_position_topology_and_note(monkeypatch) -
 
     real_env = authoring_stages.WorkbookEnv
 
-    class MissingNoteEnv:
+    class MissingEvidenceEnv:
         def __init__(self, *args, **kwargs):
             self._env = real_env(*args, **kwargs)
 
         def reset(self):
             observation, info = self._env.reset()
-            spec = self._env.spec
-            exception_sheet = spec.workbook.sheets[2]
-            exception_p2 = replace(exception_sheet.pages[1], notes=(), regions=())
-            exception_sheet = replace(exception_sheet, pages=(exception_sheet.pages[0], exception_p2))
-            workbook = replace(
-                spec.workbook,
-                sheets=(spec.workbook.sheets[0], spec.workbook.sheets[1], exception_sheet, spec.workbook.sheets[3]),
-            )
-            self.spec = replace(spec, workbook=workbook)
+            metadata = dict(self._env.spec.metadata)
+            metadata["required_evidence"] = []
+            self.spec = replace(self._env.spec, metadata=metadata)
             return observation, info
 
-    monkeypatch.setattr(authoring_stages, "WorkbookEnv", MissingNoteEnv)
+    monkeypatch.setattr(authoring_stages, "WorkbookEnv", MissingEvidenceEnv)
     broken_result, _ = VisualQAAgent().run(
         PipelineContext(
             run_id="marker-run",
@@ -266,7 +260,7 @@ def test_visual_qa_agent_checks_marker_position_topology_and_note(monkeypatch) -
         attempt=1,
     )
     assert broken_result.status == "failed"
-    assert any("anchor-scope-note" in finding for finding in broken_result.findings)
+    assert any("Missing required_evidence" in finding for finding in broken_result.findings)
 
 
 def test_viewport_readability_agent_checks_marker_position_note(monkeypatch, tmp_path: Path) -> None:
@@ -319,7 +313,7 @@ def test_red_team_solver_agent_enforces_marker_position_thresholds(monkeypatch) 
             self.template_id = template_id
 
     def fake_run_episode(env, agent):
-        value = 1.0 if agent.name == "legend_skip" else 0.0
+        value = 1.0 if agent.name == "query_only" else 0.0
         return SimpleNamespace(evaluation=SimpleNamespace(correctness=SimpleNamespace(value=value)))
 
     monkeypatch.setattr(authoring_stages, "WorkbookEnv", StaticEnv)
@@ -337,7 +331,7 @@ def test_red_team_solver_agent_enforces_marker_position_thresholds(monkeypatch) 
         attempt=1,
     )
     assert result.status == "failed"
-    assert any("Legend-skip" in finding for finding in result.findings)
+    assert any("Query-only" in finding for finding in result.findings)
 
 
 def test_viewport_readability_agent_fails_missing_required_viewport_state(monkeypatch, tmp_path: Path) -> None:

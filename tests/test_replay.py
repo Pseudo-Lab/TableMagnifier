@@ -7,7 +7,7 @@ from table_env_bench.env.replay import ReplayEvent, ReplayTrace, viewport_state_
 def test_action_logging_and_replay_export(tmp_path) -> None:
     env = WorkbookEnv(family="k_vis_table_arc", level=3, seed=0, template_id="symbol_rule_induction")
     env.reset()
-    env.step({"type": "select_sheet", "sheet": "반례"})
+    env.step({"type": "select_sheet", "sheet": "질의"})
     env.step({"type": "next_page"})
     env.step({"type": "click_region", "x": 120, "y": 120})
     env.step({"type": "submit_answer", "text": env.spec.answer.canonical})

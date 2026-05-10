@@ -2,8 +2,10 @@
 
 ## Before Coding
 
+- Read or write the matching `rubrics/*.md` entry first.
 - Identify the target family id, Korean label, answer form, primary/support operators, and level range.
 - Decide required sheets/pages and why each is decisive.
+- List the gold evidence path and map it to `required_sheet_ids`, `required_page_refs`, `required_navigation`, and `required_evidence`.
 - Define at least one shortcut probe: query-only, sheet skip, note skip, text-only, initial viewport only, or wrong cue interpretation.
 - Confirm docs already cover the cue/operator/answer form, or plan the doc update.
 
@@ -20,6 +22,7 @@
 - `TemplateManifest.family` matches `FAMILY`.
 - `TemplateManifest.level` matches the requested level.
 - `required_sheet_ids`, `required_page_refs`, `required_navigation`, and `required_evidence` describe the real solving path.
+- Required evidence matches the rubric, not just the current generator implementation.
 - `expected_reasoning_steps` matches the level guidance.
 - `shortcut_probes` targets the tempting wrong solution.
 

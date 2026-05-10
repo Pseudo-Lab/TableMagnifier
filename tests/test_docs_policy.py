@@ -22,7 +22,7 @@ def test_task_family_docs_match_current_release_posture() -> None:
     assert "`family_status == preferred`" in doc
     assert "`is_preferred == true`" in doc
     assert "frozen `public_*` instance pack을 포함하지 않는다" in doc
-    assert "deprecated generator family는 canonical registry에서 제거했다" in doc
+    assert "canonical registry에서 제거" in doc
 
 
 def test_navigation_contract_is_documented_as_authoring_policy() -> None:

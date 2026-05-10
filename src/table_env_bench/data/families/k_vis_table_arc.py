@@ -190,10 +190,31 @@ def _query_page(
                     text_block(
                         "exception-check",
                         "Level 3 예외",
-                        rect(84, 190, 1080, 168),
+                        rect(84, 176, 1080, 150),
                         ("보조 페이지의 예외 문구가 기본 규칙보다 우선합니다.", "예외가 적용되는 행 또는 열만 다시 확인하세요."),
                         style="note",
-                    )
+                    ),
+                    table_from_cells(
+                        "exception-application",
+                        "예외 적용 범위",
+                        rect(84, 386, 900, 170),
+                        n_rows=3,
+                        n_cols=3,
+                        cells=[
+                            cell(0, 0, "조건", style="header"),
+                            cell(0, 1, "적용", style="header"),
+                            cell(0, 2, "판정", style="header"),
+                            cell(1, 0, "질의 행", style="row_label", align="left"),
+                            cell(1, 1, "예외 보너스 확인", style="accent"),
+                            cell(1, 2, "필수"),
+                            cell(2, 0, "예시 행", style="row_label", align="left"),
+                            cell(2, 1, "기본 규칙만 사용"),
+                            cell(2, 2, "제외"),
+                        ],
+                        column_weights=(1.0, 1.4, 0.8),
+                        row_heights=(44, 46, 46),
+                        subtitle="질의 행에만 보조 페이지의 예외를 적용합니다.",
+                    ),
                 ],
             )
         )
