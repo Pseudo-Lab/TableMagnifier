@@ -460,75 +460,16 @@ class VisualQAAgent:
                     findings.append(f"Missing public regions for level {level} seed {seed}.")
                 if info.get("family") != context.target.family:
                     findings.append(f"Family mismatch in info for level {level} seed {seed}.")
-                if context.target.family == "marker_position_rule_transfer":
-                    expected_sheet_ids = ["examples", "legend", "exception", "query"]
-                    actual_sheet_ids = _sheet_ids(env.spec.workbook)
-                    if actual_sheet_ids != expected_sheet_ids:
-                        findings.append(f"Marker family should expose sheets {expected_sheet_ids}, found {actual_sheet_ids}.")
-                if context.target.family == "excel_viewport_sheet_navigation":
-                    required_navigation = env.spec.metadata.get("required_navigation", {})
-                    if not required_navigation.get("required_viewport_states"):
-                        findings.append("Excel viewport family should declare required viewport states.")
-                if context.target.family == "marker_position_rule_transfer":
-                    expected_sheet_ids = ["examples", "legend", "exception", "query"]
-                    actual_sheet_ids = _sheet_ids(env.spec.workbook)
-                    if actual_sheet_ids != expected_sheet_ids:
-                        findings.append(
-                            f"Marker position family should expose sheets {expected_sheet_ids}, found {actual_sheet_ids}."
-                        )
-                    metadata_sheet_ids = list(env.spec.metadata.get("required_sheet_ids", []))
-                    if metadata_sheet_ids != expected_sheet_ids:
-                        findings.append(
-                            f"Required sheet ids should be {expected_sheet_ids}, found {metadata_sheet_ids}."
-                        )
-                    expected_page_refs = ["examples:examples-p1", "legend:legend-p1", "exception:exception-p1", "query:query-p1"]
-                    if level >= 2:
-                        expected_page_refs.insert(1, "examples:examples-p2")
-                    if level == 3:
-                        expected_page_refs.insert(-1, "exception:exception-p2")
-                    metadata_page_refs = list(env.spec.metadata.get("required_page_refs", []))
-                    if metadata_page_refs != expected_page_refs:
-                        findings.append(
-                            f"Required page refs should be {expected_page_refs}, found {metadata_page_refs}."
-                        )
-                    metadata_actions = list(env.spec.metadata.get("required_actions", []))
-                    expected_actions = ["must_switch_sheet", "must_visit_legend", "must_visit_exception"]
-                    if level >= 2:
-                        expected_actions.append("must_visit_examples_page2")
-                    if level == 3:
-                        expected_actions.append("must_open_note")
-                    if not _same_items(metadata_actions, expected_actions):
-                        findings.append(f"Required actions should be {expected_actions}, found {metadata_actions}.")
-                    expected_evidence = {
-                        ("page", "examples", "examples-p1", None),
-                        ("page", "legend", "legend-p1", None),
-                        ("page", "exception", "exception-p1", None),
-                        ("page", "query", "query-p1", None),
-                    }
-                    if level >= 2:
-                        expected_evidence.add(("page", "examples", "examples-p2", None))
-                    if level == 3:
-                        expected_evidence.add(("page", "exception", "exception-p2", None))
-                        expected_evidence.add(("note", "exception", "exception-p2", "anchor-scope-note"))
-                    metadata_evidence = _normalized_evidence(env.spec.metadata.get("required_evidence", []))
-                    if metadata_evidence != expected_evidence:
-                        findings.append("Required evidence should match the marker position workbook topology.")
-                    exception_sheet = _find_sheet(env.spec.workbook, "exception")
-                    if exception_sheet is None:
-                        findings.append("Marker position exception sheet is missing.")
-                    elif level == 3:
-                        exception_p2 = _find_page(exception_sheet, "exception-p2")
-                        if exception_p2 is None:
-                            findings.append("Level 3 should expose exception-p2.")
-                        else:
-                            note_ids = [note.id for note in exception_p2.notes]
-                            if "anchor-scope-note" not in note_ids:
-                                findings.append("Level 3 exception-p2 should expose anchor-scope-note.")
-                            note_marker_regions = [region for region in exception_p2.regions if region.role == "note_marker"]
-                            if not note_marker_regions:
-                                findings.append("Level 3 exception-p2 should expose a note_marker region.")
-                            elif all(region.linked_note_id != "anchor-scope-note" for region in note_marker_regions):
-                                findings.append("Level 3 note_marker region should link to anchor-scope-note.")
+                required_sheet_ids = list(env.spec.metadata.get("required_sheet_ids", []))
+                actual_sheet_ids = _sheet_ids(env.spec.workbook)
+                if not required_sheet_ids:
+                    findings.append(f"Missing required_sheet_ids for level {level} seed {seed}.")
+                elif any(sheet_id not in actual_sheet_ids for sheet_id in required_sheet_ids):
+                    findings.append(
+                        f"Required sheet ids should be present in workbook sheets; required={required_sheet_ids}, actual={actual_sheet_ids}."
+                    )
+                if not env.spec.metadata.get("required_evidence"):
+                    findings.append(f"Missing required_evidence for level {level} seed {seed}.")
                 scene_region_counts.append(len(scene_page.get("regions", [])))
         result = StageResult(
             stage=self.stage,
@@ -721,14 +662,10 @@ class ViewportReadabilityAgent:
                     findings.append(
                         f"Level {level} seed {seed} did not visit required viewport state {state_id} during workbench readability traversal."
                     )
-                if context.target.family == "marker_position_rule_transfer" and level == 3:
+                if generate_episode(context.target.family, level, seed, template_id=context.target.template_id).metadata.get("required_navigation", {}).get("required_notes"):
                     opened_notes = list(workbench_summary.get("opened_notes", []))
-                    if "anchor-scope-note" not in opened_notes:
-                        findings.append(
-                            f"Level {level} seed {seed} did not open anchor-scope-note during workbench readability traversal."
-                        )
-            elif context.target.family == "marker_position_rule_transfer" and level == 3:
-                findings.append(f"Level {level} seed {seed} did not produce a workbench readability summary.")
+                    if not opened_notes:
+                        findings.append(f"Level {level} seed {seed} did not open required notes during workbench readability traversal.")
             review_runs.append(
                 {
                     "level": level,
@@ -786,17 +723,7 @@ class RedTeamSolverAgent:
         for shortcut in forbidden_shortcuts:
             if shortcut in generic_probe_builders:
                 agent_builders[shortcut] = generic_probe_builders[shortcut]
-        if context.target.family == "marker_position_rule_transfer":
-            agent_builders.update(
-                {
-                    "query_only": QueryOnlyAgent,
-                    "marker_presence_only": MarkerPresenceOnlyAgent,
-                    "legend_skip": LegendSkipAgent,
-                    "exception_skip": MarkerExceptionSkipAgent,
-                }
-            )
-            if any(level == 3 for level in _selected_levels(context)):
-                agent_builders["note_skip"] = MarkerNoteSkipAgent
+        agent_builders.update({"query_only": QueryOnlyAgent})
         scores: dict[int, dict[str, list[float]]] = {level: {name: [] for name in agent_builders} for level in selected_levels}
         for level in selected_levels:
             for seed in _selected_seed_samples(context, level):
@@ -822,26 +749,15 @@ class RedTeamSolverAgent:
         for shortcut in sorted(forbidden_shortcuts):
             if shortcut in generic_probe_builders and summary_scores.get(shortcut, 0.0) >= 0.25:
                 findings.append(f"{shortcut} probe still solves too many required-navigation episodes.")
-        if context.target.family == "marker_position_rule_transfer":
-            answer_labels = {
-                generate_episode(context.target.family, level, seed, template_id=context.target.template_id).answer.canonical
-                for level in selected_levels
-                for seed in range(min(3, canonical_seed_capacity(context.target.family, level)))
-            }
-            if len(answer_labels) < 2:
-                findings.append("Marker-position base answer labels are static across checked seeds.")
-            if any(level_scores[f"l{level}"].get("query_only", 0.0) >= 0.25 for level in selected_levels if level >= 2):
-                findings.append("Query-only probe still solves too many marker_position_rule_transfer episodes.")
-            if any(level_scores[f"l{level}"].get("text_scrape", 0.0) >= 0.50 for level in selected_levels):
-                findings.append("Text-scrape probe still solves too many marker_position_rule_transfer episodes.")
-            if any(level_scores[f"l{level}"].get("marker_presence_only", 0.0) >= 0.50 for level in selected_levels):
-                findings.append("Marker-presence-only probe still solves too many marker_position_rule_transfer episodes.")
-            if any(level_scores[f"l{level}"].get("legend_skip", 0.0) >= 0.25 for level in selected_levels):
-                findings.append("Legend-skip probe still solves too many marker_position_rule_transfer episodes.")
-            if any(level_scores[f"l{level}"].get("exception_skip", 0.0) >= 0.25 for level in selected_levels if level >= 2):
-                findings.append("Exception-skip probe still solves too many marker_position_rule_transfer episodes.")
-            if any(level_scores[f"l{level}"].get("note_skip", 0.0) >= 0.25 for level in selected_levels if level == 3):
-                findings.append("Note-skip probe still solves too many marker_position_rule_transfer episodes.")
+        answer_labels = {
+            generate_episode(context.target.family, level, seed, template_id=context.target.template_id).answer.canonical
+            for level in selected_levels
+            for seed in range(min(3, canonical_seed_capacity(context.target.family, level)))
+        }
+        if len(answer_labels) < 2:
+            findings.append("Generated answer labels are static across checked seeds.")
+        if any(level_scores[f"l{level}"].get("query_only", 0.0) >= 0.25 for level in selected_levels if level >= 2):
+            findings.append("Query-only probe still solves too many interactive episodes.")
         result = StageResult(
             stage=self.stage,
             status="failed" if findings else "passed",

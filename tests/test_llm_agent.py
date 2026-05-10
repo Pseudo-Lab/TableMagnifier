@@ -46,7 +46,7 @@ def test_estimate_usage_cost_supports_known_models() -> None:
 
 
 def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
-    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
     agent = LLMAgent(
         client=FakeLLMClient(
             [
@@ -94,7 +94,7 @@ def test_llm_agent_retries_invalid_response_and_records_metadata() -> None:
 
 
 def test_serialize_observation_includes_svg_and_state() -> None:
-    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
     observation, info = env.reset()
     prompt = serialize_observation(observation, info)
     assert "Viewport image is attached as PNG." in prompt
@@ -104,14 +104,14 @@ def test_serialize_observation_includes_svg_and_state() -> None:
 
 
 def test_extract_visible_choice_ids_from_query_page() -> None:
-    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
     env.reset()
     observation, _, _, _, _ = env.step(WorkbookAction(type="select_sheet", sheet="질의"))
     assert extract_visible_choice_ids(observation) == ["A", "B", "C", "D"]
 
 
 def test_extract_visible_choice_ids_falls_back_for_sanitized_agent_scene() -> None:
-    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction")
     env.reset()
     observation, _, _, _, _ = env.step(WorkbookAction(type="select_sheet", sheet="질의"))
     assert extract_visible_choice_ids(observation) == []
@@ -130,7 +130,7 @@ def test_workbook_action_tools_omits_submit_enum_without_visible_choices() -> No
 
 
 def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
-    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
     agent = LLMAgent(
         client=FakeLLMClient(
             [
@@ -159,7 +159,7 @@ def test_llm_agent_normalizes_submit_answer_choice_label() -> None:
 
 
 def test_llm_agent_retries_invalid_submit_answer_when_choices_are_visible() -> None:
-    env = WorkbookEnv(family="marker_position_rule_transfer", level=1, seed=0, template_id="corner_anchor_statement", mode="human")
+    env = WorkbookEnv(family="k_vis_table_arc", level=1, seed=0, template_id="symbol_rule_induction", mode="human")
     agent = LLMAgent(
         client=FakeLLMClient(
             [

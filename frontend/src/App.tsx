@@ -366,7 +366,7 @@ function App() {
         setSeed(requestedSession.seed)
         await startFamilySession(requestedSession.family, requestedSession.level, requestedSession.seed)
         void loadGeneratedBenchmarkSuites().catch((error: unknown) => {
-          setErrorText(error instanceof Error ? error.message : '생성형 벤치마크 catalog를 불러오지 못했습니다.')
+          setErrorText(error instanceof Error ? error.message : '에피소드 catalog를 불러오지 못했습니다.')
         })
         return
       }
@@ -377,14 +377,14 @@ function App() {
         setSelectedPackId(initialPack.pack_id)
         setSelectedInstanceId(initialInstance.instance_id)
         void loadGeneratedBenchmarkSuites().catch((error: unknown) => {
-          setErrorText(error instanceof Error ? error.message : '생성형 벤치마크 catalog를 불러오지 못했습니다.')
+          setErrorText(error instanceof Error ? error.message : '에피소드 catalog를 불러오지 못했습니다.')
         })
         await startInstanceSession(initialInstance.instance_id)
       } else {
         const nextGeneratedSuites = await loadGeneratedBenchmarkSuites()
         const generatedDefault = firstGeneratedRecord(nextGeneratedSuites)
         if (!generatedDefault) {
-          throw new Error('생성형 벤치마크 catalog에 시작 가능한 record가 없습니다.')
+          throw new Error('에피소드 catalog에 시작 가능한 record가 없습니다.')
         }
         await startGeneratedSession(generatedDefault.suite.suite_id, generatedDefault.template, generatedDefault.record)
       }
@@ -450,7 +450,7 @@ function App() {
     setSelectedGeneratedRecordKey(nextSelection.recordKey)
     setIsLoading(true)
     setErrorText('')
-    setStatusText('생성형 벤치마크 문제를 준비하는 중입니다.')
+    setStatusText('상호작용 에피소드를 준비하는 중입니다.')
     setEvents([])
     setReplay([])
     try {
@@ -468,7 +468,7 @@ function App() {
       setLastClick(null)
       setStatusText(`${response.info.family_display_name} · ${response.info.template_id ?? record.template_id} · seed ${response.info.seed} 세션이 준비되었습니다.`)
     } catch (error) {
-      setErrorText(error instanceof Error ? error.message : '생성형 벤치마크 세션 생성에 실패했습니다.')
+      setErrorText(error instanceof Error ? error.message : '상호작용 에피소드 세션 생성에 실패했습니다.')
     } finally {
       setIsLoading(false)
     }
@@ -558,7 +558,7 @@ function App() {
 
   const generatedRecordDescription = selectedGeneratedTemplate
     ? `${selectedGeneratedTemplate.family_display_name} · 레벨 ${selectedGeneratedTemplate.level} · ${selectedGeneratedTemplate.template_label}`
-    : '생성형 벤치마크 record를 선택합니다.'
+    : '탐색형 에피소드 record를 선택합니다.'
 
   return (
     <div className="min-h-screen bg-transparent">
@@ -575,7 +575,7 @@ function App() {
                   <Badge variant={isLoading ? 'default' : 'outline'}>{sessionStateLabel}</Badge>
                 </div>
                 <div className="space-y-2">
-                  <CardTitle className="text-2xl">한국어 Visual TableQA Workbench</CardTitle>
+                  <CardTitle className="text-2xl">K-VisTable-ARC Agent Workbench</CardTitle>
                   <CardDescription className="text-sm leading-6">{statusText}</CardDescription>
                 </div>
               </CardHeader>
@@ -645,7 +645,7 @@ function App() {
                   <>
                     <div className="space-y-3">
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">생성형 벤치마크 세트</label>
+                        <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">상호작용 에피소드 세트</label>
                         <select
                           data-testid="generated-suite-select"
                           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -725,7 +725,7 @@ function App() {
                         disabled={!selectedSuite || !selectedGeneratedTemplate || !selectedGeneratedRecord || isLoading}
                       >
                         <RefreshCw className="h-4 w-4" />
-                        생성형 벤치마크 시작
+                        에피소드 시작
                       </Button>
                     </div>
 
@@ -735,7 +735,7 @@ function App() {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
-                    <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">개발용 패밀리</label>
+                    <label className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">개발용 환경</label>
                     <Badge data-testid="family-status-badge" variant={familyRecord?.is_preferred ? 'secondary' : 'default'}>
                       {familyStatusLabel(familyRecord)}
                     </Badge>
@@ -782,7 +782,7 @@ function App() {
 
                 <Button data-testid="start-session-button" className="w-full gap-2" onClick={() => void startFamilySession(selectedFamily, selectedLevel, seed)} disabled={!selectedFamily || isLoading}>
                   <RefreshCw className="h-4 w-4" />
-                  개발 세션 시작
+                  환경 세션 시작
                 </Button>
               </CardContent>
             </Card>
@@ -901,7 +901,7 @@ function App() {
                       <Eye className="h-5 w-5 text-primary" />
                       Workbook Viewport
                     </CardTitle>
-                    <CardDescription>표를 직접 클릭해 탐색합니다. 상세 로그와 메타데이터는 오른쪽 Inspector에서 확인합니다.</CardDescription>
+                <CardDescription>표와 문서 페이지를 탐색하며 규칙을 유도하고 계산합니다. 상세 로그와 메타데이터는 오른쪽 Inspector에서 확인합니다.</CardDescription>
                   </div>
                   <Button variant={isInspectorOpen ? 'default' : 'outline'} onClick={() => void openInspector(inspectorTab)}>
                     <PanelRight className="mr-2 h-4 w-4" />
@@ -938,7 +938,7 @@ function App() {
             <Card className="border-border/70 shadow-soft" data-testid="answer-card">
               <CardHeader className="pb-4">
                 <CardTitle className="text-base">정답 제출</CardTitle>
-                <CardDescription>숫자 또는 선택지 텍스트를 그대로 입력합니다.</CardDescription>
+                <CardDescription>계산한 최종 답을 입력합니다. 에피소드의 제출 형식 안내에 맞춰 숫자 또는 단위를 포함합니다.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex gap-3">

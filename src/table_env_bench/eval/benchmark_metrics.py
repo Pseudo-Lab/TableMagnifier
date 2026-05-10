@@ -20,7 +20,7 @@ def generalization_score(records: list[dict[str, Any]]) -> float | None:
         benchmark_track = coverage.get("benchmark_track")
         generalization_group = coverage.get("generalization_group")
         level = coverage.get("level", record.get("level"))
-        if benchmark_track != "canonical_real_tableqa" or generalization_group is None or level is None:
+        if benchmark_track != "korean_visual_table_agent_reasoning" or generalization_group is None or level is None:
             continue
         grouped[(str(generalization_group), int(level))].append(float(evaluation["correctness"]["value"]))
     if not grouped:

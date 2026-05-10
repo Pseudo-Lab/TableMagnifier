@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "table-env-bench"
 version = "0.1.0"
-description = "Workbook-style Korean Visual TableQA benchmark and agent evaluation environment"
+description = "Interactive Korean visual table agent reasoning benchmark"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [

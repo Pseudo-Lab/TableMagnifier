@@ -5,7 +5,7 @@ from table_env_bench.env.replay import ReplayEvent, ReplayTrace, viewport_state_
 
 
 def test_action_logging_and_replay_export(tmp_path) -> None:
-    env = WorkbookEnv(family="marker_position_rule_transfer", level=3, seed=0, template_id="corner_anchor_statement")
+    env = WorkbookEnv(family="k_vis_table_arc", level=3, seed=0, template_id="symbol_rule_induction")
     env.reset()
     env.step({"type": "select_sheet", "sheet": "반례"})
     env.step({"type": "next_page"})

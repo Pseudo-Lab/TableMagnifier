@@ -1,12 +1,12 @@
 # Repository Guidelines
 
-`table-env-bench` is an offline-first, deterministic research benchmark for interactive Korean Visual TableQA in a workbook-style interface.
+`table-env-bench` is an offline-first, deterministic research benchmark for Korean visual table agent reasoning in a workbook-style interface.
 
-The current canonical track is `canonical_real_tableqa`: realistic synthetic Korean workbook tables where agents inspect rendered tables, grouped rows, merged headers, notes, and answer panels, then infer and apply rules across sheets and pages.
+The current canonical track is `korean_visual_table_agent_reasoning`: agents inspect rendered Korean table/document environments, navigate sheets/pages/viewports, induce hidden rules, reference support documents, calculate answers, and submit evidence-aware final responses.
 
 ## North Star
 
-- Measure higher-order reasoning on top of Visual TableQA surfaces.
+- Measure interactive table-agent reasoning on top of Korean visual table surfaces.
 - Keep workbook/tables as the primary evidence space, not just decorative chrome.
 - Use sheets/pages to distribute examples, legends, exception surfaces, and query states.
 - Favor tasks that require abstraction, scope resolution, disambiguation, and transfer.
@@ -63,37 +63,34 @@ The current canonical track is `canonical_real_tableqa`: realistic synthetic Kor
 - `src/table_env_bench/server/`: FastAPI session server
 - `src/table_env_bench/baselines/`: random and heuristic agents
 - `frontend/`: React + Vite + TypeScript primary human-facing web UI
-- `frontend/playwright/`: surface readability, workbench traversal, and snapshot-based visual validation
+- `frontend/playwright/`: surface readability and workbench traversal validation
 - `tests/`: deterministic regression coverage
 - `docs/`: benchmark-facing documentation and assumptions
 
 ## Content Direction
 
-The current active canonical families are:
+The current active canonical family is:
 
-- `marker_position_rule_transfer`
-- `excel_viewport_sheet_navigation`
+- `k_vis_table_arc`
 
 The preferred episode structure is now closer to:
 
-- `examples` sheet/page: 2-3 small table snippets or worksheet fragments showing input/output behavior
-- `legend` / `operators` sheet/page: markers, chips, header cues, filter meaning, or chart/table mapping rules
-- `query` sheet/page: a new table fragment plus answer choices, target cell, or target summary slot
-- `exception` / `appendix` / `notes` sheet/page: merged-header scope, note, alternate table, or exception case that rules out a wrong interpretation
+- `examples` sheet/page: small table snippets showing completed behavior or inferred rules
+- `glossary` / `notes` / `directory` sheet/page: synthetic abbreviations, unit rules, column map, or exception rules
+- `query` sheet/page: a new rendered table fragment plus answer choices or final answer prompt
+- optional exception/support page: rules out query-only or document-skip shortcuts
 
 Recommended future family themes:
 
-- example-to-query table transform
-- header/group scope disambiguation
-- legend/operator composition over table regions
-- exception-based table rule disambiguation
-- cross-format table-chart abstraction
-- order-sensitive worksheet pipelines
+- special symbol rule induction
+- merged cell/header scope disambiguation
+- synthetic abbreviation document reference
+- 50+ column wide-table navigation and calculation
+- cross-family composite hidden tests combining symbol, merged header, glossary, and wide table cues
 
 Current family intent:
 
-- `marker_position_rule_transfer`: marker anchor position, legend mapping, exception sheets, and note-assisted scope transfer
-- `excel_viewport_sheet_navigation`: wide worksheet pan/zoom navigation plus cross-sheet rule transfer
+- `k_vis_table_arc`: episode-based Korean visual table agent benchmark with symbol induction, merged header scope, synthetic abbreviation reference, and wide table navigation templates.
 
 ## Episode Rule Docs
 
@@ -144,9 +141,9 @@ Use WSL + `uv` when available.
 
 - `uv run pytest`
 - `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active`
-- `uv run python -m table_env_bench.scripts.run_demo --family marker_position_rule_transfer --level 2 --agent random`
+- `uv run python -m table_env_bench.scripts.run_demo --family k_vis_table_arc --level 1 --template-id symbol_rule_induction --agent random`
 - `uv run python -m table_env_bench.scripts.eval_baselines`
-- `uv run python -m table_env_bench.scripts.run_authoring_pipeline --family marker_position_rule_transfer`
+- `uv run python -m table_env_bench.scripts.run_authoring_pipeline --family k_vis_table_arc`
 - `uv run python -m table_env_bench.scripts.audit_readability`
 - `uv run python -m table_env_bench.scripts.run_server --reload`
 - `cd frontend && npm install && npm run dev`

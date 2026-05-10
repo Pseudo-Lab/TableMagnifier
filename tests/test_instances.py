@@ -29,7 +29,7 @@ def test_hidden_holdout_pack_requires_private_data_root(tmp_path: Path, monkeypa
         "pack_label": "Hidden Holdout Real V1",
         "version": "1.0",
         "locale": "ko-KR",
-        "benchmark_track": "canonical_real_tableqa",
+        "benchmark_track": "korean_visual_table_agent_reasoning",
         "pack_role": "hidden_holdout",
         "instances": [],
     }

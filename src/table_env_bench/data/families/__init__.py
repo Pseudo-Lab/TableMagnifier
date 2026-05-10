@@ -1,32 +1,20 @@
 """Canonical family registry."""
 
 from table_env_bench.data.families.adapters import FamilyAdapter
-from table_env_bench.data.families.marker_position_rule_transfer import (
-    FAMILY as MARKER_POSITION_FAMILY,
-    FAMILY_LABEL as MARKER_POSITION_LABEL,
-    build_episode as build_marker_position_episode,
-    list_manifests as list_marker_position_manifests,
-)
-from table_env_bench.data.families.excel_viewport_sheet_navigation import (
-    FAMILY as EXCEL_VIEWPORT_FAMILY,
-    FAMILY_LABEL as EXCEL_VIEWPORT_LABEL,
-    build_episode as build_excel_viewport_episode,
-    list_manifests as list_excel_viewport_manifests,
+from table_env_bench.data.families.k_vis_table_arc import (
+    FAMILY as K_VIS_TABLE_ARC_FAMILY,
+    FAMILY_LABEL as K_VIS_TABLE_ARC_LABEL,
+    build_episode as build_k_vis_table_arc_episode,
+    list_manifests as list_k_vis_table_arc_manifests,
 )
 from table_env_bench.data.families.shared import CANONICAL_SEEDS_PER_TEMPLATE, TemplateManifest
 
 CANONICAL_FAMILY_ADAPTERS = (
     FamilyAdapter(
-        family=EXCEL_VIEWPORT_FAMILY,
-        label=EXCEL_VIEWPORT_LABEL,
-        build_episode=build_excel_viewport_episode,
-        list_manifests=list_excel_viewport_manifests,
-    ),
-    FamilyAdapter(
-        family=MARKER_POSITION_FAMILY,
-        label=MARKER_POSITION_LABEL,
-        build_episode=build_marker_position_episode,
-        list_manifests=list_marker_position_manifests,
+        family=K_VIS_TABLE_ARC_FAMILY,
+        label=K_VIS_TABLE_ARC_LABEL,
+        build_episode=build_k_vis_table_arc_episode,
+        list_manifests=list_k_vis_table_arc_manifests,
     ),
 )
 

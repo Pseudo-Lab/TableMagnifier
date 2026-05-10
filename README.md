@@ -1,8 +1,8 @@
 # table-env-bench
 
-`table-env-bench`는 workbook-style 인터페이스에서 시트와 페이지를 탐색하며 푸는 한국어 Visual TableQA 벤치마크입니다. 에이전트는 숨겨진 구조화 workbook 데이터를 직접 받지 않고, 현재 viewport, 질문, 남은 예산, sheet/page 상태만 보고 행동합니다.
+`table-env-bench`는 한국어 시각 테이블 환경에서 에이전트가 탐색, 규칙 유도, 문서 참조, 계산을 수행하는 interactive benchmark입니다. 에이전트는 숨겨진 구조화 workbook 데이터를 직접 받지 않고, 현재 viewport, 질문, 남은 예산, sheet/page 상태만 보고 행동합니다.
 
-현재 canonical 방향은 `canonical_real_tableqa`입니다. 사람이 읽을 수 있는 실제 업무형 합성 표를 바탕으로, 표 구조와 시각 단서를 읽고 규칙을 유도하거나 범위를 좁힌 뒤 정답을 선택하는 문제를 다룹니다.
+현재 canonical 방향은 `korean_visual_table_agent_reasoning`입니다. 정적 `{table, question, answer}` 데이터셋이 아니라, episode 안에서 목표와 규칙을 파악하고 경험을 통해 적응하는 agent 능력을 측정합니다.
 
 ## 현재 운영 모델
 
@@ -22,15 +22,10 @@ Workbench는 instance pack이 없으면 generated benchmark selector를 보여�
 
 우선 노출 family:
 
-- `marker_position_rule_transfer`
-  - 예시/범례/반례에서 셀 모서리 표식 위치 규칙을 유도하고 query table에 전이합니다.
+- `k_vis_table_arc`
+  - 특수 기호 규칙 유도, merged header scope, 합성 약어 문서 참조, wide table 탐색 계산을 포함합니다.
 
-Active/dev family:
-
-- `excel_viewport_sheet_navigation`
-  - pan/zoom/sheet navigation과 viewport traversal 안정성을 검증합니다.
-
-이전 comparison family와 해당 hard suite는 canonical registry에서 제거했습니다. 현재 UI/API 기본 catalog에는 위 두 family만 노출됩니다.
+이전 family와 해당 데이터는 canonical registry에서 제거했습니다. 현재 UI/API 기본 catalog에는 `k_vis_table_arc`만 노출됩니다.
 
 ## 빠른 시작
 
@@ -75,7 +70,7 @@ npm run dev -- --host 127.0.0.1 --port 5173
 개발용 family deep link는 계속 지원합니다.
 
 ```text
-http://127.0.0.1:5173/?family=excel_viewport_sheet_navigation&level=1&seed=0
+http://127.0.0.1:5173/?family=k_vis_table_arc&level=1&seed=0
 ```
 
 유효한 `?family=...` dev URL은 generated default보다 우선합니다. 유효하지 않은 `?family` URL이나 URL 파라미터가 없는 경우에는 `/api/benchmark-suites`의 첫 generated record로 시작합니다.
@@ -86,7 +81,7 @@ Generated family demo:
 
 ```bash
 cd /mnt/c/Users/imssh/Documents/TableMagnifier
-uv run python -m table_env_bench.scripts.run_demo --family marker_position_rule_transfer --level 1 --template-id corner_anchor_statement --seed 0 --agent heuristic
+uv run python -m table_env_bench.scripts.run_demo --family k_vis_table_arc --level 1 --template-id symbol_rule_induction --seed 0 --agent heuristic
 ```
 
 Baseline 평가:
@@ -202,7 +197,7 @@ cp -R /mnt/c/Users/imssh/Documents/TableMagnifier/docs/skills/tableqa-family-aut
 Codex에서 새 문제 family를 만들 때는 프롬프트 첫머리에 skill을 명시합니다.
 
 ```text
-$tableqa-family-author marker_position_rule_transfer와 다른 새 Visual TableQA family를 adapter 방식으로 추가해줘
+$tableqa-family-author k_vis_table_arc에 새 interactive table-agent episode template을 adapter 방식으로 추가해줘
 ```
 
 이 skill은 다음 순서를 강제합니다.

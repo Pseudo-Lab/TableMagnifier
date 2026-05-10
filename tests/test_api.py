@@ -32,30 +32,24 @@ def test_api_session_flow_for_workbook_env() -> None:
     catalog_response = client.get("/api/catalog")
     assert catalog_response.status_code == 200
     families = catalog_response.json()
-    assert [item["family"] for item in families] == [
-        "marker_position_rule_transfer",
-        "excel_viewport_sheet_navigation",
-    ]
+    assert [item["family"] for item in families] == ["k_vis_table_arc"]
     assert families[0]["is_preferred"] is True
     assert families[0]["family_status"] == "preferred"
-    excel_family = next(item for item in families if item["family"] == "excel_viewport_sheet_navigation")
-    assert excel_family["is_preferred"] is False
-    assert excel_family["family_status"] == "active"
     assert all(item["family_status"] != "deprecated" for item in families)
 
     session_response = client.post(
         "/api/sessions",
-        json={"family": "marker_position_rule_transfer", "level": 1, "seed": 0, "mode": "agent"},
+        json={"family": "k_vis_table_arc", "level": 1, "seed": 0, "template_id": "symbol_rule_induction", "mode": "agent"},
     )
     assert session_response.status_code == 200
     session_payload = session_response.json()
     session_id = session_payload["session_id"]
-    assert session_payload["info"]["sheet_tabs"] == ["예시", "범례", "반례", "질의"]
+    assert session_payload["info"]["sheet_tabs"] == ["예시", "질의"]
     assert session_payload["info"]["active_sheet_id"] == "examples"
     assert session_payload["info"]["current_page_id"] == "examples-p1"
     assert session_payload["info"]["zoom_index"] == 0
     assert session_payload["info"]["viewbox"]["width"] > 0
-    assert session_payload["info"]["required_navigation"]["required_sheet_ids"] == ["examples", "legend", "exception", "query"]
+    assert session_payload["info"]["required_navigation"]["required_sheet_ids"] == ["examples", "query"]
     assert session_payload["observation"]["viewport_scene"]["page"]["page_id"] == "examples-p1"
     assert "elements" not in session_payload["observation"]["viewport_scene"]["page"]
     assert "regions" not in session_payload["observation"]["viewport_scene"]["page"]
@@ -94,7 +88,7 @@ def test_generated_benchmark_suite_catalog_is_compact_and_launchable() -> None:
     first_suite = suites[0]
     first_template = first_suite["templates"][0]
     first_record = first_template["records"][0]
-    assert first_template["family"] == "marker_position_rule_transfer"
+    assert first_template["family"] == "k_vis_table_arc"
     assert first_template["template_id"]
     assert first_template["seed_slots"] == sorted(first_template["seed_slots"])
     assert first_record["seed"] == first_template["seed_slots"][0]

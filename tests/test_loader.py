@@ -3,13 +3,13 @@ from table_env_bench.data.loader import load_episode_spec, save_episode_spec
 
 
 def test_load_workbook_episode_spec_from_json(tmp_path) -> None:
-    original = generate_episode("marker_position_rule_transfer", 1, seed=0, template_id="corner_anchor_statement")
+    original = generate_episode("k_vis_table_arc", 1, seed=0, template_id="symbol_rule_induction")
     spec_path = tmp_path / "hierarchical_sample.json"
     save_episode_spec(original, spec_path)
 
     spec = load_episode_spec(spec_path)
-    assert spec.family == "marker_position_rule_transfer"
-    assert spec.family_display_name == "표식 위치 규칙 전이"
+    assert spec.family == "k_vis_table_arc"
+    assert spec.family_display_name == "K-VisTable-ARC 파일럿"
     assert spec.level == 1
     assert spec.locale == "ko-KR"
     assert spec.workbook.sheets[0].tab_label == "예시"

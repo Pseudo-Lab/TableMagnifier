@@ -41,13 +41,13 @@ app.add_middleware(
 store = SessionStore()
 authoring_store = AuthoringRunStore()
 
-PREFERRED_GENERATOR_FAMILY = "marker_position_rule_transfer"
+PREFERRED_GENERATOR_FAMILY = "k_vis_table_arc"
 GENERATED_BENCHMARK_SUITE_ORDER = ("canonical_dev",)
 GENERATED_BENCHMARK_SUITE_LABELS = {
-    "canonical_dev": "Canonical 개발 세트",
+    "canonical_dev": "K-VisTable-ARC v0.1 개발 세트",
 }
 GENERATED_BENCHMARK_SUITE_DESCRIPTIONS = {
-    "canonical_dev": "공개 frozen pack 없이 canonical generator에서 즉시 생성하는 개발용 benchmark record입니다.",
+    "canonical_dev": "한국어 시각 테이블 환경에서 탐색, 규칙유도, 문서참조, 계산을 평가하는 생성형 episode입니다.",
 }
 
 

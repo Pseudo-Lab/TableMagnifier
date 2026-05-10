@@ -12,7 +12,7 @@ def test_removed_eval_hard_suites_are_not_exposed() -> None:
 
 def test_removed_eval_hard_templates_are_not_launchable() -> None:
     try:
-        generate_episode("marker_position_rule_transfer", 2, seed=0, template_id="evalhard_l2_base")
+        generate_episode("k_vis_table_arc", 2, seed=0, template_id="evalhard_l2_base")
     except KeyError as exc:
         assert "Unknown template" in str(exc)
     else:

@@ -243,7 +243,7 @@ test('workbench navigation readability covers every available page', async ({ pa
 
   try {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByText('한국어 Visual TableQA Workbench')).toBeVisible()
+    await expect(page.getByText('K-VisTable-ARC Agent Workbench')).toBeVisible()
     await viewerCanvas.waitFor({ state: 'visible', timeout: 20_000 })
     await expect(page.getByText('세션을 불러오는 중입니다.')).not.toBeVisible()
     selectedTarget = await startTargetSession(page)

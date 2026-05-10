@@ -15,7 +15,7 @@ PRIVATE_DATA_ENV = "TABLE_BENCH_PRIVATE_DATA_DIR"
 
 
 def _default_benchmark_track(pack_id: str) -> str:
-    return "canonical_real_tableqa"
+    return "korean_visual_table_agent_reasoning"
 
 
 def _default_pack_role(pack_id: str) -> str:

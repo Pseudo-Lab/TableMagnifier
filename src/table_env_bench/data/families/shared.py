@@ -134,7 +134,7 @@ class TemplateManifest:
     distractor_failure_modes: tuple[str, ...]
     task_archetype: str = "review_verification"
     scenario_context: str = ""
-    benchmark_track: str = "canonical_real_tableqa"
+    benchmark_track: str = "korean_visual_table_agent_reasoning"
     reasoning_archetype: str = "induce_apply"
     abstraction_tier: str = "abstract_worksheet"
     support_surface_policy: str = "optional"

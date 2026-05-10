@@ -1,71 +1,51 @@
 # Task Families
 
-현재 benchmark는 `canonical_real_tableqa` track 아래 두 generator family만 canonical registry에 등록한다.
+현재 benchmark는 `korean_visual_table_agent_reasoning` track 아래 `k_vis_table_arc` generator family만 canonical registry에 등록한다.
 
-## Active Families
+## Active Family
 
-### 우선 family
+- `k_vis_table_arc`
 
-- `marker_position_rule_transfer`
+`k_vis_table_arc`는 `/api/catalog`에서 `family_status == preferred`, `is_preferred == true`로 노출된다.
+이전 `marker_position_rule_transfer`, `excel_viewport_sheet_navigation` 데이터 family는 canonical registry에서 제거했고 기본 UI/API catalog에 노출하지 않는다.
 
-### Active canonical/dev families
+## `k_vis_table_arc`
 
-- `excel_viewport_sheet_navigation`
+핵심 정의:
 
-`marker_position_rule_transfer`는 `/api/catalog`에서 `family_status == preferred`, `is_preferred == true`로 노출된다.
-`excel_viewport_sheet_navigation`은 `family_status == active`, `is_preferred == false`로 노출된다.
+- 한국어로 작성된 시각적 테이블/문서 환경에서 에이전트가 제한된 관찰과 행동으로 탐색한다.
+- 정적 `{table, question, answer}` 샘플이 아니라 sheet/page/action budget/replay를 갖는 episode를 평가 단위로 삼는다.
+- 에이전트는 원본 CSV나 구조화 grid dump를 받지 않고 rendered viewport, 질문, 상태, action feedback만 사용한다.
+- 최종 답뿐 아니라 evidence coverage, navigation efficiency, robustness, calibration을 평가 축으로 둔다.
 
-deprecated generator family는 canonical registry에서 제거했다. UI/API 기본 catalog와 generated benchmark suite에는 deprecated record가 노출되지 않는다.
+현재 v0.1 template:
 
-## `marker_position_rule_transfer`
-
-핵심 문제 구조:
-
-- `예시` 시트에서 worked example를 읽는다.
-- `범례` 시트에서 같은 삼각 표식이라도 셀 내부 모서리 위치가 다른 의미를 갖는다는 mapping을 확인한다.
-- `반례` 시트에서 marker shape만 따라가는 wrong hypothesis를 제거한다.
-- Level 3에서는 `반례` 시트의 openable note가 적용 묶음을 고정한다.
-- `질의` 시트에서 현재 표에 대해 맞는 statement choice를 고른다.
-
-현재 템플릿:
-
-- `corner_anchor_statement`
+- `symbol_rule_induction`: 완성 행에서 특수 기호 규칙을 유도하고 미완성 행에 적용한다.
+- `merged_header_scope`: 병합 헤더와 계층 scope를 따라가며 범위 계산을 수행한다.
+- `abbrev_doc_reference`: 합성 약어와 단위를 별도 문서에서 확인한 뒤 계산한다.
+- `wide_table_navigation`: 50+ 열 환경을 탐색해 유사 열명을 구분하고 단위 변환 계산을 한다.
 
 답 형식:
 
-- `statement_choice`
-
-## `excel_viewport_sheet_navigation`
-
-핵심 문제 구조:
-
-- `사례` 시트에서 넓은 worksheet의 기준 열과 target 열 관계를 읽는다.
-- Level 2에서는 `사례` 시트의 두 번째 페이지까지 확인한다.
-- Level 3에서는 `연산자` 시트에서 같은 행 라벨과 target 열 이동 규칙을 확인한다.
-- `질의` 시트에서 초기 viewport 오른쪽의 target 열까지 zoom/pan으로 이동한 뒤 최종 값을 선택한다.
-- `required_navigation.required_viewport_states`가 `zoom_in`, `pan_right`, target rect center-in-viewbox 조건을 요구한다.
-
-현재 템플릿:
-
-- `wide_sheet_rule_transfer`
-
-답 형식:
-
-- `statement_choice`
+- v0.1은 `number` 중심이며 금액은 원 단위 exact match를 기본으로 한다.
 
 ## Level Progression
 
-### `marker_position_rule_transfer`
+- Level 1: 작은 표와 단일 규칙, 2-3 reasoning steps.
+- Level 2: 추가 cue 또는 support document를 요구하며 3-4 reasoning steps.
+- Level 3: 예외/보조 페이지가 wrong rule을 제거하며 4-5 reasoning steps.
 
-- Level 1: `예시 + 범례 + 반례 + 질의`, 두 anchor mapping과 짧은 contrast로 위치 규칙을 전이
-- Level 2: `예시 p1 + 예시 p2 + 범례 + 반례 + 질의`, 네 모서리 anchor와 row group variation을 함께 사용
-- Level 3: `예시 p1 + 예시 p2 + 범례 + 반례 표 + 반례 note + 질의`, note는 적용 묶음을 고정
+## Splits And OOD Axes
 
-### `excel_viewport_sheet_navigation`
+계획된 split 축:
 
-- Level 1: `사례 + 질의`, 사례의 target 열 이동 규칙을 질의 시트의 오른쪽 target column에 적용
-- Level 2: `사례 p1 + 사례 p2 + 질의`, 두 번째 사례 페이지로 열 이동 규칙의 반복성을 확인
-- Level 3: `사례 p1 + 사례 p2 + 연산자 + 질의`, 연산자 시트가 같은 행 라벨과 target 열 이동 규칙을 고정
+- `dev_public`: 디버깅과 예시 공개.
+- `public_test`: 공개 leaderboard용 답 비공개.
+- `private_test`: hidden seed와 hidden rule family.
+- `ood_symbol`: 처음 보는 기호 모양/색/위치.
+- `ood_layout`: 처음 보는 병합/렌더링 스타일.
+- `ood_abbrev`: 처음 보는 합성 약어 체계.
+- `ood_width`: column 수와 scroll 구조 확대.
 
 ## Instance Pack Note
 

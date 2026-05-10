@@ -27,8 +27,8 @@ def test_run_demo_parser_rejects_unknown_families() -> None:
 
 def test_run_demo_parser_accepts_instance_id_without_family() -> None:
     parser = build_parser()
-    args = parser.parse_args(["--instance-id", "example_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0"])
-    assert args.instance_id == "example_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0"
+    args = parser.parse_args(["--instance-id", "example_pack_v1__k_vis_table_arc_symbol_rule_induction_l1_s0"])
+    assert args.instance_id == "example_pack_v1__k_vis_table_arc_symbol_rule_induction_l1_s0"
     assert args.family is None
     assert args.level is None
 
@@ -39,10 +39,10 @@ def test_export_preview_gallery_writes_index_and_raster_artifacts(tmp_path) -> N
     assert (tmp_path / "review.html").exists()
     assert (tmp_path / "manifest.json").exists()
     assert (tmp_path / "workbook-canvas-renderer.js").exists()
-    assert any(path.name.startswith("marker_position_rule_transfer") for path in tmp_path.glob("*.png"))
-    assert any(path.name.startswith("excel_viewport_sheet_navigation") for path in tmp_path.glob("*.png"))
-    assert any(path.name.startswith("marker_position_rule_transfer") for path in tmp_path.glob("*.scene.json"))
-    assert any(path.name.startswith("excel_viewport_sheet_navigation") for path in tmp_path.glob("*.scene.json"))
+    assert any(path.name.startswith("k_vis_table_arc") for path in tmp_path.glob("*.png"))
+    assert any(path.name.startswith("k_vis_table_arc") for path in tmp_path.glob("*.png"))
+    assert any(path.name.startswith("k_vis_table_arc") for path in tmp_path.glob("*.scene.json"))
+    assert any(path.name.startswith("k_vis_table_arc") for path in tmp_path.glob("*.scene.json"))
     manifest = (tmp_path / "manifest.json").read_text(encoding="utf-8")
     review_html = (tmp_path / "review.html").read_text(encoding="utf-8")
     assert '"surface_id"' in manifest
@@ -56,23 +56,23 @@ def test_export_preview_gallery_writes_index_and_raster_artifacts(tmp_path) -> N
 
 
 def test_export_preview_gallery_can_filter_family_and_level(tmp_path) -> None:
-    result = export_preview_gallery(tmp_path, seed=0, families=["marker_position_rule_transfer"], levels=[3])
+    result = export_preview_gallery(tmp_path, seed=0, families=["k_vis_table_arc"], levels=[3])
     manifest = (tmp_path / "manifest.json").read_text(encoding="utf-8")
 
     assert result["count"] > 0
-    assert "marker_position_rule_transfer" in manifest
-    assert "excel_viewport_sheet_navigation" not in manifest
+    assert "k_vis_table_arc" in manifest
+    assert "k_vis_table_arc" not in manifest
     assert '"level": "3"' in manifest
     assert '"level": "1"' not in manifest
 
 
 def test_export_preview_gallery_includes_marker_note_overlay(tmp_path) -> None:
-    export_preview_gallery(tmp_path, seed=0, families=["marker_position_rule_transfer"], levels=[3])
+    export_preview_gallery(tmp_path, seed=0, families=["k_vis_table_arc"], levels=[3])
     manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     previews = manifest["previews"]
 
     assert previews
-    assert all(preview["family"] == "marker_position_rule_transfer" for preview in previews)
+    assert all(preview["family"] == "k_vis_table_arc" for preview in previews)
     assert any(preview["kind"] == "note_overlay" and preview["page_id"] == "exception-p2" for preview in previews)
 
 
@@ -116,16 +116,16 @@ def test_audit_readability_parser_accepts_pack_and_instance_ids() -> None:
             "--pack",
             "fixture_pack_v1",
             "--instance-id",
-            "fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0",
+            "fixture_pack_v1__k_vis_table_arc_symbol_rule_induction_l1_s0",
             "--instance-id",
-            "fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0",
+            "fixture_pack_v1__k_vis_table_arc_wide_table_navigation_l1_s0",
         ]
     )
     assert args.out == "artifacts/tmp_fixture_pack_audit"
     assert args.pack == "fixture_pack_v1"
     assert args.instance_ids == [
-        "fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0",
-        "fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0",
+        "fixture_pack_v1__k_vis_table_arc_symbol_rule_induction_l1_s0",
+        "fixture_pack_v1__k_vis_table_arc_wide_table_navigation_l1_s0",
     ]
 
 
@@ -182,18 +182,18 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
         pack_label="Fixture Pack v1",
         instances=(
             SimpleNamespace(
-                instance_id="fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0",
+                instance_id="fixture_pack_v1__k_vis_table_arc_symbol_rule_induction_l1_s0",
                 instance_label="채널 집행 기준 L1",
-                family="marker_position_rule_transfer",
+                family="k_vis_table_arc",
                 level=1,
-                benchmark_track="canonical_real_tableqa",
+                benchmark_track="korean_visual_table_agent_reasoning",
             ),
             SimpleNamespace(
-                instance_id="fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0",
+                instance_id="fixture_pack_v1__k_vis_table_arc_wide_table_navigation_l1_s0",
                 instance_label="재고 예외 판정 L1",
-                family="excel_viewport_sheet_navigation",
+                family="k_vis_table_arc",
                 level=1,
-                benchmark_track="canonical_real_tableqa",
+                benchmark_track="korean_visual_table_agent_reasoning",
             ),
         ),
     )
@@ -208,7 +208,7 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
         previews = [
             {
                 "surface_id": f"{instance_ids[0]}-query-query-p1",
-                "family": "excel_viewport_sheet_navigation" if "excel" in instance_ids[0] else "marker_position_rule_transfer",
+                "family": "k_vis_table_arc" if "excel" in instance_ids[0] else "k_vis_table_arc",
                 "family_label": "demo",
                 "level": "1",
                 "kind": "query",
@@ -226,7 +226,7 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
             previews.append(
                 {
                     "surface_id": f"{instance_ids[0]}-exception-exception-p2-note-scope-note",
-                    "family": "excel_viewport_sheet_navigation",
+                    "family": "k_vis_table_arc",
                     "family_label": "demo",
                     "level": "1",
                     "kind": "note_overlay",
@@ -274,8 +274,8 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
     assert summary["surface_failures"] == 0
     assert summary["workbench_failures"] == 1
     assert summary["blocking_failures"] == 1
-    assert summary["runs"][0]["instance_id"] == "fixture_pack_v1__marker_position_rule_transfer_corner_anchor_statement_l1_s0"
-    assert summary["runs"][1]["instance_id"] == "fixture_pack_v1__excel_viewport_sheet_navigation_wide_sheet_rule_transfer_l1_s0"
+    assert summary["runs"][0]["instance_id"] == "fixture_pack_v1__k_vis_table_arc_symbol_rule_induction_l1_s0"
+    assert summary["runs"][1]["instance_id"] == "fixture_pack_v1__k_vis_table_arc_wide_table_navigation_l1_s0"
     assert summary["runs"][1]["workbench_navigation"]["summary"]["opened_notes"] == ["scope-note"]
     assert (tmp_path / "summary.json").exists()
     assert (tmp_path / "summary.md").exists()

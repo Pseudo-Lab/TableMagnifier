@@ -9,7 +9,7 @@ const captureDir = process.env.PLAYWRIGHT_CAPTURE_DIR ?? path.resolve(process.cw
 test('capture workbench states', async ({ page }, testInfo) => {
   const projectSuffix = testInfo.project.name.replace(/^chromium-/, '')
   await page.goto(route, { waitUntil: 'domcontentloaded' })
-  await expect(page.getByText('한국어 Visual TableQA Workbench')).toBeVisible()
+  await expect(page.getByText('K-VisTable-ARC Agent Workbench')).toBeVisible()
   await page.locator(readySelector).waitFor({ state: 'visible', timeout: 20_000 })
   await page.waitForTimeout(500)
 

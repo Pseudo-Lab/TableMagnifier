@@ -15,14 +15,12 @@ def _read_doc(name: str) -> str:
 def test_task_family_docs_match_current_release_posture() -> None:
     doc = _read_doc("task_families.md")
 
-    assert PREFERRED_GENERATOR_FAMILY == "marker_position_rule_transfer"
-    assert list_families() == ["excel_viewport_sheet_navigation", "marker_position_rule_transfer"]
-    assert "### 우선 family" in doc
-    assert "- `marker_position_rule_transfer`" in doc
-    assert "### Active canonical/dev families" in doc
-    assert "- `excel_viewport_sheet_navigation`" in doc
-    assert "`family_status == active`" in doc
-    assert "`is_preferred == false`" in doc
+    assert PREFERRED_GENERATOR_FAMILY == "k_vis_table_arc"
+    assert list_families() == ["k_vis_table_arc"]
+    assert "## Active Family" in doc
+    assert "- `k_vis_table_arc`" in doc
+    assert "`family_status == preferred`" in doc
+    assert "`is_preferred == true`" in doc
     assert "frozen `public_*` instance pack을 포함하지 않는다" in doc
     assert "deprecated generator family는 canonical registry에서 제거했다" in doc
 
@@ -50,4 +48,4 @@ def test_navigation_contract_is_documented_as_authoring_policy() -> None:
 
     assert "### 2.9 `match_column_offset`" in operators
     assert "`rule_transfer`" in operators
-    assert "`excel_viewport_sheet_navigation`" in operators
+    assert "`match_column_offset`" in operators
