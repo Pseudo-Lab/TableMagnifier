@@ -12,18 +12,18 @@ from PIL import Image, ImageDraw, ImageFont
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 FONT_REGULAR = (
-    REPO_ROOT / "assets/fonts/BMJUA.ttf",
     Path("/mnt/c/Windows/Fonts/malgun.ttf"),
     Path("/System/Library/Fonts/AppleSDGothicNeo.ttc"),
     Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
     Path("/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc"),
+    REPO_ROOT / "assets/fonts/BMJUA.ttf",
 )
 FONT_BOLD = (
-    REPO_ROOT / "assets/fonts/BMJUA.ttf",
     Path("/mnt/c/Windows/Fonts/malgunbd.ttf"),
     Path("/System/Library/Fonts/AppleSDGothicNeo.ttc"),
     Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"),
     Path("/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc"),
+    REPO_ROOT / "assets/fonts/BMJUA.ttf",
 )
 FONT_MONO = (
     Path("/mnt/c/Windows/Fonts/gulim.ttc"),
