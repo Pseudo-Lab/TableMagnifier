@@ -35,6 +35,14 @@ def test_scorers_and_episode_metrics_behave_as_expected() -> None:
     assert "overall" in payload
 
 
+def test_ko_answer_scorer_accepts_correct_choice_id_for_visible_choices() -> None:
+    answer = AnswerSpec(canonical="38", accepted=("38원", "C"), normalizer="ko_answer")
+    scorer = ExactMatchScorer()
+
+    assert scorer.score("C", answer).value == 1.0
+    assert scorer.score("B", answer).value == 0.0
+
+
 def test_episode_evaluator_rewards_decisive_evidence_before_submit() -> None:
     answer = AnswerSpec(canonical="B", accepted=("b",), normalizer="basic")
     evaluation = EpisodeEvaluator().evaluate(

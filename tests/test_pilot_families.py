@@ -99,8 +99,13 @@ def test_registered_canonical_family_is_k_vis_table_arc() -> None:
             "merged_header_scope",
             "abbrev_doc_reference",
             "wide_table_navigation",
+            "color_condition_rule_induction",
+            "legend_color_exception_scope",
+            "wide_table_viewport_trace",
+            "merged_header_pan_scope",
+            "zoom_micro_marker_exception",
         ]
-        assert canonical_seed_capacity("k_vis_table_arc", level) == 32
+        assert canonical_seed_capacity("k_vis_table_arc", level) == 72
 
 
 def test_k_vis_table_arc_templates_cover_agentic_axes() -> None:
@@ -109,6 +114,11 @@ def test_k_vis_table_arc_templates_cover_agentic_axes() -> None:
         "merged_header_scope": ("examples", "query", "resolve_header_scope"),
         "abbrev_doc_reference": ("main", "glossary", "lookup_document_rule"),
         "wide_table_navigation": ("directory", "wide", "navigate_wide_table"),
+        "color_condition_rule_induction": ("examples", "query", "filter_members"),
+        "legend_color_exception_scope": ("legend", "query", "classify_state"),
+        "wide_table_viewport_trace": ("examples", "wide", "match_column_offset"),
+        "merged_header_pan_scope": ("examples", "wide", "resolve_header_scope"),
+        "zoom_micro_marker_exception": ("examples", "query", "exception_by_icon_anchor"),
     }
     for template_id, (first_sheet, support_sheet, operator) in expectations.items():
         episode = generate_episode("k_vis_table_arc", 2, seed=0, template_id=template_id)
@@ -118,6 +128,27 @@ def test_k_vis_table_arc_templates_cover_agentic_axes() -> None:
         assert first_sheet in [sheet.sheet_id for sheet in episode.workbook.sheets]
         assert support_sheet in episode.metadata["required_navigation"]["required_sheet_ids"]
         assert episode.answer.normalizer == "ko_answer"
+
+
+def test_k_vis_table_arc_answer_choices_are_shuffled_and_scorable() -> None:
+    labels_by_template: dict[str, list[str]] = {}
+    leak_phrases = ("계산 규칙과 단위를 모두 반영", "건너뛴 후보", "유사 열/행을 고른 후보")
+    for template_id in list_templates("k_vis_table_arc", 1):
+        labels: list[str] = []
+        for seed in range(8):
+            episode = generate_episode("k_vis_table_arc", 1, seed=seed, template_id=template_id)
+            accepted_choice_ids = [value for value in episode.answer.accepted if value in {"A", "B", "C", "D"}]
+            assert len(accepted_choice_ids) == 1
+            labels.append(accepted_choice_ids[0])
+
+            query_sheet = next(sheet for sheet in episode.workbook.sheets if sheet.sheet_id == "query")
+            choice_blocks = [element for element in query_sheet.pages[0].elements if element.type == "text_block" and element.title.startswith("선택지 ")]
+            assert len(choice_blocks) == 4
+            visible_text = "\n".join(line for block in choice_blocks for line in (block.title, *block.lines))
+            assert not any(phrase in visible_text for phrase in leak_phrases)
+        labels_by_template[template_id] = labels
+
+    assert all(len(set(labels)) > 1 for labels in labels_by_template.values())
 
 
 def test_catalog_records_use_interactive_track() -> None:

@@ -216,6 +216,85 @@ disallowed shortcuts:
 - `required_navigation.required_viewport_states`
 - `required_navigation.forbidden_shortcuts`
 
+### 3.10 `color_pattern_rule_transfer`
+
+설명:
+
+- 완성 예시에서 색상, 패턴, 테두리 조합이 포함/제외 상태를 어떻게 바꾸는지 유도하고 질의 표에 적용한다
+
+대표 cue:
+
+- conditional formatting pattern
+- cell frame / exception frame
+
+대표 answer form:
+
+- count
+- mini-table choice
+- statement choice
+
+추천 family:
+
+- `k_vis_table_arc`
+
+disallowed shortcuts:
+
+- `text_scrape`
+- `pattern_presence_only`
+- `query_only`
+
+### 3.11 `legend_color_exception_priority`
+
+설명:
+
+- 범례 문서의 색상·패턴 의미와 표 안의 예외 테두리 우선순위를 함께 적용한다
+
+대표 cue:
+
+- legend item
+- conditional formatting pattern
+- exception frame
+
+대표 answer form:
+
+- count
+- statement choice
+
+추천 family:
+
+- `k_vis_table_arc`
+
+disallowed shortcuts:
+
+- `legend_skip`
+- `exception_skip`
+- `color_only`
+
+### 3.12 `micro_marker_zoom_exception`
+
+설명:
+
+- 작은 코너 마커의 위치가 기본값에 대한 가산/감산/제외 예외를 결정하므로 확대 관찰이 필요하다
+
+대표 cue:
+
+- icon anchor position
+- viewport zoom state
+
+대표 answer form:
+
+- short numeric output
+- statement choice
+
+추천 family:
+
+- `k_vis_table_arc`
+
+필수 metadata:
+
+- `required_navigation.required_viewport_states`
+- `required_navigation.forbidden_shortcuts`
+
 ## 4. episode 조합 규칙
 
 하나의 episode는 보통 아래 조합을 권장한다.
