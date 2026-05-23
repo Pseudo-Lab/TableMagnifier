@@ -1,6 +1,6 @@
 # Domain Vocab Policy
 
-canonical real-data benchmark는 공개 원자료 복제가 아니라 현실형 합성 데이터다. 어휘는 실제 업무 표처럼 들리되, 특정 회사나 민감 데이터에 묶이지 않아야 한다.
+canonical benchmark는 공개 원자료 복제가 아니라 현실형 합성 데이터다. 어휘는 실제 업무 표처럼 들리되, 특정 회사나 민감 데이터에 묶이지 않아야 한다.
 
 ## 권장 어휘 축
 

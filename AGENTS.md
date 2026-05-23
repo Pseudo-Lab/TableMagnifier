@@ -126,6 +126,13 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 - Table headings, callouts, notes, answer cards, and cell text must fit their boxes without clipping.
 - Multi-page families must be checked both statically and by actual workbench traversal.
 - If a screenshot looks wrong, add or tighten the gate so the problem fails automatically next time. Do not rely on manual spot checks as the only defense.
+- Generated PNG, JSON, `index.html`, `review.html`, and manifest artifacts must not be hand-edited; change renderer/template source and regenerate them.
+- After any visual renderer/template change, regenerate contact sheets and inspect representative level/template sheets before finalizing.
+- Always run artifact validation before finalizing regenerated observation packages.
+- Do not use target-specific visual leakage: no row, cell, column, border, stripe, glow, bolding, or status treatment may identify the answer-bearing location unless the task itself is explicitly about that visible cue and the cue is applied consistently.
+- L3 supplemental/query-p2 pages must be template-specific professional documents, not a repeated generic placeholder.
+- Do not allow large blank panels, overlapping cards, or white masks to cover content in agent observations.
+- Human-visible observation copy should be concise professional Korean; keep benchmark, debug, oracle, seed, rationale, hidden text, and generation metadata out of screenshots.
 
 ## Data Preview Artifacts
 
@@ -135,6 +142,11 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 - Then capture every agent observation through Playwright: `cd frontend && npm run visual:capture:agent-observations`.
 - The Playwright capture reads `artifacts/agent_observations_active/manifest.json` and writes PNG screenshots under `artifacts/playwright/agent_observations_active/`.
 - When the handoff needs every canonical benchmark record rather than a single suite, use `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --all-benchmark-records`.
+- After UI or human-workbench design changes, also create a human-facing UI review gallery for every affected problem, not just a few representative screenshots. The preferred top-level entry point is `artifacts/index.html`.
+- `artifacts/index.html` should make both perspectives easy to review from one place:
+  - **Human UI / demo view**: polished browser screenshots of the redesigned human-facing interface for every affected problem record.
+  - **Agent observation view**: links or embedded thumbnails for the `TableEnv(..., mode="agent")` observation gallery, usually `artifacts/agent_observations_active/index.html` and/or `artifacts/playwright/agent_observations_active/`.
+- Keep the two perspectives clearly labeled. Never describe a human UI screenshot as what the agent sees, and never use human-workbench chrome as proof of agent-observation quality.
 - Static renderer previews are still useful for renderer debugging: `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active` followed by `cd frontend && npm run visual:capture:previews`.
 - For targeted datasets, pass the matching `--suite`, `--family`, `--level`, `--template-id`, or `--seed` options to `export_agent_observation_gallery`, and keep `PLAYWRIGHT_REVIEW_DIR` / `PLAYWRIGHT_CAPTURE_DIR` pointed at the corresponding artifact directories.
 - Treat these images as the default handoff artifact for new data. Do not rely only on JSON specs, generated metadata, or a local UI session when asking another agent or reviewer to evaluate generated problems.

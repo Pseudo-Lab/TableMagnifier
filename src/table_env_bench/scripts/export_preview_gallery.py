@@ -188,6 +188,7 @@ def _gallery_html(previews: list[dict[str, object]]) -> str:
 
 def _review_html(previews: list[dict[str, object]]) -> str:
     previews_json = json.dumps(previews, ensure_ascii=False)
+    config = RenderConfig()
     options = []
     for index, preview in enumerate(previews):
         label = f"{preview['family_label']} · L{preview['level']} · {preview['sheet']} / {preview['page']}"
@@ -245,8 +246,8 @@ def _review_html(previews: list[dict[str, object]]) -> str:
             padding: 20px;
           }}
           .surface-frame canvas {{
-            width: 1120px;
-            height: 780px;
+            width: {config.viewport_width}px;
+            height: {config.viewport_height}px;
             display: block;
             margin: 0 auto;
             border-radius: var(--teb-radius-md);
@@ -268,7 +269,7 @@ def _review_html(previews: list[dict[str, object]]) -> str:
             </label>
           </aside>
           <main class="surface-frame">
-            <canvas id="surface-canvas" width="1120" height="780"></canvas>
+            <canvas id="surface-canvas" width="{config.viewport_width}" height="{config.viewport_height}"></canvas>
           </main>
         </section>
         <script src="./workbook-canvas-renderer.js"></script>

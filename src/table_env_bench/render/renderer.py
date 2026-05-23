@@ -22,8 +22,8 @@ from table_env_bench.theme import RADII, TOKENS, rgba
 
 @dataclass(frozen=True)
 class RenderConfig:
-    viewport_width: int = 1120
-    viewport_height: int = 780
+    viewport_width: int = 1280
+    viewport_height: int = 900
     page_margin: int = 44
     header_height: int = 84
     font_family: str = TOKENS.font_sans
@@ -325,6 +325,16 @@ class SvgWorkbookRenderer:
         x = 76.0
         y = 42.0
         height = 30.0
+        parts.append(
+            _svg_text(
+                f"문서 검토 자료 · {workbook.title}",
+                x=x,
+                y=32,
+                size=12,
+                fill=TOKENS.on_surface_variant,
+                weight=700,
+            )
+        )
         for sheet_index, sheet in enumerate(workbook.sheets):
             label = sheet.tab_label
             width = max(86.0, min(148.0, 54.0 + (len(label) * 14.0)))

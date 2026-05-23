@@ -146,9 +146,118 @@ def test_k_vis_table_arc_answer_choices_are_shuffled_and_scorable() -> None:
             assert len(choice_blocks) == 4
             visible_text = "\n".join(line for block in choice_blocks for line in (block.title, *block.lines))
             assert not any(phrase in visible_text for phrase in leak_phrases)
+            choice_values = [block.lines[0] for block in choice_blocks]
+            assert len(set(choice_values)) == len(choice_values)
         labels_by_template[template_id] = labels
 
     assert all(len(set(labels)) > 1 for labels in labels_by_template.values())
+
+
+def test_symbol_rule_induction_seed0_semantics_survive_readability_layout() -> None:
+    l1 = generate_episode("k_vis_table_arc", 1, seed=0, template_id="symbol_rule_induction")
+    l3 = generate_episode("k_vis_table_arc", 3, seed=0, template_id="symbol_rule_induction")
+
+    assert l1.question == "마킹 샘플 로그 기준으로 미분류 레코드의 합계는 원 단위로 얼마인가?"
+    assert len([value for value in l1.answer.accepted if value in {"A", "B", "C", "D"}]) == 1
+    assert len([value for value in l3.answer.accepted if value in {"A", "B", "C", "D"}]) == 1
+    assert [sheet.sheet_id for sheet in l1.workbook.sheets] == ["examples", "query"]
+    assert [page.page_id for sheet in l1.workbook.sheets for page in sheet.pages] == ["examples-p1", "query-p1"]
+    assert [page.page_id for sheet in l3.workbook.sheets for page in sheet.pages] == ["examples-p1", "query-p1", "query-p2"]
+
+    examples_table = next(element for element in l1.workbook.sheets[0].pages[0].elements if element.element_id == "symbol-examples")
+    assert examples_table.rect.width >= 760
+    assert examples_table.rect.height >= 340
+    assert examples_table.row_heights == (64, 86, 86, 86)
+    assert [cell.text for cell in examples_table.cells if cell.row == 1] == ["가", "10★", "5", "25"]
+    assert [cell.text for cell in examples_table.cells if cell.row == 2] == ["나", "7", "3★", "13"]
+    assert [cell.text for cell in examples_table.cells if cell.row == 3] == ["다", "6★", "2★", "16"]
+
+    query_sheet = next(sheet for sheet in l1.workbook.sheets if sheet.sheet_id == "query")
+    query_page = query_sheet.pages[0]
+    query_examples = next(element for element in query_page.elements if element.element_id == "symbol-query-completed-examples")
+    query_table = next(element for element in query_page.elements if element.element_id == "symbol-query")
+    assert query_examples.rect.width >= 826
+    assert query_table.rect.width >= 826
+    assert [cell.text for cell in query_table.cells if cell.row == 1] == ["검토", "11★", "8★", "?"]
+    choice_values = [
+        element.lines[0]
+        for element in query_page.elements
+        if element.type == "text_block" and element.title.startswith("선택지 ")
+    ]
+    assert len(choice_values) == 4
+    assert len(set(choice_values)) == 4
+
+
+def test_abbrev_doc_reference_uses_enterprise_document_surfaces() -> None:
+    episode = generate_episode("k_vis_table_arc", 3, seed=0, template_id="abbrev_doc_reference")
+    sheets = {sheet.sheet_id: sheet for sheet in episode.workbook.sheets}
+
+    assert [sheet.sheet_id for sheet in episode.workbook.sheets] == ["query", "main", "glossary"]
+    assert episode.workbook.title == "운영 분석 리포트 탐색"
+    assert sheets["main"].tab_label == "메인 표"
+    assert sheets["glossary"].tab_label == "약어 문서"
+
+    main_table = next(element for element in sheets["main"].pages[0].elements if element.type == "table")
+    assert main_table.title == "지점별 조정 지표 현황"
+    assert "2025-Q2" in str(main_table.metadata["subtitle"])
+    assert "TCA: 천 원" in str(main_table.metadata["subtitle"])
+    glossary_table = next(element for element in sheets["glossary"].pages[0].elements if element.type == "table")
+    assert glossary_table.title == "지표 코드북 / 산식 기준표"
+    assert glossary_table.n_cols == 6
+    assert {cell.text for cell in glossary_table.cells if cell.row == 0} == {"코드", "의미", "적용 위치", "단위/스케일", "계산 규칙", "비고"}
+
+    query_text = "\n".join(
+        line
+        for element in sheets["query"].pages[0].elements
+        if element.type == "text_block"
+        for line in (element.title, *element.lines)
+    )
+    assert "접수 케이스" in query_text
+    assert "요청 번호: ARC-OPS-KPI-2047" in query_text
+    assert "참조 경로" not in query_text
+    assert "검토 항목" not in query_text
+    assert "확인 위치" not in query_text
+    assert "source_hint" not in query_text
+
+
+def test_k_vis_table_arc_visual_surfaces_avoid_target_specific_highlights() -> None:
+    abbrev = generate_episode("k_vis_table_arc", 3, seed=0, template_id="abbrev_doc_reference")
+    main_sheet = next(sheet for sheet in abbrev.workbook.sheets if sheet.sheet_id == "main")
+    main_table = next(element for element in main_sheet.pages[0].elements if element.type == "table")
+    hld_y_styles = {cell.style for cell in main_table.cells if cell.col == 5 and cell.text == "Y"}
+    assert hld_y_styles == {"negative"}
+    target_row_styles = {cell.col: cell.style for cell in main_table.cells if cell.row == 1}
+    assert target_row_styles[1] == "numeric"
+    assert target_row_styles[2] == "numeric"
+    assert target_row_styles[3] == "numeric"
+    assert target_row_styles[4] == "numeric"
+
+    wide = generate_episode("k_vis_table_arc", 3, seed=0, template_id="wide_table_navigation")
+    wide_sheet = next(sheet for sheet in wide.workbook.sheets if sheet.sheet_id == "wide")
+    wide_table = next(element for element in wide_sheet.pages[0].elements if element.type == "table")
+    answer_bearing_cells = [cell for cell in wide_table.cells if cell.row == 2 and cell.col in {12, 14}]
+    assert {cell.style for cell in answer_bearing_cells} == {"body"}
+
+
+def test_l3_query_supplemental_pages_are_template_specific() -> None:
+    generic_titles = {"규정 상태 요약", "Supplemental Rule Notice"}
+    seen_titles: set[str] = set()
+    for template_id in list_templates("k_vis_table_arc", 3):
+        episode = generate_episode("k_vis_table_arc", 3, seed=0, template_id=template_id)
+        query_sheet = next(sheet for sheet in episode.workbook.sheets if sheet.sheet_id == "query")
+        if len(query_sheet.pages) < 2:
+            continue
+        supplemental_page = query_sheet.pages[1]
+        visible_titles = {
+            element.title
+            for element in supplemental_page.elements
+            if element.type in {"text_block", "table"}
+        }
+        assert not (visible_titles & generic_titles)
+        seen_titles.update(visible_titles)
+    assert "마커 처리 기준" in seen_titles
+    assert "원장 대조 기준" in seen_titles
+    assert "마커 판독 기준" in seen_titles
 
 
 def test_catalog_records_use_interactive_track() -> None:

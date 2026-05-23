@@ -2,8 +2,7 @@
 
 이 문서는 `table-env-bench`의 UI 모드를 현재 기준으로 정리한 문서입니다.
 
-이제 사람용 기본 경로는 `Streamlit`이 아니라 `FastAPI session API + React web UI`입니다.  
-즉, human/dev/agent 모드는 모두 같은 environment contract 위에서 동작하고, 차이는 관측 정보와 UI affordance에서 만들어집니다.
+사람용 기본 경로는 `FastAPI session API + React web UI`입니다. human/dev/agent 모드는 모두 같은 environment contract 위에서 동작하고, 차이는 관측 정보와 UI affordance에서 만들어집니다.
 
 ## 1. Dev / Inspector mode
 
@@ -85,9 +84,14 @@
 보여도 되는 것:
 
 - `viewport_svg`
+- `viewport_scene`
+- `viewport_image_png_base64`
+- `viewport_width`
+- `viewport_height`
 - `question`
 - `remaining_action_budget`
-- `active_sheet`
+- `current_sheet_name`
+- `current_sheet_index`
 - `sheet_tabs`
 - `current_page_index`
 - `page_count_in_sheet`
@@ -106,4 +110,4 @@
 - env core는 mode와 무관하게 같은 state transition을 사용합니다.
 - mode 차이는 observation filtering과 UI rendering에서 만듭니다.
 - server layer는 `mode=agent|human|dev`와 `debug`를 받습니다.
-- canonical human path는 더 이상 Streamlit이 아니라 FastAPI + React입니다.
+- canonical human path는 FastAPI + React입니다.

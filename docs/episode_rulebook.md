@@ -342,11 +342,11 @@ disallowed shortcuts:
 
 ## 7. 문서 연결
 
-- [docs/visual_cue_inventory.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/visual_cue_inventory.md)
-- [docs/real_data_authoring_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/real_data_authoring_policy.md)
-- [docs/domain_vocab_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/domain_vocab_policy.md)
-- [docs/human_readability_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/human_readability_checklist.md)
-- [docs/operator_taxonomy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/operator_taxonomy.md)
-- [docs/answer_form_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/answer_form_policy.md)
-- [docs/level_design_policy.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/level_design_policy.md)
-- [docs/episode_validation_checklist.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/episode_validation_checklist.md)
+- [visual_cue_inventory.md](./visual_cue_inventory.md)
+- [real_data_authoring_policy.md](./real_data_authoring_policy.md)
+- [domain_vocab_policy.md](./domain_vocab_policy.md)
+- [human_readability_checklist.md](./human_readability_checklist.md)
+- [operator_taxonomy.md](./operator_taxonomy.md)
+- [answer_form_policy.md](./answer_form_policy.md)
+- [task_families.md](./task_families.md)
+- [episode_validation_checklist.md](./episode_validation_checklist.md)

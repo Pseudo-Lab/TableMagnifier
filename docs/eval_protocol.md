@@ -1,6 +1,6 @@
 # Evaluation Protocol
 
-다음 build pass에서도 채점은 현재 코드와 같은 원칙을 유지합니다. correctness와 efficiency를 분리해 기록하고, environment core는 특정 결합식에 종속되지 않게 둡니다.
+채점은 correctness와 efficiency를 분리해 기록하고, environment core는 특정 결합식에 종속되지 않게 둡니다.
 
 ## Episode 결과 계약
 
@@ -19,7 +19,7 @@
 
 ## 정답 판정
 
-MVP correctness는 normalized exact match를 유지합니다.
+현재 correctness는 normalized exact match를 유지합니다.
 
 - 공백 정리
 - 쉼표 허용
@@ -33,7 +33,7 @@ MVP correctness는 normalized exact match를 유지합니다.
 ### 현재 코드와의 정렬
 
 - 현재 repo는 action count 기반 효율 scorer를 이미 갖고 있다.
-- build pass 초반에는 이 scorer를 기본값으로 유지해도 된다.
+- 현재 이 scorer를 기본값으로 유지한다.
 
 ### workbook용 추가 metadata
 

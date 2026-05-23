@@ -18,16 +18,23 @@
 - 에이전트는 원본 CSV나 구조화 grid dump를 받지 않고 rendered viewport, 질문, 상태, action feedback만 사용한다.
 - 최종 답뿐 아니라 evidence coverage, navigation efficiency, robustness, calibration을 평가 축으로 둔다.
 
-현재 v0.1 template:
+현재 template:
 
 - `symbol_rule_induction`: 완성 행에서 특수 기호 규칙을 유도하고 미완성 행에 적용한다.
 - `merged_header_scope`: 병합 헤더와 계층 scope를 따라가며 범위 계산을 수행한다.
 - `abbrev_doc_reference`: 합성 약어와 단위를 별도 문서에서 확인한 뒤 계산한다.
 - `wide_table_navigation`: 50+ 열 환경을 탐색해 유사 열명을 구분하고 단위 변환 계산을 한다.
+- `color_condition_rule_induction`: 완성 예시에서 색상/패턴/테두리 조건 규칙을 유도하고 질의 표에 적용한다.
+- `legend_color_exception_scope`: 범례의 색상/패턴 의미와 질의 표의 예외 테두리를 함께 반영해 대상을 분류한다.
+- `wide_table_viewport_trace`: 예시에서 학습한 열 오프셋을 넓은 질의 표에 적용하려면 pan/zoom과 위치 기억이 필요하다.
+- `merged_header_pan_scope`: 병합 헤더가 정한 원거리 열 범위를 기억한 채 넓은 표를 이동해 값을 비교한다.
+- `zoom_micro_marker_exception`: 작은 코너 마커의 위치가 예외 적용 범위를 바꾸므로 확대 관찰 후 계산한다.
 
 답 형식:
 
-- v0.1은 `number` 중심이며 금액은 원 단위 exact match를 기본으로 한다.
+- `number`와 `count`를 사용한다.
+- 금액/수량 답은 canonical numeric string과 accepted alias를 함께 둔다.
+- 질의 페이지의 선택지 ID도 accepted alias로 등록될 수 있다.
 
 ## Level Progression
 
@@ -37,15 +44,13 @@
 
 ## Splits And OOD Axes
 
-계획된 split 축:
+현재 코드의 generated split/suite 축:
 
 - `dev_public`: 디버깅과 예시 공개.
-- `public_test`: 공개 leaderboard용 답 비공개.
-- `private_test`: hidden seed와 hidden rule family.
-- `ood_symbol`: 처음 보는 기호 모양/색/위치.
-- `ood_layout`: 처음 보는 병합/렌더링 스타일.
-- `ood_abbrev`: 처음 보는 합성 약어 체계.
-- `ood_width`: column 수와 scroll 구조 확대.
+- `test_holdout`: manifest index 기준 holdout template/seed slot.
+- `canonical_dev`: `dev_public` records를 노출하는 현재 기본 generated suite.
+
+각 template manifest에는 `holdout_group`, `generalization_group`, `shortcut_probes`, `required_evidence`, `required_navigation` metadata가 들어간다. OOD 축은 이 metadata를 기준으로 확장한다.
 
 ## Instance Pack Note
 

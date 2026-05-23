@@ -84,6 +84,13 @@ export type GeneratedBenchmarkSuiteEnvelope = {
 export type Observation = {
   viewport_svg: string
   viewport_scene: Record<string, unknown>
+  sample_surfaces?: Array<{
+    sheet_id: string
+    sheet_name: string
+    page_id: string
+    page_title: string
+    elements: Array<Record<string, unknown>>
+  }>
   viewport_image_png_base64: string
   viewport_width: number
   viewport_height: number

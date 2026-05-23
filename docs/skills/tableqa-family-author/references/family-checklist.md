@@ -2,6 +2,7 @@
 
 ## Before Coding
 
+- If starting from `docs/family/abc_generator.md` or a similar scaffold, extract a concrete Template Spec Card first; do not implement from the generic scaffold alone.
 - Read or write the matching `rubrics/*.md` entry first.
 - Identify the target family id, Korean label, answer form, primary/support operators, and level range.
 - Decide required sheets/pages and why each is decisive.
@@ -12,6 +13,7 @@
 ## Generator Module
 
 - Put family code in `src/table_env_bench/data/families/<family_id>.py`.
+- Translate scaffold methods into repo-native Python helpers: `sampleParams` becomes deterministic private parameter sampling, `buildWorkbook` becomes `WorkbookSpec`, `solve` becomes hidden answer calculation plus `AnswerSpec`, and `validate` becomes tests/audits.
 - Use shared helpers from `families/shared.py` before adding helpers.
 - Use `resolve_template_seed()` so `seed` selects templates consistently.
 - Use `episode()` and `build_episode_metadata()` paths through shared helpers where possible.
@@ -21,6 +23,7 @@
 
 - `TemplateManifest.family` matches `FAMILY`.
 - `TemplateManifest.level` matches the requested level.
+- Template Spec Card fields are represented in `TemplateManifest` or generated metadata; missing fields are documented as explicit assumptions.
 - `required_sheet_ids`, `required_page_refs`, `required_navigation`, and `required_evidence` describe the real solving path.
 - Required evidence matches the rubric, not just the current generator implementation.
 - `expected_reasoning_steps` matches the level guidance.

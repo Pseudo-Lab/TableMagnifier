@@ -1,6 +1,6 @@
 # Assumptions
 
-- 다음 build pass에서도 렌더링 백엔드는 SVG를 유지한다. 차트, 범례, note overlay도 같은 결정론적 SVG 파이프라인에서 처리한다.
+- 렌더링 백엔드는 SVG를 유지하고, agent observation gallery와 시각 검토를 위해 PNG viewport도 함께 생성한다. 차트, 범례, note overlay는 같은 결정론적 scene/rendering 파이프라인에서 처리한다.
 - core benchmark는 계속 offline-first여야 하며, OCR 서비스나 외부 네트워크 호출에 의존하지 않는다.
 - 현재 `TableEnv`의 step loop, replay, scorer, FastAPI session API는 재사용하고, workbook abstraction은 그 위에 얹는다.
 - benchmark의 장기 정체성은 `Visual TableQA-rooted reasoning`이다. 즉, canonical task는 visually rendered table 또는 worksheet fragment를 핵심 evidence로 유지한다.
@@ -12,5 +12,5 @@
 - sheet tab 이름과 page 번호는 시각적으로 보이는 정보이므로 agent observation에 포함해도 leakage로 보지 않는다.
 - exact numeric answer는 가능하면 표, 범례, note, appendix에서 얻을 수 있어야 하며, 차트 pixel OCR만으로 풀어야 하는 문제는 피한다.
 - 사용자 노출 콘텐츠와 UI는 한국어 기본값을 유지한다. 내부 family id와 action id는 영어를 유지할 수 있다.
-- 한국어 answer normalizer는 계속 확장 가능하게 유지하지만, build pass 초반에는 현재 지원 범위인 공백/쉼표/일부 단위 접미어 처리만 보장한다.
+- 한국어 answer normalizer는 계속 확장 가능하게 유지하지만, 현재 기본 보장 범위는 공백/쉼표/일부 단위 접미어와 accepted alias 처리다.
 - 세션 저장소는 당분간 in-memory여도 괜찮다. 다만 human baseline 수집이 시작되면 replay와 run metadata의 영속 저장이 필요하다.

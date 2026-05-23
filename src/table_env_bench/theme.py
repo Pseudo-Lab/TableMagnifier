@@ -17,7 +17,7 @@ def rgba(hex_color: str, alpha: float) -> str:
 
 @dataclass(frozen=True)
 class ThemeTokens:
-    font_sans: str = "Inter, 'Segoe UI', sans-serif"
+    font_sans: str = "'Noto Sans KR', Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Segoe UI', sans-serif"
     font_mono: str = "'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace"
     surface: str = "#f8fafc"
     surface_container_low: str = "#f1f5f9"

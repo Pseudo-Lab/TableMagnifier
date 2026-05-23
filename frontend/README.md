@@ -1,54 +1,37 @@
-# React + TypeScript + Vite
+# Frontend Workbench
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+이 디렉터리는 `table-env-bench`의 React + Vite + TypeScript workbench입니다. 기본 사용자는 사람 평가자와 family 개발자이며, 데이터는 FastAPI session server에서 받습니다.
 
-Currently, two official plugins are available:
+## 실행
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Repo root에서 API server를 먼저 실행합니다.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+uv run python -m table_env_bench.scripts.run_server --host 127.0.0.1 --port 8000
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Frontend:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+cd frontend
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
+```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+브라우저에서 `http://127.0.0.1:5173/`를 엽니다. URL에 유효한 `family`, `level`, `seed`, `template_id`가 있으면 개발용 family deep link가 우선하고, 없으면 `/api/benchmark-suites`의 첫 generated record로 시작합니다.
+
+## 검증
+
+```bash
+npm run build
+npm run lint
+npm run visual:workbench
+```
+
+Agent observation gallery를 캡처할 때는 repo root에서 gallery를 먼저 만든 뒤 실행합니다.
+
+```bash
+uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --suite canonical_dev
+cd frontend
+npm run visual:capture:agent-observations
 ```

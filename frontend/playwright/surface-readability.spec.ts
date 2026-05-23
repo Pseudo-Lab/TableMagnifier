@@ -46,8 +46,8 @@ function allowedConsoleMessages(messages: string[]) {
 }
 
 function assertCommonMetrics(metrics: NonNullable<Awaited<ReturnType<typeof readDebugMetrics>>>) {
-  expect(metrics.canvasSize.width).toBe(1120)
-  expect(metrics.canvasSize.height).toBe(780)
+  expect(metrics.canvasSize.width).toBe(1280)
+  expect(metrics.canvasSize.height).toBe(900)
   expect(metrics.invalidLayout).toBeFalsy()
   expect(metrics.layoutErrors ?? []).toEqual([])
   assertRectInside(metrics.pageTitleBox, metrics.contentFrame, 0)

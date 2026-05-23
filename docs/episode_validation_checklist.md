@@ -46,6 +46,7 @@
 - answer form이 operator와 자연스럽게 맞는가?
 - answer form이 지나치게 free-form이라 채점이 불안정하지 않은가?
 - distractor가 실제 failure mode를 반영하는가?
+- 정답 선택지 ID 제출을 허용하는 value choice에서는 표시값이 서로 중복되지 않는가?
 
 ## 6. level-fit check
 
@@ -59,6 +60,7 @@
 - 오답 choice마다 어떤 failure mode를 반영하는지 설명 가능한가?
 - random distractor가 아니라 plausible wrong rule인가?
 - 정답이 시각적으로 너무 튀지 않는가?
+- 선택지에는 option ID와 제출값만 노출되고, distractor 생성 이유나 내부 라벨이 보이지 않는가?
 
 ## 8. leakage check
 

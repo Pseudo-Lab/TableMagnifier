@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "audit:samples": "cd .. && uv run python -m table_env_bench.scripts.audit_sample_viewer",
     "preview": "vite preview",
     "playwright:install": "playwright install chromium",
     "visual:readability": "uv run python -m table_env_bench.scripts.audit_readability",

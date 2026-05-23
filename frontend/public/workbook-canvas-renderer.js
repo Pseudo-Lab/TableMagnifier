@@ -417,7 +417,7 @@
       titleBox,
       subtitleBox,
       lastRowBottom: rectBottom(rect),
-      overflowY: rectBottom(rect) > 740,
+      overflowY: rectBottom(rect) > scene.surface.height - 80,
       cellTextMetrics,
       cellOverflowCount: cellTextMetrics.filter((metric) => metric.overflowX || metric.overflowY).length,
       markerCount,

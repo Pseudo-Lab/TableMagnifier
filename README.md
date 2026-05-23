@@ -170,8 +170,9 @@ npx playwright test playwright/workbench-navigation-readability.spec.ts --projec
 - [docs/first_steps.md](docs/first_steps.md)
 - [docs/benchmark_guide.md](docs/benchmark_guide.md)
 - [docs/task_families.md](docs/task_families.md)
-- [docs/family_design_brief.md](docs/family_design_brief.md)
 - [docs/episode_rulebook.md](docs/episode_rulebook.md)
+- [docs/episode_validation_checklist.md](docs/episode_validation_checklist.md)
+- [docs/primitive_glossary.md](docs/primitive_glossary.md)
 - [docs/visual_cue_inventory.md](docs/visual_cue_inventory.md)
 - [docs/operator_taxonomy.md](docs/operator_taxonomy.md)
 

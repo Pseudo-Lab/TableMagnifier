@@ -385,9 +385,35 @@ class WorkbookEnv:
             "sheet_tabs": [sheet.tab_label for sheet in self.spec.sheets],
             "action_history_summary": [event.action["type"] for event in self._replay.events[-4:]],
         }
+        if self.mode in {"human", "dev"}:
+            observation["sample_surfaces"] = self._sample_surfaces_payload()
         if self.mode == "dev" and self.oracle_observation:
             observation["oracle"] = self.spec.to_dict()
         return observation
+
+    def _sample_surfaces_payload(self) -> list[dict[str, Any]]:
+        surfaces: list[dict[str, Any]] = []
+        for sheet_index, sheet_spec in enumerate(self.spec.sheets):
+            for page_index, page_spec in enumerate(sheet_spec.pages):
+                scene = build_page_scene(
+                    self.spec.workbook,
+                    sheet_index=sheet_index,
+                    page_index=page_index,
+                    viewport=make_outer_viewbox(page_spec, self._aspect_ratio()),
+                    config=self.renderer.config,
+                )
+                page_payload = scene.get("page") if isinstance(scene, dict) else None
+                elements = page_payload.get("elements", []) if isinstance(page_payload, dict) else []
+                surfaces.append(
+                    {
+                        "sheet_id": sheet_spec.sheet_id,
+                        "sheet_name": sheet_spec.tab_label,
+                        "page_id": page_spec.page_id,
+                        "page_title": page_spec.title,
+                        "elements": elements,
+                    }
+                )
+        return surfaces
 
     def _agent_scene_payload(self, scene: dict[str, Any]) -> dict[str, Any]:
         payload = deepcopy(scene)

@@ -3,6 +3,7 @@ import { Activity, ChevronLeft, ChevronRight, Crosshair, Eye, LayoutPanelLeft, P
 
 import { EventFeed, InfoGrid } from '@/components/workbench/event-feed'
 import { WorkbookCanvas } from '@/components/workbench/workbook-canvas'
+import { SampleViewer } from '@/components/sample-viewer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -105,10 +106,12 @@ function requestedDevSession(catalog: CatalogFamily[]) {
 
   const seedParam = params.get('seed')
   const seed = seedParam === null ? 0 : Number(seedParam)
+  const templateId = params.get('template_id') ?? params.get('template')
   return {
     family: family.family,
     level,
     seed: Number.isFinite(seed) ? seed : 0,
+    templateId,
   }
 }
 
@@ -364,7 +367,7 @@ function App() {
         setSelectedFamily(requestedSession.family)
         setSelectedLevel(requestedSession.level)
         setSeed(requestedSession.seed)
-        await startFamilySession(requestedSession.family, requestedSession.level, requestedSession.seed)
+        await startFamilySession(requestedSession.family, requestedSession.level, requestedSession.seed, requestedSession.templateId)
         void loadGeneratedBenchmarkSuites().catch((error: unknown) => {
           setErrorText(error instanceof Error ? error.message : '에피소드 catalog를 불러오지 못했습니다.')
         })
@@ -401,14 +404,14 @@ function App() {
     return response.suites
   }
 
-  async function startFamilySession(family: string, level: number, nextSeed: number) {
+  async function startFamilySession(family: string, level: number, nextSeed: number, templateId?: string | null) {
     setIsLoading(true)
     setErrorText('')
     setStatusText('새 세션을 준비하는 중입니다.')
     setEvents([])
     setReplay([])
     try {
-      const response = await createSession({ family, level, seed: nextSeed, mode: 'human' })
+      const response = await createSession({ family, level, seed: nextSeed, template_id: templateId || undefined, mode: 'human' })
       setSessionId(response.session_id)
       setObservation(response.observation)
       setInfo(response.info)
@@ -559,10 +562,22 @@ function App() {
   const generatedRecordDescription = selectedGeneratedTemplate
     ? `${selectedGeneratedTemplate.family_display_name} · 레벨 ${selectedGeneratedTemplate.level} · ${selectedGeneratedTemplate.template_label}`
     : '탐색형 에피소드 record를 선택합니다.'
+  const showDevWorkbench = new URLSearchParams(window.location.search).get('dev') === '1'
 
   return (
     <div className="min-h-screen bg-transparent">
-      <div className="container max-w-[1840px] py-5 3xl:max-w-[2360px]">
+      <SampleViewer
+        observation={observation}
+        info={info}
+        answer={answer}
+        isLoading={isLoading}
+        errorText={errorText}
+        onAnswerChange={setAnswer}
+        onSubmit={(nextAnswer) => void applyAction({ type: 'submit_answer', text: nextAnswer })}
+      />
+      {showDevWorkbench ? <details className="dev-workbench-panel">
+        <summary>개발용 세션 설정 및 원본 워크벤치</summary>
+        <div className="container max-w-[1840px] py-5 3xl:max-w-[2360px]">
         <div className="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)_400px] 3xl:grid-cols-[360px_minmax(0,1fr)_460px] 3xl:gap-6">
           <div className="space-y-6">
             <Card className="border-border/70 bg-card/95 shadow-soft">
@@ -1051,7 +1066,8 @@ function App() {
             </Card>
           </aside>
         </div>
-      </div>
+        </div>
+      </details> : null}
     </div>
   )
 }

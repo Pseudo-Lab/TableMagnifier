@@ -340,7 +340,7 @@ def table_from_cells(
     metadata = {
         "subtitle": subtitle or "시각 단서가 포함된 표",
         "worksheet_name": worksheet_name or element_id.upper().replace("-", "_"),
-        "excel_chrome": True,
+        "excel_chrome": False,
         "freeze_columns": 1,
     }
     return TableElementSpec(
@@ -474,11 +474,11 @@ def query_choice_cards(
     answer_form: str,
     y: float = 248.0,
     subtitle: str | None = None,
-    columns: int = 2,
-    width: float = 514.0,
-    height: float = 126.0,
-    gap_x: float = 26.0,
-    gap_y: float = 20.0,
+    columns: int = 4,
+    width: float = 258.0,
+    height: float = 102.0,
+    gap_x: float = 16.0,
+    gap_y: float = 16.0,
     x0: float = 84.0,
 ) -> tuple[tuple[TextBlockElementSpec, ...], tuple[RegionSpec, ...]]:
     return choice_cards(

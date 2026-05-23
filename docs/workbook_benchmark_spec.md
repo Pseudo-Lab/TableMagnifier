@@ -1,6 +1,6 @@
 # Workbook Benchmark Spec
 
-이 문서는 현재 구현된 workbook/report 환경 benchmark의 핵심 설계를 요약합니다. Gym 유사 환경 루프, 결정론적 SVG renderer, replay, FastAPI session API, Streamlit human/dev UI를 유지하면서 `workbook/sheet/page/region` 추상화로 동작합니다.
+이 문서는 현재 구현된 workbook/report 환경 benchmark의 핵심 설계를 요약합니다. Gym 유사 환경 루프, 결정론적 SVG/PNG viewport rendering, replay, FastAPI session API, React workbench UI를 `workbook/sheet/page/region` 추상화 위에서 동작시킵니다.
 
 ## 방향 메모
 
@@ -12,7 +12,7 @@
 - 문제는 business lookup-only task로도, pure abstract puzzle로도 흘러가지 않는다
 - 구조적 reasoning은 header, row group, marker, filter, subtotal, chart/table alignment 위에서 일어나야 한다
 
-콘텐츠 방향에 대한 자세한 기준은 [PLANS.md](/mnt/c/Users/imssh/Documents/TableMagnifier/PLANS.md)와 [docs/family_design_brief.md](/mnt/c/Users/imssh/Documents/TableMagnifier/docs/family_design_brief.md)를 따른다.
+콘텐츠 방향에 대한 자세한 기준은 [PLANS.md](../PLANS.md), [task_families.md](./task_families.md), [episode_rulebook.md](./episode_rulebook.md)를 따른다.
 
 ## 현재 코드에서 재사용할 축
 
@@ -46,7 +46,7 @@
 
 ## 환경 상태 모델
 
-현재 `_State`는 `page_index/zoom/center/open_footnote/action_count` 중심입니다. build pass에서는 아래 상태를 기본으로 권장합니다.
+현재 `_State`는 아래 상태를 유지합니다.
 
 - `sheet_index`
 - `page_index`
@@ -67,9 +67,14 @@
 agent mode observation은 workbook을 직접 dump하지 않고, 현재 보이는 화면과 최소 내비게이션 상태만 제공합니다.
 
 - `viewport_svg`
+- `viewport_scene`
+- `viewport_image_png_base64`
+- `viewport_width`
+- `viewport_height`
 - `question`
 - `remaining_action_budget`
-- `active_sheet`
+- `current_sheet_name`
+- `current_sheet_index`
 - `sheet_tabs`
 - `current_page_index`
 - `page_count_in_sheet`
@@ -86,31 +91,29 @@ agent mode observation은 workbook을 직접 dump하지 않고, 현재 보이는
 
 ## Workbook / Sheet / Page / Region 추상화
 
-현재 `EpisodeSpec -> PageSpec -> CellSpec` 구조는 table-only MVP에는 적합하지만, workbook-first 목표에는 한 단계 상위 모델이 필요합니다.
+현재 구현 계층:
 
-권장 계층:
-
-- `WorkbookEpisodeSpec`
+- `EpisodeSpec`
   - `episode_id`, `family`, `level`, `seed`, `locale`, `question`, `answer`, `max_actions`
   - `workbook`
 - `WorkbookSpec`
   - `title`, `sheets`
 - `SheetSpec`
   - `sheet_id`, `tab_label`, `pages`, `metadata`
-- `WorkbookPageSpec`
+- `PageSpec`
   - `page_id`, `title`, `canvas`, `elements`, `regions`, `notes`, `metadata`
 - `ElementSpec`
   - `type`: `table`, `chart`, `legend`, `note_block`, `text_block`, `callout`
 - `RegionSpec`
-  - `public_id`, `role`, `bbox`, `visible_label`, `linked_note_id`, `metadata`
+  - `public_id`, `role`, `rect`, `label`, `linked_note_id`, `metadata`
 
-현재 `CellSpec`은 `TableElementSpec` 내부로 내려가는 것이 자연스럽습니다.
+`TableCellSpec`은 `TableElementSpec` 내부에 포함된다.
 
-## 결정론적 spec format 제안
+## 결정론적 spec format
 
-현재 JSON 기반 declarative spec 방향을 사용합니다. MVP 구현은 `src/table_env_bench/data/models.py`와 `src/table_env_bench/data/generators.py`를 중심으로 동작하고, sample spec은 `src/table_env_bench/data/specs/`에 둡니다.
+현재 JSON-serializable declarative spec 방향을 사용합니다. 구현은 `src/table_env_bench/data/models.py`, `src/table_env_bench/data/generators.py`, `src/table_env_bench/data/canonical_catalog.py`, `src/table_env_bench/data/families/`를 중심으로 동작합니다.
 
-아래 예시는 구조 설명용 illustration이며, 현재 canonical real-data family도 같은 상위 구조를 공유해야 합니다.
+아래 예시는 구조 설명용 illustration이며, 현재 `k_vis_table_arc` family도 같은 상위 구조를 사용합니다.
 
 ```json
 {
@@ -143,7 +146,7 @@ agent mode observation은 workbook을 직접 dump하지 않고, 현재 보이는
 
 ## 렌더링 방향
 
-- 기본 렌더러는 계속 SVG를 사용한다
+- 기본 렌더러는 SVG viewport와 agent review용 PNG viewport를 함께 생성한다
 - 차트, 범례, note overlay도 SVG로 렌더링한다
 - debug overlay는 renderer 옵션으로만 켠다
 - 환경 상태 전이와 렌더링 로직은 현재처럼 분리한다
@@ -155,11 +158,11 @@ agent mode observation은 workbook을 직접 dump하지 않고, 현재 보이는
 - chart/note/legend는 table evidence를 보조할 것
 - pure abstract token panel처럼 보이는 표현은 피할 것
 
-현재 `render/layout.py`의 geometry 계산은 그대로 재사용 가능하고, `renderer.py`는 `table renderer`에서 `workbook page renderer`로 일반화하는 것이 적절합니다.
+현재 `render/layout.py`의 geometry 계산, `render/renderer.py`의 SVG renderer, `render/image_renderer.py`의 PNG renderer가 viewport output을 구성한다.
 
 ## 현재 저장소 구조
 
-MVP 구현은 아래 구조를 사용합니다.
+구현은 아래 구조를 사용합니다.
 
 ```text
 src/table_env_bench/
@@ -172,16 +175,16 @@ src/table_env_bench/
     renderer.py
   data/
     models.py
-    loader.py
     generators.py
-    specs/
+    canonical_catalog.py
+    families/
   eval/
     scoring.py
   baselines/
     random_agent.py
     heuristic_agent.py
     runner.py
-  ui/
+  server/
     app.py
   scripts/
     run_demo.py
@@ -199,8 +202,8 @@ src/table_env_bench/
 - agent mode에서 debug/oracle 정보가 숨겨지는지 검증
 - dev mode에서 region overlay와 spec inspect가 보이는지 검증
 - replay export에 sheet/page/region metadata가 남는지 검증
-- canonical real-data smoke test와 regression smoke test를 분리해 관리
+- generated suite smoke test와 regression smoke test를 분리해 관리
 
 ## 구현 경계
 
-이번 패스는 문서와 리팩터 계획 고정이 목표입니다. 다음 build pass의 최소 구현은 "현재 table prototype을 workbook spec 안에 두되, table-rooted reasoning family를 올릴 수 있는 primitive 계층을 추가"하는 것에서 시작하는 것이 가장 안전합니다.
+현재 구현은 workbook spec, canonical family registry, FastAPI session API, React workbench, readability gates를 기준으로 유지합니다. 새 family나 template을 추가할 때는 이 문서의 환경 계약보다 [task_families.md](./task_families.md), [episode_rulebook.md](./episode_rulebook.md), [episode_validation_checklist.md](./episode_validation_checklist.md)를 우선 확인합니다.

@@ -10,7 +10,7 @@
 - 모든 액션은 replay에서 재현 가능해야 한다.
 - 사용자 노출 문구는 한국어로, API 식별자는 영어로 유지한다.
 
-## MVP 액션
+## 현재 액션
 
 - `zoom_in`
 - `zoom_out`
@@ -81,12 +81,17 @@ replay metadata 권장 필드:
 
 ## Observation과의 관계
 
-agent mode observation에는 다음만 포함하는 것을 권장한다.
+agent mode observation에는 현재 보이는 화면과 최소 내비게이션 상태만 포함한다.
 
 - `viewport_svg`
+- `viewport_scene`
+- `viewport_image_png_base64`
+- `viewport_width`
+- `viewport_height`
 - `question`
 - `remaining_action_budget`
-- `active_sheet`
+- `current_sheet_name`
+- `current_sheet_index`
 - `sheet_tabs`
 - `current_page_index`
 - `page_count_in_sheet`

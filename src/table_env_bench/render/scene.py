@@ -41,6 +41,7 @@ def build_page_scene(
             "sheet_tabs": [item.tab_label for item in workbook.sheets],
             "active_sheet_index": sheet_index,
             "active_sheet_id": sheet.sheet_id,
+            "metadata": dict(workbook.metadata),
         },
         "page": {
             "sheet_id": sheet.sheet_id,
@@ -50,6 +51,7 @@ def build_page_scene(
             "title": page.title,
             "width": page.width,
             "height": page.height,
+            "metadata": dict(page.metadata),
             "elements": [element.to_dict() for element in page.elements],
             "regions": [region.to_dict() for region in page.regions],
             "notes": [note.to_dict() for note in page.notes],

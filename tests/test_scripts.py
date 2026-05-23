@@ -1,4 +1,6 @@
 import json
+import sys
+import types
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -97,8 +99,70 @@ def test_export_agent_observation_gallery_writes_agent_view_artifacts(tmp_path) 
     assert all(surface["family"] == "k_vis_table_arc" for surface in manifest["surfaces"])
     assert all((tmp_path / surface["png"]).exists() for surface in manifest["surfaces"])
     assert all((tmp_path / surface["observation"]).exists() for surface in manifest["surfaces"])
-    assert "agent API observation.viewport_image_png_base64" in (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert all(surface["metric_source"] == "exporter_full_scene" for surface in manifest["surfaces"])
+    assert all(surface["review_contract_version"] == 1 for surface in manifest["surfaces"])
+    assert all((tmp_path / surface["semantic_snapshot"]).exists() for surface in manifest["surfaces"])
+    assert manifest["validation"]["missing_semantic_snapshot_count"] == 0
+    assert manifest["validation"]["stale_semantic_snapshot_count"] == 0
+    assert manifest["validation"]["metric_source_mismatch"] == []
+    index_html = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "Agent surface QA" in index_html
+    assert "review-dashboard-data" in index_html
+    assert (tmp_path / "review-dashboard-assets" / "review-dashboard.css").exists()
+    assert (tmp_path / "review-dashboard-assets" / "review-dashboard.js").exists()
     assert "agent-observation" in review_html
+    assert 'data-review-contract-version="1"' in review_html
+    assert "review-snapshot-json" in review_html
+    assert "review-validation" in review_html
+    assert "review-metrics" in review_html
+    assert "review-status" in review_html
+    assert "zoom-fit" in review_html
+    assert "focus-toggle" in review_html
+    assert result["dashboard"]["status"] == "skipped"
+    assert result["dashboard"]["reason"] == "missing_human_screenshot_dir"
+
+
+def test_export_agent_observation_gallery_delegates_dashboard_generation(tmp_path, monkeypatch) -> None:
+    artifacts_root = tmp_path / "artifacts"
+    human_dir = artifacts_root / "ui-design-review" / "all-problems"
+    agent_dir = artifacts_root / "agent_observations_active"
+    human_dir.mkdir(parents=True)
+    calls: list[dict[str, Path]] = []
+
+    fake_module = types.ModuleType("table_env_bench.scripts.export_review_dashboard")
+
+    def fake_export_review_dashboard(*, artifacts_root, human_dir, agent_dir, agent_manifest):
+        assert agent_manifest.exists()
+        calls.append(
+            {
+                "artifacts_root": artifacts_root,
+                "human_dir": human_dir,
+                "agent_dir": agent_dir,
+                "agent_manifest": agent_manifest,
+            }
+        )
+        return {"index": str(artifacts_root / "index.html"), "agent_index": str(agent_dir / "index.html")}
+
+    fake_module.export_review_dashboard = fake_export_review_dashboard
+    monkeypatch.setitem(sys.modules, "table_env_bench.scripts.export_review_dashboard", fake_module)
+
+    result = export_agent_observation_gallery(
+        agent_dir,
+        family="k_vis_table_arc",
+        levels=[1],
+        seeds=[0],
+        template_id="symbol_rule_induction",
+    )
+
+    assert result["dashboard"]["status"] == "generated"
+    assert calls == [
+        {
+            "artifacts_root": artifacts_root,
+            "human_dir": human_dir,
+            "agent_dir": agent_dir,
+            "agent_manifest": agent_dir / "manifest.json",
+        }
+    ]
 
 
 def test_eval_llm_parser_accepts_suite_and_model() -> None:
