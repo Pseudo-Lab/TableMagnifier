@@ -1,7 +1,0 @@
-interface:
-  display_name: "TableQA Family Author"
-  short_description: "Create Korean workbook Visual TableQA families"
-  default_prompt: "Use $tableqa-family-author to add a new canonical problem family with manifests, docs, tests, and validation."
-
-policy:
-  allow_implicit_invocation: true
