@@ -65,6 +65,7 @@ htmlcov/
 
 # MyPy
 .mypy_cache/
+.ruff_cache/
 .dmypy.json
 dmypy.json
 
@@ -73,6 +74,7 @@ dmypy.json
 
 # Output - 생성된 결과물
 /artifacts/
+/runs/
 frontend/artifacts/
 frontend/playwright/*-snapshots/
 frontend/test-results/

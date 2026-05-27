@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TableAGIRunSummary",
+  "type": "object",
+  "required": [
+    "run_id",
+    "agent_id",
+    "num_tasks",
+    "accuracy",
+    "efficiency_mean_human"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "agent_id": {
+      "type": "string"
+    },
+    "num_tasks": {
+      "type": "integer"
+    },
+    "accuracy": {
+      "type": "number"
+    },
+    "efficiency_mean_human": {
+      "type": "number"
+    },
+    "efficiency_second_best": {
+      "type": "number"
+    },
+    "mean_actions_correct": {
+      "type": "number"
+    },
+    "invalid_action_rate": {
+      "type": "number"
+    },
+    "cost_usd": {
+      "type": "number"
+    },
+    "task_results": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

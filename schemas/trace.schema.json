@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TableAGITrace",
+  "type": "object",
+  "required": [
+    "run_id",
+    "task_id",
+    "agent_id",
+    "events"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "agent_id": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "ended_at": {
+      "type": "string"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "turn",
+          "image_path",
+          "image_sha256"
+        ],
+        "properties": {
+          "turn": {
+            "type": "integer"
+          },
+          "image_path": {
+            "type": "string"
+          },
+          "image_sha256": {
+            "type": "string"
+          },
+          "observation": {
+            "type": "object"
+          },
+          "action": {
+            "type": "object"
+          },
+          "valid": {
+            "type": "boolean"
+          },
+          "done": {
+            "type": "boolean"
+          },
+          "feedback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "submitted_answer": {},
+        "correct": {
+          "type": "boolean"
+        },
+        "action_count": {
+          "type": "integer"
+        },
+        "efficiency_score": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
