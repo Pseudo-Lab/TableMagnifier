@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
-import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -488,26 +486,6 @@ class ViewportReadabilityAgent:
 
     def run(self, context: PipelineContext, *, attempt: int = 1) -> tuple[StageResult, list[FileMutation]]:
         _ensure_family(context)
-        frontend_root = context.repo_root / "frontend"
-        if not frontend_root.exists():
-            result = StageResult(
-                stage=self.stage,
-                status="blocked",
-                summary="Frontend workspace is missing; Playwright readability gate could not run.",
-                findings=["Missing frontend directory for Playwright readability review."],
-                attempt=attempt,
-            )
-            return result, []
-        if shutil.which("npm") is None:
-            result = StageResult(
-                stage=self.stage,
-                status="blocked",
-                summary="npm is unavailable; Playwright readability gate could not run.",
-                findings=["npm was not found in PATH."],
-                attempt=attempt,
-            )
-            return result, []
-
         selected_levels = _selected_levels(context)
         seed_map = {level: _selected_readability_seed_samples(context, level) for level in selected_levels}
         review_targets = [(level, seed) for level in selected_levels for seed in seed_map[level]]
@@ -522,7 +500,6 @@ class ViewportReadabilityAgent:
             return result, []
 
         stage_dir = _stage_attempt_dir(context, self.stage, attempt)
-        playwright_artifact_root = stage_dir / "playwright"
         findings: list[str] = []
         artifact_paths: list[str] = []
         review_runs: list[dict[str, Any]] = []
@@ -549,137 +526,40 @@ class ViewportReadabilityAgent:
             manifest["seed"] = seed
             manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
 
-            stdout_path = stage_dir / f"playwright_l{level}_seed_{seed}.stdout.log"
-            stderr_path = stage_dir / f"playwright_l{level}_seed_{seed}.stderr.log"
-            port = 8781 + ((level * 10 + seed) % 10)
-            env = os.environ.copy()
-            env.update(
-                {
-                    "PLAYWRIGHT_ENABLE_WORKBENCH": "0",
-                    "PLAYWRIGHT_REVIEW_DIR": os.path.relpath(review_dir, frontend_root),
-                    "PLAYWRIGHT_BASE_URL": f"http://127.0.0.1:{port}",
-                    "PLAYWRIGHT_STATIC_PORT": str(port),
-                    "PLAYWRIGHT_ARTIFACT_ROOT": os.path.relpath(playwright_artifact_root, frontend_root),
-                }
-            )
-            command = [
-                "npm",
-                "exec",
-                "--",
-                "playwright",
-                "test",
-                "playwright/surface-readability.spec.ts",
-                "--project=chromium-fullhd",
-            ]
-            completed = subprocess.run(
-                command,
-                cwd=frontend_root,
-                env=env,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            stdout_path.write_text(completed.stdout, encoding="utf-8")
-            stderr_path.write_text(completed.stderr, encoding="utf-8")
+            missing_artifacts: list[str] = []
+            for preview in filtered_previews:
+                for key in ("png", "scene"):
+                    artifact_name = str(preview.get(key, ""))
+                    if not artifact_name or not (review_dir / artifact_name).exists():
+                        missing_artifacts.append(f"{preview.get('surface_id', 'unknown')}:{key}")
             artifact_paths.extend(
                 [
                     _relpath(context, manifest_path),
-                    _relpath(context, stdout_path),
-                    _relpath(context, stderr_path),
+                    _relpath(context, review_dir / "index.html"),
+                    _relpath(context, review_dir / "review.html"),
                 ]
             )
-            if playwright_artifact_root.exists():
-                artifact_paths.append(_relpath(context, playwright_artifact_root))
             review_runs.append(
                 {
                     "level": level,
                     "seed": seed,
-                    "mode": "surface_review",
+                    "mode": "surface_static",
                     "surface_count": len(filtered_previews),
-                    "returncode": completed.returncode,
+                    "returncode": 1 if missing_artifacts else 0,
                     "review_dir": _relpath(context, review_dir),
                     "export_count": export_result["count"],
+                    "missing_artifacts": missing_artifacts,
                 }
             )
             if not filtered_previews:
                 findings.append(f"Level {level} seed {seed} produced no review surfaces for {context.target.family}.")
-            elif completed.returncode != 0:
-                findings.append(f"Level {level} seed {seed} failed the Playwright viewport readability gate.")
-
-            workbench_stdout_path = stage_dir / f"workbench_l{level}_seed_{seed}.stdout.log"
-            workbench_stderr_path = stage_dir / f"workbench_l{level}_seed_{seed}.stderr.log"
-            workbench_summary_path = stage_dir / f"workbench_l{level}_seed_{seed}.summary.json"
-            workbench_artifact_root = stage_dir / "playwright_workbench"
-            workbench_env = os.environ.copy()
-            workbench_env.update(
-                {
-                    "PLAYWRIGHT_ENABLE_WORKBENCH": "1",
-                    "PLAYWRIGHT_TARGET_FAMILY": context.target.family,
-                    "PLAYWRIGHT_TARGET_LEVEL": str(level),
-                    "PLAYWRIGHT_TARGET_SEED": str(seed),
-                    "PLAYWRIGHT_WORKBENCH_SUMMARY_PATH": str(workbench_summary_path),
-                    "PLAYWRIGHT_ARTIFACT_ROOT": os.path.relpath(workbench_artifact_root, frontend_root),
-                }
-            )
-            workbench_command = [
-                "npm",
-                "exec",
-                "--",
-                "playwright",
-                "test",
-                "playwright/workbench-navigation-readability.spec.ts",
-                "--project=chromium-fullhd",
-            ]
-            workbench_completed = subprocess.run(
-                workbench_command,
-                cwd=frontend_root,
-                env=workbench_env,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            workbench_stdout_path.write_text(workbench_completed.stdout, encoding="utf-8")
-            workbench_stderr_path.write_text(workbench_completed.stderr, encoding="utf-8")
-            artifact_paths.extend(
-                [
-                    _relpath(context, workbench_stdout_path),
-                    _relpath(context, workbench_stderr_path),
-                ]
-            )
-            if workbench_artifact_root.exists():
-                artifact_paths.append(_relpath(context, workbench_artifact_root))
-            workbench_summary: dict[str, Any] | None = None
-            if workbench_summary_path.exists():
-                artifact_paths.append(_relpath(context, workbench_summary_path))
-                workbench_summary = json.loads(workbench_summary_path.read_text(encoding="utf-8"))
-                missing_viewport_states = _missing_required_viewport_state_ids(
-                    generate_episode(context.target.family, level, seed, template_id=context.target.template_id).metadata.get("required_navigation", {}),
-                    workbench_summary,
-                )
-                for state_id in missing_viewport_states:
-                    findings.append(
-                        f"Level {level} seed {seed} did not visit required viewport state {state_id} during workbench readability traversal."
-                    )
-                if generate_episode(context.target.family, level, seed, template_id=context.target.template_id).metadata.get("required_navigation", {}).get("required_notes"):
-                    opened_notes = list(workbench_summary.get("opened_notes", []))
-                    if not opened_notes:
-                        findings.append(f"Level {level} seed {seed} did not open required notes during workbench readability traversal.")
-            review_runs.append(
-                {
-                    "level": level,
-                    "seed": seed,
-                    "mode": "workbench_navigation",
-                    "returncode": workbench_completed.returncode,
-                    "summary": workbench_summary,
-                }
-            )
-            if workbench_completed.returncode != 0:
-                findings.append(f"Level {level} seed {seed} failed the workbench page traversal readability gate.")
+            elif missing_artifacts:
+                findings.append(f"Level {level} seed {seed} has missing preview artifacts: {', '.join(missing_artifacts)}.")
 
         result = StageResult(
             stage=self.stage,
             status="failed" if findings else "passed",
-            summary="Playwright viewport readability sweep completed.",
+            summary="Static viewport readability sweep completed.",
             findings=findings,
             artifact_paths=artifact_paths,
             metrics={

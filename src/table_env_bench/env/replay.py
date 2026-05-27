@@ -25,8 +25,8 @@ def _intersection_area(a: dict[str, Any], b: dict[str, Any]) -> float:
 def viewport_target_matches(*, viewbox: dict[str, Any], target_rect: dict[str, Any], match: str) -> bool:
     """Return whether one target rect is covered by the current viewport.
 
-    This function is intentionally pure and mirrors
-    `frontend/playwright/readability-helpers.ts`.
+    This function is intentionally pure so replay and static validation can
+    share the same viewport-target matching semantics.
     """
 
     if match == "viewbox_intersects_target":

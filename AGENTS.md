@@ -62,8 +62,6 @@ The current canonical track is `korean_visual_table_agent_reasoning`: agents ins
 - `src/table_env_bench/eval/`: correctness and efficiency scoring
 - `src/table_env_bench/server/`: FastAPI session server
 - `src/table_env_bench/baselines/`: random and heuristic agents
-- `frontend/`: React + Vite + TypeScript primary human-facing web UI
-- `frontend/playwright/`: surface readability and workbench traversal validation
 - `tests/`: deterministic regression coverage
 - `docs/`: benchmark-facing documentation and assumptions
 
@@ -115,7 +113,7 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 
 - Use `src/table_env_bench/authoring/` as the source of truth for family build/validation flow.
 - The default stage order is `rulebook -> family_builder -> visual_qa -> viewport_readability -> red_team_solver -> regression_gate`.
-- `viewport_readability` is mandatory for family changes. It checks rendered surfaces and workbench traversal, not just metadata.
+- `viewport_readability` is mandatory for family changes. It checks exported rendered surfaces and static artifact integrity, not just metadata.
 - `red_team_solver` should explicitly probe family-specific shortcuts such as query-only solving, page skipping, note skipping, or exception skipping when relevant.
 - Keep write ownership narrow by stage. Avoid one-off scripts that mix docs, family generation, renderer, and validation in the same patch without reason.
 
@@ -124,7 +122,7 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 - Every rendered surface must satisfy zero-overlap requirements.
 - Renderer debug payloads must report `invalidLayout == false` and `layoutErrors == []` for benchmark-ready surfaces.
 - Table headings, callouts, notes, answer cards, and cell text must fit their boxes without clipping.
-- Multi-page families must be checked both statically and by actual workbench traversal.
+- Multi-page families must be checked through metadata, replay state, and static rendered artifact review.
 - If a screenshot looks wrong, add or tighten the gate so the problem fails automatically next time. Do not rely on manual spot checks as the only defense.
 - Generated PNG, JSON, `index.html`, `review.html`, and manifest artifacts must not be hand-edited; change renderer/template source and regenerate them.
 - After any visual renderer/template change, regenerate contact sheets and inspect representative level/template sheets before finalizing.
@@ -137,18 +135,12 @@ Authoring is now a first-class workflow, not an ad hoc script path.
 ## Data Preview Artifacts
 
 - After generating or revising benchmark data, create image artifacts for every rendered problem surface so reviewers can inspect what the agent actually receives.
-- The default handoff artifact must be based on `TableEnv(..., mode="agent")` observations, specifically `observation.viewport_image_png_base64`, not a hidden scene dump, oracle metadata, or human-only workbench chrome.
+- The default handoff artifact must be based on `TableEnv(..., mode="agent")` observations, specifically `observation.viewport_image_png_base64`, not a hidden scene dump, oracle metadata, or human-only review chrome.
 - First export the agent observation gallery from the repo root, for example `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --suite canonical_dev`.
-- Then capture every agent observation through Playwright: `cd frontend && npm run visual:capture:agent-observations`.
-- The Playwright capture reads `artifacts/agent_observations_active/manifest.json` and writes PNG screenshots under `artifacts/playwright/agent_observations_active/`.
+- Review the generated `index.html`, `review.html`, PNGs, and manifest under the exported artifact directory.
 - When the handoff needs every canonical benchmark record rather than a single suite, use `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --all-benchmark-records`.
-- After UI or human-workbench design changes, also create a human-facing UI review gallery for every affected problem, not just a few representative screenshots. The preferred top-level entry point is `artifacts/index.html`.
-- `artifacts/index.html` should make both perspectives easy to review from one place:
-  - **Human UI / demo view**: polished browser screenshots of the redesigned human-facing interface for every affected problem record.
-  - **Agent observation view**: links or embedded thumbnails for the `TableEnv(..., mode="agent")` observation gallery, usually `artifacts/agent_observations_active/index.html` and/or `artifacts/playwright/agent_observations_active/`.
-- Keep the two perspectives clearly labeled. Never describe a human UI screenshot as what the agent sees, and never use human-workbench chrome as proof of agent-observation quality.
-- Static renderer previews are still useful for renderer debugging: `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active` followed by `cd frontend && npm run visual:capture:previews`.
-- For targeted datasets, pass the matching `--suite`, `--family`, `--level`, `--template-id`, or `--seed` options to `export_agent_observation_gallery`, and keep `PLAYWRIGHT_REVIEW_DIR` / `PLAYWRIGHT_CAPTURE_DIR` pointed at the corresponding artifact directories.
+- Static renderer previews are the primary visual review artifact: `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active`.
+- For targeted datasets, pass the matching `--suite`, `--family`, `--level`, `--template-id`, or `--seed` options to `export_agent_observation_gallery`.
 - Treat these images as the default handoff artifact for new data. Do not rely only on JSON specs, generated metadata, or a local UI session when asking another agent or reviewer to evaluate generated problems.
 
 ## Human and Agent Integrity
@@ -166,22 +158,14 @@ Use WSL + `uv` when available.
 - `uv run pytest`
 - `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --suite canonical_dev`
 - `uv run python -m table_env_bench.scripts.export_agent_observation_gallery --out artifacts/agent_observations_active --all-benchmark-records`
-- `cd frontend && npm run visual:capture:agent-observations`
 - `uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active`
-- `cd frontend && npm run visual:capture:previews`
 - `uv run python -m table_env_bench.scripts.run_demo --family k_vis_table_arc --level 1 --template-id symbol_rule_induction --agent random`
 - `uv run python -m table_env_bench.scripts.eval_baselines`
 - `uv run python -m table_env_bench.scripts.run_authoring_pipeline --family k_vis_table_arc`
 - `uv run python -m table_env_bench.scripts.audit_readability`
 - `uv run python -m table_env_bench.scripts.run_server --reload`
-- `cd frontend && npm install && npm run dev`
-- `cd frontend && npm run visual:readability`
-- `cd frontend && npm run visual:workbench`
-- `cd frontend && npm run visual:readability:public-smoke`
-- `cd frontend && npm run visual:readability:public-dev`
 
 Readability notes:
 
 - `uv run python -m table_env_bench.scripts.audit_readability` is the strict release-blocking audit. By default it sweeps all families, all levels, and the full seed capacity.
-- `cd frontend && npm run visual:readability` should stay aligned with that strict audit.
 - Use smoke downgrades only when iterating locally, for example `uv run python -m table_env_bench.scripts.audit_readability --smoke --seed-samples 0`.

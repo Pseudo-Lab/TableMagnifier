@@ -41,7 +41,6 @@ def test_export_preview_gallery_writes_index_and_raster_artifacts(tmp_path) -> N
     assert (tmp_path / "index.html").exists()
     assert (tmp_path / "review.html").exists()
     assert (tmp_path / "manifest.json").exists()
-    assert (tmp_path / "workbook-canvas-renderer.js").exists()
     assert any(path.name.startswith("k_vis_table_arc") for path in tmp_path.glob("*.png"))
     assert any(path.name.startswith("k_vis_table_arc") for path in tmp_path.glob("*.png"))
     assert any(path.name.startswith("k_vis_table_arc") for path in tmp_path.glob("*.scene.json"))
@@ -235,7 +234,7 @@ def test_run_audit_writes_summary_and_counts_failures(monkeypatch, tmp_path) -> 
                                 "metrics": {
                                     "review_runs": [
                                         {"mode": "surface_review", "returncode": 1 if family == "beta" else 0},
-                                        {"mode": "workbench_navigation", "returncode": 0},
+                                        {"mode": "navigation_review", "returncode": 0},
                                     ]
                                 },
                                 "to_dict": lambda self: {"stage": "viewport_readability", "status": "failed" if family == "beta" else "passed"},
@@ -289,6 +288,12 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
     def _fake_export_preview_gallery(out_dir, *, pack=None, instance_ids=None, **_kwargs):
         out_path = tmp_path / Path(out_dir).name if not isinstance(out_dir, Path) else out_dir
         out_path.mkdir(parents=True, exist_ok=True)
+        (out_path / "index.html").write_text("<html></html>", encoding="utf-8")
+        (out_path / "review.html").write_text("<html></html>", encoding="utf-8")
+        (out_path / "demo.png").write_bytes(b"png")
+        (out_path / "demo.scene.json").write_text("{}", encoding="utf-8")
+        (out_path / "note.png").write_bytes(b"png")
+        (out_path / "note.scene.json").write_text("{}", encoding="utf-8")
         previews = [
             {
                 "surface_id": f"{instance_ids[0]}-query-query-p1",
@@ -327,28 +332,7 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
         (out_path / "manifest.json").write_text(json.dumps({"previews": previews}, ensure_ascii=False), encoding="utf-8")
         return {"count": len(previews)}
 
-    def _fake_run(command, cwd, env, capture_output, text, check):
-        summary_path = env.get("PLAYWRIGHT_WORKBENCH_SUMMARY_PATH")
-        if summary_path:
-            Path(summary_path).write_text(
-                json.dumps(
-                    {
-                        "pack_id": env.get("PLAYWRIGHT_TARGET_PACK_ID"),
-                        "instance_id": env.get("PLAYWRIGHT_TARGET_INSTANCE_ID"),
-                            "opened_notes": ["scope-note"] if "wide_table_navigation" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", "") else [],
-                    },
-                    ensure_ascii=False,
-                ),
-                encoding="utf-8",
-            )
-            if "wide_table_navigation" in env.get("PLAYWRIGHT_TARGET_INSTANCE_ID", ""):
-                return SimpleNamespace(returncode=1, stdout="workbench failed", stderr="")
-            return SimpleNamespace(returncode=0, stdout="workbench ok", stderr="")
-        return SimpleNamespace(returncode=0, stdout="surface ok", stderr="")
-
     monkeypatch.setattr("table_env_bench.scripts.audit_readability.export_preview_gallery", _fake_export_preview_gallery)
-    monkeypatch.setattr("table_env_bench.scripts.audit_readability.subprocess.run", _fake_run)
-    monkeypatch.setattr("table_env_bench.scripts.audit_readability.shutil.which", lambda name: "/usr/bin/npm")
 
     summary = run_audit(out=tmp_path, pack="fixture_pack_v1")
 
@@ -356,10 +340,10 @@ def test_run_audit_supports_instance_pack_mode(monkeypatch, tmp_path) -> None:
     assert summary["pack_id"] == "fixture_pack_v1"
     assert summary["total_runs"] == 2
     assert summary["surface_failures"] == 0
-    assert summary["workbench_failures"] == 1
-    assert summary["blocking_failures"] == 1
+    assert summary["navigation_failures"] == 0
+    assert summary["blocking_failures"] == 0
     assert summary["runs"][0]["instance_id"] == "fixture_pack_v1__k_vis_table_arc_symbol_rule_induction_l1_s0"
     assert summary["runs"][1]["instance_id"] == "fixture_pack_v1__k_vis_table_arc_wide_table_navigation_l1_s0"
-    assert summary["runs"][1]["workbench_navigation"]["summary"]["opened_notes"] == ["scope-note"]
+    assert summary["runs"][1]["navigation_review"]["required_navigation"] == {}
     assert (tmp_path / "summary.json").exists()
     assert (tmp_path / "summary.md").exists()

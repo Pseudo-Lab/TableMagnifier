@@ -1,10 +1,8 @@
-# UI Modes
+# Runtime Modes
 
-이 문서는 `table-env-bench`의 UI 모드를 현재 기준으로 정리한 문서입니다.
+이 문서는 `table-env-bench`의 runtime mode를 현재 기준으로 정리한다. 별도 web UI는 유지하지 않으며, 사람이 확인해야 하는 surface는 Python export artifact와 optional FastAPI session API를 사용한다.
 
-사람용 기본 경로는 `FastAPI session API + React web UI`입니다. human/dev/agent 모드는 모두 같은 environment contract 위에서 동작하고, 차이는 관측 정보와 UI affordance에서 만들어집니다.
-
-## 1. Dev / Inspector mode
+## 1. Dev / Inspector Mode
 
 목적:
 
@@ -15,9 +13,9 @@
 
 현재 구현:
 
-- `WorkbookEnv(mode="dev")`가 debug-friendly observation을 제공합니다.
-- [src/table_env_bench/server/app.py](/mnt/c/Users/imssh/Documents/TableMagnifier/src/table_env_bench/server/app.py)가 `mode`와 `debug`를 받아 session을 생성합니다.
-- [frontend/src/App.tsx](/mnt/c/Users/imssh/Documents/TableMagnifier/frontend/src/App.tsx)는 이벤트 로그, replay, 상태 메타데이터 같은 inspector 성격의 정보를 표시할 수 있습니다.
+- `WorkbookEnv(mode="dev")`가 debug-friendly observation을 제공한다.
+- [src/table_env_bench/server/app.py](/mnt/c/Users/imssh/Documents/TableMagnifier/src/table_env_bench/server/app.py)가 optional session API를 제공한다.
+- [src/table_env_bench/scripts/export_preview_gallery.py](/mnt/c/Users/imssh/Documents/TableMagnifier/src/table_env_bench/scripts/export_preview_gallery.py)가 PNG, scene JSON, `index.html`, `review.html`을 생성한다.
 
 보여도 되는 것:
 
@@ -34,42 +32,23 @@
 - hidden spreadsheet text dump
 - oracle metadata
 
-## 2. Human evaluation mode
+## 2. Human Review Mode
 
 목적:
 
-- 사람 baseline 수집
-- 조작 UX 검증
-- workbook 탐색 경험 확인
+- 생성 surface 육안 검토
+- workbook 탐색 난이도와 evidence 분포 확인
+- table text overlap, clipping, invalid layout 검토
 
-보여야 하는 것:
+기본 경로:
 
-- 질문
-- sheet tabs
-- page navigation
-- viewport
-- action budget / 진행 상태
-- answer input / submit
+```bash
+uv run python -m table_env_bench.scripts.export_preview_gallery --out artifacts/previews_active
+```
 
-추가 원칙:
+생성된 `index.html`과 `review.html`은 정적 PNG 기반 review artifact다.
 
-- 중심 evidence surface는 visually rendered table / worksheet fragment여야 합니다.
-- chart, note, legend는 보조 근거로만 보여야 합니다.
-- debug affordance가 기본 경험을 덮으면 안 됩니다.
-
-보이면 안 되는 것:
-
-- hidden workbook text dump
-- answer canonical
-- evaluator internals
-- debug-only overlay
-
-현재 기본 shell:
-
-- [src/table_env_bench/server/app.py](/mnt/c/Users/imssh/Documents/TableMagnifier/src/table_env_bench/server/app.py)
-- [frontend/src/App.tsx](/mnt/c/Users/imssh/Documents/TableMagnifier/frontend/src/App.tsx)
-
-## 3. Agent API mode
+## 3. Agent API Mode
 
 목적:
 
@@ -77,9 +56,8 @@
 
 계약:
 
-- transport는 FastAPI session API를 사용합니다.
-- agent는 JSON observation + SVG viewport만 받습니다.
-- human UI 전용 정보는 최소화합니다.
+- agent는 JSON observation + rendered viewport만 받는다.
+- hidden workbook text dump와 oracle metadata는 노출하지 않는다.
 
 보여도 되는 것:
 
@@ -107,7 +85,6 @@
 
 ## 구현 메모
 
-- env core는 mode와 무관하게 같은 state transition을 사용합니다.
-- mode 차이는 observation filtering과 UI rendering에서 만듭니다.
-- server layer는 `mode=agent|human|dev`와 `debug`를 받습니다.
-- canonical human path는 FastAPI + React입니다.
+- env core는 mode와 무관하게 같은 state transition을 사용한다.
+- 사람 검토용 artifact와 agent observation artifact를 혼동하지 않는다.
+- release 판단은 `uv run pytest`, `export_preview_gallery`, `audit_readability` 결과를 우선한다.

@@ -54,4 +54,4 @@
 
 ## Instance Pack Note
 
-현재 repo는 frozen `public_*` instance pack을 포함하지 않는다. family generator가 authoring/dev source-of-truth이고, workbench의 기본 노출 경로도 generator catalog다.
+현재 repo는 frozen `public_*` instance pack을 포함하지 않는다. family generator가 authoring/dev source-of-truth이고, 기본 노출 경로도 generator catalog다.

@@ -30,11 +30,6 @@ def export_preview_gallery(
     image_renderer = SceneImageRenderer()
     previews: list[dict[str, object]] = []
 
-    repo_root = Path(__file__).resolve().parents[3]
-    renderer_script = repo_root / "frontend" / "public" / "workbook-canvas-renderer.js"
-    if renderer_script.exists():
-        (output_dir / renderer_script.name).write_text(renderer_script.read_text(encoding="utf-8"), encoding="utf-8")
-
     selected_specs: list[tuple[str | None, object]] = []
     if pack is not None or instance_ids is not None:
         default_pack = pack
@@ -245,7 +240,7 @@ def _review_html(previews: list[dict[str, object]]) -> str:
             box-shadow: var(--teb-ambient-shadow);
             padding: 20px;
           }}
-          .surface-frame canvas {{
+          .surface-frame img {{
             width: {config.viewport_width}px;
             height: {config.viewport_height}px;
             display: block;
@@ -259,7 +254,7 @@ def _review_html(previews: list[dict[str, object]]) -> str:
         <section class="review-shell">
           <aside class="review-panel">
             <h2>Surface Review</h2>
-            <p>Playwright로 canvas-rendered workbook surface를 검수하기 위한 전용 페이지입니다.</p>
+            <p>PNG로 export된 workbook surface를 검수하기 위한 정적 페이지입니다.</p>
             <select id="surface-select" class="review-select">
               {''.join(options)}
             </select>
@@ -269,29 +264,16 @@ def _review_html(previews: list[dict[str, object]]) -> str:
             </label>
           </aside>
           <main class="surface-frame">
-            <canvas id="surface-canvas" width="{config.viewport_width}" height="{config.viewport_height}"></canvas>
+            <img id="surface-image" width="{config.viewport_width}" height="{config.viewport_height}" alt="selected workbook surface"/>
           </main>
         </section>
-        <script src="./workbook-canvas-renderer.js"></script>
         <script>
           const previews = {previews_json};
           const select = document.getElementById('surface-select');
           const debugToggle = document.getElementById('debug-toggle');
-          const canvas = document.getElementById('surface-canvas');
+          const image = document.getElementById('surface-image');
           const byId = new Map(previews.map((preview) => [preview.surface_id, preview]));
-          const consoleErrors = [];
           window.__TABLE_ENV_DEBUG__ = null;
-          window.addEventListener('error', (event) => {{
-            consoleErrors.push(String(event.message || 'window error'));
-          }});
-          window.addEventListener('unhandledrejection', (event) => {{
-            consoleErrors.push(String(event.reason || 'unhandled rejection'));
-          }});
-          const originalConsoleError = console.error.bind(console);
-          console.error = (...args) => {{
-            consoleErrors.push(args.map((value) => String(value)).join(' '));
-            originalConsoleError(...args);
-          }};
 
           function currentDebugFlag() {{
             return new URLSearchParams(window.location.search).get('debug') === '1';
@@ -313,16 +295,8 @@ def _review_html(previews: list[dict[str, object]]) -> str:
             if (!preview) {{
               throw new Error(`Unknown surface: ${{surfaceId}}`);
             }}
-            consoleErrors.length = 0;
-            const response = await fetch(preview.scene);
-            const scene = await response.json();
             document.body.dataset.surfaceLoaded = 'pending';
-            const debug = currentDebugFlag();
-            window.TableEnvCanvas.renderWorkbookSceneToCanvas(canvas, scene, {{
-              debug,
-              surfaceId: preview.surface_id,
-              consoleErrors,
-            }});
+            image.src = preview.png;
             document.body.dataset.surfaceLoaded = preview.surface_id;
           }}
 

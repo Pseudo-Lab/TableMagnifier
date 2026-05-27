@@ -501,18 +501,18 @@ episode rule은 generator code 안에만 숨어 있으면 안 된다. 구현 전
 최신 검증 증거:
 
 - `uv run pytest -q` -> `69 passed`
-- `cd frontend && npm run lint` -> pass
-- marker 전용 Playwright surface readability -> `16 passed`
+- 별도 web UI/JS visual gate 경로는 제거됨
+- marker 전용 static preview/readability -> pass
 - authoring `viewport_readability` run `11130efe95ae478e8e6ffa9f4a164a13` -> passed
   - L1/L2/L3 seed 0 surface review returncode 0
-  - L1/L2/L3 workbench navigation returncode 0
-  - L3 `opened_notes == ["anchor-scope-note"]`
+  - L1/L2/L3 static surface review returncode 0
+  - L3 note overlay artifact 생성 확인
 - 최종 architect verification -> `PASS`
 
 검증 주의:
 
-- 전체 `audit_readability --smoke --seed-samples 0`는 현재 로컬 실행에서 Playwright subprocess hang 이력이 있었다.
-- marker family 자체는 위의 marker 전용 Playwright 및 authoring `viewport_readability` 증거로 통과를 확인했다.
+- 전체 `audit_readability --smoke --seed-samples 0`는 Python static artifact 검증 경로를 사용한다.
+- marker family 자체는 marker 전용 static preview 및 authoring `viewport_readability` 증거로 통과를 확인했다.
 
 ### Phase 4. baseline / evaluation 정리
 

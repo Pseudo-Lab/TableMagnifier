@@ -27,4 +27,4 @@ canonical surface를 freeze하기 전에 아래 항목을 모두 통과해야 �
 - `invalidLayout == false`
 - `layoutErrors == []`
 - strict readability audit 통과
-- workbench traversal 통과
+- static preview artifact 검증 통과

@@ -129,11 +129,9 @@ src/
 
         index.ts
 
-  frontend/
-    components/
-      sample-viewer.tsx
-      evidence-table.tsx
-      answer-choice-grid.tsx
+  scripts/
+    export_preview_gallery.py
+    audit_readability.py
 ```
 
 ### 1.1 Core와 template의 역할 분리
@@ -856,7 +854,7 @@ rationale_type
 
 ## 8. Normalized Viewer Contract
 
-Generator output은 frontend에서 raw template별로 직접 렌더링하지 않고, normalized view model로 변환되어야 한다.
+Generator output은 raw template별로 직접 노출하지 않고, normalized scene/view model로 변환되어야 한다.
 
 ```ts
 type NormalizedSampleViewModel = {
@@ -1185,4 +1183,3 @@ Works only for the screenshot.
 ```
 
 새로운 template을 추가할 때는 항상 전자가 되도록 구현한다.
-

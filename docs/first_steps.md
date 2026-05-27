@@ -17,7 +17,7 @@
 2. [docs/benchmark_guide.md](./benchmark_guide.md)
 3. [src/table_env_bench/data/families/k_vis_table_arc.py](../src/table_env_bench/data/families/k_vis_table_arc.py)
 4. [src/table_env_bench/data/families/__init__.py](../src/table_env_bench/data/families/__init__.py)
-5. [frontend/src/App.tsx](../frontend/src/App.tsx)
+5. [src/table_env_bench/scripts/export_preview_gallery.py](../src/table_env_bench/scripts/export_preview_gallery.py)
 
 기본 실행:
 

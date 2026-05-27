@@ -3,7 +3,7 @@
 ## Before Coding
 
 - If starting from `docs/family/abc_generator.md` or a similar scaffold, extract a concrete Template Spec Card first; do not implement from the generic scaffold alone.
-- Read or write the matching `rubrics/*.md` entry first.
+- Read or write the matching rule-doc section first.
 - Identify the target family id, Korean label, answer form, primary/support operators, and level range.
 - Decide required sheets/pages and why each is decisive.
 - List the gold evidence path and map it to `required_sheet_ids`, `required_page_refs`, `required_navigation`, and `required_evidence`.
@@ -25,7 +25,7 @@
 - `TemplateManifest.level` matches the requested level.
 - Template Spec Card fields are represented in `TemplateManifest` or generated metadata; missing fields are documented as explicit assumptions.
 - `required_sheet_ids`, `required_page_refs`, `required_navigation`, and `required_evidence` describe the real solving path.
-- Required evidence matches the rubric, not just the current generator implementation.
+- Required evidence matches the rule docs, not just the current generator implementation.
 - `expected_reasoning_steps` matches the level guidance.
 - `shortcut_probes` targets the tempting wrong solution.
 
@@ -48,6 +48,5 @@ For release-ready family work:
 
 ```bash
 uv run python -m table_env_bench.scripts.audit_readability
-cd frontend && npm run visual:readability
-cd frontend && npm run visual:workbench
+uv run python -m table_env_bench.scripts.audit_readability
 ```

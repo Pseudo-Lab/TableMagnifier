@@ -1,6 +1,6 @@
 # Workbook Benchmark Spec
 
-이 문서는 현재 구현된 workbook/report 환경 benchmark의 핵심 설계를 요약합니다. Gym 유사 환경 루프, 결정론적 SVG/PNG viewport rendering, replay, FastAPI session API, React workbench UI를 `workbook/sheet/page/region` 추상화 위에서 동작시킵니다.
+이 문서는 현재 구현된 workbook/report 환경 benchmark의 핵심 설계를 요약합니다. Gym 유사 환경 루프, 결정론적 SVG/PNG viewport rendering, replay, optional FastAPI session API를 `workbook/sheet/page/region` 추상화 위에서 동작시킵니다.
 
 ## 방향 메모
 
@@ -25,9 +25,7 @@
 - `src/table_env_bench/eval/scoring.py`
   - correctness / efficiency 분리
 - `src/table_env_bench/server/`
-  - 세션 API와 local human-play 흐름
-- `frontend/`
-  - human/dev shell의 기반 UI
+  - optional 세션 API
 
 ## 새 핵심 추상화
 
@@ -206,4 +204,4 @@ src/table_env_bench/
 
 ## 구현 경계
 
-현재 구현은 workbook spec, canonical family registry, FastAPI session API, React workbench, readability gates를 기준으로 유지합니다. 새 family나 template을 추가할 때는 이 문서의 환경 계약보다 [task_families.md](./task_families.md), [episode_rulebook.md](./episode_rulebook.md), [episode_validation_checklist.md](./episode_validation_checklist.md)를 우선 확인합니다.
+현재 구현은 workbook spec, canonical family registry, optional FastAPI session API, static preview/readability gates를 기준으로 유지합니다. 새 family나 template을 추가할 때는 이 문서의 환경 계약보다 [task_families.md](./task_families.md), [episode_rulebook.md](./episode_rulebook.md), [episode_validation_checklist.md](./episode_validation_checklist.md)를 우선 확인합니다.

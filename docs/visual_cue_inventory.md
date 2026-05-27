@@ -218,7 +218,7 @@
 
 - 초기 viewport에는 점검 열만 보이고, 오른쪽 target column은 zoom/pan 후에만 보임
 - 사례 시트에서 확인한 column offset을 질의 시트의 같은 행에 적용
-- `required_viewport_states`가 target rect와 match mode를 명시해 replay/workbench가 같은 상태를 검증
+- `required_viewport_states`가 target rect와 match mode를 명시해 replay/static validation이 같은 상태를 검증
 
 잘 맞는 operator:
 

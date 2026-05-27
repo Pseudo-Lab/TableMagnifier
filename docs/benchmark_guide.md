@@ -7,7 +7,7 @@
 ## 현재 노출 경로
 
 현재 repo는 frozen `public_*` instance pack을 포함하지 않는다.
-workbench와 API의 기본 노출 경로는 generator family catalog이며, hidden holdout은 별도 instance pack으로 같은 loader 경로를 통해 읽는다.
+기본 노출 경로는 generator family catalog와 optional API이며, hidden holdout은 별도 instance pack으로 같은 loader 경로를 통해 읽는다.
 
 ## 현재 Family
 
@@ -17,7 +17,7 @@ workbench와 API의 기본 노출 경로는 generator family catalog이며, hidd
   - 합성 약어 문서 참조
   - 50+ column wide table 탐색 계산
 
-이전 family는 canonical registry와 UI/API 노출 경로에서 제거했다.
+이전 family는 canonical registry와 API 노출 경로에서 제거했다.
 
 ## 무엇을 측정하나
 

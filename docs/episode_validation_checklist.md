@@ -100,7 +100,7 @@ sheet/page/viewport 이동이 reasoning의 일부라면 아래를 확인한다.
 - viewport state는 `sheet_id`, `page_id`, `min_zoom_index`, `required_action_types`, `match`, `target_rects`를 명시하는가?
 - `target_center_in_viewbox`와 `viewbox_intersects_target` 중 어떤 match mode를 쓰는지 명확한가?
 - `forbidden_shortcuts`가 `initial_viewport_only`, `no_pan_zoom`, `sheet_skip` 같은 generic navigation shortcut을 표현하는가?
-- replay metrics와 Playwright workbench summary가 같은 required viewport state id를 visited로 보고하는가?
+- replay metrics와 static validation metadata가 같은 required viewport state id를 보고하는가?
 
 ## 13. pass 기준
 
@@ -135,7 +135,7 @@ sheet/page/viewport 이동이 reasoning의 일부라면 아래를 확인한다.
 - initial-viewport-only probe는 target column을 보지 못해야 한다.
 - no-pan-zoom probe는 required viewport state를 방문하지 못해야 한다.
 - sheet-skip probe는 examples/operators surface를 생략하므로 required evidence를 충족하지 못해야 한다.
-- replay와 workbench traversal은 `query-right-target` 같은 required viewport state id를 동일하게 기록해야 한다.
+- replay와 static navigation validation은 `query-right-target` 같은 required viewport state id를 동일하게 기록해야 한다.
 
 ## 14. 권장 워크플로
 

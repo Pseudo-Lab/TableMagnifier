@@ -11,7 +11,7 @@ Use this checklist when the user provides a document such as `docs/family/abc_ge
 
 ## Minimum Filled Spec
 
-Before coding, make sure these fields are explicit either in the source doc, rubric, or working note:
+Before coding, make sure these fields are explicit either in the source doc, rule docs, or working note:
 
 - `family_id`, `template_id`, Korean label, and supported levels.
 - target capability and why each support sheet/page is decisive.

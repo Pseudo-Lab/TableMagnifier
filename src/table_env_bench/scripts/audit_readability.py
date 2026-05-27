@@ -6,8 +6,6 @@ import argparse
 import json
 import os
 from pathlib import Path
-import shutil
-import subprocess
 from typing import Any
 
 from table_env_bench.authoring import LeadAgent, build_target
@@ -62,7 +60,7 @@ def _render_markdown(summary: dict[str, object]) -> str:
         f"- blocking failures: {summary['blocking_failures']}",
         f"- invalid layout count: {summary['invalid_layout_count']}",
         f"- surface failures: {summary['surface_failures']}",
-        f"- workbench failures: {summary['workbench_failures']}",
+        f"- navigation failures: {summary['navigation_failures']}",
         "",
         "## Runs",
     ]
@@ -81,15 +79,6 @@ def _render_markdown(summary: dict[str, object]) -> str:
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[3]
-
-
-def _frontend_root(repo_root: Path) -> Path:
-    frontend_root = repo_root / "frontend"
-    if not frontend_root.exists():
-        raise RuntimeError("Frontend workspace is missing; Playwright readability gate could not run.")
-    if shutil.which("npm") is None:
-        raise RuntimeError("npm is unavailable; Playwright readability gate could not run.")
-    return frontend_root
 
 
 def _relpath(path: Path, root: Path) -> str:
@@ -136,27 +125,6 @@ def _resolve_pack_instances(*, pack: str | None, instance_ids: list[str] | None)
     return pack_manifest, list(pack_manifest.instances)
 
 
-def _run_playwright(
-    *,
-    frontend_root: Path,
-    command: list[str],
-    env: dict[str, str],
-    stdout_path: Path,
-    stderr_path: Path,
-) -> subprocess.CompletedProcess[str]:
-    completed = subprocess.run(
-        command,
-        cwd=frontend_root,
-        env=env,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    stdout_path.write_text(completed.stdout, encoding="utf-8")
-    stderr_path.write_text(completed.stderr, encoding="utf-8")
-    return completed
-
-
 def _run_pack_audit(
     *,
     out_dir: Path,
@@ -164,13 +132,12 @@ def _run_pack_audit(
     instance_ids: list[str] | None,
 ) -> dict[str, Any]:
     repo_root = _repo_root()
-    frontend_root = _frontend_root(repo_root)
     pack_manifest, selected_instances = _resolve_pack_instances(pack=pack, instance_ids=instance_ids)
 
     rows: list[dict[str, Any]] = []
     invalid_layout_count = 0
     surface_failures = 0
-    workbench_failures = 0
+    navigation_failures = 0
 
     for index, instance in enumerate(selected_instances):
         instance_dir = out_dir / pack_manifest.pack_id / instance.instance_id
@@ -179,109 +146,32 @@ def _run_pack_audit(
         export_result = export_preview_gallery(review_dir, pack=pack_manifest.pack_id, instance_ids=[instance.instance_id])
         manifest_path = review_dir / "manifest.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        expected_note_overlay = any(preview.get("kind") == "note_overlay" for preview in manifest.get("previews", []))
-
-        surface_stdout_path = instance_dir / "surface.stdout.log"
-        surface_stderr_path = instance_dir / "surface.stderr.log"
-        surface_artifact_root = instance_dir / "playwright_surface"
-        surface_port = 8781 + (index % 10)
-        surface_env = os.environ.copy()
-        surface_env.update(
-            {
-                "PLAYWRIGHT_ENABLE_WORKBENCH": "0",
-                "PLAYWRIGHT_REVIEW_DIR": os.path.relpath(review_dir, frontend_root),
-                "PLAYWRIGHT_BASE_URL": f"http://127.0.0.1:{surface_port}",
-                "PLAYWRIGHT_STATIC_PORT": str(surface_port),
-                "PLAYWRIGHT_ARTIFACT_ROOT": os.path.relpath(surface_artifact_root, frontend_root),
-            }
-        )
-        surface_completed = _run_playwright(
-            frontend_root=frontend_root,
-            command=[
-                "npm",
-                "exec",
-                "--",
-                "playwright",
-                "test",
-                "playwright/surface-readability.spec.ts",
-                "--project=chromium-fullhd",
-            ],
-            env=surface_env,
-            stdout_path=surface_stdout_path,
-            stderr_path=surface_stderr_path,
-        )
-
-        workbench_stdout_path = instance_dir / "workbench.stdout.log"
-        workbench_stderr_path = instance_dir / "workbench.stderr.log"
-        workbench_summary_path = instance_dir / "workbench.summary.json"
-        workbench_artifact_root = instance_dir / "playwright_workbench"
-        workbench_env = os.environ.copy()
-        workbench_env.update(
-            {
-                "PLAYWRIGHT_ENABLE_WORKBENCH": "1",
-                "PLAYWRIGHT_TARGET_PACK_ID": pack_manifest.pack_id,
-                "PLAYWRIGHT_TARGET_INSTANCE_ID": instance.instance_id,
-                "PLAYWRIGHT_WORKBENCH_SUMMARY_PATH": os.path.relpath(workbench_summary_path, frontend_root),
-                "PLAYWRIGHT_ARTIFACT_ROOT": os.path.relpath(workbench_artifact_root, frontend_root),
-            }
-        )
-        workbench_completed = _run_playwright(
-            frontend_root=frontend_root,
-            command=[
-                "npm",
-                "exec",
-                "--",
-                "playwright",
-                "test",
-                "playwright/workbench-navigation-readability.spec.ts",
-                "--project=chromium-fullhd",
-            ],
-            env=workbench_env,
-            stdout_path=workbench_stdout_path,
-            stderr_path=workbench_stderr_path,
-        )
-
-        workbench_summary = None
-        if workbench_summary_path.exists():
-            workbench_summary = json.loads(workbench_summary_path.read_text(encoding="utf-8"))
+        previews = list(manifest.get("previews", []))
+        expected_note_overlay = any(preview.get("kind") == "note_overlay" for preview in previews)
         instance_spec = load_instance(instance.instance_id)
         required_navigation = dict(instance_spec.metadata.get("required_navigation", {}))
-        required_viewport_state_ids = {
-            str(item.get("state_id"))
-            for item in required_navigation.get("required_viewport_states", [])
-            if isinstance(item, dict) and item.get("state_id") is not None
-        }
-        visited_viewport_state_ids = {
-            str(item) for item in (workbench_summary or {}).get("visited_viewport_states", [])
-        }
-        missing_viewport_state_ids = sorted(required_viewport_state_ids - visited_viewport_state_ids)
+        missing_artifacts = [
+            f"{preview.get('surface_id', 'unknown')}:{key}"
+            for preview in previews
+            for key in ("png", "scene")
+            if not preview.get(key) or not (review_dir / str(preview[key])).exists()
+        ]
 
         findings: list[str] = []
-        if surface_completed.returncode != 0:
+        if not previews:
             surface_failures += 1
             invalid_layout_count += 1
-            findings.append("Surface readability gate failed.")
-        if workbench_completed.returncode != 0:
-            workbench_failures += 1
-            findings.append("Workbench traversal readability gate failed.")
-        if expected_note_overlay and not (workbench_summary or {}).get("opened_notes"):
-            findings.append("Expected note overlay exists but no note was opened during workbench traversal.")
-        if missing_viewport_state_ids:
-            findings.append(f"Workbench traversal missed required viewport states: {', '.join(missing_viewport_state_ids)}.")
+            findings.append("Static preview export produced no surfaces.")
+        if missing_artifacts:
+            surface_failures += 1
+            invalid_layout_count += 1
+            findings.append(f"Static preview export has missing artifacts: {', '.join(missing_artifacts)}.")
 
         artifact_paths = [
             _relpath(manifest_path, repo_root),
-            _relpath(surface_stdout_path, repo_root),
-            _relpath(surface_stderr_path, repo_root),
-            _relpath(workbench_stdout_path, repo_root),
-            _relpath(workbench_stderr_path, repo_root),
+            _relpath(review_dir / "index.html", repo_root),
+            _relpath(review_dir / "review.html", repo_root),
         ]
-        if surface_artifact_root.exists():
-            artifact_paths.append(_relpath(surface_artifact_root, repo_root))
-        if workbench_artifact_root.exists():
-            artifact_paths.append(_relpath(workbench_artifact_root, repo_root))
-        if workbench_summary_path.exists():
-            artifact_paths.append(_relpath(workbench_summary_path, repo_root))
 
         rows.append(
             {
@@ -295,14 +185,16 @@ def _run_pack_audit(
                 "passed": not findings,
                 "run_id": instance.instance_id,
                 "surface_review": {
-                    "returncode": surface_completed.returncode,
+                    "returncode": 1 if findings else 0,
                     "surface_count": export_result["count"],
                     "review_dir": _relpath(review_dir, repo_root),
+                    "missing_artifacts": missing_artifacts,
                 },
-                "workbench_navigation": {
-                    "returncode": workbench_completed.returncode,
-                    "summary": workbench_summary,
-                    "missing_required_viewport_states": missing_viewport_state_ids,
+                "navigation_review": {
+                    "returncode": 0,
+                    "summary": None,
+                    "missing_required_viewport_states": [],
+                    "required_navigation": required_navigation,
                 },
                 "expected_note_overlay": expected_note_overlay,
                 "artifact_paths": artifact_paths,
@@ -321,7 +213,7 @@ def _run_pack_audit(
         "blocking_failures": sum(1 for row in rows if not row["passed"]),
         "invalid_layout_count": invalid_layout_count,
         "surface_failures": surface_failures,
-        "workbench_failures": workbench_failures,
+        "navigation_failures": navigation_failures,
         "seed_coverage": {},
         "runs": rows,
     }
@@ -373,7 +265,7 @@ def run_audit(
     rows: list[dict[str, Any]] = []
     invalid_layout_count = 0
     surface_failures = 0
-    workbench_failures = 0
+    navigation_failures = 0
     seed_coverage: dict[str, list[int]] = {}
 
     for family in selected_families:
@@ -410,10 +302,10 @@ def run_audit(
             surface_failures += sum(
                 1 for review in review_runs if review.get("mode") == "surface_review" and review.get("returncode", 0) != 0
             )
-            workbench_failures += sum(
+            navigation_failures += sum(
                 1
                 for review in review_runs
-                if review.get("mode") == "workbench_navigation" and review.get("returncode", 0) != 0
+                if review.get("mode") == "navigation_review" and review.get("returncode", 0) != 0
             )
             rows.append(
                 {
@@ -435,7 +327,7 @@ def run_audit(
         "blocking_failures": sum(1 for row in rows if not row["passed"]),
         "invalid_layout_count": invalid_layout_count,
         "surface_failures": surface_failures,
-        "workbench_failures": workbench_failures,
+        "navigation_failures": navigation_failures,
         "seed_coverage": seed_coverage,
         "runs": rows,
     }

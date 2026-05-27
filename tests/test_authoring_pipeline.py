@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import replace
 from dataclasses import dataclass, field
 from pathlib import Path
-from subprocess import CompletedProcess
 from types import SimpleNamespace
 
 import pytest
@@ -117,9 +116,7 @@ def test_lead_agent_repair_loop_runs_once(tmp_path: Path) -> None:
     assert record.overall_status == "failed"
 
 
-def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path: Path) -> None:
-    frontend_root = tmp_path / "frontend"
-    frontend_root.mkdir()
+def test_viewport_readability_agent_runs_static_preview_review(monkeypatch, tmp_path: Path) -> None:
     context = PipelineContext(
         run_id="demo-run",
         target=build_target(family="k_vis_table_arc", level=3, seed_samples=(0,)),
@@ -132,28 +129,18 @@ def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path
     def fake_export_preview_gallery(out_dir, *, seed, families, levels, template_id):
         review_dir = Path(out_dir)
         review_dir.mkdir(parents=True, exist_ok=True)
+        (review_dir / "index.html").write_text("<html></html>", encoding="utf-8")
+        (review_dir / "review.html").write_text("<html></html>", encoding="utf-8")
+        (review_dir / "surface.png").write_bytes(b"png")
+        (review_dir / "surface.scene.json").write_text("{}", encoding="utf-8")
         manifest_path = review_dir / "manifest.json"
         manifest_path.write_text(
-            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "3", "surface_id": "surface-1", "kind": "note_overlay", "page_id": "exception-p2"}]}',
+            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "3", "surface_id": "surface-1", "kind": "note_overlay", "page_id": "exception-p2", "png": "surface.png", "scene": "surface.scene.json"}]}',
             encoding="utf-8",
         )
         return {"count": 1}
 
-    def fake_subprocess_run(*args, **kwargs):
-        command = args[0]
-        env = kwargs.get("env", {})
-        if "workbench-navigation-readability.spec.ts" in " ".join(command):
-            summary_path = Path(env["PLAYWRIGHT_WORKBENCH_SUMMARY_PATH"])
-            summary_path.parent.mkdir(parents=True, exist_ok=True)
-            summary_path.write_text(
-                '{"visited_pages": ["exception:1/2", "exception:2/2"], "opened_notes": ["anchor-scope-note"]}',
-                encoding="utf-8",
-            )
-        return CompletedProcess(args=command, returncode=0, stdout="ok", stderr="")
-
-    monkeypatch.setattr(authoring_stages.shutil, "which", lambda _: "/usr/bin/npm")
     monkeypatch.setattr(authoring_stages, "export_preview_gallery", fake_export_preview_gallery)
-    monkeypatch.setattr(authoring_stages.subprocess, "run", fake_subprocess_run)
     monkeypatch.setattr(authoring_stages, "canonical_seed_capacity", lambda family, level: 1)
 
     context = PipelineContext(
@@ -170,37 +157,27 @@ def test_viewport_readability_agent_runs_playwright_review(monkeypatch, tmp_path
     assert mutations == []
     assert result.status == "passed"
     assert any(path.endswith("manifest.json") for path in result.artifact_paths)
-    assert any(path.endswith(".stdout.log") for path in result.artifact_paths)
-    assert any(path.endswith(".stderr.log") for path in result.artifact_paths)
-    assert any(path.endswith(".summary.json") for path in result.artifact_paths)
-    assert result.metrics["review_runs"][-1]["summary"]["opened_notes"] == ["anchor-scope-note"]
+    assert any(path.endswith("index.html") for path in result.artifact_paths)
+    assert any(path.endswith("review.html") for path in result.artifact_paths)
+    assert result.metrics["review_runs"][-1]["mode"] == "surface_static"
     assert result.metrics["full_seed_mode"] is False
 
 
 def test_viewport_readability_agent_expands_default_seed_samples_to_full_capacity(monkeypatch, tmp_path: Path) -> None:
-    (tmp_path / "frontend").mkdir()
-
     def fake_export_preview_gallery(out_dir, *, seed, families, levels, template_id):
         review_dir = Path(out_dir)
         review_dir.mkdir(parents=True, exist_ok=True)
+        (review_dir / "index.html").write_text("<html></html>", encoding="utf-8")
+        (review_dir / "review.html").write_text("<html></html>", encoding="utf-8")
+        (review_dir / "surface.png").write_bytes(b"png")
+        (review_dir / "surface.scene.json").write_text("{}", encoding="utf-8")
         (review_dir / "manifest.json").write_text(
-            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "1", "surface_id": "surface-1", "kind": "overview", "page_id": "examples-p1"}]}',
+            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "1", "surface_id": "surface-1", "kind": "overview", "page_id": "examples-p1", "png": "surface.png", "scene": "surface.scene.json"}]}',
             encoding="utf-8",
         )
         return {"count": 1}
 
-    def fake_subprocess_run(*args, **kwargs):
-        command = args[0]
-        env = kwargs.get("env", {})
-        if "workbench-navigation-readability.spec.ts" in " ".join(command):
-            summary_path = Path(env["PLAYWRIGHT_WORKBENCH_SUMMARY_PATH"])
-            summary_path.parent.mkdir(parents=True, exist_ok=True)
-            summary_path.write_text('{"visited_pages": ["examples:1/1"]}', encoding="utf-8")
-        return CompletedProcess(args=command, returncode=0, stdout="ok", stderr="")
-
-    monkeypatch.setattr(authoring_stages.shutil, "which", lambda _: "/usr/bin/npm")
     monkeypatch.setattr(authoring_stages, "export_preview_gallery", fake_export_preview_gallery)
-    monkeypatch.setattr(authoring_stages.subprocess, "run", fake_subprocess_run)
     monkeypatch.setattr(authoring_stages, "canonical_seed_capacity", lambda family, level: 4)
 
     context = PipelineContext(
@@ -264,29 +241,20 @@ def test_visual_qa_agent_checks_required_evidence_metadata(monkeypatch) -> None:
 
 
 def test_viewport_readability_agent_checks_marker_position_note(monkeypatch, tmp_path: Path) -> None:
-    (tmp_path / "frontend").mkdir()
-
     def fake_export_preview_gallery(out_dir, *, seed, families, levels, template_id):
         review_dir = Path(out_dir)
         review_dir.mkdir(parents=True, exist_ok=True)
+        (review_dir / "index.html").write_text("<html></html>", encoding="utf-8")
+        (review_dir / "review.html").write_text("<html></html>", encoding="utf-8")
+        (review_dir / "surface.png").write_bytes(b"png")
+        (review_dir / "surface.scene.json").write_text("{}", encoding="utf-8")
         (review_dir / "manifest.json").write_text(
-            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "3", "surface_id": "surface-1", "kind": "note_overlay", "page_id": "exception-p2"}]}',
+            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "3", "surface_id": "surface-1", "kind": "note_overlay", "page_id": "exception-p2", "png": "surface.png", "scene": "surface.scene.json"}]}',
             encoding="utf-8",
         )
         return {"count": 1}
 
-    def fake_subprocess_run(*args, **kwargs):
-        command = args[0]
-        env = kwargs.get("env", {})
-        if "workbench-navigation-readability.spec.ts" in " ".join(command):
-            summary_path = Path(env["PLAYWRIGHT_WORKBENCH_SUMMARY_PATH"])
-            summary_path.parent.mkdir(parents=True, exist_ok=True)
-            summary_path.write_text('{"visited_pages": ["exception:2/2"], "opened_notes": ["anchor-scope-note"]}', encoding="utf-8")
-        return CompletedProcess(args=command, returncode=0, stdout="ok", stderr="")
-
-    monkeypatch.setattr(authoring_stages.shutil, "which", lambda _: "/usr/bin/npm")
     monkeypatch.setattr(authoring_stages, "export_preview_gallery", fake_export_preview_gallery)
-    monkeypatch.setattr(authoring_stages.subprocess, "run", fake_subprocess_run)
     monkeypatch.setattr(authoring_stages, "canonical_seed_capacity", lambda family, level: 1)
 
     result, _ = ViewportReadabilityAgent().run(
@@ -301,7 +269,7 @@ def test_viewport_readability_agent_checks_marker_position_note(monkeypatch, tmp
         attempt=1,
     )
     assert result.status == "passed"
-    assert result.metrics["review_runs"][-1]["summary"]["opened_notes"] == ["anchor-scope-note"]
+    assert result.metrics["review_runs"][-1]["surface_count"] == 1
 
 
 def test_red_team_solver_agent_enforces_marker_position_thresholds(monkeypatch) -> None:
@@ -334,40 +302,20 @@ def test_red_team_solver_agent_enforces_marker_position_thresholds(monkeypatch) 
     assert any("Query-only" in finding for finding in result.findings)
 
 
-def test_viewport_readability_agent_fails_missing_required_viewport_state(monkeypatch, tmp_path: Path) -> None:
-    (tmp_path / "frontend").mkdir()
-
+def test_viewport_readability_agent_fails_missing_preview_artifact(monkeypatch, tmp_path: Path) -> None:
     def fake_export_preview_gallery(out_dir, *, seed, families, levels, template_id):
         review_dir = Path(out_dir)
         review_dir.mkdir(parents=True, exist_ok=True)
+        (review_dir / "index.html").write_text("<html></html>", encoding="utf-8")
+        (review_dir / "review.html").write_text("<html></html>", encoding="utf-8")
         (review_dir / "manifest.json").write_text(
-            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "1", "surface_id": "surface-1", "kind": "query", "page_id": "query-p1"}]}',
+            '{"seed": 0, "previews": [{"family": "k_vis_table_arc", "level": "1", "surface_id": "surface-1", "kind": "query", "page_id": "query-p1", "png": "missing.png", "scene": "missing.scene.json"}]}',
             encoding="utf-8",
         )
         return {"count": 1}
 
-    def fake_subprocess_run(*args, **kwargs):
-        command = args[0]
-        env = kwargs.get("env", {})
-        if "workbench-navigation-readability.spec.ts" in " ".join(command):
-            summary_path = Path(env["PLAYWRIGHT_WORKBENCH_SUMMARY_PATH"])
-            summary_path.parent.mkdir(parents=True, exist_ok=True)
-            summary_path.write_text('{"visited_viewport_states": []}', encoding="utf-8")
-        return CompletedProcess(args=command, returncode=0, stdout="ok", stderr="")
-
-    fake_spec = SimpleNamespace(
-        metadata={
-            "required_navigation": {
-                "required_viewport_states": [{"state_id": "query-zoom-pan-evidence"}],
-            }
-        }
-    )
-
-    monkeypatch.setattr(authoring_stages.shutil, "which", lambda _: "/usr/bin/npm")
     monkeypatch.setattr(authoring_stages, "export_preview_gallery", fake_export_preview_gallery)
-    monkeypatch.setattr(authoring_stages.subprocess, "run", fake_subprocess_run)
     monkeypatch.setattr(authoring_stages, "canonical_seed_capacity", lambda family, level: 1)
-    monkeypatch.setattr(authoring_stages, "generate_episode", lambda *args, **kwargs: fake_spec)
 
     result, _ = ViewportReadabilityAgent().run(
         PipelineContext(
@@ -382,7 +330,7 @@ def test_viewport_readability_agent_fails_missing_required_viewport_state(monkey
     )
 
     assert result.status == "failed"
-    assert any("query-zoom-pan-evidence" in finding for finding in result.findings)
+    assert any("missing preview artifacts" in finding for finding in result.findings)
 
 
 def test_red_team_solver_derives_generic_navigation_probes(monkeypatch, tmp_path: Path) -> None:
