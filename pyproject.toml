@@ -3,18 +3,21 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "table-agi-bench"
+name = "table-env-bench"
 version = "0.1.0"
-description = "Interactive visual table QA benchmark scaffold with human-normalized action efficiency."
-readme = "README_FOR_CODEX.md"
-requires-python = ">=3.10"
+description = "Interactive Korean visual table reasoning benchmark environment."
+readme = "README.md"
+requires-python = ">=3.11, <3.13"
 dependencies = [
-  "pillow>=10.0.0",
-  "numpy>=1.24.0",
+  "fastapi>=0.115.0",
+  "httpx>=0.28.0",
+  "pillow>=10.4.0",
+  "pydantic>=2.9.0",
+  "uvicorn>=0.34.0",
 ]
 
-[project.optional-dependencies]
-dev = ["pytest>=8.0.0", "ruff>=0.6.0", "mypy>=1.8.0"]
+[dependency-groups]
+dev = ["pytest>=8.3.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

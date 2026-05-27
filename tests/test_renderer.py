@@ -9,7 +9,7 @@ def test_renderer_is_deterministic_for_workbook_pages() -> None:
     first = renderer.render_page(spec.workbook, sheet_index=0, page_index=0)
     second = renderer.render_page(spec.workbook, sheet_index=0, page_index=0)
     assert first == second
-    assert "완성 행에서 기호 규칙 찾기" in first
+    assert "검사 코드 매핑 로그" in first
     assert "★" in first
     assert "WORKBOOK REPORT" not in first
     assert "Clinical Observer View" not in first
